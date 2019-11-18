@@ -622,5 +622,14 @@ export default {
          "new_item": false,
          "child_routes": null
       }
+   ],
+   category8: [
+      {
+         "menu_title": "sidebar.newDashboard",
+         "menu_icon": "zmdi zmdi-view-dashboard",
+         "path": "/app/new-dashboard",
+         "new_item": false,
+         "child_routes": null
+      }
    ]
 }

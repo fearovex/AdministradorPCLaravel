@@ -18,6 +18,7 @@ import Crm from 'Routes/crm';
 import ImageCropper from 'Routes/image-cropper';
 import VideoPlayer from 'Routes/video-player';
 import Dropzone from 'Routes/dropzone';
+import NewList from 'Routes/new-dashboard';
 
 // async component
 import {
@@ -119,5 +120,9 @@ export default [
    {
       path: 'dropzone',
       component: Dropzone
-   }
+   },
+   {
+		path: 'new-dashboard',
+		component: NewList
+	}
 ]
