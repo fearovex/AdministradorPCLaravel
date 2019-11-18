@@ -622,5 +622,33 @@ export default {
          "new_item": false,
          "child_routes": null
       }
+   ],
+   // category7: [
+   //    {
+   //       "menu_title": "sidebar.detailEvents",
+   //       "menu_icon": "zmdi zmdi-view-quilt",
+   //       "path": "/app/detail-events",
+   //       "child_routes": null
+   //    }
+   // ],
+   // category7: [
+   //    {
+   //       "menu_title": "sidebar.detailEvents",
+   //       "path": "/app/events/detail-events",
+   //       "child_routes": null
+   //    }
+   // ],
+   category9: [
+      {
+         "menu_title": "sidebar.events",
+         "menu_icon": "zmdi zmdi-view-compact",
+         "path": "/app/events",
+         "child_routes": [
+            {
+               "path": "/app/events/detail-events",
+               "new_item": false,
+            },
+         ]
+      }
    ]
 }

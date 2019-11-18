@@ -760,5 +760,7 @@ module.exports = {
    "sidebar.projects": "projects",
    "sidebar.projectDetail": "project Detail",
    "sidebar.clients": "clients",
-   "sidebar.reports": "reports"
+   "sidebar.reports": "reports",
+   "sidebar.events" :"Events",
+   "sidebar.detailEvents" :"Detail Events" // Newly created category
 }

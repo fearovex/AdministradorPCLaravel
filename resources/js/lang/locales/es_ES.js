@@ -764,5 +764,7 @@ module.exports = {
    "sidebar.projects": "proyectos",
    "sidebar.projectDetail": "detalle del proyecto",
    "sidebar.clients": "clientela",
-   "sidebar.reports": "informes"
+   "sidebar.reports": "informes",
+   "sidebar.events" :"Eventos",
+   "sidebar.detailEvents" :"Detalle Eventos"
 }

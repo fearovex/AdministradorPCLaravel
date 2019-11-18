@@ -18,6 +18,9 @@ import Crm from 'Routes/crm';
 import ImageCropper from 'Routes/image-cropper';
 import VideoPlayer from 'Routes/video-player';
 import Dropzone from 'Routes/dropzone';
+import Events from 'Routes/events';
+import DetailEvents from 'Routes/events/detail-events';
+// import DetailEvents from 'Routes/detail-events';
 
 // async component
 import {
@@ -119,5 +122,21 @@ export default [
    {
       path: 'dropzone',
       component: Dropzone
-   }
+   },
+   {
+		path: 'events',
+		component: Events
+	},
+   // {
+	// 	path: 'detail-events',
+	// 	component: DetailEvents
+   // },
+   // {
+   //    path: 'detail-events',
+   //    component: DetailEvents
+   // },
+   {
+		path: 'events/detail-events',
+		component: DetailEvents
+	}
 ]
