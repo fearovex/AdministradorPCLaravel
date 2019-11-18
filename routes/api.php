@@ -13,4 +13,5 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/graficas', 'GraficasController@Consulta');
+Route::post('/graficas', 'GraficasController@Consulta');
+Route::get('/evento', 'GraficasController@UltimoEvento');

@@ -61,13 +61,36 @@ export default class NewList extends Component {
         this.ConsultaGraficas = this.ConsultaGraficas.bind(this);
     }
     
-    componentDidMount(){
-        this.ConsultaGraficas()
+    async componentDidMount(){
+        try {
+            let res = await fetch(`http://administradorpclaravel.test:8080/api/evento`);
+            let datagraph = await res.json()
+
+            var fecha_inicio = datagraph.fecha_inicio;
+            var fecha_final = datagraph.fecha_fin;
+            
+            this.ConsultaGraficas(fecha_inicio, fecha_final)
+            
+         } catch (error) {
+               this.setState({ 
+                  error
+               })
+         }
     }
 
     async ConsultaGraficas(fecha_inicial, fecha_final){
         try {
-            let res = await fetch(`http://administradorpclaravel.test:8080/api/graficas`);
+            let config = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                
+                body: JSON.stringify({'fecha_inicial': fecha_inicial, 'fecha_final': fecha_final})
+            }
+
+            let res = await fetch(`http://administradorpclaravel.test:8080/api/graficas`, config);
             let datagraph = await res.json()
 
             this.setState({
