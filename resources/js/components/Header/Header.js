@@ -85,7 +85,7 @@ class Header extends Component {
 			<AppBar position="static" className="rct-header">
 				<Toolbar className="d-flex justify-content-between w-100 pl-0">
 					<div className="d-flex align-items-center">
-						{(horizontalMenu || agencyMenu) &&
+						{/* {(horizontalMenu || agencyMenu) &&
 							<div className="site-logo">
 								<Link to="/" className="logo-mini">
 									<img src={require('Assets/img/appLogo.png')} className="mr-15" alt="site logo" width="35" height="35" />
@@ -94,7 +94,7 @@ class Header extends Component {
 									<img src={require('Assets/img/appLogoText.png')} className="img-fluid" alt="site-logo" width="67" height="17" />
 								</Link>
 							</div>
-						}
+						} */}
 						{!agencyMenu &&
 							<ul className="list-inline mb-0 navbar-left">
 								{!horizontalMenu ?
@@ -113,7 +113,7 @@ class Header extends Component {
 										</Tooltip>
 									</li>
 								}
-								{!horizontalMenu && <QuickLinks />}
+								{/* {!horizontalMenu && <QuickLinks />} */}
 								<li className="list-inline-item search-icon d-inline-block">
 									<SearchForm />
 									<IconButton mini="true" className="search-icon-btn" onClick={() => this.openMobileSearchForm()}>
@@ -128,7 +128,7 @@ class Header extends Component {
 						}
 					</div>
 					<ul className="navbar-right list-inline mb-0">
-						<li className="list-inline-item summary-icon">
+						{/* <li className="list-inline-item summary-icon">
 							<Tooltip title="Summary" placement="bottom">
 								<a href="#" className="header-icon tour-step-3" onClick={(e) => this.openDashboardOverlay(e)}>
 									<i className="zmdi zmdi-info-outline"></i>
@@ -143,17 +143,17 @@ class Header extends Component {
 									</Button>
 								</Tooltip>
 							</li>
-						}
+						} */}
 						<LanguageProvider />
-						<Notifications />
-						<Cart />
-						<li className="list-inline-item setting-icon">
+						{/* <Notifications /> */}
+						{/* <Cart /> */}
+						{/* <li className="list-inline-item setting-icon">
 							<Tooltip title="Chat" placement="bottom">
 								<IconButton aria-label="settings" onClick={() => this.setState({ customizer: true })}>
 									<i className="zmdi zmdi-comment"></i>
 								</IconButton>
 							</Tooltip>
-						</li>
+						</li> */}
 						<li className="list-inline-item">
 							<Tooltip title="Full Screen" placement="bottom">
 								<IconButton aria-label="settings" onClick={() => this.toggleScreenFull()}>
