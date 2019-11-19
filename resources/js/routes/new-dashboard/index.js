@@ -123,7 +123,7 @@ export default class NewList extends Component {
         const { match } = this.props;
         return (
             <div className="cardsmasonry-wrapper">
-                <PageTitleBar title={<IntlMessages id="sidebar.cardsMasonry" />} match={this.props.match} />
+                <PageTitleBar title={<IntlMessages id="sidebar.dashboard" />} match={this.props.match} />
                 <RctCollapsibleCard heading="Filtro" fullBlock>
 					<FilterDateForm
 							form={this.state.form}

@@ -7,7 +7,7 @@ module.exports = {
    "sidebar.features": "Caracteristicas",
    "sidebar.applications": "Aplicaciones",
    "sidebar.newDashboard": "Nuevo Tablero",
-   "sidebar.dashboard": "Tablero",
+   "sidebar.dashboard": "Inicio",
    "sidebar.dashboard1": "Tablero de instrumentos 1",
    "sidebar.dashboard2": "Tablero 2",
    "sidebar.dashboard3": "Tablero 3",

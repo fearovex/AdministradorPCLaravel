@@ -84,15 +84,15 @@ class UserBlock extends Component {
 								/>
 							</div>
 							<div className="user-info">
-								<span className="user-name ml-4">Lucile Beck</span>
-								<i className="zmdi zmdi-chevron-down dropdown-icon mx-4"></i>
+								<span className="user-name ml-3">Administrador</span>
+								<i className="zmdi zmdi-chevron-down dropdown-icon mx-2"></i>
 							</div>
 						</DropdownToggle>
 						<DropdownMenu>
 							<ul className="list-unstyled mb-0">
 								<li className="p-15 border-bottom user-profile-top bg-primary rounded-top">
-									<p className="text-white mb-0 fs-14">Lucile Beck</p>
-									<span className="text-white fs-14">info@example.com</span>
+									<p className="text-white mb-0 fs-14">Administrador</p>
+									{/* <span className="text-white fs-14">mauricio.pascuas@ipwork.com.co</span> */}
 								</li>
 								<li>
 									<Link to={{

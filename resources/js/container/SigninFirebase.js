@@ -20,7 +20,7 @@ class Signin extends Component {
    constructor(props) {
       super(props)
       this.state = {
-         data: 'false',
+         data: [],
          error: null,
          Form: {
             email: "",
@@ -42,14 +42,15 @@ class Signin extends Component {
             },
             body: JSON.stringify(this.state.Form)
          };
-         let res = await fetch('http://administradorpclaravel.test/api/login', config);
+         let res = await fetch('http://administradorpclaravel.test:8080/api/login', config);
          let data = await res.json()
-         this.setState({
-            data:data
-         })
-        
-         this.props.signinUserInFirebase(this.state, this.props.history)
-
+         if(data.email && data.email != null){
+            this.setState({
+               data:data
+            })
+            this.props.signinUserInFirebase(this.state, this.props.history)
+         }
+         
       } catch (error) {
          this.setState({
             error
