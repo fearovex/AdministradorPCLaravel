@@ -27,7 +27,7 @@ export default class Events extends Component {
 
      async componentDidMount(){
          try {
-            let res = await fetch('http://administradorpclaravel.test:8080/api/events')
+            let res = await fetch('https://ipfi.ipwork.io/api/events')
             let data = await res.json()
 
             for (let i = 0; i < data.length; i++) {
