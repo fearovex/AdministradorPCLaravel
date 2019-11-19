@@ -74,8 +74,9 @@ class App extends Component {
 
    render() {
       const { location, match, user } = this.props;
+      console.log(this.props)
       if (location.pathname === '/') {
-         if (user === null) {
+         if (user === 'false') {
             return (<Redirect to={'/signin'} />);
          } else {
             return (<Redirect to={'/app/new-dashboard'} />);
