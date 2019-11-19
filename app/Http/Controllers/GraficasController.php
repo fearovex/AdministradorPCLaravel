@@ -18,27 +18,27 @@ class GraficasController extends Controller
 
     public function Consulta(Request $request){
 
-        $fecha_inicial = $request->fecha_inicial;
-        $fecha_final = $request->fecha_final;
-
-
+        $fecha_inicial = $request->initialDate." ".$request->initialTime;;
+        $fecha_final = $request->finalDate." ".$request->finalTime;;
+        
+        
         $Evento = GraficasController::UltimoEvento();
         $Evento = $Evento->original;
-
+        
         $DatosGraficas['genero'] = array();
         $DatosGraficas['ap'] = array();
         $DatosGraficas['paises'] = array();
         $DatosGraficas['edad'] = array();
         $DatosGraficas['os'] = array();
         $DatosGraficas['fecha'] = array();
-
+        
         $DatosGraficas['genero'] = DB::table($Evento->campania)
-            ->select(DB::raw('genero, COUNT(*) AS personas'))
-            ->whereBetween('fecha_creacion', [$fecha_inicial,$fecha_final])
-            ->groupBy('genero')
-            ->orderBy('personas', 'DESC')
-            ->limit(5)
-            ->get();
+        ->select(DB::raw('genero, COUNT(*) AS personas'))
+        ->whereBetween('fecha_creacion', [$fecha_inicial,$fecha_final])
+        ->groupBy('genero')
+        ->orderBy('personas', 'DESC')
+        ->limit(5)
+        ->get();
         
         $DatosGraficas['ap'] = DB::table($Evento->campania)
             ->select(DB::raw('ip_ap as ap, COUNT(*) AS personas'))

@@ -771,5 +771,7 @@ module.exports = {
    "graphics.pais": "País",
    "graphics.edad": "Edad",
    "graphics.os": "Sistema Operativo",
-   "graphics.date": "Fecha"
+   "graphics.date": "Fecha",
+   "sidebar.events" :"Eventos",
+   "sidebar.detailEvents" :"Detalle Eventos"
 }

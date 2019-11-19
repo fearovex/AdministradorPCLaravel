@@ -767,5 +767,7 @@ module.exports = {
    "graphics.pais": "Country",
    "graphics.edad": "Age",
    "graphics.os": "Operating system",
-   "graphics.date": "Date"
+   "graphics.date": "Date",
+   "sidebar.events" :"Events",
+   "sidebar.detailEvents" :"Detail Events" // Newly created category
 }

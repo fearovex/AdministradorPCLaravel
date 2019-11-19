@@ -30,46 +30,47 @@ import {
     CardBody,
     CardImgOverlay
  } from 'reactstrap';
- import Button from '@material-ui/core/Button';
-import { Scrollbars } from 'react-custom-scrollbars';
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
 
-// widgets data 
-/* import {
-   visitorData,
-   revenueData,
-   salesData,
-   dealData,
-   transactionList,
-   transferreport,
-   expenseCategory
-} from './data'; */
-
+import FilterDateForm from 'Components/FilterDateForm/FilterDateForm';
 
 export default class NewList extends Component {
 
     constructor(props){
         super(props)
 
-        this.state={
-            data:[],
-            // fecha_inicial: new Data(),
-            // fecha_final: new Data(),
-            error:null
+        this.state = {
+			data:[],
+			error: null,
+			form: {}
         }
+        
         this.ConsultaGraficas = this.ConsultaGraficas.bind(this);
+        this.handleChange=this.handleChange.bind(this)
+		this.handleDateFilter=this.handleDateFilter.bind(this)
     }
     
     async componentDidMount(){
         try {
             let res = await fetch(`http://administradorpclaravel.test:8080/api/evento`);
             let datagraph = await res.json()
-
-            var fecha_inicio = datagraph.fecha_inicio;
-            var fecha_final = datagraph.fecha_fin;
+            let tempDate = new Date(datagraph.fecha_inicio);
+            let initialDate = tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate(); 
+            // let initialDate = new Date(); 
+            let initialTime = ('0'+tempDate.getHours()).slice(-2) +':'+ ('0'+tempDate.getMinutes()).slice(-2) +':'+ ('0' + tempDate.getSeconds()).slice(-2);
+            let tempDate2 = new Date(datagraph.fecha_fin);
+            let finalDate = tempDate2.getFullYear() + '-' + (tempDate2.getMonth()+1) + '-' + tempDate2.getDate();
+            let finalTime = ('0'+tempDate2.getHours()).slice(-2) +':'+ ('0'+tempDate2.getMinutes()).slice(-2) +':'+ ('0' + tempDate2.getSeconds()).slice(-2);
             
-            this.ConsultaGraficas(fecha_inicio, fecha_final)
+            this.setState({
+                form:{
+                    initialDate: initialDate,
+                    initialTime: initialTime,
+                    finalDate: finalDate,
+                    finalTime: finalTime
+                }
+            })
+
+            this.ConsultaGraficas()
             
          } catch (error) {
                this.setState({ 
@@ -78,7 +79,7 @@ export default class NewList extends Component {
          }
     }
 
-    async ConsultaGraficas(fecha_inicial, fecha_final){
+    async ConsultaGraficas(){
         try {
             let config = {
                 method: 'POST',
@@ -87,7 +88,7 @@ export default class NewList extends Component {
                     'Content-Type': 'application/json'
                 },
                 
-                body: JSON.stringify({'fecha_inicial': fecha_inicial, 'fecha_final': fecha_final})
+                body: JSON.stringify(this.state.form)
             }
 
             let res = await fetch(`http://administradorpclaravel.test:8080/api/graficas`, config);
@@ -104,11 +105,32 @@ export default class NewList extends Component {
          }
     }
 
+    handleDateFilter(e){
+        e.preventDefault()
+        this.ConsultaGraficas()
+    }
+
+    handleChange(e){
+        this.setState({
+            form:{
+				...this.state.form,
+                [e.target.name]: e.target.value
+            }
+        })
+    }
+
     render() {
         const { match } = this.props;
         return (
             <div className="cardsmasonry-wrapper">
                 <PageTitleBar title={<IntlMessages id="sidebar.cardsMasonry" />} match={this.props.match} />
+                <RctCollapsibleCard heading="Filtro" fullBlock>
+					<FilterDateForm
+							form={this.state.form}
+							onChange={this.handleChange}
+							onSubmit={this.handleDateFilter}
+					/>
+				</RctCollapsibleCard>
                 <CardColumns>
                     <Card>
                         <CardBody>

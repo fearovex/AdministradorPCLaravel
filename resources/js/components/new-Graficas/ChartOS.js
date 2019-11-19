@@ -13,13 +13,25 @@ am4core.useTheme(am4themes_animated);
 import { RctCardContent } from 'Components/RctCard';
 
 class ChartOS extends Component {
+   constructor(props){
+      super(props)
+
+      this.state={
+         props: ''
+      }
+   }
 
    componentDidMount() {
       this.handleChart()
    }
 
    componentDidUpdate() {
-      this.handleChart(this.props.data)
+      if(this.state.props != this.props.data){
+         this.handleChart(this.props.data)
+         this.setState({
+            props: this.props.data
+         })
+      }
    }
 
    async handleChart(data = []) {

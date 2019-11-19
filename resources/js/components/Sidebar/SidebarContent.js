@@ -115,6 +115,32 @@ class SidebarContent extends Component {
                             />
                         ))}
                     </List>
+                    {/* <List
+                        className="rct-mainMenu p-0 m-0 list-unstyled"
+                        subheader={<ListSubheader className="side-title" component="li">
+                            <IntlMessages id="sidebar.detailEvents" /></ListSubheader>}
+                    >
+                        {sidebarMenus.category7.map((menu, key) => (
+                            <NavMenuItem
+                                menu={menu}
+                                key={key}
+                                onToggleMenu={() => this.toggleMenu(menu, 'category7')}
+                            />
+                        ))}
+                    </List> */}
+                    <List
+                        className="rct-mainMenu p-0 m-0 list-unstyled"
+                        subheader={<ListSubheader className="side-title" component="li">
+                            <IntlMessages id="sidebar.events" /></ListSubheader>}
+                    >
+                        {sidebarMenus.category9.map((menu, key) => (
+                            <NavMenuItem
+                                menu={menu}
+                                key={key}
+                                onToggleMenu={() => this.toggleMenu(menu, 'category9')}
+                            />
+                        ))}
+                    </List>
                 </nav>
             </div>
         );
