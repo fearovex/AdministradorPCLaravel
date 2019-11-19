@@ -11,6 +11,7 @@ import RctCollapsibleCard from 'Components/RctCollapsibleCard/RctCollapsibleCard
 import IntlMessages from 'Util/IntlMessages';
 import FilterDateForm from './FilterDateForm';
 import queryString from 'query-string'
+import '../events/styles.css';
 
 
 export default class DetailEvents extends Component {

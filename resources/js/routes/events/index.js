@@ -6,6 +6,8 @@ import MUIDataTable from "mui-datatables";
 import RctCollapsibleCard from 'Components/RctCollapsibleCard/RctCollapsibleCard';
 import IconButton from "@material-ui/core/IconButton";
 import AddIcon from "@material-ui/icons/Add";
+import './styles.css'
+import { Route, Link } from 'react-router-dom'
 
 export default class Events extends Component {
     constructor(props){
@@ -29,7 +31,8 @@ export default class Events extends Component {
             let data = await res.json()
 
             for (let i = 0; i < data.length; i++) {
-                data[i]["acciones"]=<a href={"http://administradorpclaravel.test/app/detail-events?id="+ data[i].id+"&tb="+data[i].campania }>Ver</a>
+                // data[i]["acciones"]=<a href={"http://administradorpclaravel.test/app/detail-events?id="+ data[i].id+"&tb="+data[i].campania }>Ver</a>
+                data[i]["acciones"]=<Link to={"/app/detail-events?id="+ data[i].id+"&tb="+data[i].campania }>Ver</Link>
                 delete data[i].id
                 delete data[i].id_locacion
             }

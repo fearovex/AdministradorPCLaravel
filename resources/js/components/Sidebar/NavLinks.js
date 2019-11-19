@@ -642,13 +642,7 @@ export default {
       {
          "menu_title": "sidebar.events",
          "menu_icon": "zmdi zmdi-view-compact",
-         "path": "/app/events",
-         "child_routes": [
-            {
-               "path": "/app/events/detail-events",
-               "new_item": false,
-            },
-         ]
+         "path": "/app/events"
       }
    ]
 }

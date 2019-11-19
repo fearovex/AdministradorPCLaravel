@@ -1,7 +1,5 @@
 import React from "react";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import './styles.css';
 
 const FilterDateForm = ({ form, onChange, onSubmit}) => (
     <form className="form-inline justify-content-center"

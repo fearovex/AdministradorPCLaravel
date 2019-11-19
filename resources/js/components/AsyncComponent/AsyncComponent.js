@@ -539,14 +539,14 @@ const AsyncEventsComponent = Loadable({
    loading: () => <RctPageLoader />,
 });
 
-// const AsyncDetailEventsComponent = Loadable({
-//    loader: () => import("Routes/detail-events"),
-//    loading: () => <RctPageLoader />,
-// });
 const AsyncDetailEventsComponent = Loadable({
-   loader: () => import("Routes/events/detail-events"),
+   loader: () => import("Routes/detail-events"),
    loading: () => <RctPageLoader />,
 });
+// const AsyncDetailEventsComponent = Loadable({
+//    loader: () => import("Routes/events/detail-events"),
+//    loading: () => <RctPageLoader />,
+// });
 export {
    AsyncUserWidgetComponent,
    AsyncUserChartsComponent,
