@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Badge } from 'reactstrap';
 import { NotificationManager } from 'react-notifications';
+import Avatar from '@material-ui/core/Avatar';
 
 // components
 import SupportPage from '../Support/Support';
@@ -75,13 +76,14 @@ class UserBlock extends Component {
 							className="d-flex align-items-center"
 						>
 							<div className="user-profile">
-								<img
+								<Avatar className="size-50 bg-info rounded-circle">AD</Avatar>
+								{/* <img
 									src={require('Assets/avatars/user-15.jpg')}
 									alt="user profile"
 									className="img-fluid rounded-circle"
 									width="50"
 									height="100"
-								/>
+								/> */}
 							</div>
 							<div className="user-info">
 								<span className="user-name ml-3">Administrador</span>
@@ -94,7 +96,7 @@ class UserBlock extends Component {
 									<p className="text-white mb-0 fs-14">Administrador</p>
 									{/* <span className="text-white fs-14">mauricio.pascuas@ipwork.com.co</span> */}
 								</li>
-								<li>
+								{/* <li>
 									<Link to={{
 										pathname: '/app/users/user-profile-1',
 										state: { activeTab: 0 }
@@ -119,7 +121,7 @@ class UserBlock extends Component {
 										<IntlMessages id="sidebar.feedback" />
 										<Badge color="info" className="pull-right">1</Badge>
 									</Link>
-								</li>
+								</li> */}
 								<li className="border-top">
 									<a href="#" onClick={(e) => this.logoutUser(e)}>
 										<i className="zmdi zmdi-power text-danger mr-3"></i>
