@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Badge } from 'reactstrap';
 import { NotificationManager } from 'react-notifications';
-
+import Avatar from '@material-ui/core/Avatar';
 // components
 import SupportPage from '../Support/Support';
 
@@ -75,13 +75,14 @@ class UserBlock extends Component {
 							className="d-flex align-items-center"
 						>
 							<div className="user-profile">
-								<img
+							<Avatar className="size-80 bg-warning rounded-circle">TS</Avatar>
+								{/* <img
 									src={require('Assets/avatars/user-15.jpg')}
 									alt="user profile"
 									className="img-fluid rounded-circle"
 									width="50"
 									height="100"
-								/>
+								/> */}
 							</div>
 							<div className="user-info">
 								<span className="user-name ml-4">Lucile Beck</span>
