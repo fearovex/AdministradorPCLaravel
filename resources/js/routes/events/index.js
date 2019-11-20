@@ -27,7 +27,7 @@ export default class Events extends Component {
 
      async componentDidMount(){
          try {
-            let res = await fetch('https://ipfi.ipwork.io/api/events')
+            let res = await fetch('https://www.ipfi.ipwork.io/api/events')
             let data = await res.json()
 
             for (let i = 0; i < data.length; i++) {

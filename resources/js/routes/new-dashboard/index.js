@@ -51,7 +51,7 @@ export default class NewList extends Component {
     
     async componentDidMount(){
         try {
-            let res = await fetch(`https://ipfi.ipwork.io/api/evento`);
+            let res = await fetch(`https://www.ipfi.ipwork.io/api/evento`);
             let datagraph = await res.json()
             let tempDate = new Date(datagraph.fecha_inicio);
             let initialDate = tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate(); 
@@ -91,7 +91,7 @@ export default class NewList extends Component {
                 body: JSON.stringify(this.state.form)
             }
 
-            let res = await fetch(`https://ipfi.ipwork.io/api/graficas`, config);
+            let res = await fetch(`https://www.ipfi.ipwork.io/api/graficas`, config);
             let datagraph = await res.json()
 
             this.setState({
