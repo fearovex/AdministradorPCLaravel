@@ -36,7 +36,7 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>Reactify - ReactJS/Redux Admin Template</title>
+    <title>IPfi - Administrador</title>
 </head>
 
 <body>

@@ -36,7 +36,6 @@ export default class Events extends Component {
                 delete data[i].id
                 delete data[i].id_locacion
             }
-            console.log(data)
             this.setState({
                 data: data
             })
