@@ -27,7 +27,7 @@ export default class Events extends Component {
 
      async componentDidMount(){
          try {
-            let res = await fetch('http://administradorpclaravel.test/api/events')
+            let res = await fetch('https://www.ipfi.ipwork.io/api/events')
             let data = await res.json()
 
             for (let i = 0; i < data.length; i++) {
@@ -36,7 +36,6 @@ export default class Events extends Component {
                 delete data[i].id
                 delete data[i].id_locacion
             }
-            console.log(data)
             this.setState({
                 data: data
             })

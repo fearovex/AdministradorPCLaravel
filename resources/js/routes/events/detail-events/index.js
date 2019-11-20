@@ -11,7 +11,6 @@ import RctCollapsibleCard from 'Components/RctCollapsibleCard/RctCollapsibleCard
 import IntlMessages from 'Util/IntlMessages';
 import FilterDateForm from './FilterDateForm';
 import queryString from 'query-string'
-import '../events/styles.css';
 
 
 export default class DetailEvents extends Component {
@@ -57,7 +56,7 @@ export default class DetailEvents extends Component {
                 body: JSON.stringify(this.state.form)
 			}
 			// console.log(this.state.form)
-			let res = await fetch('https://www.ipfi.ipwork.io/api/detailEvents', config)
+			let res = await fetch('http://administradorpclaravel.test://api/detailEvents', config)
             let dataDetails = await res.json()
             this.setState({
                dataDetails: dataDetails
@@ -95,7 +94,7 @@ export default class DetailEvents extends Component {
                 body: JSON.stringify(this.state.form)
 			}
 
-			let resNameColumns = await fetch('https://www.ipfi.ipwork.io/api/nameColumnNames', onlyTableConfig)
+			let resNameColumns = await fetch('http://administradorpclaravel.test://api/nameColumnNames', onlyTableConfig)
             let dataNameColumns = await resNameColumns.json()
 		   /// fin  Consulta Nombre Columnas
 
@@ -108,10 +107,20 @@ export default class DetailEvents extends Component {
 			 // fin Proceso DataTable
 
 			 //Consulta Detalle -> Se consulta el detalle del evento de acuerdo a su tabla en la bd
-            this.handleDateFilter()
+            let config = {
+                method: 'POST',
+                headers:{
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(this.state.form)
+			}
+			let res = await fetch('http://administradorpclaravel.test://api/detailEvents', config)
+			let dataDetails = await res.json()
 			
             this.setState({
-				nameColumns: arrayNames
+				nameColumns: arrayNames,
+            	dataDetails: dataDetails
 			})
 			//fin Consulta Detalle
             
@@ -144,13 +153,11 @@ export default class DetailEvents extends Component {
 				
 				<PageTitleBar title={<IntlMessages id="sidebar.detailEvents" />} match={this.props.match} />
 				
-				<RctCollapsibleCard heading="Filtro" fullBlock>
-					<FilterDateForm
-							form={this.state.form}
-							onChange={this.handleChange}
-							onSubmit={this.handleDateFilter}
-					/>
-				</RctCollapsibleCard>
+				<FilterDateForm
+                        form={this.state.form}
+                        onChange={this.handleChange}
+						onSubmit={this.handleDateFilter}
+                />
 				<RctCollapsibleCard heading="Tabla de Datos" fullBlock>
 					<MUIDataTable
 						title={"Detalle Eventos"}

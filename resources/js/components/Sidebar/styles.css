@@ -1,0 +1,8 @@
+/* .logo-normal{
+    margin-left: 25px;
+    border-bottom: 2px solid white;
+} */
+.logo-normal{
+    border-bottom: 2px solid white;
+    padding: 10px 50px;
+}

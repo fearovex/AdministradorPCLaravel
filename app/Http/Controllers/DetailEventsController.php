@@ -11,7 +11,7 @@ class DetailEventsController extends Controller
 {
     public function getColumnNames(Request $request){
         $table_name=$request->tb;
-        $db='portal_oxohotel';
+        $db = env('DB_DATABASE');
         $getColumnNames = DB::select("SELECT COLUMN_NAME
         FROM INFORMATION_SCHEMA.COLUMNS
         WHERE TABLE_SCHEMA = '".$db."' AND TABLE_NAME = '".$table_name."';");

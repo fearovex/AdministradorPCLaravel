@@ -33,12 +33,13 @@ const mix = require('laravel-mix');
 }); 
 
 mix.js('resources/js/index.js', 'public/js')
-   .sass('resources/js/assets/scss/_style.scss', 'public/css/style.css');
+   .sass('resources/js/assets/scss/_style.scss', 'public/css/style.css')
+   .sass('resources/js/assets/scss/_login.scss', 'public/css/login.css');
 
 mix.options({ extractVueStyles: true });
 
 if (mix.inProduction()) {
-  mix.version(["public/css/style.css", "public/js/index.js"]);
+  mix.version(["public/css/style.css", "public/js/index.js","public/css/login.css"]);
 } else {
   mix.sourceMaps();
 }

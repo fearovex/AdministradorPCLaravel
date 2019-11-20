@@ -7,6 +7,7 @@ module.exports = {
    "sidebar.component": "Component",
    "sidebar.features": "Features",
    "sidebar.applications": "Applications",
+   "sidebar.newDashboard": "Dashboard",
    "sidebar.dashboard": "Dashboard",
    "sidebar.dashboard1": "Dashboard 1",
    "sidebar.dashboard2": "Dashboard 2",
@@ -113,7 +114,6 @@ module.exports = {
    "sidebar.wallet": "wallet",
    "sidebar.trade": "trade",
    "sidebar.crm": "CRM",
-   "sidebar.dashboard": "dashboard",
    "widgets.totalEarns": "Total Earns",
    "widgets.emailsStatistics": "Emails Statistics",
    "widgets.totalRevenue": "Total Revenue",
@@ -761,6 +761,12 @@ module.exports = {
    "sidebar.projectDetail": "project Detail",
    "sidebar.clients": "clients",
    "sidebar.reports": "reports",
+   "graphics.gender": "Gender",
+   "graphics.ap": "Ap",
+   "graphics.pais": "Country",
+   "graphics.edad": "Age",
+   "graphics.os": "Operating system",
+   "graphics.date": "Date",
    "sidebar.events" :"Events",
    "sidebar.detailEvents" :"Detail Events" // Newly created category
 }

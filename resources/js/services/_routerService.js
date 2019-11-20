@@ -18,6 +18,7 @@ import Crm from 'Routes/crm';
 import ImageCropper from 'Routes/image-cropper';
 import VideoPlayer from 'Routes/video-player';
 import Dropzone from 'Routes/dropzone';
+import NewList from 'Routes/new-dashboard';
 import Events from 'Routes/events';
 // import DetailEvents from 'Routes/events/detail-events';
 import DetailEvents from 'Routes/detail-events';
@@ -124,17 +125,17 @@ export default [
       component: Dropzone
    },
    {
+		path: 'new-dashboard',
+      component: NewList
+   },
+   {
 		path: 'events',
 		component: Events
 	},
-   // {
-	// 	path: 'detail-events',
-	// 	component: DetailEvents
-   // },
    {
       path: 'detail-events',
       component: DetailEvents
-   }
+   },
    // {
 	// 	path: 'events/detail-events',
 	// 	component: DetailEvents

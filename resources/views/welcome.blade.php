@@ -25,6 +25,7 @@
     <!-- Use For Google Font -->
     <link href="https://fonts.googleapis.com/css?family=Heebo:100,300,400,500,700,800,900" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{asset('css/style.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('css/login.css')}}">
 
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
@@ -35,7 +36,7 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>Reactify - ReactJS/Redux Admin Template</title>
+    <title>IPfi - Administrador</title>
 </head>
 
 <body>

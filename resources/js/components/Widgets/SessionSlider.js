@@ -47,22 +47,19 @@ export default class SessionSlider extends Component {
 		return (
 			<div className="session-slider">
 				<Slider {...settings}>
-					{(sessionUsersData && sessionUsersData !== null) && sessionUsersData.map((data, key) => (
-						<div key={key}>
+						<div >
 							<img
-								src={data.profile}
+								src={require('Assets/img/gallery-1.jpg')}
 								alt="session-slider"
-								className="img-fluid"
-								width="377"
-								height="588"
+								className="img-fluid gallery1"
+								width="310"
 							/>
-							<div className="rct-img-overlay">
+							{/* <div className="rct-img-overlay">
 								<h5 className="client-name">{data.name}</h5>
 								<span>{data.designation}</span>
 								<p className="mb-0 fs-14">{data.body}</p>
-							</div>
+							</div> */}
 						</div>
-					))}
 				</Slider>
 			</div>
 		);

@@ -78,6 +78,7 @@
     justify-content: space-around;
     box-shadow: none;
   }
+  
   .session-inner-wrapper {
     .session-body {
       background-color: $block-bg;
@@ -116,6 +117,9 @@
     img {
       border-radius: 6px;
     }
+    .gallery1{
+      margin-left: 18%;
+    }
     .rct-img-overlay {
       position: absolute;
       bottom: 0px;
@@ -148,6 +152,7 @@
     .container {
       max-width: 100%;
     }
+    
     .session-inner-wrapper {
       .session-body {
         padding: 2rem 1.875rem;

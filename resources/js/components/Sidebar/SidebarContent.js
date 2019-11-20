@@ -29,7 +29,7 @@ class SidebarContent extends Component {
         return (
             <div className="rct-sidebar-nav">
                 <nav className="navigation">
-                    <List
+                    {/* <List
                         className="rct-mainMenu p-0 m-0 list-unstyled"
                         subheader={
                             <ListSubheader className="side-title" component="li">
@@ -104,16 +104,14 @@ class SidebarContent extends Component {
                             />
                         ))}
                     </List>
-                    {/* <List
+                    <List
                         className="rct-mainMenu p-0 m-0 list-unstyled"
-                        subheader={<ListSubheader className="side-title" component="li">
-                            <IntlMessages id="sidebar.detailEvents" /></ListSubheader>}
+                        subheader={<ListSubheader className="side-title" component="li"><IntlMessages id="sidebar.newDashboard" /></ListSubheader>}
                     >
-                        {sidebarMenus.category7.map((menu, key) => (
+                        {sidebarMenus.category8.map((menu, key) => (
                             <NavMenuItem
                                 menu={menu}
                                 key={key}
-                                onToggleMenu={() => this.toggleMenu(menu, 'category7')}
                             />
                         ))}
                     </List> */}

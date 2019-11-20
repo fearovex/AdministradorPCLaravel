@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
-
+import './styles.css';
 // redux actions
 import { collapsedSidebarAction } from 'Actions';
 
@@ -63,12 +63,16 @@ class Sidebar extends Component {
 				>
 					<div className={classNames("rct-sidebar-content", { "sidebar-overlay-dark": isDarkSidenav, 'sidebar-overlay-light': !isDarkSidenav })}>
 						<div className="site-logo">
-							<Link to="/" className="logo-mini">
+							{/* <Link to="/" className="logo-mini">
 								<img src={require('Assets/img/appLogo.png')} className="mr-15" alt="site logo" width="35" height="35" />
-							</Link>
-							<Link to="/" className="logo-normal">
+							</Link> */}
+							{/* <Link to="/" className="logo-normal">
 								<img src={require('Assets/img/appLogoText.png')} className="img-fluid" alt="site-logo" width="67" height="17" />
-							</Link>
+							</Link> */}
+							<Link to="/" className="logo-normal">
+								{/* <img src={require('Assets/img/Logo_IPwork.png')} className="img-fluid" alt="site-logo" width="150" height="20"/> */}
+								<img src="https://cdn.shortpixel.ai/client/to_webp,q_glossy,ret_img,w_166,h_135/https://unicentrobogota.com/wp-content/uploads/2019/09/logo-unicentro-negativo-1.png" className="img-fluid" alt="site-logo" width="150" height="20"/>
+							</Link> 
 						</div>
 						<div className="rct-sidebar-wrap">
 							<Scrollbars
