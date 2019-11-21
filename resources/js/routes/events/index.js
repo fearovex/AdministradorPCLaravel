@@ -9,6 +9,9 @@ import AddIcon from "@material-ui/icons/Add";
 import './styles.css'
 import { Route, Link } from 'react-router-dom'
 
+// url for backend
+import urlDomain from 'Util/urlDomain';
+
 export default class Events extends Component {
     constructor(props){
         super(props)
@@ -27,7 +30,7 @@ export default class Events extends Component {
 
      async componentDidMount(){
          try {
-            let res = await fetch('https://www.ipfi.ipwork.io/api/events')
+            let res = await fetch(`${urlDomain}api/events`)
             let data = await res.json()
 
             for (let i = 0; i < data.length; i++) {

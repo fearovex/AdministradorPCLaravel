@@ -12,6 +12,9 @@ import { Form, FormGroup, Input } from 'reactstrap';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import QueueAnim from 'rc-queue-anim';
 
+// url for backend
+import urlDomain from 'Util/urlDomain';
+
 // components
 import {
    SessionSlider
@@ -62,7 +65,7 @@ class Signin extends Component {
             },
             body: JSON.stringify(this.state.Form)
          };
-         let res = await fetch('https://www.ipfi.ipwork.io/api/login', config);
+         let res = await fetch(`${urlDomain}api/login`, config);
          let data = await res.json()
          if(data.email && data.email != null){
             this.setState({

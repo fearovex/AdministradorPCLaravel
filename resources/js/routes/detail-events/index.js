@@ -13,6 +13,9 @@ import FilterDateForm from './FilterDateForm';
 import queryString from 'query-string'
 import '../events/styles.css';
 
+// url for backend 
+import urlDomain from 'Util/urlDomain';
+
 
 export default class DetailEvents extends Component {
 
@@ -57,7 +60,7 @@ export default class DetailEvents extends Component {
                 body: JSON.stringify(this.state.form)
 			}
 			// console.log(this.state.form)
-			let res = await fetch('https://www.ipfi.ipwork.io/api/detailEvents', config)
+			let res = await fetch(`${urlDomain}api/detailEvents`, config)
             let dataDetails = await res.json()
             this.setState({
                dataDetails: dataDetails
@@ -95,7 +98,7 @@ export default class DetailEvents extends Component {
                 body: JSON.stringify(this.state.form)
 			}
 
-			let resNameColumns = await fetch('https://www.ipfi.ipwork.io/api/nameColumnNames', onlyTableConfig)
+			let resNameColumns = await fetch(`${urlDomain}api/nameColumnNames`, onlyTableConfig)
             let dataNameColumns = await resNameColumns.json()
 		   /// fin  Consulta Nombre Columnas
 
