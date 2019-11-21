@@ -14,6 +14,15 @@ use Illuminate\Http\Request;
 */
 Route::post('/login','LoginController@login');
 
+Route::post('/graficas', 'GraficasController@Consulta');
+Route::get('/evento', 'GraficasController@UltimoEvento');
+
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
+
+Route::post('/detailEvents','DetailEventsController@index');
+
+Route::post('/nameColumnNames','DetailEventsController@getColumnNames');
+
+Route::get('/events','EventsController@index');

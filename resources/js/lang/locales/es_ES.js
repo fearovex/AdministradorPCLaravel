@@ -6,6 +6,7 @@ module.exports = {
    "sidebar.component": "Componente",
    "sidebar.features": "Caracteristicas",
    "sidebar.applications": "Aplicaciones",
+   "sidebar.newDashboard": "Nuevo Tablero",
    "sidebar.dashboard": "Tablero",
    "sidebar.dashboard1": "Tablero de instrumentos 1",
    "sidebar.dashboard2": "Tablero 2",
@@ -764,5 +765,13 @@ module.exports = {
    "sidebar.projects": "proyectos",
    "sidebar.projectDetail": "detalle del proyecto",
    "sidebar.clients": "clientela",
-   "sidebar.reports": "informes"
+   "sidebar.reports": "informes",
+   "graphics.gender": "Genero",
+   "graphics.ap": "Ap",
+   "graphics.pais": "País",
+   "graphics.edad": "Edad",
+   "graphics.os": "Sistema Operativo",
+   "graphics.date": "Fecha",
+   "sidebar.events" :"Eventos",
+   "sidebar.detailEvents" :"Detalle Eventos"
 }
