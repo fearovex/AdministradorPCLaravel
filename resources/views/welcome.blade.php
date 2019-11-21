@@ -25,6 +25,7 @@
     <!-- Use For Google Font -->
     <link href="https://fonts.googleapis.com/css?family=Heebo:100,300,400,500,700,800,900" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{asset('css/style.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('css/login.css')}}">
 
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.

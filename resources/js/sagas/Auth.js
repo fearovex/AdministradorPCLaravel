@@ -86,10 +86,10 @@ const createUserWithEmailPasswordRequest = async (email, password) =>
  * Signin User With Email & Password
  */
 function* signInUserWithEmailPassword({ payload }) {
-    const { email, password } = payload.user;
+    const { data } = payload.user;
     const { history } = payload;
     try {
-        const signInUser = yield call(signInUserWithEmailPasswordRequest, email, password);
+        const signInUser = data;
         if (signInUser.message) {
             yield put(signinUserFailure(signInUser.message));
         } else {
