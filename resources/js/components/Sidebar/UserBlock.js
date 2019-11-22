@@ -11,6 +11,9 @@ import Avatar from '@material-ui/core/Avatar';
 // components
 import SupportPage from '../Support/Support';
 
+// url for backend
+import urlDomain from 'Util/urlDomain';
+
 // redux action
 import { logoutUserFromFirebase } from 'Actions';
 
@@ -27,9 +30,14 @@ class UserBlock extends Component {
 	/**
 	 * Logout User
 	 */
-	logoutUser(e) {
+	async logoutUser(e) {
 		e.preventDefault();
-		this.props.logoutUserFromFirebase();
+		try {
+			let res = await fetch(`${urlDomain}api/logout`);
+			this.props.logoutUserFromFirebase();
+		} catch (error) {
+			console.log(error)
+		}
 	}
 
 	/**
@@ -85,14 +93,14 @@ class UserBlock extends Component {
 								/> */}
 							</div>
 							<div className="user-info">
-								<span className="user-name ml-3">Administrador</span>
+								<span className="user-name ml-3">{localStorage.user_name}</span>
 								<i className="zmdi zmdi-chevron-down dropdown-icon mx-2"></i>
 							</div>
 						</DropdownToggle>
 						<DropdownMenu>
 							<ul className="list-unstyled mb-0">
 								<li className="p-15 border-bottom user-profile-top bg-primary rounded-top">
-									<p className="text-white mb-0 fs-14">Administrador</p>
+									<p className="text-white mb-0 fs-14">{localStorage.user_name}</p>
 									{/* <span className="text-white fs-14">mauricio.pascuas@ipwork.com.co</span> */}
 								</li>
 								{/* <li>

@@ -70,8 +70,8 @@ class Sidebar extends Component {
 								<img src={require('Assets/img/appLogoText.png')} className="img-fluid" alt="site-logo" width="67" height="17" />
 							</Link> */}
 							<Link to="/" className="logo-normal">
-								{/* <img src={require('Assets/img/Logo_IPwork.png')} className="img-fluid" alt="site-logo" width="150" height="20"/> */}
-								<img src="https://cdn.shortpixel.ai/client/to_webp,q_glossy,ret_img,w_166,h_135/https://unicentrobogota.com/wp-content/uploads/2019/09/logo-unicentro-negativo-1.png" className="img-fluid" alt="site-logo" width="150" height="20"/>
+								<img src={require('Assets/logos/'+localStorage.user_imgdashboard)} className="img-fluid" alt="site-logo" width="150" height="20"/>
+								{/* <img src="https://cdn.shortpixel.ai/client/to_webp,q_glossy,ret_img,w_166,h_135/https://unicentrobogota.com/wp-content/uploads/2019/09/logo-unicentro-negativo-1.png" className="img-fluid" alt="site-logo" width="150" height="20"/> */}
 							</Link> 
 						</div>
 						<div className="rct-sidebar-wrap">

@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 Route::post('/login','LoginController@login');
+Route::get('/logout', 'LoginController@logout');
 
 Route::post('/graficas', 'GraficasController@Consulta');
 Route::get('/evento', 'GraficasController@UltimoEvento');

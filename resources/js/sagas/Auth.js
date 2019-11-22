@@ -93,7 +93,11 @@ function* signInUserWithEmailPassword({ payload }) {
         if (signInUser.message) {
             yield put(signinUserFailure(signInUser.message));
         } else {
-            localStorage.setItem('user_id', signInUser.uid);
+            localStorage.setItem('user_id', signInUser.id);
+            localStorage.setItem('user_name', signInUser.name);
+            localStorage.setItem('user_email', signInUser.email);
+            localStorage.setItem('user_database', signInUser.database);
+            localStorage.setItem('user_imgdashboard', signInUser.imgdashboard);
             yield put(signinUserSuccess(signInUser));
             history.push('/');
         }
@@ -181,6 +185,10 @@ function* signOut() {
     try {
         yield call(signOutRequest);
         localStorage.removeItem('user_id');
+        localStorage.removeItem('user_name');
+        localStorage.removeItem('user_email');
+        localStorage.removeItem('user_database');
+        localStorage.removeItem('user_imgdashboard');
         yield put(logoutUserFromFirebaseSuccess())
     } catch (error) {
         yield put(logoutUserFromFirebaseFailure());

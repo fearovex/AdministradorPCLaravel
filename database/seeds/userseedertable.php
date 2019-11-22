@@ -13,27 +13,27 @@ class userseedertable extends Seeder
     public function run()
     {
         $user = new User();
-        $user->name = 'Administrador';
+        $user->name = 'IPwork';
         $user->email = 'administrador@ipwork.com.co';
         $user->password = 'IPwork2019.';
-        $user->database = 'ipfiadmin';
-        $user->imgdashboard = 'Assets/logos/ipfi.png';
+        $user->database = 'unicentro';
+        $user->imgdashboard = 'ipfi.png';
         $user->save();
 
         $user = new User();
-        $user->name = 'Administrador';
+        $user->name = 'Oxohotel';
         $user->email = 'oxohotel@ipwork.com.co';
         $user->password = 'Oxohotel2019';
         $user->database = 'portal_oxohotel';
-        $user->imgdashboard = 'Assets/logos/oxohotel.png';
+        $user->imgdashboard = 'oxohotel.png';
         $user->save();
 
         $user = new User();
-        $user->name = 'Administrador';
+        $user->name = 'Unicentro';
         $user->email = 'unicentro@ipwork.com.co';
         $user->password = 'Unicentro2019';
         $user->database = 'unicentro';
-        $user->imgdashboard = 'Assets/logos/unicentro.png';
+        $user->imgdashboard = 'unicentro.png';
         $user->save();
     }
 }
