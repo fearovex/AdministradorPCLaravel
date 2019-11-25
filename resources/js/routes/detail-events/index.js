@@ -48,8 +48,10 @@ export default class DetailEvents extends Component {
 		this.handleDateFilter=this.handleDateFilter.bind(this)
 	}
 
-	async handleDateFilter(e){
-        e.preventDefault()
+	async handleDateFilter(e = null){
+		if(e != null){
+			e.preventDefault()
+		}
         try {
             let config = {
                 method: 'POST',
