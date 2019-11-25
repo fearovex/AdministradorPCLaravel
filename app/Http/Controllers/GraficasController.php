@@ -8,11 +8,13 @@ use Illuminate\Support\Facades\DB;
 class GraficasController extends Controller
 {
     public function UltimoEvento(){
-        $Evento = DB::table('eventos')
+
+        $Evento = DB::connection(session('database'))
+            ->table('eventos')
             ->orderBy('fecha_inicio', 'DESC')
             ->limit(1)
             ->first();
-        
+
         return response()->json($Evento, 200);
     }
 
@@ -32,15 +34,17 @@ class GraficasController extends Controller
         $DatosGraficas['os'] = array();
         $DatosGraficas['fecha'] = array();
         
-        $DatosGraficas['genero'] = DB::table($Evento->campania)
-        ->select(DB::raw('genero, COUNT(*) AS personas'))
-        ->whereBetween('fecha_creacion', [$fecha_inicial,$fecha_final])
-        ->groupBy('genero')
-        ->orderBy('personas', 'DESC')
-        ->limit(5)
-        ->get();
+        $DatosGraficas['genero'] = DB::connection(session('database'))
+            ->table($Evento->campania)
+            ->select(DB::raw('genero, COUNT(*) AS personas'))
+            ->whereBetween('fecha_creacion', [$fecha_inicial,$fecha_final])
+            ->groupBy('genero')
+            ->orderBy('personas', 'DESC')
+            ->limit(5)
+            ->get();
         
-        $DatosGraficas['ap'] = DB::table($Evento->campania)
+        $DatosGraficas['ap'] = DB::connection(session('database'))
+            ->table($Evento->campania)
             ->select(DB::raw('ip_ap as ap, COUNT(*) AS personas'))
             ->whereBetween('fecha_creacion', [$fecha_inicial,$fecha_final])
             ->groupBy('ap')
@@ -48,7 +52,8 @@ class GraficasController extends Controller
             ->limit(5)
             ->get();
 
-        $DatosGraficas['paises'] = DB::table($Evento->campania.' as pac')
+        $DatosGraficas['paises'] = DB::connection(session('database'))
+            ->table($Evento->campania.' as pac')
             ->join('paises', 'pac.id_pais',  '=', 'paises.id')
             ->select(DB::raw('paises.nombre_esp as pais, pac.id_pais, COUNT(*) AS personas'))
             ->whereBetween('fecha_creacion', [$fecha_inicial,$fecha_final])
@@ -57,7 +62,8 @@ class GraficasController extends Controller
             ->limit(5)
             ->get();
 
-        $DatosGraficas['edad'] = DB::table($Evento->campania)
+        $DatosGraficas['edad'] = DB::connection(session('database'))
+            ->table($Evento->campania)
             ->select(DB::raw('edad, COUNT(*) AS personas'))
             ->whereBetween('fecha_creacion', [$fecha_inicial,$fecha_final])
             ->groupBy('edad')
@@ -65,7 +71,8 @@ class GraficasController extends Controller
             ->limit(5)
             ->get();
 
-        $DatosGraficas['os'] = DB::table($Evento->campania)
+        $DatosGraficas['os'] = DB::connection(session('database'))
+            ->table($Evento->campania)
             ->select(DB::raw('os, COUNT(*) AS personas'))
             ->whereBetween('fecha_creacion', [$fecha_inicial,$fecha_final])
             ->groupBy('os')
@@ -73,7 +80,8 @@ class GraficasController extends Controller
             ->limit(5)
             ->get();
 
-        $DatosGraficas['fecha'] = DB::table($Evento->campania)
+        $DatosGraficas['fecha'] = DB::connection(session('database'))
+            ->table($Evento->campania)
             ->select(DB::raw('date(fecha_creacion) as fecha, COUNT(*) AS personas'))
             ->whereBetween('fecha_creacion', [$fecha_inicial,$fecha_final])
             ->groupBy('fecha')

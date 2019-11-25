@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\DetailEvents;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -11,7 +10,7 @@ class DetailEventsController extends Controller
 {
     public function getColumnNames(Request $request){
         $table_name=$request->tb;
-        $db = env('DB_DATABASE');
+        $db = session('database');
         $getColumnNames = DB::select("SELECT COLUMN_NAME
         FROM INFORMATION_SCHEMA.COLUMNS
         WHERE TABLE_SCHEMA = '".$db."' AND TABLE_NAME = '".$table_name."';");
@@ -27,7 +26,7 @@ class DetailEventsController extends Controller
         $id_event=$request->id_event;
         $table_name=$request->tb;
 
-        $detailEvents = DB::table($table_name)->where('id_evento',$id_event )->whereBetween('fecha_creacion',[$totalInitialDate, $totalFinalDate])->get();
+        $detailEvents = DB::connection(session('database'))->table($table_name)->where('id_evento',$id_event )->whereBetween('fecha_creacion',[$totalInitialDate, $totalFinalDate])->get();
 
         return response()->json($detailEvents, 200);
     }

@@ -16,17 +16,20 @@ use Illuminate\Http\Request;
 //     return $request->user();
 // });
 Route::group(['middleware' => 'cors'], function() {
-    Route::post('/login','LoginController@login');
 
-    Route::get('/logout', 'LoginController@logout');
+    Route::post('/login','Auth\LoginController@login');
 
-    Route::post('/graficas', 'GraficasController@Consulta');
-    
-    Route::get('/evento', 'GraficasController@UltimoEvento');
+    Route::group(['middleware' => 'connection'], function() {
+        Route::get('/logout', 'Auth\LoginController@logout');
 
-    Route::post('/detailEvents','DetailEventsController@index');
+        Route::post('/graficas', 'GraficasController@Consulta');
+        
+        Route::get('/evento', 'GraficasController@UltimoEvento');
 
-    Route::post('/nameColumnNames','DetailEventsController@getColumnNames');
+        Route::post('/detailEvents','DetailEventsController@index');
 
-    Route::get('/events','EventsController@index');
+        Route::post('/nameColumnNames','DetailEventsController@getColumnNames');
+
+        Route::get('/events','EventsController@index');
+    });
  });
