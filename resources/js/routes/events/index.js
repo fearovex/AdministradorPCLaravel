@@ -62,9 +62,6 @@ export default class Events extends Component {
         return (
             <div className="blank-wrapper">
                 <Helmet>
-                    <title>
-                        Eventos
-                    </title>
                     <meta name="description" content="Reactify Blank Page" />
                 </Helmet>
 
