@@ -24,8 +24,15 @@
         media="screen" />
     <!-- Use For Google Font -->
     <link href="https://fonts.googleapis.com/css?family=Heebo:100,300,400,500,700,800,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" type="text/css" href="{{asset('css/style.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('css/login.css')}}">
+
+    <style>
+        h1, h2, h3, h4, h5, h6, input, button, select, span, table, th, td, p{
+          font-family: 'Montserrat', sans-serif !important;
+        }
+    </style>
 
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.

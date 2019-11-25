@@ -101,28 +101,28 @@ class Signin extends Component {
                {loading &&
                   <LinearProgress />
                }
-               <AppBar position="static" className="session-header">
-                  {/* <Toolbar>
-                     <div className="container">
-                        <div className="d-flex justify-content-between">
-                           <div className="session-logo">
-                              <Link to="/">
-                                 <img src={AppConfig.appLogo} alt="session-logo" className="img-fluid" width="110" height="35" />
-                                 <img src="https://cdn.shortpixel.ai/client/to_webp,q_glossy,ret_img,w_166,h_135/https://unicentrobogota.com/wp-content/uploads/2019/09/logo-unicentro-negativo-1.png" className="img-fluid" alt="site-logo" width="90" height="20"/>
-                              </Link>
-                           </div>
-                           <div>
-                              <a className="mr-15" onClick={() => this.onUserSignUp()}>Create New account?</a>
-                              <Button variant="contained" className="btn-light" onClick={() => this.onUserSignUp()}>Sign Up</Button>
-                           </div>
-                        </div>
-                     </div>
-                  </Toolbar> */}
-               </AppBar>
                <div className="session-inner-wrapper">
                   <div className="container">
                      <div className="row row-eq-height">
-                        <div className="col-sm-7 col-md-7 col-lg-7">
+                        <div className="col-sm-6 col-md-6 col-lg-6">
+                           <AppBar position="static" className="session-header" style={{'alignItems' : 'center', 'marginBottom': '30px'}}>
+                              <Toolbar>
+                                 <div className="container">
+                                    <div className="d-flex justify-content-between">
+                                       <div className="session-logo">
+                                          <Link to="/">
+                                             {/* <img src={AppConfig.appLogo} alt="session-logo" className="img-fluid" width="110" height="35" /> */}
+                                             <img src={require('Assets/logos/ipfi.png')} className="img-fluid" alt="site-logo" style={{'width' : '150px', 'height': '90px'}}/>
+                                          </Link>
+                                       </div>
+                                       {/* <div>
+                                          <a className="mr-15" onClick={() => this.onUserSignUp()}>Create New account?</a>
+                                          <Button variant="contained" className="btn-light" onClick={() => this.onUserSignUp()}>Sign Up</Button>
+                                       </div> */}
+                                    </div>
+                                 </div>
+                              </Toolbar>
+                           </AppBar>
                            <div className="session-body text-center ">
                               <div className="session-head mb-30">
                                  <h2 className="font-weight-bold">Administrador Portal Cautivo</h2>
@@ -166,7 +166,7 @@ class Signin extends Component {
                               </Form>
                            </div>
                         </div>
-                        <div className="col-sm-5 col-md-5 col-lg-5 ">
+                        <div className="col-sm-6 col-md-6 col-lg-6 ">
                            <SessionSlider />
                         </div>
                      </div>

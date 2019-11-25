@@ -47,12 +47,13 @@ export default class SessionSlider extends Component {
 		return (
 			<div className="session-slider">
 				<Slider {...settings}>
-						<div >
+						<div>
 							<img
 								src={require('Assets/img/gallery-1.jpg')}
 								alt="session-slider"
 								className="img-fluid gallery1"
-								width="310"
+								// width="100%"
+								// height="100%"
 							/>
 							{/* <div className="rct-img-overlay">
 								<h5 className="client-name">{data.name}</h5>
