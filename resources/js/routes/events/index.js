@@ -17,7 +17,8 @@ export default class Events extends Component {
         super(props)
         this.state = {
             data: [],
-            error: null
+            error: null,
+            form: {},
         }
         this.onSubmit=this.onSubmit.bind(this)
     }
@@ -30,15 +31,29 @@ export default class Events extends Component {
 
      async componentDidMount(){
          try {
-            let res = await fetch(`${urlDomain}api/events`)
+            let form = {
+                initialDate: 0
+            }
+
+            let config = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                
+                body: JSON.stringify(form)
+            }
+
+            let res = await fetch(`${urlDomain}api/events`, config)
             let data = await res.json()
 
             for (let i = 0; i < data.length; i++) {
-                // data[i]["acciones"]=<a href={"http://administradorpclaravel.test/app/detail-events?id="+ data[i].id+"&tb="+data[i].campania }>Ver</a>
                 data[i]["acciones"]=<Link to={"/app/detail-events?id="+ data[i].id+"&tb="+data[i].campania }>Ver</Link>
                 delete data[i].id
                 delete data[i].id_locacion
             }
+
             this.setState({
                 data: data
             })

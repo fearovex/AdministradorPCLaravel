@@ -44,12 +44,14 @@ export default class NewList extends Component {
         this.state = {
 			data:[],
 			error: null,
-			form: {}
+            form: {},
+            events: []
         }
         
         this.ConsultaGraficas = this.ConsultaGraficas.bind(this);
         this.handleChange=this.handleChange.bind(this)
-		this.handleDateFilter=this.handleDateFilter.bind(this)
+        this.handleDateFilter=this.handleDateFilter.bind(this)
+        this.handleChangeEvent = this.handleChangeEvent.bind(this)
     }
     
     async componentDidMount(){
@@ -63,16 +65,18 @@ export default class NewList extends Component {
             let tempDate2 = new Date(datagraph.fecha_fin);
             let finalDate = tempDate2.getFullYear() + '-' + (tempDate2.getMonth()+1) + '-' + tempDate2.getDate();
             let finalTime = ('0'+tempDate2.getHours()).slice(-2) +':'+ ('0'+tempDate2.getMinutes()).slice(-2) +':'+ ('0' + tempDate2.getSeconds()).slice(-2);
-            
+
             this.setState({
                 form:{
                     initialDate: initialDate,
                     initialTime: initialTime,
                     finalDate: finalDate,
-                    finalTime: finalTime
+                    finalTime: finalTime,
+                    id_event: datagraph.id,
                 }
             })
 
+            this.ConsultaEventos()
             this.ConsultaGraficas()
             
          } catch (error) {
@@ -108,9 +112,61 @@ export default class NewList extends Component {
          }
     }
 
-    handleDateFilter(e){
-        e.preventDefault()
-        this.ConsultaGraficas()
+    handleDateFilter(e = null){
+        if(e != null){
+            e.preventDefault()
+        }
+        this.setState({
+            form:{
+                ...this.state.form,
+                id_event: 0,
+            }
+        })
+
+        this.ConsultaEventos()
+    }
+    
+    async ConsultaEventos(){
+        try {
+            let config = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                
+                body: JSON.stringify(this.state.form)
+            }
+
+            let res = await fetch(`${urlDomain}api/events`, config)
+            let dataevents = await res.json()
+            
+            for (let i = 0; i < dataevents.length; i++) {
+                this.setState({
+                    events: dataevents
+                })                
+            }
+
+        } catch (error) {
+            this.setState({ 
+                error
+            })
+        }
+    }
+    
+    handleChangeEvent(e){
+        var value = e.target.value
+
+        if(value != 0){
+            this.state.form.id_event = value;
+
+            this.ConsultaGraficas()
+        }
+        else{
+            this.setState({ 
+                error: 'error'
+            })
+        }
     }
 
     handleChange(e){
@@ -123,52 +179,66 @@ export default class NewList extends Component {
     }
 
     render() {
-        const { match } = this.props;
+        const { events, form } = this.state;
         return (
             <div className="cardsmasonry-wrapper">
                 <PageTitleBar title={<IntlMessages id="sidebar.dashboard" />} match={this.props.match} />
-                <RctCollapsibleCard heading="Filtro" fullBlock>
+                <RctCollapsibleCard heading="Filtro" >
 					<FilterDateForm
-							form={this.state.form}
+							form={form}
 							onChange={this.handleChange}
 							onSubmit={this.handleDateFilter}
 					/>
+                    <div className="form-group" style={{'marginTop': '5px','marginBottom': '5px'}}>
+                        <select name="change" id="change" className="form-control col-lg-8 offset-lg-2" onChange={this.handleChangeEvent} value={form.id_event}>
+                            <option value="0">Seleccione...</option>
+                            {events && events.map((data) => (
+                            <option value={data.id}>{data.nombre}</option>
+                            ))}
+                        </select>   
+                    </div>
 				</RctCollapsibleCard>
                 <CardColumns>
                     <Card>
                         <CardBody>
                             <CardTitle><IntlMessages id="graphics.gender" /></CardTitle>
-                            <CardText><ChartGenero data={this.state.data.genero}/></CardText>
+                            <ChartGenero data={this.state.data.genero}/>
+                            <CardText></CardText>
                         </CardBody>
                     </Card>
                     <Card>
                         <CardBody>
                             <CardTitle><IntlMessages id="graphics.ap" /></CardTitle>
-                            <CardText><ChartAp data={this.state.data.ap}/></CardText>
+                            <ChartAp data={this.state.data.ap}/>
+                            <CardText></CardText>
                         </CardBody>
                     </Card>
                     {/* <Card>
                         <CardBody>
                             <CardTitle><IntlMessages id="graphics.pais" /></CardTitle>
-                            <CardText><ChartPais data={this.state.data.paises}/></CardText>
+                            <ChartPais data={this.state.data.paises}/>
+                            <CardText></CardText>
                         </CardBody>
                     </Card> */}
                     <Card>
                         <CardBody>
                             <CardTitle><IntlMessages id="graphics.edad" /></CardTitle>
-                            <CardText><ChartEdad data={this.state.data.edad}/></CardText>
+                            <ChartEdad data={this.state.data.edad}/>
+                            <CardText></CardText>
                         </CardBody>
                     </Card>
                     <Card>
                         <CardBody>
                             <CardTitle><IntlMessages id="graphics.os" /></CardTitle>
-                            <CardText><ChartOS data={this.state.data.os}/></CardText>
+                            <ChartOS data={this.state.data.os}/>
+                            <CardText></CardText>
                         </CardBody>
                     </Card>
                     <Card>
                         <CardBody>
                             <CardTitle><IntlMessages id="graphics.date" /></CardTitle>
-                            <CardText><ChartFecha data={this.state.data.fecha}/></CardText>
+                            <ChartFecha data={this.state.data.fecha}/>
+                            <CardText></CardText>
                         </CardBody>
                     </Card>
                 </CardColumns>

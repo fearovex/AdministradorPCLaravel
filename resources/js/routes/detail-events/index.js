@@ -9,7 +9,7 @@ import RctCollapsibleCard from 'Components/RctCollapsibleCard/RctCollapsibleCard
 
 // intl messages
 import IntlMessages from 'Util/IntlMessages';
-import FilterDateForm from './FilterDateForm';
+import FilterDateForm from 'Components/FilterDateForm/FilterDateForm';
 import queryString from 'query-string'
 import '../events/styles.css';
 

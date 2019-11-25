@@ -20,12 +20,11 @@ class GraficasController extends Controller
 
     public function Consulta(Request $request){
 
-        $fecha_inicial = $request->initialDate." ".$request->initialTime;;
-        $fecha_final = $request->finalDate." ".$request->finalTime;;
+        $fecha_inicial = $request->initialDate." ".$request->initialTime;
+        $fecha_final = $request->finalDate." ".$request->finalTime;
         
         
-        $Evento = GraficasController::UltimoEvento();
-        $Evento = $Evento->original;
+        $Evento = DB::connection(session('database'))->table('eventos')->where('id', $request->id_event)->first();
         
         $DatosGraficas['genero'] = array();
         $DatosGraficas['ap'] = array();
