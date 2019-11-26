@@ -4,5 +4,11 @@
 } */
 .logo-normal{
     border-bottom: 2px solid white;
-    padding: 10px 50px;
+    padding: 10px 20px;
+    width: 200px;
+    height: 100px;
+}
+.logo-normal>img{
+    width: 100%;
+    height: 100%;
 }
