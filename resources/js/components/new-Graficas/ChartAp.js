@@ -38,7 +38,7 @@ class ChartAp extends Component {
    async handleChart(data = []) {
 
       let chart = am4core.create("chartap", am4charts.XYChart);
-      chart.scrollbarX = new am4core.Scrollbar();
+      // chart.scrollbarX = new am4core.Scrollbar();
 
       // Add data
       chart.data = data;

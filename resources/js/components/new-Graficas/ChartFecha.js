@@ -43,7 +43,8 @@ class ChartFecha extends Component {
       }
       
       let chart = am4core.create("chartfecha", am4charts.XYChart);
-      
+      // chart.scrollbarX = new am4core.Scrollbar();
+
       // Add data
       chart.data = data;
       
@@ -51,28 +52,24 @@ class ChartFecha extends Component {
       var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
       dateAxis.renderer.minGridDistance = 50;
 
+      // Create value axis
       var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
 
       // Create series
-      var series = chart.series.push(new am4charts.LineSeries());
+      var series = chart.series.push(new am4charts.ColumnSeries());
       series.dataFields.valueY = "personas";
       series.dataFields.dateX = "fecha";
-      series.strokeWidth = 2;
-      series.minBulletDistance = 10;
       series.tooltipText = "{valueY}";
-      series.tooltip.pointerOrientation = "vertical";
-      series.tooltip.background.cornerRadius = 20;
-      series.tooltip.background.fillOpacity = 0.5;
-      series.tooltip.label.padding(12,12,12,12)
 
-      // Add scrollbar
-      chart.scrollbarX = new am4charts.XYChartScrollbar();
-      chart.scrollbarX.series.push(series);
+      
 
-      // Add cursor
+      var columnTemplate = series.columns.template;
+      columnTemplate.strokeWidth = 2;
+      columnTemplate.strokeOpacity = 1;
+
       chart.cursor = new am4charts.XYCursor();
-      chart.cursor.xAxis = dateAxis;
-      chart.cursor.snapToSeries = series;
+      chart.cursor.lineX.strokeOpacity = 0;
+      chart.cursor.lineY.strokeOpacity = 0;
    }
 
    componentWillUnmount() {
