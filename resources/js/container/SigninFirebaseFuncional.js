@@ -11,8 +11,7 @@ import { NotificationContainer, NotificationManager } from 'react-notifications'
 import { Redirect, Route } from 'react-router-dom';
 import { connect } from 'react-redux'
 
-// url for backend
-import urlDomain from 'Util/urlDomain';
+
 
 import {
    signinUserInFirebase
@@ -45,7 +44,7 @@ class Signin extends Component {
             },
             body: JSON.stringify(this.state.Form)
          };
-         let res = await fetch(`${urlDomain}api/login`, config);
+         let res = await fetch(`${localStorage.urlDomain}api/login`, config);
          let data = await res.json()
          if(data.email && data.email != null){
             this.setState({

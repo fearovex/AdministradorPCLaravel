@@ -11,8 +11,7 @@ import Avatar from '@material-ui/core/Avatar';
 // components
 import SupportPage from '../Support/Support';
 
-// url for backend
-import urlDomain from 'Util/urlDomain';
+
 
 // redux action
 import { logoutUserFromFirebase } from 'Actions';
@@ -33,7 +32,7 @@ class UserBlock extends Component {
 	async logoutUser(e) {
 		e.preventDefault();
 		try {
-			let res = await fetch(`${urlDomain}api/logout`);
+			let res = await fetch(`${localStorage.urlDomain}api/logout`);
 			this.props.logoutUserFromFirebase();
 		} catch (error) {
 			console.log(error)

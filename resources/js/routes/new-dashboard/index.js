@@ -6,8 +6,7 @@ import PageTitleBar from 'Components/PageTitleBar/PageTitleBar';
 // intl messages
 import IntlMessages from 'Util/IntlMessages';
 
-// url for backend
-import urlDomain from 'Util/urlDomain';
+
 
 // rct card box
 import { RctCard, RctCardContent } from 'Components/RctCard';
@@ -56,7 +55,7 @@ export default class NewList extends Component {
     
     async componentDidMount(){
         try {
-            let res = await fetch(`${urlDomain}api/evento`);
+            let res = await fetch(`${localStorage.urlDomain}api/evento`);
             let datagraph = await res.json()
             let tempDate = new Date(datagraph.fecha_inicio);
             let initialDate = tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate(); 
@@ -98,7 +97,7 @@ export default class NewList extends Component {
                 body: JSON.stringify(this.state.form)
             }
 
-            let res = await fetch(`${urlDomain}api/graficas`, config);
+            let res = await fetch(`${localStorage.urlDomain}api/graficas`, config);
             let datagraph = await res.json()
 
             this.setState({
@@ -138,7 +137,7 @@ export default class NewList extends Component {
                 body: JSON.stringify(this.state.form)
             }
 
-            let res = await fetch(`${urlDomain}api/events`, config)
+            let res = await fetch(`${localStorage.urlDomain}api/events`, config)
             let dataevents = await res.json()
             
             for (let i = 0; i < dataevents.length; i++) {

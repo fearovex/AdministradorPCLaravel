@@ -9,8 +9,7 @@ import AddIcon from "@material-ui/icons/Add";
 import './styles.css'
 import { Route, Link } from 'react-router-dom'
 
-// url for backend
-import urlDomain from 'Util/urlDomain';
+
 
 export default class Events extends Component {
     constructor(props){
@@ -45,7 +44,7 @@ export default class Events extends Component {
                 body: JSON.stringify(form)
             }
 
-            let res = await fetch(`${urlDomain}api/events`, config)
+            let res = await fetch(`${localStorage.urlDomain}api/events`, config)
             let data = await res.json()
 
             for (let i = 0; i < data.length; i++) {
