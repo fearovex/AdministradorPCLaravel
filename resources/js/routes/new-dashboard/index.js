@@ -62,9 +62,11 @@ export default class NewList extends Component {
             let initialDate = tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate(); 
             // let initialDate = new Date(); 
             let initialTime = ('0'+tempDate.getHours()).slice(-2) +':'+ ('0'+tempDate.getMinutes()).slice(-2) +':'+ ('0' + tempDate.getSeconds()).slice(-2);
+            // let initialTime = ('0'+tempDate.getHours()).slice(-2) +':'+ ('0'+tempDate.getMinutes()).slice(-2);
             let tempDate2 = new Date(datagraph.fecha_fin);
             let finalDate = tempDate2.getFullYear() + '-' + (tempDate2.getMonth()+1) + '-' + tempDate2.getDate();
             let finalTime = ('0'+tempDate2.getHours()).slice(-2) +':'+ ('0'+tempDate2.getMinutes()).slice(-2) +':'+ ('0' + tempDate2.getSeconds()).slice(-2);
+            // let finalTime = ('0'+tempDate2.getHours()).slice(-2) +':'+ ('0'+tempDate2.getMinutes()).slice(-2);
 
             this.setState({
                 form:{
@@ -189,13 +191,14 @@ export default class NewList extends Component {
 							onChange={this.handleChange}
 							onSubmit={this.handleDateFilter}
 					/>
-                    <div className="form-group" style={{'marginTop': '5px','marginBottom': '5px'}}>
-                        <select name="change" id="change" className="form-control col-lg-8 offset-lg-2" onChange={this.handleChangeEvent} value={form.id_event}>
-                            <option value="0">Seleccione...</option>
-                            {events && events.map((data) => (
-                            <option value={data.id}>{data.nombre}</option>
-                            ))}
-                        </select>   
+                    <div className="form-inline justify-content-center">
+                        <label className="mr-4">Eventos</label>
+                            <select name="change" id="change" className="form-control col-10 col-sm-8 col-lg-8" onChange={this.handleChangeEvent} value={form.id_event}>
+                                <option value="0">Seleccione...</option>
+                                {events && events.map((data) => (
+                                <option value={data.id}>{data.nombre}</option>
+                                ))}
+                            </select>   
                     </div>
 				</RctCollapsibleCard>
                 <CardColumns>
