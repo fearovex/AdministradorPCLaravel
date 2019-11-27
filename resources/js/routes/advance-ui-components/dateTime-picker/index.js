@@ -20,7 +20,9 @@ import RctCollapsibleCard from 'Components/RctCollapsibleCard/RctCollapsibleCard
 import IntlMessages from 'Util/IntlMessages';
 
 class RctPickers extends Component {
+	
 	render() {
+		
 		return (
 			<div className="date-time-wrapper">
 				<PageTitleBar title={<IntlMessages id="sidebar.dateAndTimePicker" />} match={this.props.match} />
@@ -34,7 +36,9 @@ class RctPickers extends Component {
 						heading={<IntlMessages id="widgets.defaultPicker" />}
 						colClasses="col-sm-12 col-md-6 col-xl-4"
 					>
-						<DatePicker />
+						<DatePicker 
+							
+						/>
 					</RctCollapsibleCard>
 					<RctCollapsibleCard
 						colClasses="col-sm-12 col-md-6 col-xl-4"

@@ -534,6 +534,23 @@ const AsyncReportsComponent = Loadable({
    loader: () => import("Routes/crm/reports"),
    loading: () => <RctPageLoader />,
 });
+const AsyncNewDashboardComponent = Loadable({
+   loader: () => import("Routes/new-dashboard"),
+   loading: () => <RctPageLoader />,
+});
+const AsyncEventsComponent = Loadable({
+   loader: () => import("Routes/events"),
+   loading: () => <RctPageLoader />,
+});
+
+const AsyncDetailEventsComponent = Loadable({
+   loader: () => import("Routes/detail-events"),
+   loading: () => <RctPageLoader />,
+});
+// const AsyncDetailEventsComponent = Loadable({
+//    loader: () => import("Routes/events/detail-events"),
+//    loading: () => <RctPageLoader />,
+// });
 export {
    AsyncUserWidgetComponent,
    AsyncUserChartsComponent,
@@ -621,5 +638,11 @@ export {
    AsyncProjectsComponent,
    AsyncProjectDetailComponent,
    AsyncClientsComponent,
-   AsyncReportsComponent
+   AsyncReportsComponent,
+   AsyncNewDashboardComponent,
+   //events
+   AsyncEventsComponent,
+   //detail events
+   AsyncDetailEventsComponent
+   
 };

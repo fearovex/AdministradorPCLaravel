@@ -6,7 +6,8 @@ module.exports = {
    "sidebar.component": "Componente",
    "sidebar.features": "Caracteristicas",
    "sidebar.applications": "Aplicaciones",
-   "sidebar.dashboard": "Tablero",
+   "sidebar.newDashboard": "Inicio",
+   "sidebar.dashboard": "Inicio",
    "sidebar.dashboard1": "Tablero de instrumentos 1",
    "sidebar.dashboard2": "Tablero 2",
    "sidebar.dashboard3": "Tablero 3",
@@ -753,7 +754,6 @@ module.exports = {
    "widgets.preview": "Avance",
    "widgets.croppedImage": "Imagen recortada",
    "sidebar.crm": "CRM",
-   "sidebar.dashboard": "tablero",
    "widgets.transactionList": "lista de transacciones",
    "widgets.transferReport": "informe de transferencia",
    "widgets.expenseCategory": "categoría de gastos",
@@ -764,5 +764,13 @@ module.exports = {
    "sidebar.projects": "proyectos",
    "sidebar.projectDetail": "detalle del proyecto",
    "sidebar.clients": "clientela",
-   "sidebar.reports": "informes"
+   "sidebar.reports": "informes",
+   "graphics.gender": "N° Personas por Genero",
+   "graphics.ap": "N° Conexiones por Punto de Acceso",
+   "graphics.pais": "N° Personas por País",
+   "graphics.edad": "N° Personas por Edad",
+   "graphics.os": "N° Personas por Sistema Operativo",
+   "graphics.date": "N° Personas por Fecha",
+   "sidebar.events" :"Eventos",
+   "sidebar.detailEvents" :"Detalle Eventos"
 }

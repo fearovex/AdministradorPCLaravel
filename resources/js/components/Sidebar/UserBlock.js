@@ -7,9 +7,11 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Badge } from 'reactstrap';
 import { NotificationManager } from 'react-notifications';
-
+import Avatar from '@material-ui/core/Avatar';
 // components
 import SupportPage from '../Support/Support';
+
+
 
 // redux action
 import { logoutUserFromFirebase } from 'Actions';
@@ -27,9 +29,14 @@ class UserBlock extends Component {
 	/**
 	 * Logout User
 	 */
-	logoutUser(e) {
+	async logoutUser(e) {
 		e.preventDefault();
-		this.props.logoutUserFromFirebase();
+		try {
+			let res = await fetch(`${localStorage.urlDomain}api/logout`);
+			this.props.logoutUserFromFirebase();
+		} catch (error) {
+			console.log(error)
+		}
 	}
 
 	/**
@@ -75,26 +82,27 @@ class UserBlock extends Component {
 							className="d-flex align-items-center"
 						>
 							<div className="user-profile">
-								<img
+								<Avatar className="size-50 bg-info rounded-circle">AD</Avatar>
+								{/* <img
 									src={require('Assets/avatars/user-15.jpg')}
 									alt="user profile"
 									className="img-fluid rounded-circle"
 									width="50"
 									height="100"
-								/>
+								/> */}
 							</div>
 							<div className="user-info">
-								<span className="user-name ml-4">Lucile Beck</span>
-								<i className="zmdi zmdi-chevron-down dropdown-icon mx-4"></i>
+								<span className="user-name ml-3">{localStorage.user_name}</span>
+								<i className="zmdi zmdi-chevron-down dropdown-icon mx-2"></i>
 							</div>
 						</DropdownToggle>
 						<DropdownMenu>
 							<ul className="list-unstyled mb-0">
 								<li className="p-15 border-bottom user-profile-top bg-primary rounded-top">
-									<p className="text-white mb-0 fs-14">Lucile Beck</p>
-									<span className="text-white fs-14">info@example.com</span>
+									<p className="text-white mb-0 fs-14">{localStorage.user_name}</p>
+									{/* <span className="text-white fs-14">mauricio.pascuas@ipwork.com.co</span> */}
 								</li>
-								<li>
+								{/* <li>
 									<Link to={{
 										pathname: '/app/users/user-profile-1',
 										state: { activeTab: 0 }
@@ -119,7 +127,7 @@ class UserBlock extends Component {
 										<IntlMessages id="sidebar.feedback" />
 										<Badge color="info" className="pull-right">1</Badge>
 									</Link>
-								</li>
+								</li> */}
 								<li className="border-top">
 									<a href="#" onClick={(e) => this.logoutUser(e)}>
 										<i className="zmdi zmdi-power text-danger mr-3"></i>

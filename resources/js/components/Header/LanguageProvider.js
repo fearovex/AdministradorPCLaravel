@@ -66,11 +66,32 @@ class LanguageProvider extends Component {
 					<div className="dropdown-content">
 						<div className="dropdown-top d-flex justify-content-between rounded-top bg-primary">
 							<span className="text-white font-weight-bold">Languages</span>
-							<Badge color="warning">3 NEW</Badge>
 						</div>
 						<Scrollbars className="rct-scroll" autoHeight autoHeightMin={100} autoHeightMax={280}>
 							<ul className="list-unstyled mb-0 dropdown-list">
-								{languages.map((language, key) => (
+								<li key={languages[0].name} onClick={() => this.onChangeLanguage(languages[0])}>
+									<a href="#" onClick={e => e.preventDefault()}>
+										<img
+											src={require(`Assets/flag-icons/${languages[0].icon}.png`)} className="mr-10"
+											width="25"
+											height="16"
+											alt="lang-icon"
+										/>
+										{languages[0].name}
+									</a>
+								</li>
+								<li key={languages[7].name} onClick={() => this.onChangeLanguage(languages[7])}>
+									<a href="#" onClick={e => e.preventDefault()}>
+										<img
+											src={require(`Assets/flag-icons/${languages[7].icon}.png`)} className="mr-10"
+											width="25"
+											height="16"
+											alt="lang-icon"
+										/>
+										{languages[7].name}
+									</a>
+								</li>
+								{/* {languages.map((language, key) => (
 									<li key={key} onClick={() => this.onChangeLanguage(language)}>
 										<a href="#" onClick={e => e.preventDefault()}>
 											<img
@@ -82,7 +103,7 @@ class LanguageProvider extends Component {
 											{language.name}
 										</a>
 									</li>
-								))}
+								))} */}
 							</ul>
 						</Scrollbars>
 					</div>

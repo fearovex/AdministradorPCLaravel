@@ -1,7 +1,7 @@
 {
-    "/js/chunks/pdfmake.js": "/js/chunks/pdfmake.js",
-    "/js/chunks/xlsx.js": "/js/chunks/xlsx.js",
-    "/js/chunks/canvg.js": "/js/chunks/canvg.js",
     "/js/index.js": "/js/index.js",
-    "/css/style.css": "/css/style.css"
+    "/js/chunks/vendors~canvg.js": "/js/chunks/vendors~canvg.js",
+    "/js/chunks/vendors~pdfmake.js": "/js/chunks/vendors~pdfmake.js",
+    "/js/chunks/vendors~xlsx.js": "/js/chunks/vendors~xlsx.js",
+    "/js/chunks/xlsx.js": "/js/chunks/xlsx.js"
 }

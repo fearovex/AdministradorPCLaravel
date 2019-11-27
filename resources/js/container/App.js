@@ -55,7 +55,7 @@ const handleAuthentication = ({ location }) => {
 /**
  * Initial Path To Check Whether User Is Logged In Or Not
  */
-const InitialPath = ({ component: Component, ...rest, authUser }) =>
+const InitialPath = ({ component: Component, authUser, ...rest}) =>
    <Route
       {...rest}
       render={props =>
@@ -75,10 +75,10 @@ class App extends Component {
    render() {
       const { location, match, user } = this.props;
       if (location.pathname === '/') {
-         if (user === null) {
+         if (user === 'false') {
             return (<Redirect to={'/signin'} />);
          } else {
-            return (<Redirect to={'/app/dashboard/ecommerce'} />);
+            return (<Redirect to={'/app/new-dashboard'} />);
          }
       }
       return (

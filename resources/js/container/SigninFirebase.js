@@ -12,6 +12,8 @@ import { Form, FormGroup, Input } from 'reactstrap';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import QueueAnim from 'rc-queue-anim';
 
+
+
 // components
 import {
    SessionSlider
@@ -37,34 +39,60 @@ const auth = new Auth();
 
 class Signin extends Component {
 
-   state = {
-      email: 'demo@example.com',
-      password: 'test#123'
+   constructor(props) {
+      super(props)
+      this.state = {
+         data: [],
+         error: null,
+         Form: {
+            email: "",
+            password: ""
+         }
+      };
+      this.handleChange = this.handleChange.bind(this);
+      this.handleSubmit = this.handleSubmit.bind(this);
    }
 
-	/**
-	 * On User Login
-	 */
-   onUserLogin() {
-      if (this.state.email !== '' && this.state.password !== '') {
-         this.props.signinUserInFirebase(this.state, this.props.history);
+   async handleSubmit(e) {
+      e.preventDefault()
+      try {
+         let config = {
+            method: 'POST',
+            headers: {
+               'Accept': 'application/json',
+               'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.state.Form)
+         };
+         let res = await fetch(`${localStorage.urlDomain}api/login`, config);
+         let data = await res.json()
+         if(data.email && data.email != null){
+            this.setState({
+               data:data
+            })
+            this.props.signinUserInFirebase(this.state, this.props.history)
+         }
+         
+      } catch (error) {
+         this.setState({
+            error
+         });
       }
+
+
    }
 
-	/**
-	 * On User Sign Up
-	 */
-   onUserSignUp() {
-      this.props.history.push('/signup');
-   }
-
-   //Auth0 Login
-   loginAuth0() {
-      auth.login();
+   handleChange(e) {
+      this.setState({
+         Form: {
+            ...this.state.Form,
+            [e.target.name]: e.target.value
+         }
+      });
    }
 
    render() {
-      const { email, password } = this.state;
+      const {data} = this.state
       const { loading } = this.props;
       return (
          <QueueAnim type="bottom" duration={2000}>
@@ -72,54 +100,54 @@ class Signin extends Component {
                {loading &&
                   <LinearProgress />
                }
-               <AppBar position="static" className="session-header">
-                  <Toolbar>
-                     <div className="container">
-                        <div className="d-flex justify-content-between">
-                           <div className="session-logo">
-                              <Link to="/">
-                                 <img src={AppConfig.appLogo} alt="session-logo" className="img-fluid" width="110" height="35" />
-                              </Link>
-                           </div>
-                           <div>
-                              <a className="mr-15" onClick={() => this.onUserSignUp()}>Create New account?</a>
-                              <Button variant="contained" className="btn-light" onClick={() => this.onUserSignUp()}>Sign Up</Button>
-                           </div>
-                        </div>
-                     </div>
-                  </Toolbar>
-               </AppBar>
                <div className="session-inner-wrapper">
                   <div className="container">
                      <div className="row row-eq-height">
-                        <div className="col-sm-7 col-md-7 col-lg-8">
-                           <div className="session-body text-center">
+                        <div className="col-sm-6 col-md-6 col-lg-6">
+                           <AppBar position="static" className="session-header" style={{'alignItems' : 'center', 'marginBottom': '30px'}}>
+                              <Toolbar>
+                                 <div className="container">
+                                    <div className="d-flex justify-content-between">
+                                       <div className="session-logo">
+                                          <Link to="/">
+                                             {/* <img src={AppConfig.appLogo} alt="session-logo" className="img-fluid" width="110" height="35" /> */}
+                                             <img src={require('Assets/logos/ipfi.png')} className="img-fluid" alt="site-logo" style={{'width' : '200px'}}/>
+                                          </Link>
+                                       </div>
+                                       {/* <div>
+                                          <a className="mr-15" onClick={() => this.onUserSignUp()}>Create New account?</a>
+                                          <Button variant="contained" className="btn-light" onClick={() => this.onUserSignUp()}>Sign Up</Button>
+                                       </div> */}
+                                    </div>
+                                 </div>
+                              </Toolbar>
+                           </AppBar>
+                           <div className="session-body text-center ">
                               <div className="session-head mb-30">
-                                 <h2 className="font-weight-bold">Get started with {AppConfig.brandName}</h2>
-                                 <p className="mb-0">Most powerful ReactJS admin panel</p>
+                                 <h2 className="font-weight-bold">Administrador Portal Cautivo</h2>
                               </div>
                               <Form>
                                  <FormGroup className="has-wrapper">
                                     <Input
                                        type="mail"
-                                       value={email}
-                                       name="user-mail"
+                                       value={this.state.Form.email}
+                                       name="email"
                                        id="user-mail"
                                        className="has-input input-lg"
                                        placeholder="Enter Email Address"
-                                       onChange={(event) => this.setState({ email: event.target.value })}
+                                       onChange={() => this.handleChange(event)}
                                     />
                                     <span className="has-icon"><i className="ti-email"></i></span>
                                  </FormGroup>
                                  <FormGroup className="has-wrapper">
                                     <Input
-                                       value={password}
+                                       value={this.state.Form.password}
                                        type="Password"
-                                       name="user-pwd"
+                                       name="password"
                                        id="pwd"
                                        className="has-input input-lg"
                                        placeholder="Password"
-                                       onChange={(event) => this.setState({ password: event.target.value })}
+                                       onChange={() => this.handleChange(event)}
                                     />
                                     <span className="has-icon"><i className="ti-lock"></i></span>
                                  </FormGroup>
@@ -129,52 +157,15 @@ class Signin extends Component {
                                        className="btn-block text-white w-100"
                                        variant="contained"
                                        size="large"
-                                       onClick={() => this.onUserLogin()}
+                                       onClick={() => this.handleSubmit(event)}
                                     >
                                        Sign In
                             			</Button>
                                  </FormGroup>
-                                 <FormGroup className="mb-15">
-                                    <Button
-                                       variant="contained"
-                                       className="btn-info btn-block text-white w-100"
-                                       size="large"
-                                       onClick={() => this.loginAuth0()}
-                                    >
-                                       Sign In With Auth0
-                            			</Button>
-                                 </FormGroup>
                               </Form>
-                              <p className="mb-20">or sign in with</p>
-                              <Fab variant="round" size="small"
-                                 className="btn-facebook mr-15 mb-20 text-white"
-                                 onClick={() => this.props.signinUserWithFacebook(this.props.history)}
-                              >
-                                 <i className="zmdi zmdi-facebook"></i>
-                              </Fab>
-                              <Fab variant="round" size="small"
-                                 className="btn-google mr-15 mb-20 text-white"
-                                 onClick={() => this.props.signinUserWithGoogle(this.props.history)}
-                              >
-                                 <i className="zmdi zmdi-google"></i>
-                              </Fab>
-                              <Fab variant="round" size="small"
-                                 className="btn-twitter mr-15 mb-20 text-white"
-                                 onClick={() => this.props.signinUserWithTwitter(this.props.history)}
-                              >
-                                 <i className="zmdi zmdi-twitter"></i>
-                              </Fab>
-                              <Fab variant="round" size="small"
-                                 className="btn-instagram mr-15 mb-20 text-white"
-                                 onClick={() => this.props.signinUserWithGithub(this.props.history)}
-                              >
-                                 <i className="zmdi zmdi-github-alt"></i>
-                              </Fab>
-                              <p className="text-muted">By signing up you agree to {AppConfig.brandName}</p>
-                              <p className="mb-0"><a target="_blank" href="#/terms-condition" className="text-muted">Terms of Service</a></p>
                            </div>
                         </div>
-                        <div className="col-sm-5 col-md-5 col-lg-4">
+                        <div className="col-sm-6 col-md-6 col-lg-6 ">
                            <SessionSlider />
                         </div>
                      </div>
@@ -194,8 +185,4 @@ const mapStateToProps = ({ authUser }) => {
 
 export default connect(mapStateToProps, {
    signinUserInFirebase,
-   signinUserWithFacebook,
-   signinUserWithGoogle,
-   signinUserWithGithub,
-   signinUserWithTwitter
 })(Signin);

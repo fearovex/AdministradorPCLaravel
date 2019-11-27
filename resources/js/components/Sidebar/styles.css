@@ -1,0 +1,11 @@
+/* .logo-normal{
+    margin-left: 25px;
+    border-bottom: 2px solid white;
+} */
+.logo-normal{
+    border-bottom: 2px solid white;
+    padding: 10px 30px 10px 30px;
+    width: auto;
+}
+.logo-normal>img{
+}
