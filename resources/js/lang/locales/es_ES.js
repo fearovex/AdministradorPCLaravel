@@ -765,12 +765,12 @@ module.exports = {
    "sidebar.projectDetail": "detalle del proyecto",
    "sidebar.clients": "clientela",
    "sidebar.reports": "informes",
-   "graphics.gender": "Genero",
-   "graphics.ap": "Ap",
+   "graphics.gender": "N° Personas & Genero",
+   "graphics.ap": "N° Conexiones por Punto de Acceso",
    "graphics.pais": "País",
-   "graphics.edad": "Edad",
-   "graphics.os": "Sistema Operativo",
-   "graphics.date": "Fecha",
+   "graphics.edad": "N° Personas & Edad",
+   "graphics.os": "N° Personas por Sistema Operativo",
+   "graphics.date": "N° Personas por Fecha",
    "sidebar.events" :"Eventos",
    "sidebar.detailEvents" :"Detalle Eventos"
 }
