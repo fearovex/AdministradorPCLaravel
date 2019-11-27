@@ -761,12 +761,12 @@ module.exports = {
    "sidebar.projectDetail": "project Detail",
    "sidebar.clients": "clients",
    "sidebar.reports": "reports",
-   "graphics.gender": "N° People & Gender",
-   "graphics.ap": "N° Connections for Access Point",
-   "graphics.pais": "Country",
-   "graphics.edad": "N° People & Age",
-   "graphics.os": "N° People for Operating system",
-   "graphics.date": "N° People for Date",
+   "graphics.gender": "N° People by Gender",
+   "graphics.ap": "N° Connections by Access Point",
+   "graphics.pais": "N° People by Country",
+   "graphics.edad": "N° People by Age",
+   "graphics.os": "N° People by Operating system",
+   "graphics.date": "N° People by Date",
    "sidebar.events" :"Events",
    "sidebar.detailEvents" :"Detail Events" // Newly created category
 }
