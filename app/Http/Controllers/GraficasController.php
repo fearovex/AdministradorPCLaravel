@@ -84,7 +84,7 @@ class GraficasController extends Controller
             ->select(DB::raw('date(fecha_creacion) as fecha, COUNT(*) AS personas'))
             ->whereBetween('fecha_creacion', [$fecha_inicial,$fecha_final])
             ->groupBy('fecha')
-            ->orderBy('personas', 'DESC')
+            ->orderBy('fecha', 'ASC')
             ->get();
             
         return response()->json($DatosGraficas, 200);
