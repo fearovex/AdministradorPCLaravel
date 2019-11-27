@@ -129,7 +129,7 @@ class MainApp extends Component {
 		return (
 			<div className="app">
 				<div className="app-main-container">
-					<Tour />
+					{/* <Tour /> */}
 					<Sidebar
 						sidebar={this.renderSidebar()}
 						open={windowWidth <= 1199 ? navCollapsed : false}

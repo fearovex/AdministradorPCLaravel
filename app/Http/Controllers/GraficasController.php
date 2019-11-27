@@ -85,7 +85,6 @@ class GraficasController extends Controller
             ->whereBetween('fecha_creacion', [$fecha_inicial,$fecha_final])
             ->groupBy('fecha')
             ->orderBy('personas', 'DESC')
-            ->limit(5)
             ->get();
             
         return response()->json($DatosGraficas, 200);
