@@ -130,7 +130,7 @@ class UserComponent extends Component {
 								closeable
 								fullBlock
 							>
-								<ProductReportsWidget data={productsReports} />
+								<ProductReportsWidget />
 							</RctCollapsibleCard>
 							<RctCollapsibleCard
 								heading={<IntlMessages id="widgets.toDoList" />}
@@ -139,7 +139,7 @@ class UserComponent extends Component {
 								closeable
 								fullBlock
 							>
-								<DiscoverPeoplesWidget data={discoverPeoples} />
+								<DiscoverPeoplesWidget />
 							</RctCollapsibleCard>
 							<RctCollapsibleCard
 								customClasses="to-do-list"

@@ -10,7 +10,7 @@ const mix = require('laravel-mix');
  | file for the application as well as bundling up all the JS files.
  |
  */
- mix.autoload({
+mix.autoload({
     'jquery': ['$', 'window.jQuery', 'jQuery'],
 })
 
@@ -28,18 +28,9 @@ const mix = require('laravel-mix');
         }
     },
     output: {
-        chunkFilename: mix.inProduction() ? "js/prod/chunks/[name]?id=[chunkhash].js" : "js/chunks/[name].js"
+        chunkFilename : "js/chunks/[name].js"
+        
     }
 }); 
 
-mix.js('resources/js/index.js', 'public/js')
-   .sass('resources/js/assets/scss/_style.scss', 'public/css/style.css')
-   .sass('resources/js/assets/scss/_login.scss', 'public/css/login.css');
-
-mix.options({ extractVueStyles: true });
-
-if (mix.inProduction()) {
-  mix.version(["public/css/style.css", "public/js/index.js","public/css/login.css"]);
-} else {
-  mix.sourceMaps();
-}
+mix.js('resources/js/index.js', 'public/js');
