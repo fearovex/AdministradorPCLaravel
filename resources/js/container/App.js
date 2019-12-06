@@ -26,6 +26,8 @@ import CRMLayout from './CRMLayout';
 import AppSignIn from './SigninFirebase';
 import AppSignUp from './SignupFirebase';
 
+import AutoLogout from './AutoLogout';
+
 // async components
 import {
    AsyncSessionLoginComponent,
@@ -83,6 +85,7 @@ class App extends Component {
       }
       return (
          <RctThemeProvider>
+            <AutoLogout />
             <NotificationContainer />
             <InitialPath
                path={`${match.url}app`}

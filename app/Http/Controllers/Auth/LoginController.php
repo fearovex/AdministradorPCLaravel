@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use App\User;
-use Config;
 
 class LoginController extends Controller
 {
@@ -48,6 +47,7 @@ class LoginController extends Controller
             
             session(['email' => $request->email]);
             session(['password' => $request->password]);
+            session(['active' => true ]);
 
             return response()->json($user, 200);
 
@@ -59,7 +59,7 @@ class LoginController extends Controller
     }
 
     public function logout (){
-        session(['database' => '']);
+        session()->forget(['database', 'email', 'password', 'active']);
         return redirect()->route('home', ['/']);
     }
 }

@@ -32,6 +32,9 @@
     </style>
 
     <script>
+        @if(!session('active'))
+            localStorage.clear();
+        @endif
       localStorage.setItem('urlDomain', '{{env("APP_URL")}}');
     </script> 
 
