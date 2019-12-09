@@ -56,14 +56,14 @@ class Signin extends Component {
       };
       this.handleChange = this.handleChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);      
-      // this.recaptchaLoaded = this.recaptchaLoaded.bind(this);
-      // this.verifyCallback = this.verifyCallback.bind(this);
+      this.recaptchaLoaded = this.recaptchaLoaded.bind(this);
+      this.verifyCallback = this.verifyCallback.bind(this);
    }
 
    async handleSubmit(e) {
       e.preventDefault()
-      // if (this.state.isVerified) {
-      //       alert('You have successfully subscribed!');
+      if (this.state.isVerified) {
+            alert('You have successfully subscribed!');
          try {
             this.state.Form.ip_public = localStorage.ip_client;
             let config = {
@@ -90,10 +90,10 @@ class Signin extends Component {
                error
             });
          }
-      // }   
-      // else {
-      //       alert('por favor verifique el captcha');
-      // }
+      }   
+      else {
+            alert('por favor verifique el captcha');
+      }
    }
 
    handleChange(e) {
@@ -104,16 +104,18 @@ class Signin extends Component {
          }
       });
    }
-   // verifyCallback(response) {
-   //    if (response) {
-   //      this.setState({
-   //        isVerified: true
-   //      })
-   //    }
-   //  }
-//     recaptchaLoaded() {
-//     console.log('captcha successfully loaded');
-//   }
+
+   verifyCallback(response) {
+      if (response) {
+        this.setState({
+          isVerified: true
+        })
+      }
+    }
+
+    recaptchaLoaded() {
+    console.log('captcha successfully loaded');
+  }
 
 
 
@@ -191,7 +193,7 @@ class Signin extends Component {
                                  </FormGroup>
                               
                                     <Recaptcha
-                                       sitekey="6LfuVcYUAAAAAB5R7FWDHAPk-qG5l9hSzZ2PN9pq"
+                                       sitekey="6Lf_5cYUAAAAAEXjXwe1AKCXF7J-TZPzKFW0TAZ_"
                                        render="explicit"
                                        onloadCallback={this.recaptchaLoaded}
                                        verifyCallback={this.verifyCallback}
