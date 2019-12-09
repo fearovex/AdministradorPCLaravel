@@ -56,7 +56,7 @@ class Signin extends Component {
       };
       this.handleChange = this.handleChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);      
-      this.recaptchaLoaded = this.recaptchaLoaded.bind(this);
+      this.onloadCallback = this.onloadCallback.bind(this);
       this.verifyCallback = this.verifyCallback.bind(this);
    }
 
@@ -113,7 +113,7 @@ class Signin extends Component {
       }
     }
 
-    recaptchaLoaded() {
+    onloadCallback() {
     console.log('captcha successfully loaded');
   }
 
@@ -193,9 +193,9 @@ class Signin extends Component {
                                  </FormGroup>
                               
                                     <Recaptcha
-                                       sitekey="6Lf_5cYUAAAAAEXjXwe1AKCXF7J-TZPzKFW0TAZ_"
+                                       sitekey="6Lf_5cYUAAAAAKbjH2asiJ80nk8n6ALNiq-LVTsk"
                                        render="explicit"
-                                       onloadCallback={this.recaptchaLoaded}
+                                       onloadCallback={this.onloadCallback}
                                        verifyCallback={this.verifyCallback}
                                     />
                                 
