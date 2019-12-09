@@ -48,7 +48,10 @@ class LoginController extends Controller
             
             session(['email' => $request->email]);
             session(['password' => $request->password]);
-
+            session(['id_user' => $user->id]);
+            $user->where("id", $user->id)
+                ->update(["conexion" => 1]);
+            
             return response()->json($user, 200);
 
         }else{
@@ -59,7 +62,13 @@ class LoginController extends Controller
     }
 
     public function logout (){
+        $user = User::select('id');    
+        $user->where('id', session('id_user'))
+                ->update(["conexion" => 0]);       
         session(['database' => '']);
-        return redirect()->route('home', ['/']);
+               
+       return redirect()->route('home', ['/']);   
+
     }
+    
 }

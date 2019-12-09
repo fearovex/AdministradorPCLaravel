@@ -20,6 +20,8 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('database');
             $table->string('imgdashboard');
+            $table->tinyInteger('Conexion')->default(0)->nullable();
+            
             $table->timestamps();
         });
     }
