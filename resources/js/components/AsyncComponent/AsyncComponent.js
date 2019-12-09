@@ -298,6 +298,7 @@ const AsyncSessionForgotPasswordComponent = Loadable({
    loading: () => <RctPageLoader />,
 });
 
+
 // Session Page 404
 const AsyncSessionPage404Component = Loadable({
    loader: () => import("Routes/session/404"),

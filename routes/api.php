@@ -19,6 +19,10 @@ Route::group(['middleware' => 'cors'], function() {
 
     Route::post('/login','Auth\LoginController@login');
 
+    Route::post('/password/email','Api\ForgotPasswordController@sendResetLinkEmail');
+    
+    Route::post('/password/reset','Api\ResetPasswordController@reset');
+
     Route::group(['middleware' => 'connection'], function() {
         Route::get('/logout', 'Auth\LoginController@logout');
 

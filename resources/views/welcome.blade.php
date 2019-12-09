@@ -32,7 +32,11 @@
     </style>
 
     <script>
-      localStorage.setItem('urlDomain', '{{env("APP_URL")}}');
+        @if(!session('active'))
+            localStorage.clear();
+            console.log('gol')
+        @endif
+        localStorage.setItem('urlDomain', '{{env("APP_URL")}}');
     </script> 
 
     <title>IPfi - Administrador</title>

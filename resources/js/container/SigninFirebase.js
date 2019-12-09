@@ -11,7 +11,11 @@ import { Link } from 'react-router-dom';
 import { Form, FormGroup, Input } from 'reactstrap';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import QueueAnim from 'rc-queue-anim';
-
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+// import '@fortawesome/fontawesome-free/css/fontawesome.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 
 // components
@@ -42,6 +46,7 @@ class Signin extends Component {
    constructor(props) {
       super(props)
       this.state = {
+         isShow: false,
          data: [],
          error: null,
          Form: {
@@ -70,16 +75,24 @@ class Signin extends Component {
             this.setState({
                data:data
             })
-            this.props.signinUserInFirebase(this.state, this.props.history)
+           this.props.signinUserInFirebase(this.state, this.props.history);
+           NotificationManager.success('User Logged In Succesfully','',4000);
+         }
+         else{
+            NotificationManager.error("The password is invalid or the user doesn't have a password.",'',4000);
          }
          
       } catch (error) {
+         console.log(error);
          this.setState({
             error
          });
       }
 
 
+   }
+   forgotPassword(){
+      this.props.history.push('/password/email')
    }
 
    handleChange(e) {
@@ -140,16 +153,34 @@ class Signin extends Component {
                                     <span className="has-icon"><i className="ti-email"></i></span>
                                  </FormGroup>
                                  <FormGroup className="has-wrapper">
-                                    <Input
-                                       value={this.state.Form.password}
-                                       type="Password"
-                                       name="password"
-                                       id="pwd"
-                                       className="has-input input-lg"
-                                       placeholder="Password"
-                                       onChange={() => this.handleChange(event)}
-                                    />
-                                    <span className="has-icon"><i className="ti-lock"></i></span>
+                                 { this.state.isShow
+                                    ? <Input
+                                          value={this.state.Form.password}
+                                          type="text"
+                                          name="password"
+                                          id="pwd"
+                                          className="has-input input-lg"
+                                          placeholder="Password"
+                                          onChange={() => this.handleChange(event)}
+                                       />
+                                    : <Input
+                                          value={this.state.Form.password}
+                                          type="Password"
+                                          name="password"
+                                          id="pwd"
+                                          className="has-input input-lg"
+                                          placeholder="Password"
+                                          onChange={() => this.handleChange(event)}
+                                       />
+                                       }
+                                    
+                                    <a style={{}} onClick={()=>this.setState({ isShow: !this.state.isShow })}>
+                                       { this.state.isShow
+                                          ? <span className="has-icon"><FontAwesomeIcon icon={faEyeSlash} /></span>
+                                          : <span className="has-icon"><FontAwesomeIcon icon={faEye} /></span>
+                                       }
+                                       
+                                    </a>
                                  </FormGroup>
                                  <FormGroup className="mb-15">
                                     <Button
@@ -162,6 +193,7 @@ class Signin extends Component {
                                        Sign In
                             			</Button>
                                  </FormGroup>
+                                 <a onClick={()=> this.forgotPassword()}>Forgot the password?</a>
                               </Form>
                            </div>
                         </div>

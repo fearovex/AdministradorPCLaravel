@@ -29,7 +29,7 @@ export default (state = INIT_STATE, action) => {
             return { ...state, loading: true };
 
         case LOGIN_USER_SUCCESS:
-            NotificationManager.success('User Logged In');
+            // NotificationManager.success('User Logged In');/// descomentar cuando se sepa como funciona
             return { ...state, loading: false, user: action.payload };
 
         case LOGIN_USER_FAILURE:

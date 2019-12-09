@@ -25,6 +25,9 @@ import CRMLayout from './CRMLayout';
 // app signin
 import AppSignIn from './SigninFirebase';
 import AppSignUp from './SignupFirebase';
+import AppForgotPassword from './ForgotPassword';
+import AppResetPassword from './ResetPassword';
+
 
 // async components
 import {
@@ -95,6 +98,9 @@ class App extends Component {
             <Route path="/dashboard" component={CRMLayout} />
             <Route path="/signin" component={AppSignIn} />
             <Route path="/signup" component={AppSignUp} />
+            <Route path="/password/email" component={AppForgotPassword} />
+            <Route path="/password/reset" component={AppResetPassword} />
+            {/* password reset */}
             <Route path="/session/login" component={AsyncSessionLoginComponent} />
             <Route path="/session/register" component={AsyncSessionRegisterComponent} />
             <Route path="/session/lock-screen" component={AsyncSessionLockScreenComponent} />
