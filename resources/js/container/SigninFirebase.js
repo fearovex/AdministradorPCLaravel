@@ -113,7 +113,7 @@ class Signin extends Component {
                                        <div className="session-logo">
                                           <Link to="/">
                                              {/* <img src={AppConfig.appLogo} alt="session-logo" className="img-fluid" width="110" height="35" /> */}
-                                             <img src={require('Assets/logos/ipfi.png')} className="img-fluid" alt="site-logo" style={{'width' : '200px'}}/>
+                                             <img src={require('Assets/logos/ipfi.png')} className="img-fluid" alt="site-logo" style={{'width' : '250px'}}/>
                                           </Link>
                                        </div>
                                        {/* <div>
