@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use App\User;
+use App\Log_Login;
+use Browser;
 
 class LoginController extends Controller
 {
@@ -44,10 +46,21 @@ class LoginController extends Controller
         $user = User::where('email', $request->email)->where('password', $request->password)->first();
         
         if($user){
-            
+
             session(['email' => $request->email]);
             session(['password' => $request->password]);
+            session(['id_user' => $user->id]);
+            session(['browser' => Browser::browserName()]);
+            session(['ip_conection' => $request->ip_public]);
             session(['active' => true ]);
+
+            $log = new Log_Login();
+            $log->id_user = session('id_user');
+            $log->browser = session('browser');
+            $log->ip_conection = session('ip_conection');
+            $log->action = 'Login';
+            $log->save();
+
 
             return response()->json($user, 200);
 
@@ -59,7 +72,15 @@ class LoginController extends Controller
     }
 
     public function logout (){
-        session()->forget(['database', 'email', 'password', 'active']);
+
+        $log = new Log_Login();
+        $log->id_user = session('id_user');
+        $log->browser = session('browser');
+        $log->ip_conection = session('ip_conection');
+        $log->action = 'Logout';
+        $log->save();
+
+        session()->forget(['database', 'email', 'password', 'id_user', 'browser', 'ip_conection','active']);
         return redirect()->route('home', ['/']);
     }
 }

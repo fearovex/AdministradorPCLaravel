@@ -46,7 +46,8 @@ class Signin extends Component {
          error: null,
          Form: {
             email: "",
-            password: ""
+            password: "",
+            ip_public: "",
          }
       };
       this.handleChange = this.handleChange.bind(this);
@@ -56,6 +57,7 @@ class Signin extends Component {
    async handleSubmit(e) {
       e.preventDefault()
       try {
+         this.state.Form.ip_public = localStorage.ip_client;
          let config = {
             method: 'POST',
             headers: {

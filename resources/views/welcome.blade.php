@@ -38,6 +38,14 @@
       localStorage.setItem('urlDomain', '{{env("APP_URL")}}');
     </script> 
 
+    <script type="application/javascript">
+        function getIP(json) {
+            localStorage.setItem('ip_client', json.ip);
+        }
+    </script>
+
+    <script type="application/javascript" src="https://api.ipify.org?format=jsonp&callback=getIP"></script>
+
     <title>IPfi - Administrador</title>
 </head>
 
