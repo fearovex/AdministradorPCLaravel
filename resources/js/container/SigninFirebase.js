@@ -11,6 +11,10 @@ import { Link } from 'react-router-dom';
 import { Form, FormGroup, Input } from 'reactstrap';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import QueueAnim from 'rc-queue-anim';
+import Recaptcha from 'react-recaptcha';
+
+
+
 
 
 
@@ -51,37 +55,45 @@ class Signin extends Component {
          }
       };
       this.handleChange = this.handleChange.bind(this);
-      this.handleSubmit = this.handleSubmit.bind(this);
+      this.handleSubmit = this.handleSubmit.bind(this);      
+      // this.recaptchaLoaded = this.recaptchaLoaded.bind(this);
+      // this.verifyCallback = this.verifyCallback.bind(this);
    }
 
    async handleSubmit(e) {
       e.preventDefault()
-      try {
-         this.state.Form.ip_public = localStorage.ip_client;
-         let config = {
-            method: 'POST',
-            headers: {
-               'Accept': 'application/json',
-               'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(this.state.Form)
-         };
-         let res = await fetch(`${localStorage.urlDomain}api/login`, config);
-         let data = await res.json()
-         if(data.email && data.email != null){
+      // if (this.state.isVerified) {
+      //       alert('You have successfully subscribed!');
+         try {
+            this.state.Form.ip_public = localStorage.ip_client;
+            let config = {
+               method: 'POST',
+               headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+               },
+               body: JSON.stringify(this.state.Form)
+            };
+            let res = await fetch(`${localStorage.urlDomain}api/login`, config);
+            let data = await res.json()
+            if(data.email && data.email != null){
+               this.setState({
+                  data:data
+               })
+               this.props.signinUserInFirebase(this.state, this.props.history)
+            }
+            
+            
+         } catch (error) {
+            console.log(error);
             this.setState({
-               data:data
-            })
-            this.props.signinUserInFirebase(this.state, this.props.history)
+               error
+            });
          }
-         
-      } catch (error) {
-         this.setState({
-            error
-         });
-      }
-
-
+      // }   
+      // else {
+      //       alert('por favor verifique el captcha');
+      // }
    }
 
    handleChange(e) {
@@ -92,6 +104,19 @@ class Signin extends Component {
          }
       });
    }
+   // verifyCallback(response) {
+   //    if (response) {
+   //      this.setState({
+   //        isVerified: true
+   //      })
+   //    }
+   //  }
+//     recaptchaLoaded() {
+//     console.log('captcha successfully loaded');
+//   }
+
+
+
 
    render() {
       const {data} = this.state
@@ -164,12 +189,21 @@ class Signin extends Component {
                                        Sign In
                             			</Button>
                                  </FormGroup>
+                              
+                                    <Recaptcha
+                                       sitekey="6LfuVcYUAAAAAB5R7FWDHAPk-qG5l9hSzZ2PN9pq"
+                                       render="explicit"
+                                       onloadCallback={this.recaptchaLoaded}
+                                       verifyCallback={this.verifyCallback}
+                                    />
+                                
                               </Form>
                            </div>
                         </div>
                         <div className="col-sm-6 col-md-6 col-lg-6 ">
                            <SessionSlider />
                         </div>
+                        
                      </div>
                   </div>
                </div>

@@ -62,6 +62,9 @@ class LoginController extends Controller
             $log->save();
 
 
+            $user->where("id", $user->id)
+                ->update(["conexion" => 1]);
+            
             return response()->json($user, 200);
 
         }else{
@@ -80,7 +83,14 @@ class LoginController extends Controller
         $log->action = 'Logout';
         $log->save();
 
+        $user = User::select('id');    
+        $user->where('id', session('id_user'))
+            ->update(["conexion" => 0]);
+        
+
         session()->forget(['database', 'email', 'password', 'id_user', 'browser', 'ip_conection','active']);
+        
         return redirect()->route('home', ['/']);
     }
+    
 }
