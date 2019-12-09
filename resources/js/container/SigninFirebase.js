@@ -16,6 +16,11 @@ import { NotificationContainer, NotificationManager } from 'react-notifications'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import Recaptcha from 'react-recaptcha';
+
+
+
+
 
 
 // components
@@ -51,45 +56,52 @@ class Signin extends Component {
          error: null,
          Form: {
             email: "",
-            password: ""
+            password: "",
+            ip_public: "",
          }
       };
       this.handleChange = this.handleChange.bind(this);
-      this.handleSubmit = this.handleSubmit.bind(this);
+      this.handleSubmit = this.handleSubmit.bind(this);      
+      this.recaptchaLoaded = this.recaptchaLoaded.bind(this);
+      this.verifyCallback = this.verifyCallback.bind(this);
    }
 
    async handleSubmit(e) {
       e.preventDefault()
-      try {
-         let config = {
-            method: 'POST',
-            headers: {
-               'Accept': 'application/json',
-               'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(this.state.Form)
-         };
-         let res = await fetch(`${localStorage.urlDomain}api/login`, config);
-         let data = await res.json()
-         if(data.email && data.email != null){
+      if (this.state.isVerified) {
+         alert('You have successfully subscribed!');
+            try {
+               this.state.Form.ip_public = localStorage.ip_client;
+               let config = {
+                  method: 'POST',
+                  headers: {
+                     'Accept': 'application/json',
+                     'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(this.state.Form)
+               };
+               let res = await fetch(`${localStorage.urlDomain}api/login`, config);
+               let data = await res.json()
+               if(data.email && data.email != null){
+                  this.setState({
+                     data:data
+                  })
+               this.props.signinUserInFirebase(this.state, this.props.history);
+               NotificationManager.success('User Logged In Succesfully','',4000);
+               }
+            else{
+               NotificationManager.error("The password is invalid or the user doesn't have a password.",'',4000);
+            }
+            
+         } catch (error) {
+            console.log(error);
             this.setState({
-               data:data
-            })
-           this.props.signinUserInFirebase(this.state, this.props.history);
-           NotificationManager.success('User Logged In Succesfully','',4000);
+               error
+            });
          }
-         else{
-            NotificationManager.error("The password is invalid or the user doesn't have a password.",'',4000);
-         }
-         
-      } catch (error) {
-         console.log(error);
-         this.setState({
-            error
-         });
+      }else{
+         alert('Please verify the captcha')
       }
-
-
    }
    forgotPassword(){
       this.props.history.push('/password/email')
@@ -104,6 +116,21 @@ class Signin extends Component {
       });
    }
 
+   verifyCallback(response) {
+      if (response) {
+        this.setState({
+          isVerified: true
+        })
+      }
+    }
+
+    recaptchaLoaded() {
+    console.log('captcha successfully loaded');
+  }
+
+
+
+
    render() {
       const {data} = this.state
       const { loading } = this.props;
@@ -117,14 +144,14 @@ class Signin extends Component {
                   <div className="container">
                      <div className="row row-eq-height">
                         <div className="col-sm-6 col-md-6 col-lg-6">
-                           <AppBar position="static" className="session-header" style={{'alignItems' : 'center', 'marginBottom': '30px'}}>
+                           <AppBar position="static" className="session-header" style={{'alignItems' : 'center'}}>
                               <Toolbar>
                                  <div className="container">
                                     <div className="d-flex justify-content-between">
                                        <div className="session-logo">
                                           <Link to="/">
                                              {/* <img src={AppConfig.appLogo} alt="session-logo" className="img-fluid" width="110" height="35" /> */}
-                                             <img src={require('Assets/logos/ipfi.png')} className="img-fluid" alt="site-logo" style={{'width' : '200px'}}/>
+                                             <img src={require('Assets/logos/ipfi.png')} className="img-fluid imgLogoIPFi" alt="site-logo" />
                                           </Link>
                                        </div>
                                        {/* <div>
@@ -193,13 +220,22 @@ class Signin extends Component {
                                        Sign In
                             			</Button>
                                  </FormGroup>
-                                 <a onClick={()=> this.forgotPassword()}>Forgot the password?</a>
+                                 <a onClick={()=> this.forgotPassword()} className="forgotPassword" >Forgot the password?</a><br></br>
+                              
+                                    <Recaptcha
+                                       sitekey="6Lf_5cYUAAAAAEXjXwe1AKCXF7J-TZPzKFW0TAZ_"
+                                       render="explicit"
+                                       onloadCallback={this.recaptchaLoaded}
+                                       verifyCallback={this.verifyCallback}
+                                    />
+                                
                               </Form>
                            </div>
                         </div>
                         <div className="col-sm-6 col-md-6 col-lg-6 ">
                            <SessionSlider />
                         </div>
+                        
                      </div>
                   </div>
                </div>

@@ -29,6 +29,8 @@ import AppForgotPassword from './ForgotPassword';
 import AppResetPassword from './ResetPassword';
 
 
+import AutoLogout from './AutoLogout';
+
 // async components
 import {
    AsyncSessionLoginComponent,
@@ -86,6 +88,7 @@ class App extends Component {
       }
       return (
          <RctThemeProvider>
+            <AutoLogout />
             <NotificationContainer />
             <InitialPath
                path={`${match.url}app`}
