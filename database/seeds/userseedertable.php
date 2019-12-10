@@ -35,5 +35,13 @@ class userseedertable extends Seeder
         $user->database = 'unicentro';
         $user->imgdashboard = 'unicentro.png';
         $user->save();
+
+        $user = new User();
+        $user->name = 'IPfi Admin';
+        $user->email = 'ipfi_admin@ipwork.com.co';
+        $user->password = 'IPwork2019.';
+        $user->database = 'unicentro';
+        $user->imgdashboard = 'ipfi.png';
+        $user->save();
     }
 }
