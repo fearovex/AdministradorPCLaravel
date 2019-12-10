@@ -143,7 +143,7 @@ class Signin extends Component {
                   <div className="container">
                      <div className="row row-eq-height">
                         <div className="col-sm-6 col-md-6 col-lg-6">
-                           <AppBar position="static" className="session-header" style={{'alignItems' : 'center'}}>
+                           <AppBar position="static" className="session-header">
                               <Toolbar>
                                  <div className="container">
                                     <div className="d-flex justify-content-between">
@@ -220,14 +220,14 @@ class Signin extends Component {
                             			</Button>
                                  </FormGroup>
                                  <a onClick={()=> this.forgotPassword()} className="forgotPassword" >Forgot the password?</a><br></br>
-                              
+                                 <div className="reCaptcha">
                                     <Recaptcha
                                        sitekey="6Ldb58YUAAAAAHAumCMJxAyQLQvZ5O57tUepigG3"
                                        render="explicit"
                                        onloadCallback={this.onloadCallback}
                                        verifyCallback={this.verifyCallback}
                                     />
-                                
+                                 </div>
                               </Form>
                            </div>
                         </div>
