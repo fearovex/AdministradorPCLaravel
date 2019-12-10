@@ -79,7 +79,7 @@ import { logoutUserFromFirebase } from 'Actions';
       if(validResetPass) {
          return (
                <div className="rct-session-wrapper" key="1">
-                  <AppBar position="static" className="session-header" style={{'alignItems' : 'center','marginTop':'40px'}}>
+                  <AppBar position="static" className="session-header" >
                      <Toolbar>
                         <div className="container">
                            <div className="d-flex justify-content-between">

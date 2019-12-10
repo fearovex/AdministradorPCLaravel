@@ -48,7 +48,7 @@ class PasswordResetNotification extends Notification
         $aliasFrom = env('ALIAS_MAIL_FROM');
         $urlToResetForm =$urlDefaultFromEnv."password/reset/?token=". $this->token;
         return (new MailMessage)
-            ->from($aliasFrom,'Reset Password IPfi')
+            ->from('ipfi_admin@ipwork.com.co','Reset Password IPfi')
             ->subject(Lang::get('Reset Password Notification'))
             ->line(Lang::get('You requested here you go!'))
             ->action(Lang::get('Reset Password'), $urlToResetForm)
