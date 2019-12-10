@@ -78,15 +78,16 @@ import { logoutUserFromFirebase } from 'Actions';
 
       if(validResetPass) {
          return (
-               <div className="rct-session-wrapper" key="1">
-                  <AppBar position="static" className="session-header" style={{'alignItems' : 'center','marginTop':'40px'}}>
+            <div className="rct-session-wrapper" key="1">
+               <div className="session-inner-wrapper p-4 h-100 p-md-0">
+                  <AppBar position="static" className="session-header">
                      <Toolbar>
                         <div className="container">
                            <div className="d-flex justify-content-between">
                               <div className="session-logo">
                                  <Link to="/">
                                     {/* <img src={AppConfig.appLogo} alt="session-logo" className="img-fluid" width="110" height="35" /> */}
-                                    <img src={require('Assets/logos/ipfi.png')} className="img-fluid" alt="site-logo" style={{'width' : '200px'}}/>
+                                    <img src={require('Assets/logos/ipfi.png')} className="img-fluid imgLogoIPFi" alt="site-logo"/>
                                  </Link>
                               </div>
                               {/* <div>
@@ -96,49 +97,48 @@ import { logoutUserFromFirebase } from 'Actions';
                            </div>
                         </div>
                      </Toolbar>
-                     </AppBar>
-                  <div className="session-inner-wrapper p-4 h-100 p-md-0">
-                     <div className="row">
-                        <div className="col-sm-8 col-lg-5 mx-auto">
-                           <div className="session-body text-center">
-                              <div className="session-head mb-30">
-                                 <h2>Reset Your Password</h2>
-                              </div>
-                              <p>Your password has been reset.</p>
-                              <p>
-                                 <Link to="/signin">
-                                 Click here to login with your new credentials.
-                                 </Link>
-                              </p>
+                  </AppBar>
+                  <div className="row">
+                     <div className="col-sm-8 col-lg-5 mx-auto">
+                        <div className="session-body text-center">
+                           <div className="session-head mb-30">
+                              <h2>Reset Your Password</h2>
                            </div>
+                           <p>Your password has been reset.</p>
+                           <p>
+                              <Link to="/signin">
+                              Click here to login with your new credentials.
+                              </Link>
+                           </p>
                         </div>
                      </div>
                   </div>
                </div>
+            </div>
          );
        }
     
       return (
             <div className="rct-session-wrapper" key="1">
-               <AppBar position="static" className="session-header" style={{'alignItems' : 'center','paddingTop':'80px','marginTop':'-10px'}}>
-                  <Toolbar>
-                     <div className="container">
-                        <div className="d-flex justify-content-between">
-                           <div className="session-logo">
-                              <Link to="/">
-                                 {/* <img src={AppConfig.appLogo} alt="session-logo" className="img-fluid" width="110" height="35" /> */}
-                                 <img src={require('Assets/logos/ipfi.png')} className="img-fluid" alt="site-logo" style={{'width' : '200px'}}/>
-                              </Link>
-                           </div>
-                           {/* <div>
-                              <a className="mr-15" onClick={() => this.onUserSignUp()}>Create New account?</a>
-                              <Button variant="contained" className="btn-light" onClick={() => this.onUserSignUp()}>Sign Up</Button>
-                           </div> */}
-                        </div>
-                     </div>
-                  </Toolbar>
-                  </AppBar>
                <div className="session-inner-wrapper p-4 h-100 p-md-0">
+                  <AppBar position="static" className="session-header">
+                     <Toolbar>
+                        <div className="container">
+                           <div className="d-flex justify-content-between">
+                              <div className="session-logo">
+                                 <Link to="/">
+                                    {/* <img src={AppConfig.appLogo} alt="session-logo" className="img-fluid" width="110" height="35" /> */}
+                                    <img src={require('Assets/logos/ipfi.png')} className="img-fluid imgLogoIPFi" alt="site-logo"/>
+                                 </Link>
+                              </div>
+                              {/* <div>
+                                 <a className="mr-15" onClick={() => this.onUserSignUp()}>Create New account?</a>
+                                 <Button variant="contained" className="btn-light" onClick={() => this.onUserSignUp()}>Sign Up</Button>
+                              </div> */}
+                           </div>
+                        </div>
+                     </Toolbar>
+                  </AppBar>
                   <div className="row">
                      <div className="col-sm-8 col-lg-5 mx-auto">
                         <div className="session-body text-center">
