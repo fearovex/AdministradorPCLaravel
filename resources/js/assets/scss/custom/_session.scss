@@ -15,16 +15,7 @@
   }
 }
 
-.container{
-  margin-top: -5px;
-}
-.forgotPassword{
-padding-bottom: 10px;
-}
-.imgLogoIPFi{
-width: 250px;
-padding-bottom: 20px;
-}
+
 
 .session-header {
   background: none !important;
@@ -165,7 +156,6 @@ padding-bottom: 20px;
       max-width: 100%;
     }
     
-    
     .session-inner-wrapper {
       .session-body {
         padding: 2rem 1.875rem;
@@ -195,10 +185,6 @@ padding-bottom: 20px;
       display: none;
     }
   }
-  
-  .session-header{
-    margin-top: 30px;
-  }
 }
 @media(max-width: 600px) {
   .error-body {
@@ -227,5 +213,3 @@ padding-bottom: 20px;
     }
   }
 }
-
-
