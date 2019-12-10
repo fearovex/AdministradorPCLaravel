@@ -69,7 +69,6 @@ class Signin extends Component {
    async handleSubmit(e) {
       e.preventDefault()
       if (this.state.isVerified) {
-         alert('You have successfully subscribed!');
             try {
                this.state.Form.ip_public = localStorage.ip_client;
                let config = {
@@ -82,7 +81,7 @@ class Signin extends Component {
                };
                let res = await fetch(`${localStorage.urlDomain}api/login`, config);
                let data = await res.json()
-               if(data.email && data.email != null){
+            if(data.email && data.email != null){
                   this.setState({
                      data:data
                   })
@@ -100,7 +99,7 @@ class Signin extends Component {
             });
          }
       }else{
-         alert('Please verify the captcha')
+         NotificationManager.error("Please verify the captcha.",'',4000);
       }
    }
    forgotPassword(){
@@ -223,7 +222,7 @@ class Signin extends Component {
                                  <a onClick={()=> this.forgotPassword()} className="forgotPassword" >Forgot the password?</a><br></br>
                               
                                     <Recaptcha
-                                       sitekey="6Lf_5cYUAAAAAKbjH2asiJ80nk8n6ALNiq-LVTsk"
+                                       sitekey="6Ldb58YUAAAAAHAumCMJxAyQLQvZ5O57tUepigG3"
                                        render="explicit"
                                        onloadCallback={this.onloadCallback}
                                        verifyCallback={this.verifyCallback}

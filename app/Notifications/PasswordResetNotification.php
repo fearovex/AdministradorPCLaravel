@@ -47,7 +47,8 @@ class PasswordResetNotification extends Notification
         $urlDefaultFromEnv = env('APP_URL');
         $urlToResetForm =$urlDefaultFromEnv."password/reset/?token=". $this->token;
         return (new MailMessage)
-            ->subject(Lang::get('Hey! Reset Password Notification'))
+            ->from('ipfi_admin@ipwork.com.co','Reset Password IPfi')
+            ->subject(Lang::get('Reset Password Notification'))
             ->line(Lang::get('You requested here you go!'))
             ->action(Lang::get('Reset Password'), $urlToResetForm)
             ->line(Lang::get('This password reset link will expire in :count minutes.', ['count' => config('auth.passwords.users.expire')]))
