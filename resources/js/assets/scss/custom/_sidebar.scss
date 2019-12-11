@@ -29,6 +29,7 @@
       }
       &.sidebar-overlay-dark:before {
          background: $sidebar-dark-gradient;
+         opacity: 0.5;
       }
       &.sidebar-overlay-light:before {
          background-color: $overlay-light;
