@@ -68,7 +68,7 @@ class Signin extends Component {
 
    async handleSubmit(e) {
       e.preventDefault()
-      if (this.state.isVerified) {
+      // if (this.state.isVerified) {
             try {
                this.state.Form.ip_public = localStorage.ip_client;
                let config = {
@@ -98,9 +98,9 @@ class Signin extends Component {
                error
             });
          }
-      }else{
-         NotificationManager.error("Please verify the captcha.",'',4000);
-      }
+      // }else{
+         // NotificationManager.error("Please verify the captcha.",'',4000);
+      // }
    }
    forgotPassword(){
       this.props.history.push('/password/email')
