@@ -49,4 +49,9 @@ class User extends Authenticatable
     {
         return $this->locale;
     }
+
+    public function roles()
+    {
+        return $this->hasMany('App\Role','id_role');
+    }
 }

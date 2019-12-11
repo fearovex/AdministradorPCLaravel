@@ -20,8 +20,8 @@ import VideoPlayer from 'Routes/video-player';
 import Dropzone from 'Routes/dropzone';
 import NewList from 'Routes/new-dashboard';
 import Events from 'Routes/events';
-// import DetailEvents from 'Routes/events/detail-events';
 import DetailEvents from 'Routes/detail-events';
+import Locations from 'Routes/locations';
 
 // async component
 import {
@@ -136,8 +136,8 @@ export default [
       path: 'detail-events',
       component: DetailEvents
    },
-   // {
-	// 	path: 'events/detail-events',
-	// 	component: DetailEvents
-	// }
+   {
+		path: 'locations',
+		component: Locations
+	}
 ]
