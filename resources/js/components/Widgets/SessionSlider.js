@@ -1,6 +1,7 @@
 /**
 ** Session Slider
 **/
+
 import React, { Component } from "react";
 import Slider from "react-slick";
 
@@ -51,15 +52,38 @@ export default class SessionSlider extends Component {
 							<img
 								src={require('Assets/img/gallery-1.jpg')}
 								alt="session-slider"
-								className="img-fluid gallery1"
+								className="img-fluid gallery6"
 								// width="100%"
-								// height="100%"
-							/>
-							{/* <div className="rct-img-overlay">
-								<h5 className="client-name">{data.name}</h5>
-								<span>{data.designation}</span>
-								<p className="mb-0 fs-14">{data.body}</p>
-							</div> */}
+								// height="100%"								
+							/>							
+						</div>
+						<div>
+							<img
+								src={require('Assets/img/gallery-2.jpg')}
+								alt="session-slider"
+								className="img-fluid gallery2"								
+							/>							
+						</div>
+						<div>
+							<img
+								src={require('Assets/img/gallery-3.jpg')}
+								alt="session-slider"
+								className="img-fluid gallery3"								
+							/>							
+						</div>
+						<div>
+							<img
+								src={require('Assets/img/gallery-4.jpg')}
+								alt="session-slider"
+								className="img-fluid gallery4"								
+							/>							
+						</div>
+						<div>
+							<img
+								src={require('Assets/img/gallery-5.jpg')}
+								alt="session-slider"
+								className="img-fluid gallery5"								
+							/>							
 						</div>
 				</Slider>
 			</div>

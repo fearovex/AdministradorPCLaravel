@@ -89,7 +89,9 @@ function* signInUserWithEmailPassword({ payload }) {
     const { data } = payload.user;
     const { history } = payload;
     try {
+        // const signInUser = {message: "The password is invalid or the user does not have a password."};
         const signInUser = data;
+      
         if (signInUser.message) {
             yield put(signinUserFailure(signInUser.message));
         } else {

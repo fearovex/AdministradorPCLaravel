@@ -19,21 +19,26 @@ import { logoutUserFromFirebase } from 'Actions';
 // intl messages
 import IntlMessages from 'Util/IntlMessages';
 
-class UserBlock extends Component {
-
-	state = {
-		userDropdownMenu: false,
-		isSupportModal: false
+export class UserBlockClass extends Component {
+	constructor(props){
+		super(props)
+		this.state = {
+			userDropdownMenu: false,
+			isSupportModal: false
+		}
 	}
 
 	/**
 	 * Logout User
 	 */
-	async logoutUser(e) {
-		e.preventDefault();
+	async logoutUser(e = null) {
+		if(e != null){
+			e.preventDefault();
+		}
 		try {
 			let res = await fetch(`${localStorage.urlDomain}api/logout`);
 			this.props.logoutUserFromFirebase();
+			NotificationManager.success('User Loggout Successfully','', 4000);
 		} catch (error) {
 			console.log(error)
 		}
@@ -155,4 +160,4 @@ const mapStateToProps = ({ settings }) => {
 
 export default connect(mapStateToProps, {
 	logoutUserFromFirebase
-})(UserBlock);
+})(UserBlockClass);
