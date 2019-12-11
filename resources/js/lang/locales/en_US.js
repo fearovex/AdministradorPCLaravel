@@ -771,4 +771,5 @@ module.exports = {
    "sidebar.detailEvents" :"Detail Events",
    "alert.timeOutTitle": "Session Closed",
    "alert.timeOutButtom": "Accept",
+   "sidebar.locations" :"Locations"
 }

@@ -99,7 +99,7 @@ class Signin extends Component {
             });
          }
       // }else{
-      //    NotificationManager.error("Please verify the captcha.",'',4000);
+         // NotificationManager.error("Please verify the captcha.",'',4000);
       // }
    }
    forgotPassword(){

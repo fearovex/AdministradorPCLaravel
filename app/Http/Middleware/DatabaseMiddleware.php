@@ -19,12 +19,15 @@ class DatabaseMiddleware
     {
         $user = User::where('email', session('email'))->where('password', session('password'))->first();
 
+        $usuario = env('DB_USERNAME');
+        $password = env('DB_PASSWORD');
+
         Config::set("database.connections.".$user->database, [
             'driver' => 'mysql',
             "host" => "localhost",
             "database" => $user->database,
-            "username" => env('DB_USERNAME'),
-            "password" => env('DB_PASSWORD'),
+            "username" => 'root',
+            "password" => $password,
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
         ]);

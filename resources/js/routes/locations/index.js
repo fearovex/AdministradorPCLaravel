@@ -22,12 +22,24 @@ export default class Locations extends Component {
     constructor(props){
         super(props)
         this.state = {
+            data: [],
 			error: null,
         }
        
     }
     
     async componentDidMount(){
+        try {
+            let res = await fetch(`${localStorage.urlDomain}api/locations`)
+            let dataLocations = await res.json();
+            console.log(dataLocations); 
+            this.setState({
+                data: dataLocations
+            })
+            console.log(this.state.data)
+        } catch (error) {
+            
+        }
         // try {
         //     let res = await fetch(`${localStorage.urlDomain}api/evento`);
         //     let datagraph = await res.json()
@@ -62,32 +74,84 @@ export default class Locations extends Component {
     }
 
     render() {
-        const { events, form } = this.state;
+        const { data } = this.state;
         return (
             <div className="cardsmasonry-wrapper">
-                <PageTitleBar title={<IntlMessages id="sidebar.dashboard" />} match={this.props.match} />
+                <PageTitleBar title={<IntlMessages id="sidebar.locations" />} match={this.props.match} />
             
                 <CardColumns>
                     <Card>
                         <CardBody>
-                            <CardTitle><IntlMessages id="graphics.gender" /></CardTitle>
-                                <p>
-                                    Card 1
-                                </p>
-                            <CardText></CardText>
+                        {/* <IntlMessages id="" /> */}
+                        <CardTitle></CardTitle>
+                            <CardText>
+                                wqewqewqewqew
+                                wqewqewqewqew
+                                wqewqewqewqew
+                                wqewqewqewqew
+                                wqewqewqewqew
+                                wqewqewqewqew
+                            </CardText>
                         </CardBody>
                     </Card>
                     <Card>
                         <CardBody>
-                            <CardTitle><IntlMessages id="graphics.ap" /></CardTitle>
-                                <p>
-                                    Card 2
-                                </p>
-                            <CardText></CardText>
+                            <CardTitle>Card 4</CardTitle>
+                            <CardText>
+                                    wqewqewqewqew
+                                    wqewqewqewqew
+                                    wqewqewqewqew
+                                    wqewqewqewqew
+                                    wqewqewqewqew
+                                    wqewqewqewqew
+                            </CardText>
                         </CardBody>
                     </Card>
-                    
+                    <Card>
+                        <CardBody>
+                            <CardTitle>Card 2</CardTitle>
+                              
+                            <CardText>
+                                wqewqewqewqew
+                                wqewqewqewqew
+                                wqewqewqewqew
+                                wqewqewqewqew
+                                wqewqewqewqew
+                                wqewqewqewqew
+                            </CardText>
+                        </CardBody>
+                    </Card>
+                    <Card>
+                        <CardBody>
+                            <CardTitle>Card 5</CardTitle>
+                              
+                            <CardText>
+                                    wqewqewqewqew
+                                    wqewqewqewqew
+                                    wqewqewqewqew
+                                    wqewqewqewqew
+                                    wqewqewqewqew
+                                    wqewqewqewqew
+                            </CardText>
+                        </CardBody>
+                    </Card>
+                    <Card>
+                        <CardBody>
+                            <CardTitle>Card 3</CardTitle>
+                              
+                            <CardText>
+                                    wqewqewqewqew
+                                    wqewqewqewqew
+                                    wqewqewqewqew
+                                    wqewqewqewqew
+                                    wqewqewqewqew
+                                    wqewqewqewqew
+                            </CardText>
+                        </CardBody>
+                    </Card>
                 </CardColumns>
+
+            
             </div>
         );
 	}
