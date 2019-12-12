@@ -45,23 +45,28 @@ class ChartPais extends Component {
       // Add data
       chart.data = data;
 
-      // chart.responsive.enabled = true;
-
       var series = chart.series.push(new am4charts.PieSeries());
-      series.dataFields.category = "pais";
       series.dataFields.value = "personas";
       series.dataFields.radiusValue = "personas";
+      series.dataFields.category = "pais";
       series.slices.template.cornerRadius = 6;
-      // series.colors.step = 3;
+      series.colors.step = 3;
 
-      series.slices.template.stroke = am4core.color("#fff");
-      series.slices.template.strokeWidth = 2;
+      series.labels.template.disabled = true;
+      series.ticks.template.disabled = true;
 
-      // series.labels.template.disabled = true;
-      // series.ticks.template.disabled = true;
       series.hiddenState.properties.endAngle = -90;
-      // chart.svgContainer.htmlElement.style.height = "100px";
-      // chart.legend = new am4charts.Legend();
+
+      // Add a legend
+      chart.legend = new am4charts.Legend();
+      chart.legend.position = "left";
+      chart.legend.width = 100;
+      chart.legend.labels.template.maxWidth = 150;
+      chart.legend.labels.template.truncate = true;
+      chart.legend.markers.template;
+      var markerTemplate = chart.legend.markers.template;
+      markerTemplate.width = 10;
+      markerTemplate.height = 10;
 
       this.chart = chart;
    }
@@ -75,7 +80,7 @@ class ChartPais extends Component {
    render() {
       return (
          <RctCardContent>
-            <div id="chartpais" style={{ width: "100%", height: "150px" }}></div>
+            <div id="chartpais" style={{ width: "100%", height: "250px" }}></div>
          </RctCardContent>
       );
    }

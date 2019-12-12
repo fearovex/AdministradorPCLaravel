@@ -54,7 +54,7 @@ class ChartEdad extends Component {
       // Put a thick white border around each Slice
       pieSeries.slices.template.stroke = am4core.color("#fff");
       pieSeries.slices.template.strokeWidth = 2;
-      // pieSeries.slices.template.strokeOpacity = 1;
+      pieSeries.slices.template.strokeOpacity = 1;
       pieSeries.slices.template
          // change the cursor on hover to make it apparent the object can be interacted with
          .cursorOverStyle = [
@@ -64,8 +64,8 @@ class ChartEdad extends Component {
             }
          ];
 
-      // pieSeries.labels.template.disabled = true;
-      // pieSeries.ticks.template.disabled = true;
+      pieSeries.labels.template.disabled = true;
+      pieSeries.ticks.template.disabled = true;
 
       // Create a base filter effect (as if it's not there) for the hover to return to
       let shadow = pieSeries.slices.template.filters.push(new am4core.DropShadowFilter);
@@ -80,10 +80,15 @@ class ChartEdad extends Component {
       hoverShadow.blur = 5;
 
       // Add a legend
-      // chart.legend = new am4charts.Legend();
-      // chart.legend.position = "right";
-      // chart.legend.labels.template.maxWidth = 150;
-      // chart.legend.labels.template.truncate = true;
+      chart.legend = new am4charts.Legend();
+      chart.legend.position = "left";
+      chart.legend.width = 100;
+      chart.legend.labels.template.maxWidth = 150;
+      chart.legend.labels.template.truncate = true;
+      chart.legend.markers.template;
+      var markerTemplate = chart.legend.markers.template;
+      markerTemplate.width = 10;
+      markerTemplate.height = 10;
 
       this.chart = chart;
    }
@@ -96,7 +101,7 @@ class ChartEdad extends Component {
 
    render() {
       return (
-         <div id="chartedad" style={{ width: "100%", height: "150px" }}></div>
+         <div id="chartedad" style={{ width: "100%", height: "250px" }}></div>
       );
    }
 }

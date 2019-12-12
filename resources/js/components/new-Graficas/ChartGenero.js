@@ -26,7 +26,7 @@ class ChartGenero extends Component {
       this.handleChart()
    }
 
-   componentDidUpdate() {
+   componentDidUpdate(oldProps) {
       if(this.state.props != this.props.data){
          if (this.chart) {
             this.chart.dispose();
@@ -36,12 +36,17 @@ class ChartGenero extends Component {
             props: this.props.data
          })
       }
+      // if (oldProps.paddingRight !== this.props.paddingRight) {
+      //    this.chart.paddingRight = this.props.paddingRight;
+      // }
    }
 
    async handleChart(data = []) {
 
       let chart = am4core.create("chartgenero", am4charts.PieChart3D);
       chart.hiddenState.properties.opacity = 0;
+      chart.marginRight= 20;
+      chart.marginLeft= 10;
 
       chart.data = data;
 
@@ -54,7 +59,7 @@ class ChartGenero extends Component {
       // Put a thick white border around each Slice
       pieSeries.slices.template.stroke = am4core.color("#fff");
       pieSeries.slices.template.strokeWidth = 2;
-      // pieSeries.slices.template.strokeOpacity = 1;
+      pieSeries.slices.template.strokeOpacity = 1;
       // change the cursor on hover to make it apparent the object can be interacted with
       pieSeries.slices.template
       .cursorOverStyle = [
@@ -64,8 +69,8 @@ class ChartGenero extends Component {
             }
          ];
 
-      // pieSeries.labels.template.disabled = false;
-      // pieSeries.ticks.template.disabled = true;
+      pieSeries.labels.template.disabled = true;
+      pieSeries.ticks.template.disabled = true;
 
       // Create hover state
       let hoverState = pieSeries.slices.template.states.getKey("hover"); // normally we have to create the hover state, in this case it already exists
@@ -76,10 +81,15 @@ class ChartGenero extends Component {
       hoverShadow.blur = 5;
 
       // Add a legend
-      // chart.legend = new am4charts.Legend();
-      // chart.legend.position = "right";
-      // chart.legend.labels.template.maxWidth = 150;
-      // chart.legend.labels.template.truncate = true;
+      chart.legend = new am4charts.Legend();
+      chart.legend.position = "left";
+      chart.legend.width = 100;
+      chart.legend.labels.template.maxWidth = 150;
+      chart.legend.labels.template.truncate = true;
+      chart.legend.markers.template;
+      var markerTemplate = chart.legend.markers.template;
+      markerTemplate.width = 10;
+      markerTemplate.height = 10;
 
       this.chart = chart;
    }
@@ -92,7 +102,7 @@ class ChartGenero extends Component {
 
    render() {
       return (
-         <div id="chartgenero" style={{width: '100%', height: "150px"}}></div>
+         <div id="chartgenero" style={{width: '100%', height: "250px"}}></div>
       );
    }
 }
