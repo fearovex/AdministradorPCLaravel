@@ -203,29 +203,15 @@ export default class NewList extends Component {
                 <CardColumns>
                     <Card>
                         <CardBody>
-                            <CardTitle><IntlMessages id="graphics.gender" /></CardTitle>
-                            <ChartGenero data={this.state.data.genero}/>
-                            <CardText></CardText>
-                        </CardBody>
-                    </Card>
-                    <Card>
-                        <CardBody>
                             <CardTitle><IntlMessages id="graphics.ap" /></CardTitle>
                             <ChartAp data={this.state.data.ap}/>
                             <CardText></CardText>
                         </CardBody>
                     </Card>
-                    {/* <Card>
-                        <CardBody>
-                            <CardTitle><IntlMessages id="graphics.pais" /></CardTitle>
-                            <ChartPais data={this.state.data.paises}/>
-                            <CardText></CardText>
-                        </CardBody>
-                    </Card> */}
                     <Card>
                         <CardBody>
-                            <CardTitle><IntlMessages id="graphics.edad" /></CardTitle>
-                            <ChartEdad data={this.state.data.edad}/>
+                            <CardTitle><IntlMessages id="graphics.gender" /></CardTitle>
+                            <ChartGenero data={this.state.data.genero}/>
                             <CardText></CardText>
                         </CardBody>
                     </Card>
@@ -238,8 +224,22 @@ export default class NewList extends Component {
                     </Card>
                     <Card>
                         <CardBody>
+                            <CardTitle><IntlMessages id="graphics.pais" /></CardTitle>
+                            <ChartPais data={this.state.data.paises}/>
+                            <CardText></CardText>
+                        </CardBody>
+                    </Card>
+                    <Card>
+                        <CardBody>
                             <CardTitle><IntlMessages id="graphics.date" /></CardTitle>
                             <ChartFecha data={this.state.data.fecha}/>
+                            <CardText></CardText>
+                        </CardBody>
+                    </Card>
+                    <Card>
+                        <CardBody>
+                            <CardTitle><IntlMessages id="graphics.edad" /></CardTitle>
+                            <ChartEdad data={this.state.data.edad}/>
                             <CardText></CardText>
                         </CardBody>
                     </Card>

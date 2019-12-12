@@ -16,7 +16,7 @@ import { RctCardContent } from 'Components/RctCard';
 class ChartAp extends Component {
    constructor(props){
       super(props)
-
+      
       this.state={
          props: ''
       }
@@ -28,6 +28,9 @@ class ChartAp extends Component {
 
    componentDidUpdate() {
       if(this.state.props != this.props.data){
+         if (this.chart) {
+            this.chart.dispose();
+         }
          this.handleChart(this.props.data)
          this.setState({
             props: this.props.data
@@ -46,6 +49,8 @@ class ChartAp extends Component {
       // Create axes
       let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
       categoryAxis.dataFields.category = "ap";
+      categoryAxis.title.text = "Access Point";
+      categoryAxis.title.fontWeight = "bold";
       categoryAxis.renderer.grid.template.location = 0;
       categoryAxis.renderer.minGridDistance = 30;
       categoryAxis.renderer.labels.template.horizontalCenter = "right";
@@ -55,6 +60,8 @@ class ChartAp extends Component {
       categoryAxis.renderer.minHeight = 110;
 
       let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+      valueAxis.title.text = "People";
+      valueAxis.title.fontWeight = "bold";
       valueAxis.renderer.minWidth = 50;
 
       // Create series
@@ -82,9 +89,10 @@ class ChartAp extends Component {
 
       // Cursor
       chart.cursor = new am4charts.XYCursor();
+      this.chart = chart;
    }
 
-   componentWillUnmount() {
+   componentWillMount() {
       if (this.chart) {
          this.chart.dispose();
       }

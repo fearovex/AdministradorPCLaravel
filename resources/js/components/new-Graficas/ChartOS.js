@@ -27,6 +27,9 @@ class ChartOS extends Component {
 
    componentDidUpdate() {
       if(this.state.props != this.props.data){
+         if (this.chart) {
+            this.chart.dispose();
+         }
          this.handleChart(this.props.data)
          this.setState({
             props: this.props.data
@@ -46,8 +49,12 @@ class ChartOS extends Component {
       categoryAxis.dataFields.category = "os";
       categoryAxis.numberFormatter.numberFormat = "#";
       categoryAxis.renderer.inversed = true;
+      categoryAxis.title.text = "Operating system";
+      categoryAxis.title.fontWeight = "bold";
 
       var valueAxis = chart.xAxes.push(new am4charts.ValueAxis());
+      valueAxis.title.text = "People";
+      valueAxis.title.fontWeight = "bold";
 
       // Create series
       var series = chart.series.push(new am4charts.ColumnSeries3D());
@@ -58,9 +65,11 @@ class ChartOS extends Component {
       series.columns.template.tooltipText = "{valueX}";
       series.columns.template.column3D.stroke = am4core.color("#fff");
       series.columns.template.column3D.strokeOpacity = 0.2;
+
+      this.chart = chart;
    }
 
-   componentWillUnmount() {
+   componentWillMount() {
       if (this.chart) {
          this.chart.dispose();
       }

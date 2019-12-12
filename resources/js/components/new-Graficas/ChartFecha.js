@@ -27,6 +27,9 @@ class ChartFecha extends Component {
 
    componentDidUpdate() {
       if(this.state.props != this.props.data){
+         if (this.chart) {
+            this.chart.dispose();
+         }
          this.handleChart(this.props.data)
          this.setState({
             props: this.props.data
@@ -35,7 +38,6 @@ class ChartFecha extends Component {
    }
 
    async handleChart(data = []){
-      
       for (let i = 0; i < data.length; i++) {
          var newDate = new Date(data[i].fecha);
          newDate.setDate(newDate.getDate() + 1);
@@ -51,9 +53,13 @@ class ChartFecha extends Component {
       // Create axes
       var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
       dateAxis.renderer.minGridDistance = 50;
+      dateAxis.title.text = "Date";
+      dateAxis.title.fontWeight = "bold";
 
       // Create value axis
       var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+      valueAxis.title.text = "People";
+      valueAxis.title.fontWeight = "bold";
 
       // Create series
       var series = chart.series.push(new am4charts.ColumnSeries());
@@ -70,9 +76,11 @@ class ChartFecha extends Component {
       chart.cursor = new am4charts.XYCursor();
       chart.cursor.lineX.strokeOpacity = 0;
       chart.cursor.lineY.strokeOpacity = 0;
+
+      this.chart = chart;
    }
 
-   componentWillUnmount() {
+   componentWillMount() {
       if (this.chart) {
          this.chart.dispose();
       }

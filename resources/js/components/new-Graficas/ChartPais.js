@@ -28,6 +28,9 @@ class ChartPais extends Component {
 
    componentDidUpdate() {
       if(this.state.props != this.props.data){
+         if (this.chart) {
+            this.chart.dispose();
+         }
          this.handleChart(this.props.data)
          this.setState({
             props: this.props.data
@@ -42,22 +45,28 @@ class ChartPais extends Component {
       // Add data
       chart.data = data;
 
+      // chart.responsive.enabled = true;
+
       var series = chart.series.push(new am4charts.PieSeries());
+      series.dataFields.category = "pais";
       series.dataFields.value = "personas";
       series.dataFields.radiusValue = "personas";
-      series.dataFields.category = "pais";
       series.slices.template.cornerRadius = 6;
-      series.colors.step = 3;
+      // series.colors.step = 3;
 
-      series.labels.template.disabled = true;
-      series.ticks.template.disabled = true;
+      series.slices.template.stroke = am4core.color("#fff");
+      series.slices.template.strokeWidth = 2;
 
+      // series.labels.template.disabled = true;
+      // series.ticks.template.disabled = true;
       series.hiddenState.properties.endAngle = -90;
-
+      // chart.svgContainer.htmlElement.style.height = "100px";
       // chart.legend = new am4charts.Legend();
+
+      this.chart = chart;
    }
 
-   componentWillUnmount() {
+   componentWillMount() {
       if (this.chart) {
          this.chart.dispose();
       }

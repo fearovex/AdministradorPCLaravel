@@ -28,6 +28,9 @@ class ChartEdad extends Component {
 
    componentDidUpdate() {
       if(this.state.props != this.props.data){
+         if (this.chart) {
+            this.chart.dispose();
+         }
          this.handleChart(this.props.data)
          this.setState({
             props: this.props.data
@@ -51,7 +54,7 @@ class ChartEdad extends Component {
       // Put a thick white border around each Slice
       pieSeries.slices.template.stroke = am4core.color("#fff");
       pieSeries.slices.template.strokeWidth = 2;
-      pieSeries.slices.template.strokeOpacity = 1;
+      // pieSeries.slices.template.strokeOpacity = 1;
       pieSeries.slices.template
          // change the cursor on hover to make it apparent the object can be interacted with
          .cursorOverStyle = [
@@ -61,8 +64,8 @@ class ChartEdad extends Component {
             }
          ];
 
-      pieSeries.labels.template.disabled = true;
-      pieSeries.ticks.template.disabled = true;
+      // pieSeries.labels.template.disabled = true;
+      // pieSeries.ticks.template.disabled = true;
 
       // Create a base filter effect (as if it's not there) for the hover to return to
       let shadow = pieSeries.slices.template.filters.push(new am4core.DropShadowFilter);
@@ -81,9 +84,11 @@ class ChartEdad extends Component {
       // chart.legend.position = "right";
       // chart.legend.labels.template.maxWidth = 150;
       // chart.legend.labels.template.truncate = true;
+
+      this.chart = chart;
    }
 
-   componentWillUnmount() {
+   componentWillMount() {
       if (this.chart) {
          this.chart.dispose();
       }

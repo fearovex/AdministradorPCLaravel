@@ -28,6 +28,9 @@ class ChartGenero extends Component {
 
    componentDidUpdate() {
       if(this.state.props != this.props.data){
+         if (this.chart) {
+            this.chart.dispose();
+         }
          this.handleChart(this.props.data)
          this.setState({
             props: this.props.data
@@ -38,35 +41,31 @@ class ChartGenero extends Component {
    async handleChart(data = []) {
 
       let chart = am4core.create("chartgenero", am4charts.PieChart3D);
+      chart.hiddenState.properties.opacity = 0;
+
+      chart.data = data;
+
+
       // Add and configure Series
       let pieSeries = chart.series.push(new am4charts.PieSeries3D());
       pieSeries.dataFields.category = "genero";
       pieSeries.dataFields.value = "personas";
 
-      chart.data = data;
-
-      // Let's cut a hole in our Pie chart the size of 30% the radius
-      // chart.innerRadius = am4core.percent(30);
-
       // Put a thick white border around each Slice
       pieSeries.slices.template.stroke = am4core.color("#fff");
       pieSeries.slices.template.strokeWidth = 2;
-      pieSeries.slices.template.strokeOpacity = 1;
+      // pieSeries.slices.template.strokeOpacity = 1;
+      // change the cursor on hover to make it apparent the object can be interacted with
       pieSeries.slices.template
-         // change the cursor on hover to make it apparent the object can be interacted with
-         .cursorOverStyle = [
-            {
+      .cursorOverStyle = [
+         {
                "property": "cursor",
                "value": "pointer"
             }
          ];
 
-      pieSeries.labels.template.disabled = true;
-      pieSeries.ticks.template.disabled = true;
-
-      // Create a base filter effect (as if it's not there) for the hover to return to
-      let shadow = pieSeries.slices.template.filters.push(new am4core.DropShadowFilter);
-      shadow.opacity = 0;
+      // pieSeries.labels.template.disabled = false;
+      // pieSeries.ticks.template.disabled = true;
 
       // Create hover state
       let hoverState = pieSeries.slices.template.states.getKey("hover"); // normally we have to create the hover state, in this case it already exists
@@ -81,9 +80,11 @@ class ChartGenero extends Component {
       // chart.legend.position = "right";
       // chart.legend.labels.template.maxWidth = 150;
       // chart.legend.labels.template.truncate = true;
+
+      this.chart = chart;
    }
 
-   componentWillUnmount() {
+   componentWillMount() {
       if (this.chart) {
          this.chart.dispose();
       }
@@ -91,7 +92,7 @@ class ChartGenero extends Component {
 
    render() {
       return (
-         <div id="chartgenero" style={{ width: "100%", height: "150px" }}></div>
+         <div id="chartgenero" style={{width: '100%', height: "150px"}}></div>
       );
    }
 }
