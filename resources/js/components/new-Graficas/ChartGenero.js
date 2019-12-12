@@ -84,7 +84,7 @@ class ChartGenero extends Component {
       this.chart = chart;
    }
 
-   componentWillMount() {
+   UNSAFE_componentWillMount() {
       if (this.chart) {
          this.chart.dispose();
       }
