@@ -22,7 +22,8 @@ class CreateUsersTable extends Migration
             $table->string('imgdashboard');
             $table->string('remember_token')->default('token');
             $table->tinyInteger('Conexion')->default(0)->nullable();
-            
+            $table->unsignedBigInteger('id_rol');
+            $table->foreign('id_rol')->references('id')->on('roles')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -16,7 +16,8 @@ import IntlMessages from 'Util/IntlMessages';
 class NavMenuItem extends Component {
 
    state = {
-      subMenuOpen: ''
+      subMenuOpen: '',
+      
    }
 
 	/**
@@ -66,7 +67,7 @@ class NavMenuItem extends Component {
                                  <ListItem button component="li" key={index}>
                                     <NavLink to={subMenu.path} activeClassName="item-active" >
                                        <span className="menu">
-                                          <IntlMessages id={subMenu.menu_title} />
+                                         {subMenu.menu_title}
                                        </span>
                                        {subMenu.new_item && subMenu.new_item === true ?
                                           <Chip label="new" className="new-item" color="secondary" />

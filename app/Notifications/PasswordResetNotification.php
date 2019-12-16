@@ -48,12 +48,12 @@ class PasswordResetNotification extends Notification
         $aliasFrom = env('ALIAS_MAIL_FROM');
         $urlToResetForm =$urlDefaultFromEnv."password/reset/?token=". $this->token;
         return (new MailMessage)
-            ->from('ipfi_admin@ipwork.com.co','Reset Password IPfi')
-            ->subject(Lang::get('Reset Password Notification'))
-            ->line(Lang::get('You requested here you go!'))
-            ->action(Lang::get('Reset Password'), $urlToResetForm)
-            ->line(Lang::get('This password reset link will expire in :count minutes.', ['count' => config('auth.passwords.users.expire')]))
-            ->line(Lang::get('If you did not request a password reset, no further action is required.'));
+            ->from($aliasFrom,'Soporte IPfi')
+            ->subject(Lang::get('Notificación para restablecer de contraseña'))
+            ->line(Lang::get('Aquí está su solicitud de restablecimiento de contraseña!'))
+            ->action(Lang::get('Restablecer contraseña'), $urlToResetForm)
+            ->line(Lang::get('Este enlace de restablecimiento de contraseña caducará en 60 minutos.', ['count' => config('auth.passwords.users.expire')]))
+            ->line(Lang::get('Si no solicitó un restablecimiento de contraseña, no se requiere ninguna otra acción..'));
             // ->line(Lang::get('If you did not request a password reset, no further action is required. Token: ==>'. $this->token));
     }
 

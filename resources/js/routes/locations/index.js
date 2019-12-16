@@ -22,7 +22,7 @@ export default class Locations extends Component {
     constructor(props){
         super(props)
         this.state = {
-            data: [],
+            dataLocations: [],
 			error: null,
         }
        
@@ -32,36 +32,15 @@ export default class Locations extends Component {
         try {
             let res = await fetch(`${localStorage.urlDomain}api/locations`)
             let dataLocations = await res.json();
-            console.log(dataLocations); 
             this.setState({
-                data: dataLocations
+                dataLocations: dataLocations
             })
-            console.log(this.state.data)
         } catch (error) {
-            
+            this.state = {
+                error: error
+            }
         }
-        // try {
-        //     let res = await fetch(`${localStorage.urlDomain}api/evento`);
-        //     let datagraph = await res.json()
-
-        //     this.setState({
-        //         form:{
-        //             initialDate: initialDate,
-        //             initialTime: initialTime,
-        //             finalDate: finalDate,
-        //             finalTime: finalTime,
-        //             id_event: datagraph.id,
-        //         }
-        //     })
-
-        //     this.ConsultaEventos()
-        //     this.ConsultaGraficas()
-            
-        //  } catch (error) {
-        //        this.setState({ 
-        //           error
-        //        })
-        //  }
+     
     }
 
     handleChange(e){
@@ -74,84 +53,28 @@ export default class Locations extends Component {
     }
 
     render() {
-        const { data } = this.state;
+        const { dataLocations } = this.state;
         return (
             <div className="cardsmasonry-wrapper">
                 <PageTitleBar title={<IntlMessages id="sidebar.locations" />} match={this.props.match} />
-            
-                <CardColumns>
-                    <Card>
-                        <CardBody>
-                        {/* <IntlMessages id="" /> */}
-                        <CardTitle></CardTitle>
-                            <CardText>
-                                wqewqewqewqew
-                                wqewqewqewqew
-                                wqewqewqewqew
-                                wqewqewqewqew
-                                wqewqewqewqew
-                                wqewqewqewqew
-                            </CardText>
-                        </CardBody>
-                    </Card>
-                    <Card>
-                        <CardBody>
-                            <CardTitle>Card 4</CardTitle>
-                            <CardText>
-                                    wqewqewqewqew
-                                    wqewqewqewqew
-                                    wqewqewqewqew
-                                    wqewqewqewqew
-                                    wqewqewqewqew
-                                    wqewqewqewqew
-                            </CardText>
-                        </CardBody>
-                    </Card>
-                    <Card>
-                        <CardBody>
-                            <CardTitle>Card 2</CardTitle>
-                              
-                            <CardText>
-                                wqewqewqewqew
-                                wqewqewqewqew
-                                wqewqewqewqew
-                                wqewqewqewqew
-                                wqewqewqewqew
-                                wqewqewqewqew
-                            </CardText>
-                        </CardBody>
-                    </Card>
-                    <Card>
-                        <CardBody>
-                            <CardTitle>Card 5</CardTitle>
-                              
-                            <CardText>
-                                    wqewqewqewqew
-                                    wqewqewqewqew
-                                    wqewqewqewqew
-                                    wqewqewqewqew
-                                    wqewqewqewqew
-                                    wqewqewqewqew
-                            </CardText>
-                        </CardBody>
-                    </Card>
-                    <Card>
-                        <CardBody>
-                            <CardTitle>Card 3</CardTitle>
-                              
-                            <CardText>
-                                    wqewqewqewqew
-                                    wqewqewqewqew
-                                    wqewqewqewqew
-                                    wqewqewqewqew
-                                    wqewqewqewqew
-                                    wqewqewqewqew
-                            </CardText>
-                        </CardBody>
-                    </Card>
-                </CardColumns>
-
-            
+                <div className="row">
+                {dataLocations && dataLocations.map((data) => (
+                    <div key={data.id} className="col-md-4 col-lg-4 col-xs-2 col-sm-6 mb-3">
+                        <Card >
+                        <CardImg top width="100%" src="http://www.gsfdcy.com/data/img/42/1605654-hotel-wallpaper.jpg" alt="Card image cap" />
+                            <CardBody>
+                            {/* <IntlMessages id="" /> */}
+                            
+                            <CardTitle>{data.nombre}</CardTitle>
+                                <CardText>
+                                    {data.descripcion}  
+                                </CardText>
+                                
+                            </CardBody>
+                        </Card>
+                    </div>
+                    ))}
+                </div>
             </div>
         );
 	}
