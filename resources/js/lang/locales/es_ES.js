@@ -775,4 +775,5 @@ module.exports = {
    "sidebar.detailEvents" :"Detalle Eventos",
    "alert.timeOutTitle": "Sesión Finalizada",
    "alert.timeOutButtom": "Aceptar",
+   "sidebar.locations" :"Locaciones"
 }

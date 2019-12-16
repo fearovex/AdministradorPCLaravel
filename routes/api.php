@@ -23,6 +23,8 @@ Route::group(['middleware' => 'cors'], function() {
     
     Route::post('/password/reset','Api\ResetPasswordController@reset');
 
+    Route::get('/hidden','Api\GeneralController@index');
+
     Route::group(['middleware' => 'connection'], function() {
         Route::get('/logout', 'Auth\LoginController@logout');
 
@@ -35,5 +37,7 @@ Route::group(['middleware' => 'cors'], function() {
         Route::post('/nameColumnNames','DetailEventsController@getColumnNames');
 
         Route::post('/events','EventsController@index');
+
+        Route::resource('/locations','LocationsController');
     });
  });

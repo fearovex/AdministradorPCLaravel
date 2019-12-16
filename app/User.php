@@ -49,4 +49,6 @@ class User extends Authenticatable
     {
         return $this->locale;
     }
+
+  
 }
