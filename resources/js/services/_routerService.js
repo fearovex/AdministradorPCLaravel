@@ -22,6 +22,10 @@ import NewList from 'Routes/new-dashboard';
 import Events from 'Routes/events';
 // import DetailEvents from 'Routes/events/detail-events';
 import DetailEvents from 'Routes/detail-events';
+import locacion from 'Routes/locacion';
+import campaña from 'Routes/campaña';
+import zonas from 'Routes/zonas';
+import dispositivos from 'Routes/dispositivos';
 
 // async component
 import {
@@ -135,6 +139,22 @@ export default [
    {
       path: 'detail-events',
       component: DetailEvents
+   },
+   {
+      path: 'locacion',
+      component: locacion
+   },
+   {
+      path: 'campaña',
+      component: campaña
+   },
+   {
+      path: 'zonas',
+      component: zonas
+   },
+   {
+      path: 'dispositivos',
+      component: dispositivos
    },
    // {
 	// 	path: 'events/detail-events',

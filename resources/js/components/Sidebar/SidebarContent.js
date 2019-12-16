@@ -128,6 +128,58 @@ class SidebarContent extends Component {
                             />
                         ))}
                     </List>
+                    <List
+                        className="rct-mainMenu p-0 m-0 list-unstyled"
+                        subheader={<ListSubheader className="side-title" component="li">
+                            <IntlMessages id="sidebar.locacion" /></ListSubheader>}
+                    >
+                        {sidebarMenus.category10.map((menu, key) => (
+                            <NavMenuItem
+                                menu={menu}
+                                key={key}
+                                onToggleMenu={() => this.toggleMenu(menu, 'category10')}
+                            />
+                        ))}
+                    </List>
+                    <List
+                        className="rct-mainMenu p-0 m-0 list-unstyled"
+                        subheader={<ListSubheader className="side-title" component="li">
+                            <IntlMessages id="sidebar.campaña" /></ListSubheader>}
+                    >
+                        {sidebarMenus.category11.map((menu, key) => (
+                            <NavMenuItem
+                                menu={menu}
+                                key={key}
+                                onToggleMenu={() => this.toggleMenu(menu, 'category11')}
+                            />
+                        ))}
+                    </List>
+                    <List
+                        className="rct-mainMenu p-0 m-0 list-unstyled"
+                        subheader={<ListSubheader className="side-title" component="li">
+                            <IntlMessages id="sidebar.zonas" /></ListSubheader>}
+                    >
+                        {sidebarMenus.category12.map((menu, key) => (
+                            <NavMenuItem
+                                menu={menu}
+                                key={key}
+                                onToggleMenu={() => this.toggleMenu(menu, 'category12')}
+                            />
+                        ))}
+                    </List>
+                    <List
+                        className="rct-mainMenu p-0 m-0 list-unstyled"
+                        subheader={<ListSubheader className="side-title" component="li">
+                            <IntlMessages id="sidebar.dispositivos" /></ListSubheader>}
+                    >
+                        {sidebarMenus.category13.map((menu, key) => (
+                            <NavMenuItem
+                                menu={menu}
+                                key={key}
+                                onToggleMenu={() => this.toggleMenu(menu, 'category13')}
+                            />
+                        ))}
+                    </List>
                 </nav>
             </div>
         );

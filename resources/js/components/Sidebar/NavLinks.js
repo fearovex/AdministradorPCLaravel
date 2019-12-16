@@ -653,5 +653,34 @@ export default {
          "menu_icon": "zmdi zmdi-view-compact",
          "path": "/app/events"
       }
+   ],
+   category10: [
+      {
+         "menu_title": "sidebar.locacion",
+         "menu_icon": "zmdi zmdi-view-compact",
+         "path": "/app/locacion"
+      }
+   ],
+   category11: [
+      {
+         "menu_title": "sidebar.campaña",
+         "menu_icon": "zmdi zmdi-view-compact",
+         "path": "/app/campaña"
+      }
+   ],
+   category12: [
+      {
+         "menu_title": "sidebar.zonas",
+         "menu_icon": "zmdi zmdi-view-compact",
+         "path": "/app/zonas"
+      }
+   ],
+   category13: [
+      {
+         "menu_title": "sidebar.dispositivos",
+         "menu_icon": "zmdi zmdi-view-compact",
+         "path": "/app/dispositivos"
+      }
    ]
+
 }

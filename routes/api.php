@@ -35,5 +35,7 @@ Route::group(['middleware' => 'cors'], function() {
         Route::post('/nameColumnNames','DetailEventsController@getColumnNames');
 
         Route::post('/events','EventsController@index');
+
+        Route::resource('/locations','LocationsController');
     });
  });

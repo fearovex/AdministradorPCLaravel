@@ -771,8 +771,12 @@ module.exports = {
    "graphics.edad": "N° Personas por Edad",
    "graphics.os": "N° Personas por Sistema Operativo",
    "graphics.date": "N° Personas por Fecha",
-   "sidebar.events" :"Eventos",
+   "sidebar.events" :"Eventos",   
    "sidebar.detailEvents" :"Detalle Eventos",
    "alert.timeOutTitle": "Sesión Finalizada",
    "alert.timeOutButtom": "Aceptar",
+   "sidebar.locacion" :"locacion",
+   "sidebar.campaña" :"campaña",
+   "sidebar.zonas" :"zonas",
+   "sidebar.dispositivos" :"dispositivos",
 }
