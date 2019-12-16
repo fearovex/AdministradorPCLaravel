@@ -16,24 +16,45 @@ class userseedertable extends Seeder
         $user->name = 'IPwork';
         $user->email = 'administrador@ipwork.com.co';
         $user->password = 'IPwork2019.';
-        $user->database = 'unicentro';
+        $user->database = 'portal_oxohotel';
         $user->imgdashboard = 'ipfi.png';
+        $user->id_rol = 2;
         $user->save();
 
         $user = new User();
         $user->name = 'Oxohotel';
-        $user->email = 'oxohotel@ipwork.com.co';
-        $user->password = 'Oxohotel2019';
+        $user->email = 'admin@ermita.com';
+        $user->password = '3rm1t42019';
         $user->database = 'portal_oxohotel';
         $user->imgdashboard = 'oxohotel.png';
+        $user->id_rol = 1;
         $user->save();
 
         $user = new User();
         $user->name = 'Unicentro';
-        $user->email = 'unicentro@ipwork.com.co';
-        $user->password = 'Unicentro2019';
+        $user->email = 'admin@unicentro.com';
+        $user->password = 'Un1c3ntr0.2019';
         $user->database = 'unicentro';
         $user->imgdashboard = 'unicentro.png';
+        $user->id_rol = 1;
+        $user->save();
+
+        $user = new User();
+        $user->name = 'IPfi Admin';
+        $user->email = 'ipfi_admin@ipwork.com.co';
+        $user->password = 'IPwork2019.';
+        $user->database = 'unicentro';
+        $user->imgdashboard = 'ipfi.png';
+        $user->id_rol = 1;
+        $user->save();
+
+        $user = new User();
+        $user->name = 'IPfi Admin';
+        $user->email = 'mauricio.pascuas@ipwork.com.co';
+        $user->password = 'IPwork2019.';
+        $user->database = 'unicentro';
+        $user->imgdashboard = 'ipfi.png';
+        $user->id_rol = 1;
         $user->save();
     }
 }

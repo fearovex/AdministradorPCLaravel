@@ -25,6 +25,11 @@ import CRMLayout from './CRMLayout';
 // app signin
 import AppSignIn from './SigninFirebase';
 import AppSignUp from './SignupFirebase';
+import AppForgotPassword from './ForgotPassword';
+import AppResetPassword from './ResetPassword';
+
+
+import AutoLogout from './AutoLogout';
 
 // async components
 import {
@@ -74,15 +79,17 @@ class App extends Component {
 
    render() {
       const { location, match, user } = this.props;
+     
       if (location.pathname === '/') {
          if (user === 'false') {
             return (<Redirect to={'/signin'} />);
          } else {
-            return (<Redirect to={'/app/new-dashboard'} />);
+            return (<Redirect to={'/app/locations'} />);
          }
       }
       return (
          <RctThemeProvider>
+            <AutoLogout />
             <NotificationContainer />
             <InitialPath
                path={`${match.url}app`}
@@ -95,6 +102,9 @@ class App extends Component {
             <Route path="/dashboard" component={CRMLayout} />
             <Route path="/signin" component={AppSignIn} />
             <Route path="/signup" component={AppSignUp} />
+            <Route path="/password/email" component={AppForgotPassword} />
+            <Route path="/password/reset" component={AppResetPassword} />
+            {/* password reset */}
             <Route path="/session/login" component={AsyncSessionLoginComponent} />
             <Route path="/session/register" component={AsyncSessionRegisterComponent} />
             <Route path="/session/lock-screen" component={AsyncSessionLockScreenComponent} />

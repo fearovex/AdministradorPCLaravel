@@ -14,9 +14,26 @@
     padding-bottom: 1.875rem;
   }
 }
+
+.forgotPassword{
+  padding-bottom: 10px;
+}
+
+.imgLogoIPFi{
+  width: 250px;
+  padding-bottom: 20px;
+}
+
+.reCaptcha{
+  > div > div{
+    margin: 0 auto;
+  }
+}
+
 .session-header {
   background: none !important;
   box-shadow: none !important;
+  align-items: center;
   > div {
     padding: 0;
   }
@@ -181,6 +198,9 @@
     .session-slider {
       display: none;
     }
+  }
+  .session-header {
+    margin-top: 35px;
   }
 }
 @media(max-width: 600px) {

@@ -32,9 +32,28 @@
     </style>
 
     <script>
+        @if(!session('active'))
+            localStorage.clear();
+        @endif
       localStorage.setItem('urlDomain', '{{env("APP_URL")}}');
+      localStorage.setItem('urlDomain', '{{env("APP_URL")}}');
+   
     </script> 
 
+    <script type="application/javascript">
+        function getIP(json) {
+            localStorage.setItem('ip_client', json.ip);
+            
+            
+        }
+    </script>
+
+    <script type="application/javascript" src="https://api.ipify.org?format=jsonp&callback=getIP"></script>
+
+    {{-- <script src="https://www.google.com/recaptcha/api.js" async defer></script> --}}
+    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
+    
+    
     <title>IPfi - Administrador</title>
 </head>
 
@@ -42,6 +61,7 @@
     <noscript>
         You need to enable JavaScript to run this app.
     </noscript>
+    
     <div id="root"></div>
     <script type="text/javascript" src="{{asset('js/index.js')}}"></script>
 </body>

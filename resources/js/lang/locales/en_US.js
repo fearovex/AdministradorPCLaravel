@@ -768,5 +768,8 @@ module.exports = {
    "graphics.os": "N° People by Operating system",
    "graphics.date": "N° People by Date",
    "sidebar.events" :"Events",
-   "sidebar.detailEvents" :"Detail Events" // Newly created category
+   "sidebar.detailEvents" :"Detail Events",
+   "alert.timeOutTitle": "Session Closed",
+   "alert.timeOutButtom": "Accept",
+   "sidebar.locations" :"Locations"
 }

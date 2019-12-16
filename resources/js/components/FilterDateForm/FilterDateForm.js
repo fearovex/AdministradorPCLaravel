@@ -40,7 +40,7 @@ const FilterDateForm = ({ form, onChange, onSubmit}) => (
             />
         </div>
         <div className="input-group mx-sm-2 mb-2">
-            <label class="mr-3">Fecha fin &nbsp;&nbsp;</label>
+            <label className="mr-3">Fecha fin &nbsp;&nbsp;</label>
             <div className="input-group-prepend">
                 <div className="input-group-text"><i className="zmdi zmdi-calendar"></i></div>
             </div>
@@ -60,7 +60,7 @@ const FilterDateForm = ({ form, onChange, onSubmit}) => (
                 onChange={onChange}
                 />
         </div>
-        <div class="form-inline justify-content-center">
+        <div className="form-inline justify-content-center">
             <button type="submit" className="btn btn-primary mb-2">Filtrar</button>
         </div>
     </form>

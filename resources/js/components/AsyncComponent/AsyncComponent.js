@@ -298,6 +298,7 @@ const AsyncSessionForgotPasswordComponent = Loadable({
    loading: () => <RctPageLoader />,
 });
 
+
 // Session Page 404
 const AsyncSessionPage404Component = Loadable({
    loader: () => import("Routes/session/404"),
@@ -547,10 +548,10 @@ const AsyncDetailEventsComponent = Loadable({
    loader: () => import("Routes/detail-events"),
    loading: () => <RctPageLoader />,
 });
-// const AsyncDetailEventsComponent = Loadable({
-//    loader: () => import("Routes/events/detail-events"),
-//    loading: () => <RctPageLoader />,
-// });
+const AsyncLocationsComponent = Loadable({
+   loader: () => import("Routes/locations"),
+   loading: () => <RctPageLoader />,
+});
 export {
    AsyncUserWidgetComponent,
    AsyncUserChartsComponent,
@@ -643,6 +644,7 @@ export {
    //events
    AsyncEventsComponent,
    //detail events
-   AsyncDetailEventsComponent
+   AsyncDetailEventsComponent,
+   AsyncLocationsComponent
    
 };
