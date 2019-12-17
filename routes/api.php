@@ -30,7 +30,7 @@ Route::group(['middleware' => 'cors'], function() {
 
         Route::post('/graficas', 'GraficasController@Consulta');
         
-        Route::get('/evento', 'GraficasController@UltimoEvento');
+        Route::get('/evento', 'EventsController@UltimoEvento');
 
         Route::post('/detailEvents','DetailEventsController@index');
 

@@ -7,17 +7,6 @@ use Illuminate\Support\Facades\DB;
 
 class GraficasController extends Controller
 {
-    public function UltimoEvento(){
-
-        $Evento = DB::connection(session('database'))
-            ->table('eventos')
-            ->orderBy('fecha_inicio', 'DESC')
-            ->limit(1)
-            ->first();
-
-        return response()->json($Evento, 200);
-    }
-
     public function Consulta(Request $request){
 
         $fecha_inicial = $request->initialDate." ".$request->initialTime;

@@ -4,6 +4,7 @@ import PageTitleBar from 'Components/PageTitleBar/PageTitleBar';
 import IntlMessages from 'Util/IntlMessages';
 import { RctCard, RctCardContent } from 'Components/RctCard';
 import RctCollapsibleCard from 'Components/RctCollapsibleCard/RctCollapsibleCard';
+import { Link } from 'react-router-dom'
 
 import {
     Card,
@@ -61,7 +62,16 @@ export default class Locations extends Component {
                 {dataLocations && dataLocations.map((data) => (
                     <div key={data.id} className="col-md-4 col-lg-4 col-xs-2 col-sm-6 mb-3">
                         <Card >
-                        <CardImg top width="100%" src="http://www.gsfdcy.com/data/img/42/1605654-hotel-wallpaper.jpg" alt="Card image cap" />
+                        <Link 
+                            to={{
+                                pathname: `/app/locations/${data.nombre}`, 
+                                state: {
+                                    id_location: data.id
+                                }
+                            }}
+                        > 
+                            <CardImg top width="100%" src="http://www.gsfdcy.com/data/img/42/1605654-hotel-wallpaper.jpg" alt="Card image cap" />
+                        </Link>
                             <CardBody>
                             {/* <IntlMessages id="" /> */}
                             

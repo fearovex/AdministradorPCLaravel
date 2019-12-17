@@ -35,16 +35,15 @@ import {
 
 import FilterDateForm from 'Components/FilterDateForm/FilterDateForm';
 
-export default class NewList extends Component {
+export default class Analytical extends Component {
 
     constructor(props){
         super(props)
-
         this.state = {
-			data:[],
+            data:[],
 			error: null,
             form: {},
-            events: []
+            events: [],
         }
         
         this.ConsultaGraficas = this.ConsultaGraficas.bind(this);
@@ -54,6 +53,7 @@ export default class NewList extends Component {
     }
     
     async componentDidMount(){
+        const { id_location } = this.props.location.state 
         try {
             let res = await fetch(`${localStorage.urlDomain}api/evento`);
             let datagraph = await res.json()
@@ -74,6 +74,7 @@ export default class NewList extends Component {
                     finalDate: finalDate,
                     finalTime: finalTime,
                     id_event: datagraph.id,
+                    id_location: id_location
                 }
             })
 
@@ -98,6 +99,7 @@ export default class NewList extends Component {
                 
                 body: JSON.stringify(this.state.form)
             }
+            console.log(this.state.form);
 
             let res = await fetch(`${localStorage.urlDomain}api/graficas`, config);
             let datagraph = await res.json()
@@ -181,9 +183,10 @@ export default class NewList extends Component {
 
     render() {
         const { events, form } = this.state;
+        const { location } = this.props.match.params
         return (
             <div className="cardsmasonry-wrapper">
-                <PageTitleBar title={<IntlMessages id="sidebar.dashboard" />} match={this.props.match} />
+                <PageTitleBar title={location} match={this.props.match} />
                 <RctCollapsibleCard heading="Filtro" >
 					<FilterDateForm
 							form={form}

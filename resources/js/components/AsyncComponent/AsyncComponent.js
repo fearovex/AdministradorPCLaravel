@@ -535,10 +535,6 @@ const AsyncReportsComponent = Loadable({
    loader: () => import("Routes/crm/reports"),
    loading: () => <RctPageLoader />,
 });
-const AsyncNewDashboardComponent = Loadable({
-   loader: () => import("Routes/new-dashboard"),
-   loading: () => <RctPageLoader />,
-});
 const AsyncEventsComponent = Loadable({
    loader: () => import("Routes/events"),
    loading: () => <RctPageLoader />,
@@ -640,7 +636,6 @@ export {
    AsyncProjectDetailComponent,
    AsyncClientsComponent,
    AsyncReportsComponent,
-   AsyncNewDashboardComponent,
    //events
    AsyncEventsComponent,
    //detail events
