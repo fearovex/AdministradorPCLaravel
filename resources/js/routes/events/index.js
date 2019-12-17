@@ -34,17 +34,7 @@ export default class Events extends Component {
                 initialDate: 0
             }
 
-            let config = {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                
-                body: JSON.stringify(form)
-            }
-
-            let res = await fetch(`${localStorage.urlDomain}api/events`, config)
+            let res = await fetch(`${localStorage.urlDomain}api/events`)
             let data = await res.json()
 
             for (let i = 0; i < data.length; i++) {

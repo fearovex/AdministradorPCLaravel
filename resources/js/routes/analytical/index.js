@@ -6,7 +6,7 @@ import PageTitleBar from 'Components/PageTitleBar/PageTitleBar';
 // intl messages
 import IntlMessages from 'Util/IntlMessages';
 
-
+import moment from "moment";
 
 // rct card box
 import { RctCard, RctCardContent } from 'Components/RctCard';
@@ -39,53 +39,45 @@ export default class Analytical extends Component {
 
     constructor(props){
         super(props)
+
+        const { id_location } = this.props.location.state;
+
+        let date = moment(new Date, 'YYYY/MM/DD hh:mm a');
+        let año = date.year();
+        let mes = date.month()+1;
+        let dia = date.date();
+        let hora = date.hour();
+        let minutos = date.minute();
+        let initialDate = (año) + '-' + (mes) + '-' + (dia) + " 00:00";
+        let finalDate = (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos);
+
         this.state = {
             data:[],
 			error: null,
-            form: {},
+            form: {
+                filterPersonalizado: false,
+                initialDate: initialDate,
+                finalDate: finalDate,
+                id_event: 0,
+                id_location: id_location,
+                campania: 'Todas',
+            },
             events: [],
         }
         
         this.ConsultaGraficas = this.ConsultaGraficas.bind(this);
+        this.ConsultaEventos = this.ConsultaEventos.bind(this);
         this.handleChange=this.handleChange.bind(this)
         this.handleDateFilter=this.handleDateFilter.bind(this)
-        this.handleChangeEvent = this.handleChangeEvent.bind(this)
+        this.handleModal = this.handleModal.bind(this)
+        this.handleDateFilterCancel = this.handleDateFilterCancel.bind(this)
+        this.handleChangeFilter = this.handleChangeFilter.bind(this)
+        this.handleClickCampain = this.handleClickCampain.bind(this)
     }
     
-    async componentDidMount(){
-        const { id_location } = this.props.location.state 
-        try {
-            let res = await fetch(`${localStorage.urlDomain}api/evento`);
-            let datagraph = await res.json()
-            let tempDate = new Date(datagraph.fecha_inicio);
-            let initialDate = tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate(); 
-            // let initialDate = new Date(); 
-            let initialTime = ('0'+tempDate.getHours()).slice(-2) +':'+ ('0'+tempDate.getMinutes()).slice(-2) +':'+ ('0' + tempDate.getSeconds()).slice(-2);
-            // let initialTime = ('0'+tempDate.getHours()).slice(-2) +':'+ ('0'+tempDate.getMinutes()).slice(-2);
-            let tempDate2 = new Date(datagraph.fecha_fin);
-            let finalDate = tempDate2.getFullYear() + '-' + (tempDate2.getMonth()+1) + '-' + tempDate2.getDate();
-            let finalTime = ('0'+tempDate2.getHours()).slice(-2) +':'+ ('0'+tempDate2.getMinutes()).slice(-2) +':'+ ('0' + tempDate2.getSeconds()).slice(-2);
-            // let finalTime = ('0'+tempDate2.getHours()).slice(-2) +':'+ ('0'+tempDate2.getMinutes()).slice(-2);
-
-            this.setState({
-                form:{
-                    initialDate: initialDate,
-                    initialTime: initialTime,
-                    finalDate: finalDate,
-                    finalTime: finalTime,
-                    id_event: datagraph.id,
-                    id_location: id_location
-                }
-            })
-
-            this.ConsultaEventos()
-            this.ConsultaGraficas()
-            
-         } catch (error) {
-               this.setState({ 
-                  error
-               })
-         }
+    componentDidMount(){
+        this.ConsultaEventos()
+        this.ConsultaGraficas()
     }
 
     async ConsultaGraficas(){
@@ -99,7 +91,6 @@ export default class Analytical extends Component {
                 
                 body: JSON.stringify(this.state.form)
             }
-            console.log(this.state.form);
 
             let res = await fetch(`${localStorage.urlDomain}api/graficas`, config);
             let datagraph = await res.json()
@@ -122,33 +113,20 @@ export default class Analytical extends Component {
         this.setState({
             form:{
                 ...this.state.form,
-                id_event: 0,
+                filterPersonalizado: false,
             }
-        })
-
-        this.ConsultaEventos()
+        });
+        this.ConsultaGraficas()
     }
     
     async ConsultaEventos(){
         try {
-            let config = {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                
-                body: JSON.stringify(this.state.form)
-            }
-
-            let res = await fetch(`${localStorage.urlDomain}api/events`, config)
+            let res = await fetch(`${localStorage.urlDomain}api/events`)
             let dataevents = await res.json()
             
-            for (let i = 0; i < dataevents.length; i++) {
-                this.setState({
-                    events: dataevents
-                })                
-            }
+            this.setState({
+                events: dataevents
+            })
 
         } catch (error) {
             this.setState({ 
@@ -156,52 +134,123 @@ export default class Analytical extends Component {
             })
         }
     }
-    
-    handleChangeEvent(e){
-        var value = e.target.value
 
-        if(value != 0){
-            this.state.form.id_event = value;
+    handleChangeFilter(e){
+        if(e.target.value != 4){
+            let dateAtras = moment(new Date, 'YYYY/MM/DD hh:mm a');
+            if(e.target.value == 1){
+                dateAtras = moment(new Date, 'YYYY/MM/DD hh:mm a').subtract(3, 'days');
+            }
+            if(e.target.value == 2){
+                dateAtras = moment(new Date, 'YYYY/MM/DD hh:mm a').subtract(15, 'days');
+            }
+            if(e.target.value == 3){
+                dateAtras = moment(new Date, 'YYYY/MM/DD hh:mm a').subtract(1, 'month');
+            }
+            let añoAtras = dateAtras.year();
+            let mesAtras = dateAtras.month()+1;
+            let diaAtras = dateAtras.date();
+            let minutosAtras = '00';
+            let horaAtras = '00';
 
+            if(e.target.value != 0){
+                horaAtras = dateAtras.hour();
+                minutosAtras = dateAtras.minute();
+            }
+
+            let dateActual = moment(new Date, 'YYYY/MM/DD hh:mm a');
+            let añoActual = dateActual.year();
+            let mesActual = dateActual.month()+1;
+            let diaActual = dateActual.date();
+            let horaActual = dateActual.hour();
+            let minutosActual = dateActual.minute();
+
+            this.state.form.initialDate = (añoAtras) + '-' + (mesAtras) + '-' + (diaAtras) + " " + (horaAtras) + ":" + (minutosAtras)
+            this.state.form.finalDate = (añoActual) + '-' + (mesActual) + '-' + (diaActual) + " " + (horaActual) + ":" + (minutosActual)
+            
             this.ConsultaGraficas()
         }
-        else{
-            this.setState({ 
-                error: 'error'
-            })
-        }
-    }
-
-    handleChange(e){
         this.setState({
             form:{
-				...this.state.form,
+                ...this.state.form,
                 [e.target.name]: e.target.value
             }
         })
     }
 
+    handleChange(e, name=null){
+        if(e.target){
+            this.setState({
+                form:{
+            		...this.state.form,
+                    [e.target.name]: e.target.value
+                }
+            })
+        }
+        else if(e._d){
+            let date = moment(e._d, 'YYYY/MM/DD hh:mm a');
+            let año = date.year();
+            let mes = date.month()+1;
+            let dia = date.date();
+            let hora = date.hour();
+            let minutos = date.minute();
+            this.setState({
+                form:{
+            		...this.state.form,
+                    [name]: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos)
+                }
+            })
+        }
+    }
+
+    handleClickCampain(name){
+        this.setState({
+            form:{
+                ...this.state.form,
+                campania: name
+            }
+        })
+    }
+
+    handleModal(e){
+        e.preventDefault()
+        this.setState({
+            form:{
+                ...this.state.form,
+                filterPersonalizado: true,
+            }
+        });
+    }
+
+    handleDateFilterCancel(e){
+        e.preventDefault()
+        this.setState({
+            form:{
+                ...this.state.form,
+                filterPersonalizado: false,
+            }
+        });
+        this.ConsultaGraficas()
+    }
+
     render() {
-        const { events, form } = this.state;
+        const { events,form } = this.state;
         const { location } = this.props.match.params
         return (
             <div className="cardsmasonry-wrapper">
                 <PageTitleBar title={location} match={this.props.match} />
-                <RctCollapsibleCard heading="Filtro" >
+                <RctCollapsibleCard>
 					<FilterDateForm
 							form={form}
 							onChange={this.handleChange}
-							onSubmit={this.handleDateFilter}
+                            onSubmit={this.handleDateFilter}
+                            onClick={this.handleModal}
+                            onChangeFilter={this.handleChangeFilter}
+                            onCancel={this.handleDateFilterCancel}
+                            campain={true}
+                            events={events}
+                            onClickCampania={this.handleClickCampain}
 					/>
-                    <div className="form-inline justify-content-center">
-                        <label className="mr-4">Eventos</label>
-                            <select name="change" id="change" className="form-control col-10 col-sm-8 col-lg-8" onChange={this.handleChangeEvent} value={form.id_event}>
-                                <option value="0">Seleccione...</option>
-                                {events && events.map((data) => (
-                                <option value={data.id}>{data.nombre}</option>
-                                ))}
-                            </select>   
-                    </div>
 				</RctCollapsibleCard>
                 <CardColumns>
                     <Card>

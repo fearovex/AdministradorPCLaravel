@@ -20,8 +20,8 @@ class DetailEventsController extends Controller
 
     public function index(Request $request){
 
-        $totalInitialDate = $request->initialDate." ".$request->initialTime;
-        $totalFinalDate = $request->finalDate." ".$request->finalTime;
+        $totalInitialDate = $request->initialDate;
+        $totalFinalDate = $request->finalDate;
 
         $id_event=$request->id_event;
         $table_name=$request->tb;
