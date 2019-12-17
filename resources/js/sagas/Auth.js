@@ -111,7 +111,6 @@ function* signInUserWithEmailPassword({ payload }) {
             }
             yield put(signinUserSuccess(signInUser));
             history.push('/');
-            window.location.reload();
         }
     } catch (error) {
         yield put(signinUserFailure(error));
