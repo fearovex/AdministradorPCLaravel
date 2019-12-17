@@ -10,8 +10,7 @@ import agencyNavLinks from 'Components/AgencyMenu/NavLinks';
 
 
 const INIT_STATE = {
-	// sidebarMenus: JSON.parse(localStorage.navLinks),
-	sidebarMenus: navLinks,
+	sidebarMenus: JSON.parse(localStorage.navLinks),
 	agencySidebarMenu: agencyNavLinks,
 }
 

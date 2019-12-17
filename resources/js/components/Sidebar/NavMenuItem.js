@@ -12,6 +12,8 @@ import Chip from '@material-ui/core/Chip';
 
 // intl messages
 import IntlMessages from 'Util/IntlMessages';
+/* <IntlMessages id={menu.menu_title} /> */
+
 
 class NavMenuItem extends Component {
 
@@ -50,7 +52,7 @@ class NavMenuItem extends Component {
                      <i className={menu.menu_icon}></i>
                   </ListItemIcon>
                   <span className="menu text-capitalize">
-                     <IntlMessages id={menu.menu_title} />
+                     {menu.menu_title} 
                   </span>
                   {menu.new_item && menu.new_item === true ?
                      <Chip label="new" className="new-item" color="secondary" />
@@ -89,7 +91,7 @@ class NavMenuItem extends Component {
                                        className={`list-item ${classNames({ 'item-active': subMenuOpen === index })}`}
                                     >
                                        <span className="menu">
-                                          <IntlMessages id={subMenu.menu_title} />
+                                         {subMenu.menu_title}
                                        </span>
                                     </ListItem>
                                     <Collapse in={subMenuOpen === index} timeout="auto">
@@ -98,7 +100,7 @@ class NavMenuItem extends Component {
                                              <ListItem button component="li" key={nestedKey}>
                                                 <NavLink activeClassName="item-active" to={nestedMenu.path}>
                                                    <span className="menu pl-10 d-inline-block">
-                                                      <IntlMessages id={nestedMenu.menu_title} />
+                                                      {nestedMenu.menu_title} 
                                                    </span>
                                                 </NavLink>
                                              </ListItem>
@@ -122,7 +124,7 @@ class NavMenuItem extends Component {
                   <i className={menu.menu_icon}></i>
                </ListItemIcon>
                <span className="menu">
-                  <IntlMessages id={menu.menu_title} />
+                 {menu.menu_title}
                </span>
             </NavLink>
          </ListItem>

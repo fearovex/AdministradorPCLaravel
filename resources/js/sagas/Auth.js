@@ -90,7 +90,8 @@ function* signInUserWithEmailPassword({ payload }) {
     const { history } = payload;
     try {
         // const signInUser = {message: "The password is invalid or the user does not have a password."};
-        const signInUser = data[0];
+        const signInUser = data;
+        console.log(signInUser);
         if (signInUser.message) {
             yield put(signinUserFailure(signInUser.message));
         } else {
@@ -99,10 +100,18 @@ function* signInUserWithEmailPassword({ payload }) {
             localStorage.setItem('user_email', signInUser.email);
             localStorage.setItem('user_database', signInUser.database);
             localStorage.setItem('user_imgdashboard', signInUser.imgdashboard);
-            // localStorage.setItem('navLinks', JSON.stringify(data[1]));
-            //
+            if(signInUser.id_rol == 1){
+                localStorage.setItem('user_module', 'Locations');
+            }
+            if(signInUser.id_rol == 2){
+                localStorage.setItem('user_module', 'Location');
+            }
+            if(signInUser.id_rol == 3){
+                localStorage.setItem('user_module', 'Campaing');
+            }
             yield put(signinUserSuccess(signInUser));
             history.push('/');
+            window.location.reload();
         }
     } catch (error) {
         yield put(signinUserFailure(error));

@@ -46,9 +46,7 @@ class LoginController extends Controller
     public function login (Request $request){
 
         $user = User::where('email', $request->email)->where('password', $request->password)->first();
-        
         if($user){
-
             session(['email' => $request->email]);
             session(['password' => $request->password]);
             session(['id_user' => $user->id]);
@@ -66,38 +64,106 @@ class LoginController extends Controller
 
             $user->where("id", $user->id)
                 ->update(["conexion" => 1]);
-            
-            Config::set("database.connections.".$user->database, [
-                'driver' => 'mysql',
-                "host" => "localhost",
-                "database" => $user->database,
-                "username" => 'root',
-                "password" => '',
-                'charset' => 'utf8mb4',
-                'collation' => 'utf8mb4_unicode_ci',
-            ]);
 
-            $locationsCampaings=DB::connection($user->database)
-                ->select("select locaciones.id AS id_locacion, id_ciudad, locaciones.nombre AS nombreLocacion, locaciones.descripcion AS descripcionLocacion, locaciones.fecha_creacion AS locacionFechaCreacion, eventos.nombre AS nombreEvento, eventos.descripcion AS descripcionEvento, fecha_inicio, fecha_fin, eventos.fecha_creacion AS eventoFechaCreacion, campania  FROM locaciones  INNER JOIN eventos ON eventos.id_locacion = locaciones.id");
-            
-            $locations = [];
-                foreach ($locationsCampaings as $count => $location){
+            if($user->id_rol == 2){
+                Config::set("database.connections.".$user->database, [
+                    'driver' => 'mysql',
+                    "host" => "localhost",
+                    "database" => $user->database,
+                    "username" => 'root',
+                    "password" => '',
+                    'charset' => 'utf8mb4',
+                    'collation' => 'utf8mb4_unicode_ci',
+                ]);
+                
+                    $idLocacion = 1;
+                    $locations=DB::connection($user->database)
+                    ->select("select * from locaciones where id=".$idLocacion);
+                    $locationsArray = [];
+                        $campaings=DB::connection($user->database)
+                                        ->select("select * from eventos where id_locacion =".$idLocacion);
+                        foreach($campaings as $countC => $campaing){
+                            $locationsArray[0] = (object) array(
+                                                      'menu_title'=>$locations[0]->nombre,
+                                                      'child_routes'=>[
+                                                            (object) array(
+                                                            'menu_title'=>$campaing->campania,
+                                                            'path'=>'campaing'
+                                                                    )]
+                                                           );
+                            }
+                    $sidebarJSON = (object) array('category1' => $locationsArray); 
+                   
+                    session(['sideBar' => $sidebarJSON]);
+                    return response()->json($user, 200);
+            }if($user->id_rol == 1){
+                Config::set("database.connections.".$user->database, [
+                    'driver' => 'mysql',
+                    "host" => "localhost",
+                    "database" => $user->database,
+                    "username" => 'root',
+                    "password" => '',
+                    'charset' => 'utf8mb4',
+                    'collation' => 'utf8mb4_unicode_ci',
+                ]);
 
-                        $locations[$count] = (object) array('menu_title'=>$location->nombreLocacion,
-                                                            "new_item"=> false,
-                                                            'path'=>'/app/location');
+                $locations=DB::connection($user->database)
+                ->select("select * from locaciones");
+            
+                $locationsArray = [];
+                foreach ($locations as $count => $location){
+                    $campaingsArray =[];
+                    $campaings=DB::connection($user->database)
+                                    ->select("select * from eventos where id_locacion =".$location->id);
+                    foreach($campaings as $countC => $campaing){
+                        
+                        $campaingsArray[$countC] =  (object) array( 
+                                                    'menu_title'=>$campaing->campania,
+                                                    'path'=>'campaing');
+                        $locationsArray[$count] = (object) array(
+                                                    'menu_title'=>$location->nombre,
+                                                    'type_multi'=>true,
+                                                    'child_routes'=>[
+                                                        (object) array(
+                                                            'menu_title'=>'Campaings',
+                                                            'menu_icon'=>'zmdi zmdi-view-compact',
+                                                            'child_routes'=>$campaingsArray)
+                                                        ]);
+                        }
+                        
                 }
-            $sidebarJSON = (object) array('category1' => [
-                (object) array('menu_title' => 'sidebar.locations',
-                               'menu_icon' => 'zmdi zmdi-map',
-                               'path' => '/app/locations',
-                               'child_routes' => $locations)]);
+                $sidebarJSON = (object) array('category1' => $locationsArray);
+                session(['sideBar' => $sidebarJSON]);
+                return response()->json($user, 200);
 
+            }if($user->id_rol == 3){
+                Config::set("database.connections.".$user->database, [
+                    'driver' => 'mysql',
+                    "host" => "localhost",
+                    "database" => $user->database,
+                    "username" => 'root',
+                    "password" => '',
+                    'charset' => 'utf8mb4',
+                    'collation' => 'utf8mb4_unicode_ci',
+                ]);
+                $idLocacion = 1;
+                $campania = 'publicidad_a_2019_campania';
+                $campaingArray = [];
+                $campaing=DB::connection($user->database)
+                                ->select('select * from eventos where campania = "'.$campania.'" and id_locacion='.$idLocacion);
+                $campaingArray[0] = (object) array(
+                                            'menu_title'=>$campaing[0]->campania,
+                                            'path'=>'campaing'
+                                    );
 
-            return response()->json([$user,$sidebarJSON], 200);
-
+                $sidebarJSON = (object) array('category1' => $campaingArray); 
+                
+                session(['sideBar' => $sidebarJSON]);
+                return response()->json($user, 200);
+            }
+               
         }else{
-            return response()->json([$user], 500);
+            return response()->json($user, 500);
 
         }
     }

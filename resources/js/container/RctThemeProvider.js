@@ -73,7 +73,6 @@ class RctThemeProvider extends Component {
 
 // map state to props
 const mapStateToProps = ({ settings }) => {
-   console.log(settings)
    return settings
 }
 
