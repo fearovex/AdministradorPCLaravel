@@ -11,3 +11,6 @@ npm-debug.log
 yarn-error.log
 /public/*
 package-lock.json
+resources/js/api/index.js
+package.json
+resources/js/api/index.js

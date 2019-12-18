@@ -569,6 +569,10 @@ const AsyncdispositivosComponent = Loadable({
 //    loader: () => import("Routes/events/detail-events"),
 //    loading: () => <RctPageLoader />,
 // });
+const AsyncLocationsComponent = Loadable({
+   loader: () => import("Routes/locations"),
+   loading: () => <RctPageLoader />,
+});
 export {
    AsyncUserWidgetComponent,
    AsyncUserChartsComponent,
@@ -666,4 +670,6 @@ export {
    AsynccampañaComponent,
    AsynczonasComponent,
    AsyncdispositivosComponent,
+   AsyncLocationsComponent
+   
 };

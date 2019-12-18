@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Location;
 use App\Zona;
-use App\Dispositivo;
 use Illuminate\Support\Facades\DB;
 
-class LocationsController extends Controller
+class ZonaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,11 +15,7 @@ class LocationsController extends Controller
      */
     public function index()
     {
-        $locations = DB::connection(session('database'))
-                        ->table('locaciones')
-                        ->get();
-
-        return response()->json($locations, 200);
+        //
     }
 
     /**
@@ -31,7 +25,7 @@ class LocationsController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -42,33 +36,13 @@ class LocationsController extends Controller
      */
     public function store(Request $request)
     {
-        $location = new Location();
-        $location->setConnection(session('database'));
-        $location->nombre = $request->nombre;
-        $location->direccion = $request->direccion;
-        $location->pais = $request->pais;
-        $location->ciudad = $request->ciudad;
-        $location->telefono = $request->telefono;
-        $location->PaginaWeb = $request->PaginaWeb;
-        $location->save();
-
         $zona= new Zona();
         $zona->setConnection(session('database'));
-        $zona->nombre = 'Zona General';
-        $zona->id_locaciones = $location->id;
-        $zona->save();
-
-        if($request->mac_dispositivo){
-            $dispositivo = new Dispositivo();
-            $dispositivo->setConnection(session('database'));
-            $dispositivo->nombre_dispositivo = ($request->dispositivo ? $request->dispositivo : 'Dispositivo');
-            $dispositivo->mac_dispositivo = $request->mac_dispositivo;
-            $dispositivo->tecnologia = $request->tecnologia;
-            $dispositivo->id_zona = $zona->id;
-            $dispositivo->save();
-        }
+        $zona->nombre = $request->nombre;       
+        $zona->id_locaciones = 11;
         
-        return $request;
+
+        $zona->save();
     }
 
     /**
@@ -79,7 +53,13 @@ class LocationsController extends Controller
      */
     public function show($id)
     {
-        //
+        $zonas = DB::connection(session('database'))
+            ->table('zonas')
+            ->where('id_locaciones', $id)
+            ->get();
+            
+        return response()->json($zonas, 200);
+
     }
 
     /**
@@ -90,7 +70,18 @@ class LocationsController extends Controller
      */
     public function edit($id)
     {
-        //
+        try {
+            $zona = DB::connection(session('database'))
+                ->table('zonas')
+                ->where('id', $id)
+                ->first();
+                return response()->json($zona, 200);
+        } catch (\Throwable $th) {
+            return response()->json($zona, 500);
+        }
+        
+       
+
     }
 
     /**
@@ -100,9 +91,12 @@ class LocationsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($id, Request $request)
     {
-        //
+        $zona = DB::connection(session('database'))
+                ->table('zonas')
+                ->where('id', $id)
+                ->update(['nombre' => $request->nombre]);
     }
 
     /**

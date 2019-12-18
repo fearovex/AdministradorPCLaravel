@@ -49,17 +49,22 @@ const auth = new Auth();
 class Signin extends Component {
 
    constructor(props) {
+
+      
+     
       super(props)
       this.state = {
          isShow: false,
          data: [],
          error: null,
+        
          Form: {
             email: "",
             password: "",
             ip_public: "",
          }
       };
+      
       this.handleChange = this.handleChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);      
       this.onloadCallback = this.onloadCallback.bind(this);
@@ -81,13 +86,13 @@ class Signin extends Component {
                };
                let res = await fetch(`${localStorage.urlDomain}api/login`, config);
                let data = await res.json()
-            if(data.email && data.email != null){
-                  this.setState({
-                     data:data
-                  })
+            if(data[0].email && data[0].email != null){
+               this.setState({
+                  data:data
+               })
                this.props.signinUserInFirebase(this.state, this.props.history);
                NotificationManager.success('User Logged In Succesfully','',4000);
-               }
+            }
             else{
                NotificationManager.error("The password is invalid or the user doesn't have a password.",'',4000);
             }
@@ -126,9 +131,7 @@ class Signin extends Component {
     onloadCallback() {
     console.log('captcha successfully loaded');
   }
-
-
-
+  
 
    render() {
       const {data} = this.state

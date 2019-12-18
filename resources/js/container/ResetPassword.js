@@ -152,6 +152,7 @@ import { logoutUserFromFirebase } from 'Actions';
                                  type="mail" 
                                  name="email" 
                                  id="email" 
+                                 autocomplete="off"
                                  required
                                  className="has-input input-lg" 
                                  placeholder="Enter Email Address"
@@ -164,6 +165,7 @@ import { logoutUserFromFirebase } from 'Actions';
                                     type="password" 
                                     name="password" 
                                     id="password" 
+                                    autocomplete="off"
                                     required
                                     className="has-input input-lg" 
                                     placeholder="Enter New Password"
@@ -176,6 +178,7 @@ import { logoutUserFromFirebase } from 'Actions';
                                  name="password_confirmation" 
                                  id="password_confirmation" 
                                  required
+                                 autocomplete="off"
                                  className="has-input input-lg" 
                                  placeholder="Verify New Password"
                                  onChange={() => this.handleChange(event)}

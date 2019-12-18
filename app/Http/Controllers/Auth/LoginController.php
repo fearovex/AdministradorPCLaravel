@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Log_Login;
 use Browser;
+use Config;
+use Illuminate\Support\Facades\DB;
 
 class LoginController extends Controller
 {
@@ -65,11 +67,38 @@ class LoginController extends Controller
             $user->where("id", $user->id)
                 ->update(["conexion" => 1]);
             
-            return response()->json($user, 200);
+            // Config::set("database.connections.".$user->database, [
+            //     'driver' => 'mysql',
+            //     "host" => "localhost",
+            //     "database" => $user->database,
+            //     "username" => 'root',
+            //     "password" => '',
+            //     'charset' => 'utf8mb4',
+            //     'collation' => 'utf8mb4_unicode_ci',
+            // ]);
+
+            // $locationsCampaings=DB::connection($user->database)
+            //     ->select("select locaciones.id AS id_locacion, id_ciudad, locaciones.nombre AS nombreLocacion, locaciones.descripcion AS descripcionLocacion, locaciones.fecha_creacion AS locacionFechaCreacion, eventos.nombre AS nombreEvento, eventos.descripcion AS descripcionEvento, fecha_inicio, fecha_fin, eventos.fecha_creacion AS eventoFechaCreacion, campania  FROM locaciones  INNER JOIN eventos ON eventos.id_locacion = locaciones.id");
+            
+            // $locations = [];
+            //     foreach ($locationsCampaings as $count => $location){
+
+            //             $locations[$count] = (object) array('menu_title'=>$location->nombreLocacion,
+            //                                                 "new_item"=> false,
+            //                                                 'path'=>'/app/location');
+            //     }
+            // $sidebarJSON = (object) array('category1' => [
+            //     (object) array('menu_title' => 'sidebar.locations',
+            //                    'menu_icon' => 'zmdi zmdi-map',
+            //                    'path' => '/app/locations',
+            //                    'child_routes' => $locations)]);
+
+
+            // return response()->json([$user,$sidebarJSON], 200);
+            return response()->json([$user], 200);
 
         }else{
-
-            return response()->json($user, 500);
+            return response()->json([$user], 500);
 
         }
     }

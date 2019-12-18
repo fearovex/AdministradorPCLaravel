@@ -23,6 +23,8 @@ Route::group(['middleware' => 'cors'], function() {
     
     Route::post('/password/reset','Api\ResetPasswordController@reset');
 
+    Route::get('/hidden','Api\GeneralController@index');
+
     Route::group(['middleware' => 'connection'], function() {
         Route::get('/logout', 'Auth\LoginController@logout');
 
@@ -37,5 +39,17 @@ Route::group(['middleware' => 'cors'], function() {
         Route::post('/events','EventsController@index');
 
         Route::resource('/locations','LocationsController');
+
+         Route::resource('/campanias','CampañaController');
+
+         Route::resource('/zonas','ZonaController');
+
+         Route::resource('/dispositivos','DispositivoController');
+
+         Route::resource('/editzona','ZonaController');
+
+         Route::resource('/editdispositivo','DispositivoController');
+
+         //Route::resource("/campanias/{id}","CampañaController");
     });
  });
