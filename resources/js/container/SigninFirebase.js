@@ -91,16 +91,14 @@ class Signin extends Component {
                   data:data
                })
                this.props.signinUserInFirebase(this.state, this.props.history);
-               if(window.location.reload()){
-                  NotificationManager.success('User Logged In Succesfully','',4000);
-               }
+               
+               NotificationManager.success('User Logged In Succesfully','',4000);
             }
             else{
                NotificationManager.error("The password is invalid or the user doesn't have a password.",'',4000);
             }
             
          } catch (error) {
-            console.log(error);
             this.setState({
                error
             });
@@ -109,7 +107,9 @@ class Signin extends Component {
          // NotificationManager.error("Please verify the captcha.",'',4000);
       // }
    }
-      
+   async componentWillUnmount(){
+      window.location.reload();
+   }
    forgotPassword(){
       this.props.history.push('/password/email')
    }

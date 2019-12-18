@@ -88,7 +88,7 @@ class LoginController extends Controller
                                                       'child_routes'=>[
                                                             (object) array(
                                                             'menu_title'=>$campaing->campania,
-                                                            'path'=>'campaing'
+                                                            'path'=>'campaing?id='.$campaing->id,
                                                                     )]
                                                            );
                             }
@@ -107,27 +107,36 @@ class LoginController extends Controller
                     'collation' => 'utf8mb4_unicode_ci',
                 ]);
 
+              
+
                 $locations=DB::connection($user->database)
                 ->select("select * from locaciones");
             
                 $locationsArray = [];
+                $campaingsArray =[];
                 foreach ($locations as $count => $location){
-                    $campaingsArray =[];
                     $campaings=DB::connection($user->database)
                                     ->select("select * from eventos where id_locacion =".$location->id);
                     foreach($campaings as $countC => $campaing){
                         
                         $campaingsArray[$countC] =  (object) array( 
                                                     'menu_title'=>$campaing->campania,
-                                                    'path'=>'campaing');
+                                                    'path'=>'campaing?id='.$campaing->id);
                         $locationsArray[$count] = (object) array(
                                                     'menu_title'=>$location->nombre,
                                                     'type_multi'=>true,
                                                     'child_routes'=>[
                                                         (object) array(
+                                                            'menu_title'=>'DetailCampaings',
+                                                            'type_multi'=> false,
+                                                            'path'=>'detailCampaings'
+                                                        ),
+                                                        (object) array(
                                                             'menu_title'=>'Campaings',
+                                                            'type_multi'=>true,
                                                             'menu_icon'=>'zmdi zmdi-view-compact',
-                                                            'child_routes'=>$campaingsArray)
+                                                            'child_routes'=>
+                                                               $campaingsArray)
                                                         ]);
                         }
                         
@@ -153,7 +162,7 @@ class LoginController extends Controller
                                 ->select('select * from eventos where campania = "'.$campania.'" and id_locacion='.$idLocacion);
                 $campaingArray[0] = (object) array(
                                             'menu_title'=>$campaing[0]->campania,
-                                            'path'=>'campaing'
+                                            'path'=>'campaing?id='.$campaing[0]->id
                                     );
 
                 $sidebarJSON = (object) array('category1' => $campaingArray); 

@@ -84,32 +84,48 @@ class NavMenuItem extends Component {
                         :
                         <List className="list-unstyled py-0">
                            {menu.child_routes.map((subMenu, index) => {
-                              return (
-                                 <Fragment key={index}>
-                                    <ListItem button component="li"
-                                       onClick={() => this.onToggleCollapseMenu(index)}
-                                       className={`list-item ${classNames({ 'item-active': subMenuOpen === index })}`}
-                                    >
-                                       <span className="menu">
-                                         {subMenu.menu_title}
-                                       </span>
-                                    </ListItem>
-                                    <Collapse in={subMenuOpen === index} timeout="auto">
-                                       <List className="list-unstyled py-0">
-                                          {subMenu.child_routes.map((nestedMenu, nestedKey) => (
-                                             <ListItem button component="li" key={nestedKey}>
-                                                <NavLink activeClassName="item-active" to={nestedMenu.path}>
-                                                   <span className="menu pl-10 d-inline-block">
-                                                      {nestedMenu.menu_title} 
-                                                   </span>
-                                                </NavLink>
-                                             </ListItem>
-                                          ))}
-                                       </List>
-                                    </Collapse>
-                                 </Fragment>
-                              )
+                              if(subMenu.type_multi == true){
+                                 return (
+                                    <Fragment key={index}>
+                                       <ListItem button component="li"
+                                          onClick={() => this.onToggleCollapseMenu(index)}
+                                          className={`list-item ${classNames({ 'item-active': subMenuOpen === index })}`}
+                                          >
+                                          <span className="menu">
+                                          {subMenu.menu_title}
+                                          </span>
+                                       </ListItem>
+                                       <Collapse in={subMenuOpen === index} timeout="auto">
+                                          <List className="list-unstyled py-0">
+                                             {subMenu.child_routes.map((nestedMenu, nestedKey) => (
+                                                <ListItem button component="li" key={nestedKey}>
+                                                   <NavLink activeClassName="item-active" to={nestedMenu.path}>
+                                                      <span className="menu pl-10 d-inline-block">
+                                                         {nestedMenu.menu_title} 
+                                                      </span>
+                                                   </NavLink>
+                                                </ListItem>
+                                             ))}
+                                          </List>
+                                       </Collapse>
+                                    </Fragment>
+                                 )
+                              }
+                              else{
+                                 return (
+                                    <Fragment>
+                                       <ListItem button component="li" key={index}>
+                                          <NavLink to={subMenu.path} activeClassName="item-active" >
+                                             <span className="menu">
+                                             {subMenu.menu_title}
+                                             </span>
+                                          </NavLink>
+                                       </ListItem>
+                                    </Fragment>
+                                 )
+                              }
                            })}
+                           }
                         </List>
                      }
                   </Fragment>

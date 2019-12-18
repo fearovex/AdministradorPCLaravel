@@ -18,8 +18,6 @@ class CreateRolesTable extends Migration
             $table->string('rol');
             $table->timestamps();
         });
-
-           
     }
 
     /**
