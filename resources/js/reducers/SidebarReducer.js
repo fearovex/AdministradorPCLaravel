@@ -5,13 +5,12 @@ import update from 'react-addons-update';
 import { TOGGLE_MENU, AGENCY_TOGGLE_MENU } from 'Actions/types';
 
 // nav links
-import navLinks from 'Components/Sidebar/NavLinks';
+// import navLinks from 'Components/Sidebar/NavLinks';
 import agencyNavLinks from 'Components/AgencyMenu/NavLinks';
 
 
 const INIT_STATE = {
-	// sidebarMenus: JSON.parse(localStorage.navLinks),
-	sidebarMenus: navLinks,
+	sidebarMenus: JSON.parse(localStorage.navLinks),
 	agencySidebarMenu: agencyNavLinks,
 }
 

@@ -44,11 +44,12 @@ import {
 
 //Auth0
 import Auth from '../Auth/Auth';
-
 // callback component
 import Callback from "Components/Callback/Callback";
 
+
 //Auth0 Handle Authentication
+
 const auth = new Auth();
 
 const handleAuthentication = ({ location }) => {
@@ -88,6 +89,9 @@ class App extends Component {
          }
       }
       return (
+        
+
+
          <RctThemeProvider>
             <AutoLogout />
             <NotificationContainer />
@@ -120,6 +124,7 @@ class App extends Component {
                return <Callback {...props} />
             }} />
          </RctThemeProvider>
+         
       );
    }
 }
