@@ -10,7 +10,7 @@ class EventsController extends Controller
 {
     public function index(){
         $events = DB::connection(session('database'))
-            ->table('eventos')
+            ->table('campania')
             ->get();
     
         return response()->json($events);
@@ -19,7 +19,7 @@ class EventsController extends Controller
     public function UltimoEvento(){
 
         $Evento = DB::connection(session('database'))
-            ->table('eventos')
+            ->table('campania')
             ->orderBy('fecha_inicio', 'DESC')
             ->limit(1)
             ->first();

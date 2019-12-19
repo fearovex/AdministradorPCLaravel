@@ -70,8 +70,8 @@ class LoginController extends Controller
                     'driver' => 'mysql',
                     "host" => "localhost",
                     "database" => $user->database,
-                    "username" => 'root',
-                    "password" => '',
+                    "username" => env('DB_USERNAME'),
+                    "password" => env('DB_PASSWORD'),
                     'charset' => 'utf8mb4',
                     'collation' => 'utf8mb4_unicode_ci',
                 ]);
@@ -100,8 +100,8 @@ class LoginController extends Controller
                     'driver' => 'mysql',
                     "host" => "localhost",
                     "database" => $user->database,
-                    "username" => 'root',
-                    "password" => '',
+                    "username" => env('DB_USERNAME'),
+                    "password" => env('DB_PASSWORD'),
                     'charset' => 'utf8mb4',
                     'collation' => 'utf8mb4_unicode_ci',
                 ]);
@@ -174,8 +174,8 @@ class LoginController extends Controller
                     'driver' => 'mysql',
                     "host" => "localhost",
                     "database" => $user->database,
-                    "username" => 'root',
-                    "password" => '',
+                    "username" => env('DB_USERNAME'),
+                    "password" => env('DB_PASSWORD'),
                     'charset' => 'utf8mb4',
                     'collation' => 'utf8mb4_unicode_ci',
                 ]);
