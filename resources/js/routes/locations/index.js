@@ -334,7 +334,7 @@ export default class Locations extends Component {
                                 }
                             }}
                         > 
-                            <CardImg top width="100%" src="http://www.gsfdcy.com/data/img/42/1605654-hotel-wallpaper.jpg" alt="Card image cap" />
+                            <CardImg top width="100%" src={require('Assets/img/location.jpg')} alt="Card image cap" />
                         </Link>
                             <CardBody>
                             {/* <IntlMessages id="" /> */}
