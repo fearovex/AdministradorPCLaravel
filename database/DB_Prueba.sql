@@ -11,6 +11,22 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
+-- Volcando estructura para tabla portal_oxohotel.campania
+CREATE TABLE IF NOT EXISTS `campania` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_locacion` int(11) DEFAULT NULL,
+  `nombre` varchar(250) DEFAULT NULL,
+  `descripcion` varchar(1000) DEFAULT NULL,
+  `fecha_inicio` date DEFAULT NULL,
+  `fecha_fin` date DEFAULT NULL,
+  `ano_evento` int(11) DEFAULT NULL,
+  `campania` varchar(200) DEFAULT NULL,
+  `zona_ap` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_locacion` (`id_locacion`),
+  CONSTRAINT `id_locacion` FOREIGN KEY (`id_locacion`) REFERENCES `locaciones` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4;
+
 -- Volcando datos para la tabla portal_oxohotel.campania: ~3 rows (aproximadamente)
 /*!40000 ALTER TABLE `campania` DISABLE KEYS */;
 INSERT INTO `campania` (`id`, `id_locacion`, `nombre`, `descripcion`, `fecha_inicio`, `fecha_fin`, `ano_evento`, `campania`, `zona_ap`) VALUES
@@ -19,13 +35,161 @@ INSERT INTO `campania` (`id`, `id_locacion`, `nombre`, `descripcion`, `fecha_ini
 	(15, 1, 'publicidad_a_2019_campania', 'Portal cautivo que cuenta con un banner con publicidad', '2019-12-18', '2019-12-20', 2019, 'publicidad_a_2019_campania', '33');
 /*!40000 ALTER TABLE `campania` ENABLE KEYS */;
 
+-- Volcando estructura para tabla portal_oxohotel.ciudades
+CREATE TABLE IF NOT EXISTS `ciudades` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(45) DEFAULT NULL,
+  `descripcion` varchar(45) DEFAULT NULL,
+  `fecha_creacion` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `Id_Ciudad_UNIQUE` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 -- Volcando datos para la tabla portal_oxohotel.ciudades: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `ciudades` DISABLE KEYS */;
 /*!40000 ALTER TABLE `ciudades` ENABLE KEYS */;
 
+-- Volcando estructura para procedimiento portal_oxohotel.create_evento
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `create_evento`(
+	in id_locacion int,
+	in nombre_evento varchar(250),
+    in descripcion_evento varchar(1000),
+    in ano_evento int,
+    in fecha_inicio_evento datetime,
+    in fecha_fin_evento datetime  
+)
+BEGIN	
+	/*DEFINIMOS LAS VARIABLES INTERNAS*/
+	DECLARE NOMBRE_CAMPANIA_EVENTO VARCHAR(250) DEFAULT '';
+    
+	/*INSERTAMOS EL EVENTO*/
+	INSERT INTO eventos (
+		id_locacion, 
+        nombre, 
+        descripcion, 
+        ano_evento,
+        fecha_inicio,
+        fecha_fin) 
+	VALUES (
+		id_locacion,
+        nombre_evento, 
+        descripcion_evento,
+        ano_evento,
+        fecha_inicio_evento,
+        fecha_fin_evento
+	);
+    
+    /*CREAMOS LA CAMPAÑA, ESTOS DATOS POR EL MOMENTO ESTAN QUEMADOS */
+    /*PERO CUANDO SE REALIZE EL CMS SE INGRESARIAN AL PROCEDIMIENTO */
+    /*DEFINIMOS EL NOMBRE QUE TENDRA LA TABLA DE LA CAMPAÑA*/	
+    SET NOMBRE_CAMPANIA_EVENTO = concat(nombre_evento, '_', ano_evento, '_campania');
+    /*CREACION DE LA TABLA*/
+    SET @QUERY_CREATE_TABLE = CONCAT(
+		'CREATE TABLE ',
+        NOMBRE_CAMPANIA_EVENTO,
+		' (
+		  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+		  `id_evento` bigint(20) NOT NULL,
+		  `fecha_creacion` datetime DEFAULT CURRENT_TIMESTAMP,
+		  `nombre` varchar(255) DEFAULT NULL,
+		  `email` varchar(255) DEFAULT NULL,
+		  `edad` varchar(255) DEFAULT NULL,
+		  `telefono` varchar(255) DEFAULT NULL,
+		  `genero` varchar(255) DEFAULT NULL,
+		  `ssid` varchar(250) DEFAULT NULL,
+		  `mac_cliente` varchar(250) DEFAULT NULL,
+          `ip_cliente` varchar(250) DEFAULT NULL,
+		  `ip_ap` varchar(250) DEFAULT NULL,
+          `mac_ap` varchar(250) DEFAULT NULL,
+		  PRIMARY KEY (`id`)
+		);'
+    );
+	 PREPARE QUERY_RESULT FROM @QUERY_CREATE_TABLE;
+     EXECUTE QUERY_RESULT;
+     DEALLOCATE PREPARE QUERY_RESULT;
+END//
+DELIMITER ;
+
+-- Volcando estructura para procedimiento portal_oxohotel.create_evento_voucher
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `create_evento_voucher`(
+	in id_locacion int,
+	in nombre_evento varchar(250),
+    in descripcion_evento varchar(1000),
+    in ano_evento int,
+    in fecha_inicio_evento datetime,
+    in fecha_fin_evento datetime  
+)
+BEGIN	
+	/*DEFINIMOS LAS VARIABLES INTERNAS*/
+	DECLARE NOMBRE_CAMPANIA_EVENTO VARCHAR(250) DEFAULT '';
+    
+	/*INSERTAMOS EL EVENTO*/
+	INSERT INTO eventos (
+		id_locacion, 
+        nombre, 
+        descripcion, 
+        ano_evento,
+        fecha_inicio,
+        fecha_fin) 
+	VALUES (
+		id_locacion,
+        nombre_evento, 
+        descripcion_evento,
+        ano_evento,
+        fecha_inicio_evento,
+        fecha_fin_evento
+	);
+    
+    /*CREAMOS LA CAMPAÑA, ESTOS DATOS POR EL MOMENTO ESTAN QUEMADOS */
+    /*PERO CUANDO SE REALIZE EL CMS SE INGRESARIAN AL PROCEDIMIENTO */
+    /*DEFINIMOS EL NOMBRE QUE TENDRA LA TABLA DE LA CAMPAÑA*/	
+    SET NOMBRE_CAMPANIA_EVENTO = concat(nombre_evento, '_', ano_evento, '_campania');
+    /*CREACION DE LA TABLA*/
+    SET @QUERY_CREATE_TABLE = CONCAT(
+		'CREATE TABLE ',
+        NOMBRE_CAMPANIA_EVENTO,
+		' (
+		  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+		  `id_evento` bigint(20) NOT NULL,
+		  `fecha_creacion` datetime DEFAULT CURRENT_TIMESTAMP,
+		  `consecutivo` varchar(255) DEFAULT NULL,
+		  `ssid` varchar(250) DEFAULT NULL,
+		  `mac_cliente` varchar(250) DEFAULT NULL,
+		  `nombre_ap` varchar(250) DEFAULT NULL,
+		  PRIMARY KEY (`id`)
+		);'
+    );
+	 PREPARE QUERY_RESULT FROM @QUERY_CREATE_TABLE;
+     EXECUTE QUERY_RESULT;
+     DEALLOCATE PREPARE QUERY_RESULT;
+END//
+DELIMITER ;
+
+-- Volcando estructura para tabla portal_oxohotel.dispositivos
+CREATE TABLE IF NOT EXISTS `dispositivos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre_dispositivo` varchar(100) NOT NULL DEFAULT '',
+  `mac_dispositivo` varchar(100) NOT NULL DEFAULT '',
+  `id_zona` int(11) NOT NULL DEFAULT '0',
+  `tecnologia` varchar(100) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 -- Volcando datos para la tabla portal_oxohotel.dispositivos: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `dispositivos` DISABLE KEYS */;
 /*!40000 ALTER TABLE `dispositivos` ENABLE KEYS */;
+
+-- Volcando estructura para tabla portal_oxohotel.licencias_usuario
+CREATE TABLE IF NOT EXISTS `licencias_usuario` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `fecha_inicial` datetime DEFAULT NULL,
+  `fecha_final` datetime DEFAULT NULL,
+  `Descripcion` varchar(1000) DEFAULT NULL,
+  `id_usuario` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
 -- Volcando datos para la tabla portal_oxohotel.licencias_usuario: ~1 rows (aproximadamente)
 /*!40000 ALTER TABLE `licencias_usuario` DISABLE KEYS */;
@@ -33,11 +197,35 @@ INSERT INTO `licencias_usuario` (`id`, `fecha_inicial`, `fecha_final`, `Descripc
 	(1, '2019-10-15 00:00:00', '2020-10-15 23:59:59', 'Licencia del aplicativo de portales cautivos del 15 de noviembre de 2019 al 15 de noviembre de 2020', 1);
 /*!40000 ALTER TABLE `licencias_usuario` ENABLE KEYS */;
 
+-- Volcando estructura para tabla portal_oxohotel.locaciones
+CREATE TABLE IF NOT EXISTS `locaciones` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(250) DEFAULT NULL,
+  `direccion` varchar(50) NOT NULL DEFAULT '',
+  `pais` varchar(1000) DEFAULT NULL,
+  `ciudad` varchar(100) DEFAULT NULL,
+  `telefono` varchar(50) DEFAULT NULL,
+  `PaginaWeb` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+
 -- Volcando datos para la tabla portal_oxohotel.locaciones: ~1 rows (aproximadamente)
 /*!40000 ALTER TABLE `locaciones` DISABLE KEYS */;
 INSERT INTO `locaciones` (`id`, `nombre`, `direccion`, `pais`, `ciudad`, `telefono`, `PaginaWeb`) VALUES
 	(1, 'Prueba', 'direccion', 'colombia', 'cartagena', '3212243289', 'paginaWeb');
 /*!40000 ALTER TABLE `locaciones` ENABLE KEYS */;
+
+-- Volcando estructura para tabla portal_oxohotel.paises
+CREATE TABLE IF NOT EXISTS `paises` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre_esp` varchar(250) DEFAULT NULL,
+  `nombre_en` varchar(250) DEFAULT NULL,
+  `nombre_fr` varchar(250) DEFAULT NULL,
+  `iso2` varchar(45) DEFAULT NULL,
+  `iso3` varchar(45) DEFAULT NULL,
+  `indicativo` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=209 DEFAULT CHARSET=utf8mb4;
 
 -- Volcando datos para la tabla portal_oxohotel.paises: ~208 rows (aproximadamente)
 /*!40000 ALTER TABLE `paises` DISABLE KEYS */;
@@ -252,6 +440,26 @@ INSERT INTO `paises` (`id`, `nombre_esp`, `nombre_en`, `nombre_fr`, `iso2`, `iso
 	(208, 'Zimbabue', 'Zimbabwe', 'Zimbabwe', 'ZW', 'ZWE', 263);
 /*!40000 ALTER TABLE `paises` ENABLE KEYS */;
 
+-- Volcando estructura para tabla portal_oxohotel.publicidad_a_2019_campania
+CREATE TABLE IF NOT EXISTS `publicidad_a_2019_campania` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id_evento` bigint(20) NOT NULL,
+  `fecha_creacion` datetime DEFAULT CURRENT_TIMESTAMP,
+  `nombre` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `edad` varchar(255) DEFAULT NULL,
+  `telefono` varchar(255) DEFAULT NULL,
+  `genero` varchar(255) DEFAULT NULL,
+  `os` varchar(255) DEFAULT NULL,
+  `ssid` varchar(250) DEFAULT NULL,
+  `mac_cliente` varchar(250) DEFAULT NULL,
+  `ip_cliente` varchar(250) DEFAULT NULL,
+  `ip_ap` varchar(250) DEFAULT NULL,
+  `mac_ap` varchar(250) DEFAULT NULL,
+  `id_pais` varchar(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
+
 -- Volcando datos para la tabla portal_oxohotel.publicidad_a_2019_campania: ~24 rows (aproximadamente)
 /*!40000 ALTER TABLE `publicidad_a_2019_campania` DISABLE KEYS */;
 INSERT INTO `publicidad_a_2019_campania` (`id`, `id_evento`, `fecha_creacion`, `nombre`, `email`, `edad`, `telefono`, `genero`, `os`, `ssid`, `mac_cliente`, `ip_cliente`, `ip_ap`, `mac_ap`, `id_pais`) VALUES
@@ -281,6 +489,19 @@ INSERT INTO `publicidad_a_2019_campania` (`id`, `id_evento`, `fecha_creacion`, `
 	(24, 1, '2019-11-14 10:08:50', 'dsads', 'sfds@email.com', '22', '3212234335', 'Mujer', 'Windows', '', '', '', '', '', '40');
 /*!40000 ALTER TABLE `publicidad_a_2019_campania` ENABLE KEYS */;
 
+-- Volcando estructura para tabla portal_oxohotel.publicidad_b_2019_campania
+CREATE TABLE IF NOT EXISTS `publicidad_b_2019_campania` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id_evento` bigint(20) NOT NULL,
+  `fecha_creacion` datetime DEFAULT CURRENT_TIMESTAMP,
+  `ssid` varchar(250) DEFAULT NULL,
+  `mac_cliente` varchar(250) DEFAULT NULL,
+  `ip_cliente` varchar(250) DEFAULT NULL,
+  `ip_ap` varchar(250) DEFAULT NULL,
+  `mac_ap` varchar(250) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+
 -- Volcando datos para la tabla portal_oxohotel.publicidad_b_2019_campania: ~13 rows (aproximadamente)
 /*!40000 ALTER TABLE `publicidad_b_2019_campania` DISABLE KEYS */;
 INSERT INTO `publicidad_b_2019_campania` (`id`, `id_evento`, `fecha_creacion`, `ssid`, `mac_cliente`, `ip_cliente`, `ip_ap`, `mac_ap`) VALUES
@@ -299,17 +520,48 @@ INSERT INTO `publicidad_b_2019_campania` (`id`, `id_evento`, `fecha_creacion`, `
 	(13, 1, '2019-10-24 02:51:40', 'oxohotel_2', '34e12d43a922', '192.168.0.13', '192.168.0.23', '60d02c2d04f0');
 /*!40000 ALTER TABLE `publicidad_b_2019_campania` ENABLE KEYS */;
 
+-- Volcando estructura para tabla portal_oxohotel.roles_usuarios
+CREATE TABLE IF NOT EXISTS `roles_usuarios` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(250) DEFAULT NULL,
+  `descripcion` varchar(1000) DEFAULT NULL,
+  `fecha_creacion` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+
 -- Volcando datos para la tabla portal_oxohotel.roles_usuarios: ~1 rows (aproximadamente)
 /*!40000 ALTER TABLE `roles_usuarios` DISABLE KEYS */;
 INSERT INTO `roles_usuarios` (`id`, `nombre`, `descripcion`, `fecha_creacion`) VALUES
 	(1, 'administrador', 'rol de super usuario, que permite el uso de la totalidad de caracteristicas de la plataforma', '2019-08-18 12:03:36');
 /*!40000 ALTER TABLE `roles_usuarios` ENABLE KEYS */;
 
+-- Volcando estructura para tabla portal_oxohotel.usuarios
+CREATE TABLE IF NOT EXISTS `usuarios` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(250) DEFAULT NULL,
+  `email` varchar(250) DEFAULT NULL,
+  `username` varchar(250) DEFAULT NULL,
+  `password` varchar(250) DEFAULT NULL,
+  `id_rol` int(11) DEFAULT NULL,
+  `fecha_creacion` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `id_rol` (`id_rol`),
+  CONSTRAINT `id_rol` FOREIGN KEY (`id_rol`) REFERENCES `roles_usuarios` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+
 -- Volcando datos para la tabla portal_oxohotel.usuarios: ~1 rows (aproximadamente)
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
 INSERT INTO `usuarios` (`id`, `nombre`, `email`, `username`, `password`, `id_rol`, `fecha_creacion`) VALUES
 	(1, 'admin', 'mauricio.pascuas@ipwork.com.co', 'admin', 'IPwork2019.', 1, '2019-08-18 12:03:37');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
+
+-- Volcando estructura para tabla portal_oxohotel.zonas
+CREATE TABLE IF NOT EXISTS `zonas` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(100) NOT NULL DEFAULT '',
+  `id_locaciones` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla portal_oxohotel.zonas: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `zonas` DISABLE KEYS */;
