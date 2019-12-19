@@ -88,7 +88,7 @@ class LoginController extends Controller
                                                       'child_routes'=>[
                                                             (object) array(
                                                             'menu_title'=>$campaing->campania,
-                                                            'path'=>'/app/locations/'.$locations[0]->nombre.'/campañas/campaña')]
+                                                            'path'=>'/app/locations/'.$locations[0]->nombre.'/campañas/campaña?campaña='.$campaing->campania)]
                                                            );
                             }
                     $sidebarJSON = (object) array('category1' => $locationsArray); 
@@ -123,7 +123,7 @@ class LoginController extends Controller
                                                     'id_campain'=> $campaing->id,
                                                     'tb' => $campaing->campania,
                                                     'id_location' => $location->id,
-                                                    'path'=>'/app/locations/'.$location->nombre.'/campañas/campaña');
+                                                    'path'=>'/app/locations/'.$location->nombre.'/campañas/'.$campaing->campania);
                         $locationsArray[$count] = (object) array(
                                                     'menu_title'=>$location->nombre,
                                                     'id_campain'=> '',

@@ -26,7 +26,7 @@ class DetailEventsController extends Controller
         $id_event=$request->id_event;
         $table_name=$request->tb;
 
-        $detailEvents = DB::connection(session('database'))->table($table_name)->where('id_evento',$id_event )->whereBetween('fecha_creacion',[$totalInitialDate, $totalFinalDate])->get();
+        $detailEvents = DB::connection(session('database'))->table($table_name)->whereBetween('fecha_creacion',[$totalInitialDate, $totalFinalDate])->get();
 
         return response()->json($detailEvents, 200);
     }
