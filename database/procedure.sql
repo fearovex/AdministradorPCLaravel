@@ -21,11 +21,11 @@ BEGIN
 
     if campaniaId = 0 then
 	    SET @querylocation = CONCAT('
-	        insert into nameTables (campania) select campania from ',nameDataBase,'.eventos as e where e.id_locacion =',locationId
+	        insert into nameTables (campania) select campania from ',nameDataBase,'.campania as e where e.id_locacion =',locationId
 	    );
     else
 	 	SET @querylocation = CONCAT('
-	      	insert into nameTables (campania) select campania from ',nameDataBase,'.eventos as e where e.id =',campaniaId
+	      	insert into nameTables (campania) select campania from ',nameDataBase,'.campania as e where e.id =',campaniaId
 	    );
     end if;
 
