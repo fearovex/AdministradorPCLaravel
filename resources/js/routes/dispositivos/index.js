@@ -45,7 +45,7 @@ export default class dispositivos extends Component {
 	}   
 	async componentDidMount(){
 		try {
-		   let res = await fetch(`${localStorage.urlDomain}api/zonas/11`)
+		   let res = await fetch(`${localStorage.urlDomain}api/zonas/1`)
 		   let data = await res.json()
 
 		  
@@ -60,7 +60,7 @@ export default class dispositivos extends Component {
 		   })
 		}
 		try {
-			        let res = await fetch(`${localStorage.urlDomain}api/dispositivos/9`)
+			        let res = await fetch(`${localStorage.urlDomain}api/dispositivos/1`)
 					let datadispositivos = await res.json()
 					for (let i = 0; i < datadispositivos.length; i++) {
 						datadispositivos[i]["acciones"]=<Link to={"/app/dispositivos?id="+datadispositivos[i].id} onClick={() => this.openAlertTest('modaledit',datadispositivos[i].id)}>Editar</Link>

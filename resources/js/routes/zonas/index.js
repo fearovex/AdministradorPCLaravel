@@ -44,7 +44,7 @@ export default class zona extends Component {
 	}     
 	async componentDidMount(){
 		try {
-		   let res = await fetch(`${localStorage.urlDomain}api/zonas/11`)
+		   let res = await fetch(`${localStorage.urlDomain}api/zonas/1`)
 		   let data = await res.json();
 		   
 		   for (let i = 0; i < data.length; i++) {

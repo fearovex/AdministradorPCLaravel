@@ -7,6 +7,8 @@ import React, { Component } from 'react';
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated /* am4themes_dataviz */ from "@amcharts/amcharts4/themes/animated";
+import SweetAlert from 'react-bootstrap-sweetalert'
+import MUIDataTable from "mui-datatables";
 // am4core.useTheme(am4themes_dataviz);
 am4core.useTheme(am4themes_animated);
 
@@ -18,7 +20,18 @@ class ChartPais extends Component {
       super(props)
 
       this.state={
-         props: ''
+         props: '',
+         columns: [],
+         data: [],
+         error: null,
+         id:0,
+         prompt: false,
+         modaledit:false,
+         zona:[],
+                  		
+         form: {
+            nombre: ""
+            }
       }
    }
 
@@ -54,8 +67,26 @@ class ChartPais extends Component {
 
       series.hiddenState.properties.endAngle = -90;
 
+
+      pieSeries.slices.template.events.on("hit", function(ev) {
+         this.openAlert('prompt');
+         this.setState({
+            columns: [ev.target._dataItem.category],
+            data: [[ev.target._dataItem.value]]
+         })
+       }, this);
+
       // chart.legend = new am4charts.Legend();
    }
+
+   onCancel(key) {
+      this.setState({ [key]: false })
+
+      }
+
+      openAlert(key) {
+         this.setState({ [key]: true });
+      }
 
    componentWillUnmount() {
       if (this.chart) {
@@ -64,9 +95,35 @@ class ChartPais extends Component {
    }
 
    render() {
+      const { prompt } = this.state;
+      const columns = this.state.columns;
+      const data = this.state.data;
+      const options = {
+			filterType: 'dropdown',
+			responsive: 'scrollMaxHeight'
+		};
       return (
          <RctCardContent>
-            <div id="chartpais" style={{ width: "100%", height: "150px" }}></div>
+            <div id="chartpais" style={{ width: "100%", height: "150px" }}>
+            <SweetAlert
+                     btnSize="sm"
+                     show={prompt}
+                     showCancel
+                     confirmBtnText="Cancelar"
+                     confirmBtnBsStyle="danger"
+                     title="Detalle"
+                     onConfirm={() => this.handleSubmit(event)}
+                     onCancel={() => this.onCancel('prompt')}
+               >
+                  <MUIDataTable
+                     title={"pais"}
+                     data={data}
+                     columns={columns}
+                     options={options}
+                  />
+
+               </SweetAlert>
+               </div>
          </RctCardContent>
       );
    }

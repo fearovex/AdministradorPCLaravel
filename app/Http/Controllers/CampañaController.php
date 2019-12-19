@@ -46,7 +46,7 @@ class CampañaController extends Controller
         $campaña->descripcion = $request->descripcion;
         $campaña->zona_ap = $request->zona_ap;
         $campaña->ano_evento = $request->anio;
-        $campaña->id_locacion = 11;
+        $campaña->id_locacion = 1;
         $campaña->campania= $request->nombre_campaña.$request->fecha_inicio;
 
         $campaña->save();

@@ -7,6 +7,8 @@ import React, { Component } from 'react';
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
+import SweetAlert from 'react-bootstrap-sweetalert'
+import MUIDataTable from "mui-datatables";
 am4core.useTheme(am4themes_animated);
 
 // rct card box
@@ -17,7 +19,18 @@ class ChartOS extends Component {
       super(props)
 
       this.state={
-         props: ''
+         props: '',
+         columns: [],
+         data: [],
+         error: null,
+         id:0,
+         prompt: false,
+         modaledit:false,
+         zona:[],
+                  		
+         form: {
+            nombre: ""
+            }
       }
    }
 
@@ -58,7 +71,24 @@ class ChartOS extends Component {
       series.columns.template.tooltipText = "{valueX}";
       series.columns.template.column3D.stroke = am4core.color("#fff");
       series.columns.template.column3D.strokeOpacity = 0.2;
+
+      pieSeries.slices.template.events.on("hit", function(ev) {
+         this.openAlert('prompt');
+         this.setState({
+            columns: [ev.target._dataItem.category],
+            data: [[ev.target._dataItem.value]]
+         })
+       }, this);
    }
+
+   onCancel(key) {
+      this.setState({ [key]: false })
+
+      }
+
+      openAlert(key) {
+         this.setState({ [key]: true });
+      }
 
    componentWillUnmount() {
       if (this.chart) {
@@ -67,9 +97,35 @@ class ChartOS extends Component {
    }
 
    render() {
+      const { prompt } = this.state;
+      const columns = this.state.columns;
+      const data = this.state.data;
+      const options = {
+			filterType: 'dropdown',
+			responsive: 'scrollMaxHeight'
+		};
       return (
          <RctCardContent>
-            <div id="chartos" style={{ width: "100%", height: "300px" }}></div>
+            <div id="chartos" style={{ width: "100%", height: "300px" }}>
+            <SweetAlert
+                     btnSize="sm"
+                     show={prompt}
+                     showCancel
+                     confirmBtnText="Cancelar"
+                     confirmBtnBsStyle="danger"
+                     title="Detalle"
+                     onConfirm={() => this.handleSubmit(event)}
+                     onCancel={() => this.onCancel('prompt')}
+               >
+                  <MUIDataTable
+                     title={"os"}
+                     data={data}
+                     columns={columns}
+                     options={options}
+                  />
+
+               </SweetAlert>
+         </div>
          </RctCardContent>
       );
    }

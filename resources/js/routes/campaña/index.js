@@ -48,7 +48,7 @@ export default class campañas extends Component {
 	}   
 	async componentDidMount(){
 		try {
-		   let res = await fetch(`${localStorage.urlDomain}api/zonas/11`)
+		   let res = await fetch(`${localStorage.urlDomain}api/zonas/1`)
 		   let data = await res.json()
 
 		  
@@ -63,7 +63,7 @@ export default class campañas extends Component {
 		   })
 		}
 		try {
-			        let res = await fetch(`${localStorage.urlDomain}api/campanias/11`)
+			        let res = await fetch(`${localStorage.urlDomain}api/campanias/1`)
 					let datacampania = await res.json()
 					for (let i = 0; i < datacampania.length; i++) {
 						datacampania[i]["acciones"]=<Link to={"/app/campaña?id="+datacampania[i].id} onClick={() => this.openAlertTest('modaledit',datacampania[i].id)}>Editar</Link>

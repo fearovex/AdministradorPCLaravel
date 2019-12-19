@@ -39,7 +39,7 @@ class ZonaController extends Controller
         $zona= new Zona();
         $zona->setConnection(session('database'));
         $zona->nombre = $request->nombre;       
-        $zona->id_locaciones = 11;
+        $zona->id_locaciones = 1;
         
 
         $zona->save();
