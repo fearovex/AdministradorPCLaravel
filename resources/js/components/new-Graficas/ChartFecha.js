@@ -64,7 +64,7 @@ class ChartFecha extends Component {
       // Create series
       var series = chart.series.push(new am4charts.ColumnSeries());
       series.dataFields.valueY = "personas";
-      series.dataFields.dateX = "fecha";
+      series.dataFields.dateX = "fecha_creacion";
       series.tooltipText = "{valueY}";
 
       

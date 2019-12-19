@@ -48,7 +48,7 @@ class ChartAp extends Component {
 
       // Create axes
       let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-      categoryAxis.dataFields.category = "ap";
+      categoryAxis.dataFields.category = "ip_ap";
       categoryAxis.title.text = "Access Point";
       categoryAxis.title.fontWeight = "bold";
       categoryAxis.renderer.grid.template.location = 0;
@@ -68,7 +68,7 @@ class ChartAp extends Component {
       let series = chart.series.push(new am4charts.ColumnSeries());
       series.sequencedInterpolation = true;
       series.dataFields.valueY = "personas";
-      series.dataFields.categoryX = "ap";
+      series.dataFields.categoryX = "ip_ap";
       series.columns.template.strokeWidth = 0;
 
       series.tooltip.pointerOrientation = "vertical";

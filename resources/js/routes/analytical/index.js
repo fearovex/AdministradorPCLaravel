@@ -59,6 +59,7 @@ export default class Analytical extends Component {
                 initialDate: initialDate,
                 finalDate: finalDate,
                 id_event: 0,
+                columns: ["genero","ip_ap","id_pais","os","fecha_creacion","edad"],
                 id_location: id_location,
                 campania: 'Todas',
             },
@@ -252,12 +253,13 @@ export default class Analytical extends Component {
                             onClickCampania={this.handleClickCampain}
 					/>
 				</RctCollapsibleCard>
+                {console.log(this.state.data)}
                 <CardColumns>
                     <Card>
                         <CardBody>
                             <CardTitle><IntlMessages id="graphics.ap" /></CardTitle>
                         </CardBody>
-                        <ChartAp data={this.state.data.ap} paddingRight={20}/>
+                        <ChartAp data={this.state.data.ip_ap} paddingRight={20}/>
                     </Card>
                     <Card>
                         <CardBody>
@@ -275,13 +277,13 @@ export default class Analytical extends Component {
                         <CardBody>
                             <CardTitle><IntlMessages id="graphics.pais" /></CardTitle>
                         </CardBody>
-                        <ChartPais data={this.state.data.paises}/>
+                        <ChartPais data={this.state.data.id_pais}/>
                     </Card>
                     <Card>
                         <CardBody>
                             <CardTitle><IntlMessages id="graphics.date" /></CardTitle>
                         </CardBody>
-                        <ChartFecha data={this.state.data.fecha}/>
+                        <ChartFecha data={this.state.data.fecha_creacion}/>
                     </Card>
                     <Card>
                         <CardBody>

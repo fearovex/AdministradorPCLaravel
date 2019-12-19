@@ -48,7 +48,7 @@ class ChartPais extends Component {
       var series = chart.series.push(new am4charts.PieSeries());
       series.dataFields.value = "personas";
       series.dataFields.radiusValue = "personas";
-      series.dataFields.category = "pais";
+      series.dataFields.category = "id_pais";
       series.slices.template.cornerRadius = 6;
       series.colors.step = 3;
 
