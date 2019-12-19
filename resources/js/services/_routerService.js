@@ -161,7 +161,7 @@ export default [
       component: campaña
    },
    {
-      path: 'locations/:location/campañas/:campaña',
+      path: 'locations/:location/campañas/:camp',
       component: DetailEvents
    },
 ]
