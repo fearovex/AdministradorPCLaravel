@@ -12,11 +12,14 @@ import Chip from '@material-ui/core/Chip';
 
 // intl messages
 import IntlMessages from 'Util/IntlMessages';
+/* <IntlMessages id={menu.menu_title} /> */
+
 
 class NavMenuItem extends Component {
 
    state = {
-      subMenuOpen: ''
+      subMenuOpen: '',
+      
    }
 
 	/**
@@ -49,7 +52,7 @@ class NavMenuItem extends Component {
                      <i className={menu.menu_icon}></i>
                   </ListItemIcon>
                   <span className="menu text-capitalize">
-                     <IntlMessages id={menu.menu_title} />
+                     {menu.menu_title} 
                   </span>
                   {menu.new_item && menu.new_item === true ?
                      <Chip label="new" className="new-item" color="secondary" />
@@ -64,9 +67,17 @@ class NavMenuItem extends Component {
                            {menu.child_routes.map((subMenu, index) => {
                               return (
                                  <ListItem button component="li" key={index}>
-                                    <NavLink to={subMenu.path} activeClassName="item-active" >
+                                    <NavLink 
+                                       to={{
+                                          pathname: subMenu.path, 
+                                          state: {
+                                              id_location: subMenu.id
+                                          }
+                                       }}
+                                       activeClassName="item-active"
+                                    >
                                        <span className="menu">
-                                          <IntlMessages id={subMenu.menu_title} />
+                                         {subMenu.menu_title}
                                        </span>
                                        {subMenu.new_item && subMenu.new_item === true ?
                                           <Chip label="new" className="new-item" color="secondary" />
@@ -81,32 +92,68 @@ class NavMenuItem extends Component {
                         :
                         <List className="list-unstyled py-0">
                            {menu.child_routes.map((subMenu, index) => {
-                              return (
-                                 <Fragment key={index}>
-                                    <ListItem button component="li"
-                                       onClick={() => this.onToggleCollapseMenu(index)}
-                                       className={`list-item ${classNames({ 'item-active': subMenuOpen === index })}`}
-                                    >
-                                       <span className="menu">
-                                          <IntlMessages id={subMenu.menu_title} />
-                                       </span>
-                                    </ListItem>
-                                    <Collapse in={subMenuOpen === index} timeout="auto">
-                                       <List className="list-unstyled py-0">
-                                          {subMenu.child_routes.map((nestedMenu, nestedKey) => (
-                                             <ListItem button component="li" key={nestedKey}>
-                                                <NavLink activeClassName="item-active" to={nestedMenu.path}>
-                                                   <span className="menu pl-10 d-inline-block">
-                                                      <IntlMessages id={nestedMenu.menu_title} />
-                                                   </span>
-                                                </NavLink>
-                                             </ListItem>
-                                          ))}
-                                       </List>
-                                    </Collapse>
-                                 </Fragment>
-                              )
+                              if(subMenu.type_multi == true){
+                                 return (
+                                    <Fragment key={index}>
+                                       <ListItem button component="li"
+                                          onClick={() => this.onToggleCollapseMenu(index)}
+                                          className={`list-item ${classNames({ 'item-active': subMenuOpen === index })}`}
+                                          >
+                                          <span className="menu">
+                                          {subMenu.menu_title}
+                                          </span>
+                                       </ListItem>
+                                       <Collapse in={subMenuOpen === index} timeout="auto">
+                                          <List className="list-unstyled py-0">
+                                             {subMenu.child_routes.map((nestedMenu, nestedKey) => (
+                                                <ListItem button component="li" key={nestedKey}>
+                                                   <NavLink 
+                                                      activeClassName="item-active" 
+                                                      to={{
+                                                         pathname: `${nestedMenu.path}`, 
+                                                         state: {
+                                                            id_campain: nestedMenu.id_campain,
+                                                            tb: nestedMenu.tb,
+                                                            id_location: nestedMenu.id_location
+                                                         }
+                                                      }}
+                                                   >
+                                                      <span className="menu pl-10 d-inline-block">
+                                                         {nestedMenu.menu_title} 
+                                                      </span>
+                                                   </NavLink>
+                                                </ListItem>
+                                             ))}
+                                          </List>
+                                       </Collapse>
+                                    </Fragment>
+                                 )
+                              }
+                              else{
+                                 return (
+                                    <Fragment key={index}>
+                                       <ListItem button component="li" >
+                                          <NavLink 
+                                             to={{
+                                                pathname: subMenu.path, 
+                                                state: {
+                                                   id_campain: subMenu.id_campain,
+                                                   tb: subMenu.tb,
+                                                   id_location: subMenu.id_location
+                                                }
+                                             }}
+                                             activeClassName="item-active"
+                                          >
+                                             <span className="menu">
+                                             {subMenu.menu_title}
+                                             </span>
+                                          </NavLink>
+                                       </ListItem>
+                                    </Fragment>
+                                 )
+                              }
                            })}
+                           }
                         </List>
                      }
                   </Fragment>
@@ -121,7 +168,7 @@ class NavMenuItem extends Component {
                   <i className={menu.menu_icon}></i>
                </ListItemIcon>
                <span className="menu">
-                  <IntlMessages id={menu.menu_title} />
+                 {menu.menu_title}
                </span>
             </NavLink>
          </ListItem>

@@ -23,17 +23,34 @@ Route::group(['middleware' => 'cors'], function() {
     
     Route::post('/password/reset','Api\ResetPasswordController@reset');
 
+    Route::get('/hidden','Api\GeneralController@index');
+
     Route::group(['middleware' => 'connection'], function() {
-        Route::get('/logout', 'Auth\LoginController@logout');
+        
+        Route::get('/events','EventsController@index');
 
         Route::post('/graficas', 'GraficasController@Consulta');
         
-        Route::get('/evento', 'GraficasController@UltimoEvento');
-
         Route::post('/detailEvents','DetailEventsController@index');
-
+        
         Route::post('/nameColumnNames','DetailEventsController@getColumnNames');
+        
+        Route::resource('/locations','LocationsController');
+        
+        // Route::get('/evento', 'EventsController@UltimoEvento');
+        
+        Route::get('/logout', 'Auth\LoginController@logout');
 
-        Route::post('/events','EventsController@index');
+         Route::resource('/campanias','CampañaController');
+
+         Route::resource('/zonas','ZonaController');
+
+         Route::resource('/dispositivos','DispositivoController');
+
+         Route::resource('/editzona','ZonaController');
+
+         Route::resource('/editdispositivo','DispositivoController');
+
+         //Route::resource("/campanias/{id}","CampañaController");
     });
  });

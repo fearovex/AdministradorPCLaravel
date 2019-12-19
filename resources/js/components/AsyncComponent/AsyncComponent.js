@@ -535,10 +535,6 @@ const AsyncReportsComponent = Loadable({
    loader: () => import("Routes/crm/reports"),
    loading: () => <RctPageLoader />,
 });
-const AsyncNewDashboardComponent = Loadable({
-   loader: () => import("Routes/new-dashboard"),
-   loading: () => <RctPageLoader />,
-});
 const AsyncEventsComponent = Loadable({
    loader: () => import("Routes/events"),
    loading: () => <RctPageLoader />,
@@ -548,10 +544,31 @@ const AsyncDetailEventsComponent = Loadable({
    loader: () => import("Routes/detail-events"),
    loading: () => <RctPageLoader />,
 });
+const AsynclocacionComponent = Loadable({
+   loader: () => import("Routes/locacion"),
+   loading: () => <RctPageLoader />,
+});
+
+const AsynccampañaComponent = Loadable({
+   loader: () => import("Routes/campaña"),
+   loading: () => <RctPageLoader />,
+});
+const AsynczonasComponent = Loadable({
+   loader: () => import("Routes/zonas"),
+   loading: () => <RctPageLoader />,
+});
+const AsyncdispositivosComponent = Loadable({
+   loader: () => import("Routes/dispositivos"),
+   loading: () => <RctPageLoader />,
+});
 // const AsyncDetailEventsComponent = Loadable({
 //    loader: () => import("Routes/events/detail-events"),
 //    loading: () => <RctPageLoader />,
 // });
+const AsyncLocationsComponent = Loadable({
+   loader: () => import("Routes/locations"),
+   loading: () => <RctPageLoader />,
+});
 export {
    AsyncUserWidgetComponent,
    AsyncUserChartsComponent,
@@ -640,10 +657,14 @@ export {
    AsyncProjectDetailComponent,
    AsyncClientsComponent,
    AsyncReportsComponent,
-   AsyncNewDashboardComponent,
    //events
    AsyncEventsComponent,
    //detail events
-   AsyncDetailEventsComponent
+   AsyncDetailEventsComponent,
+   AsynclocacionComponent,
+   AsynccampañaComponent,
+   AsynczonasComponent,
+   AsyncdispositivosComponent,
+   AsyncLocationsComponent
    
 };

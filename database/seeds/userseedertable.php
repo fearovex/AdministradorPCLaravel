@@ -16,8 +16,10 @@ class userseedertable extends Seeder
         $user->name = 'IPwork';
         $user->email = 'administrador@ipwork.com.co';
         $user->password = 'IPwork2019.';
-        $user->database = 'unicentro';
+        $user->database = 'portal_oxohotel';
         $user->imgdashboard = 'ipfi.png';
+        $user->dashboard = "/app/locations/Hotel AC Cartagena";
+        $user->id_rol = 2;
         $user->save();
 
         $user = new User();
@@ -26,6 +28,8 @@ class userseedertable extends Seeder
         $user->password = '3rm1t42019';
         $user->database = 'portal_oxohotel';
         $user->imgdashboard = 'oxohotel.png';
+        $user->dashboard = "/app/locations";
+        $user->id_rol = 1;
         $user->save();
 
         $user = new User();
@@ -34,6 +38,8 @@ class userseedertable extends Seeder
         $user->password = 'Un1c3ntr0.2019';
         $user->database = 'unicentro';
         $user->imgdashboard = 'unicentro.png';
+        $user->dashboard = "/app/locations";
+        $user->id_rol = 1;
         $user->save();
 
         $user = new User();
@@ -42,6 +48,8 @@ class userseedertable extends Seeder
         $user->password = 'IPwork2019.';
         $user->database = 'unicentro';
         $user->imgdashboard = 'ipfi.png';
+        $user->dashboard = "/app/locations";
+        $user->id_rol = 1;
         $user->save();
 
         $user = new User();
@@ -50,6 +58,8 @@ class userseedertable extends Seeder
         $user->password = 'IPwork2019.';
         $user->database = 'unicentro';
         $user->imgdashboard = 'ipfi.png';
+        $user->dashboard = "/app/locations";
+        $user->id_rol = 1;
         $user->save();
     }
 }

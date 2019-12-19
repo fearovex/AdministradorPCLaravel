@@ -7,6 +7,8 @@ import React, { Component } from 'react';
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
+import SweetAlert from 'react-bootstrap-sweetalert'
+import MUIDataTable from "mui-datatables";
 
 am4core.useTheme(am4themes_animated);
 
@@ -18,7 +20,18 @@ class ChartEdad extends Component {
       super(props)
 
       this.state={
-         props: ''
+         props: '',
+         columns: [],
+         data: [],
+         error: null,
+         id:0,
+         prompt: false,
+         modaledit:false,
+         zona:[],
+                  		
+         form: {
+            nombre: ""
+            }
       }
    }
 
@@ -28,6 +41,9 @@ class ChartEdad extends Component {
 
    componentDidUpdate() {
       if(this.state.props != this.props.data){
+         if (this.chart) {
+            this.chart.dispose();
+         }
          this.handleChart(this.props.data)
          this.setState({
             props: this.props.data
@@ -77,23 +93,77 @@ class ChartEdad extends Component {
       hoverShadow.blur = 5;
 
       // Add a legend
-      // chart.legend = new am4charts.Legend();
-      // chart.legend.position = "right";
-      // chart.legend.labels.template.maxWidth = 150;
-      // chart.legend.labels.template.truncate = true;
+      chart.legend = new am4charts.Legend();
+      chart.legend.position = "left";
+      chart.legend.width = 100;
+      chart.legend.labels.template.maxWidth = 150;
+      chart.legend.labels.template.truncate = true;
+      chart.legend.markers.template;
+      var markerTemplate = chart.legend.markers.template;
+      markerTemplate.width = 10;
+      markerTemplate.height = 10;
+
+      this.chart = chart;
+      
+
+      pieSeries.slices.template.events.on("hit", function(ev) {
+         this.openAlert('prompt');
+         this.setState({
+            columns: [ev.target._dataItem.category],
+            data: [[ev.target._dataItem.value]]
+         })
+       }, this);
    }
 
+ 
+   
    componentWillUnmount() {
       if (this.chart) {
          this.chart.dispose();
       }
    }
 
+      onCancel(key) {
+      this.setState({ [key]: false })
+
+      }
+
+      openAlert(key) {
+         this.setState({ [key]: true });
+      }
+      
+   
    render() {
+      const { prompt } = this.state;
+      const columns = this.state.columns;
+      const data = this.state.data;
+		
+		const options = {
+			filterType: 'dropdown',
+			responsive: 'scrollMaxHeight'
+		};
       return (
-         <div id="chartedad" style={{ width: "100%", height: "150px" }}></div>
+         <div id="chartedad" style={{ width: "100%", height: "250px" }}>
+               <SweetAlert
+                     btnSize="sm"
+                     show={prompt}
+                     confirmBtnText="Cancelar"
+                     confirmBtnBsStyle="danger"
+                     title="Detalle"
+                     onConfirm={() => this.onCancel('prompt')}
+               >
+                  <MUIDataTable
+                     title={"edad"}
+                     data={data}
+                     columns={columns}
+                     options={options}
+                  />
+
+               </SweetAlert>
+         </div>
       );
    }
 }
+
 
 export default ChartEdad;

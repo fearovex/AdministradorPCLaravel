@@ -18,10 +18,14 @@ import Crm from 'Routes/crm';
 import ImageCropper from 'Routes/image-cropper';
 import VideoPlayer from 'Routes/video-player';
 import Dropzone from 'Routes/dropzone';
-import NewList from 'Routes/new-dashboard';
 import Events from 'Routes/events';
-// import DetailEvents from 'Routes/events/detail-events';
 import DetailEvents from 'Routes/detail-events';
+import locacion from 'Routes/locacion';
+import campaña from 'Routes/campaña';
+import zonas from 'Routes/zonas';
+import dispositivos from 'Routes/dispositivos';
+import Locations from 'Routes/locations';
+import Analytical from 'Routes/Analytical';
 
 // async component
 import {
@@ -125,19 +129,39 @@ export default [
       component: Dropzone
    },
    {
-		path: 'new-dashboard',
-      component: NewList
-   },
-   {
 		path: 'events',
 		component: Events
 	},
    {
-      path: 'detail-events',
-      component: DetailEvents
+      path: 'locacion',
+      component: locacion
    },
    // {
-	// 	path: 'events/detail-events',
-	// 	component: DetailEvents
-	// }
+   // 	path: 'events/detail-events',
+   // 	component: DetailEvents
+   // }
+   {
+      path: 'locations',
+      component: Locations
+   },
+   {
+      path: 'locations/:location',
+      component: Analytical
+   },
+   {
+      path: 'locations/:location/zonas',
+      component: zonas
+   },
+   {
+      path: 'locations/:location/dispositivos',
+      component: dispositivos
+   },
+   {
+      path: 'locations/:location/campañas',
+      component: campaña
+   },
+   {
+      path: 'locations/:location/campañas/:campaña',
+      component: DetailEvents
+   },
 ]

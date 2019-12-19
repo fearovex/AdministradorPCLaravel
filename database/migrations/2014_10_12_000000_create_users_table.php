@@ -20,9 +20,11 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('database');
             $table->string('imgdashboard');
+            $table->string('dashboard');
             $table->string('remember_token')->default('token');
             $table->tinyInteger('Conexion')->default(0)->nullable();
-            
+            $table->unsignedBigInteger('id_rol');
+            $table->foreign('id_rol')->references('id')->on('roles')->onDelete('cascade');
             $table->timestamps();
         });
     }

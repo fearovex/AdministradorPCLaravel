@@ -49,17 +49,22 @@ const auth = new Auth();
 class Signin extends Component {
 
    constructor(props) {
+
+      
+     
       super(props)
       this.state = {
          isShow: false,
          data: [],
          error: null,
+        
          Form: {
             email: "",
             password: "",
             ip_public: "",
          }
       };
+      
       this.handleChange = this.handleChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);      
       this.onloadCallback = this.onloadCallback.bind(this);
@@ -80,20 +85,20 @@ class Signin extends Component {
                   body: JSON.stringify(this.state.Form)
                };
                let res = await fetch(`${localStorage.urlDomain}api/login`, config);
-               let data = await res.json()
-            if(data.email && data.email != null){
-                  this.setState({
-                     data:data
-                  })
+               let data = await res.json();
+            if(data && data.email){
+               this.setState({
+                  data:data
+               })
                this.props.signinUserInFirebase(this.state, this.props.history);
+               
                NotificationManager.success('User Logged In Succesfully','',4000);
-               }
+            }
             else{
                NotificationManager.error("The password is invalid or the user doesn't have a password.",'',4000);
             }
             
          } catch (error) {
-            console.log(error);
             this.setState({
                error
             });
@@ -101,6 +106,9 @@ class Signin extends Component {
       }else{
          NotificationManager.error("Please verify the captcha.",'',4000);
       }
+   }
+   async componentWillUnmount(){
+      window.location.reload();
    }
    forgotPassword(){
       this.props.history.push('/password/email')
@@ -126,9 +134,7 @@ class Signin extends Component {
     onloadCallback() {
     console.log('captcha successfully loaded');
   }
-
-
-
+  
 
    render() {
       const {data} = this.state
