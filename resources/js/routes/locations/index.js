@@ -292,7 +292,7 @@ export default class Locations extends Component {
                   			return (
                      			<Step key={label}>
                         			<StepLabel>{label}</StepLabel>
-                        <StepContent>
+                        <StepContent >
 							
                            <span>{this.getStepContent(index)}</span><br/>
                            <div>
@@ -326,7 +326,7 @@ export default class Locations extends Component {
                     <div key={data.id} className="col-md-4 col-lg-4 col-xs-2 col-sm-6 mb-3">
                         <Card >
                         <CardImg top width="100%" src="http://www.gsfdcy.com/data/img/42/1605654-hotel-wallpaper.jpg" alt="Card image cap" />
-                            <CardBody>
+                            <CardBody >
                             {/* <IntlMessages id="" /> */}
                             
                             <CardTitle>{data.nombre}</CardTitle>

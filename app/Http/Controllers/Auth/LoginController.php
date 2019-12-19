@@ -88,7 +88,7 @@ class LoginController extends Controller
                                                       'child_routes'=>[
                                                             (object) array(
                                                             'menu_title'=>$campaing->campania,
-                                                            'path'=>'campaing?id='.$campaing->id,
+                                                            'path'=>'detail-events?id='.$campaing->id.'&tb='.$campaing->campania,
                                                                     )]
                                                            );
                             }
@@ -121,7 +121,7 @@ class LoginController extends Controller
                         
                         $campaingsArray[$countC] =  (object) array( 
                                                     'menu_title'=>$campaing->campania,
-                                                    'path'=>'campaing?id='.$campaing->id);
+                                                    'path'=>'detail-events?id='.$campaing->id.'&tb='.$campaing->campania);
                         $locationsArray[$count] = (object) array(
                                                     'menu_title'=>$location->nombre,
                                                     'type_multi'=>true,
@@ -129,7 +129,7 @@ class LoginController extends Controller
                                                         (object) array(
                                                             'menu_title'=>'DetailCampaings',
                                                             'type_multi'=> false,
-                                                            'path'=>'detailCampaings'
+                                                            'path'=>'campaña'
                                                         ),
                                                         (object) array(
                                                             'menu_title'=>'Campaings',
@@ -172,7 +172,7 @@ class LoginController extends Controller
                                 ->select('select * from campania where campania = "'.$campania.'" and id_locacion='.$idLocacion);
                 $campaingArray[0] = (object) array(
                                             'menu_title'=>$campaing[0]->campania,
-                                            'path'=>'campaing?id='.$campaing[0]->id
+                                            'path'=>'detail-events?id='.$campaing[0]->id.'&tb='.$campaing[0]->campania
                                     );
 
                 $sidebarJSON = (object) array('category1' => $campaingArray); 

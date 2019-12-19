@@ -113,8 +113,8 @@ class NavMenuItem extends Component {
                               }
                               else{
                                  return (
-                                    <Fragment>
-                                       <ListItem button component="li" key={index}>
+                                    <Fragment key={index}>
+                                       <ListItem button component="li" >
                                           <NavLink to={subMenu.path} activeClassName="item-active" >
                                              <span className="menu">
                                              {subMenu.menu_title}
