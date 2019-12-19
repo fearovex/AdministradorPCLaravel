@@ -26,8 +26,8 @@ class DatabaseMiddleware
             'driver' => 'mysql',
             "host" => "localhost",
             "database" => $user->database,
-            "username" => 'root',
-            "password" => '',
+            "username" => $usuario,
+            "password" => $password,
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
         ]);
