@@ -25,7 +25,7 @@ import campaña from 'Routes/campaña';
 import zonas from 'Routes/zonas';
 import dispositivos from 'Routes/dispositivos';
 import Locations from 'Routes/locations';
-import Analytical from 'Routes/Analytical';
+import Analytical from 'Routes/analytical';
 
 // async component
 import {
