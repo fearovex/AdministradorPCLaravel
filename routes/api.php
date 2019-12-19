@@ -40,5 +40,17 @@ Route::group(['middleware' => 'cors'], function() {
         // Route::get('/evento', 'EventsController@UltimoEvento');
         
         Route::get('/logout', 'Auth\LoginController@logout');
+
+         Route::resource('/campanias','CampañaController');
+
+         Route::resource('/zonas','ZonaController');
+
+         Route::resource('/dispositivos','DispositivoController');
+
+         Route::resource('/editzona','ZonaController');
+
+         Route::resource('/editdispositivo','DispositivoController');
+
+         //Route::resource("/campanias/{id}","CampañaController");
     });
  });

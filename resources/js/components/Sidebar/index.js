@@ -20,6 +20,7 @@ class Sidebar extends Component {
 
 	UNSAFE_componentWillMount() {
 		this.updateDimensions();
+		
 	}
 
 	shouldComponentUpdate(nextProps) {

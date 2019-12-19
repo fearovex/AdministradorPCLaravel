@@ -22,8 +22,8 @@ export default class DetailEvents extends Component {
 	constructor(props){
 		super(props)
 
-        // const { id_location } = this.props.location.state;
-        
+		const { id_location, id_campain, tb } = this.props.location.state;
+		
         let date = moment(new Date, 'YYYY/MM/DD hh:mm a');
         let año = date.year();
         let mes = date.month()+1;
@@ -32,30 +32,29 @@ export default class DetailEvents extends Component {
         let minutos = date.minute();
         let initialDate = (año) + '-' + (mes) + '-' + (dia) + " 00:00";
         let finalDate = (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos);
-
+		
         this.state = {
 			error: null,
             form: {
-                filterPersonalizado: false,
+				filterPersonalizado: false,
                 initialDate: initialDate,
                 finalDate: finalDate,
-                id_event: 1,
-				id_location: 0,
-				tb: 'publicidad_a_2019_campania'
+                id_event: id_campain,
+				id_location: id_location,
+				tb: tb
 			},
 			nameColumns: [],
 			dataDetails: [],
 		}
-
+		
 		this.handleDateFilter=this.handleDateFilter.bind(this)
 		this.handleChange=this.handleChange.bind(this)
 		this.handleModal = this.handleModal.bind(this)
 		this.handleDateFilterCancel = this.handleDateFilterCancel.bind(this)
 		this.handleChangeFilter = this.handleChangeFilter.bind(this)
 	}
-
-	async componentDidMount(){
-		
+	
+	async componentDidMount(){		
 		try {
 			//Consulta Nombre Columnas  -> Se hace la consulta de los nombres de las columnas de la tabla correspondiente
 			let onlyTableConfig = {

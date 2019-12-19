@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Location;
 use App\Zona;
 use App\Dispositivo;
 use Illuminate\Support\Facades\DB;
 
-class LocationsController extends Controller
+class DispositivoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,11 +16,7 @@ class LocationsController extends Controller
      */
     public function index()
     {
-        $locations = DB::connection(session('database'))
-                        ->table('locaciones')
-                        ->get();
-
-        return response()->json($locations, 200);
+        //
     }
 
     /**
@@ -42,33 +37,15 @@ class LocationsController extends Controller
      */
     public function store(Request $request)
     {
-        $location = new Location();
-        $location->setConnection(session('database'));
-        $location->nombre = $request->nombre;
-        $location->direccion = $request->direccion;
-        $location->pais = $request->pais;
-        $location->ciudad = $request->ciudad;
-        $location->telefono = $request->telefono;
-        $location->PaginaWeb = $request->PaginaWeb;
-        $location->save();
+        $dispositivo= new Dispositivo();
+        $dispositivo->setConnection(session('database'));
+        $dispositivo->nombre_dispositivo = $request->nombre_dispositivo;  
+        $dispositivo->mac_dispositivo = $request->mac_dispositivo;  
+        $dispositivo->tecnologia = $request->tecnologia;  
+        $dispositivo->id_zona = $request->id_zona;       
+     
 
-        $zona= new Zona();
-        $zona->setConnection(session('database'));
-        $zona->nombre = 'Zona General';
-        $zona->id_locaciones = $location->id;
-        $zona->save();
-
-        if($request->mac_dispositivo){
-            $dispositivo = new Dispositivo();
-            $dispositivo->setConnection(session('database'));
-            $dispositivo->nombre_dispositivo = ($request->dispositivo ? $request->dispositivo : 'Dispositivo');
-            $dispositivo->mac_dispositivo = $request->mac_dispositivo;
-            $dispositivo->tecnologia = $request->tecnologia;
-            $dispositivo->id_zona = $zona->id;
-            $dispositivo->save();
-        }
-        
-        return $request;
+        $dispositivo->save();
     }
 
     /**
@@ -79,7 +56,12 @@ class LocationsController extends Controller
      */
     public function show($id)
     {
-        //
+        $dispositivos = DB::connection(session('database'))
+            ->table('dispositivos')
+            ->where('id_zona', $id)
+            ->get();
+            
+        return response()->json($dispositivos, 200);
     }
 
     /**
@@ -90,7 +72,15 @@ class LocationsController extends Controller
      */
     public function edit($id)
     {
-        //
+        try {
+            $dispositivo = DB::connection(session('database'))
+                ->table('dispositivos')
+                ->where('id', $id)
+                ->first();
+                return response()->json($dispositivo, 200);
+        } catch (\Throwable $th) {
+            return response()->json($dispositivo, 500);
+        }
     }
 
     /**
@@ -102,7 +92,10 @@ class LocationsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $dispositivo = DB::connection(session('database'))
+                ->table('dispositivos')
+                ->where('id', $id)
+                ->update(['nombre_dispositivo' => $request->nombre_dispositivo,'mac_dispositivo' => $request->mac_dispositivo,'tecnologia' => $request->tecnologia,'id_zona' => $request->id_zona]);
     }
 
     /**

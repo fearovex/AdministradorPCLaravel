@@ -544,6 +544,27 @@ const AsyncDetailEventsComponent = Loadable({
    loader: () => import("Routes/detail-events"),
    loading: () => <RctPageLoader />,
 });
+const AsynclocacionComponent = Loadable({
+   loader: () => import("Routes/locacion"),
+   loading: () => <RctPageLoader />,
+});
+
+const AsynccampañaComponent = Loadable({
+   loader: () => import("Routes/campaña"),
+   loading: () => <RctPageLoader />,
+});
+const AsynczonasComponent = Loadable({
+   loader: () => import("Routes/zonas"),
+   loading: () => <RctPageLoader />,
+});
+const AsyncdispositivosComponent = Loadable({
+   loader: () => import("Routes/dispositivos"),
+   loading: () => <RctPageLoader />,
+});
+// const AsyncDetailEventsComponent = Loadable({
+//    loader: () => import("Routes/events/detail-events"),
+//    loading: () => <RctPageLoader />,
+// });
 const AsyncLocationsComponent = Loadable({
    loader: () => import("Routes/locations"),
    loading: () => <RctPageLoader />,
@@ -640,6 +661,10 @@ export {
    AsyncEventsComponent,
    //detail events
    AsyncDetailEventsComponent,
+   AsynclocacionComponent,
+   AsynccampañaComponent,
+   AsynczonasComponent,
+   AsyncdispositivosComponent,
    AsyncLocationsComponent
    
 };

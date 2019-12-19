@@ -20,7 +20,7 @@ export default {
                "path": "/dashboard/crm/dashboard",
                "new_item": true,
                "menu_title": "sidebar.crm"
-            },]}]
+            },]}],
 //             {
 //                "path": "/horizontal/dashboard/saas",
 //                "new_item": false,
@@ -611,51 +611,80 @@ export default {
 //          "new_item": false,
 //          "child_routes": null
 
-//       },
-//       {
-//          "menu_title": "sidebar.videoPlayer",
-//          "menu_icon": "zmdi zmdi-collection-video",
-//          "path": "/app/video-player",
-//          "new_item": false,
-//          "child_routes": null
-//       },
-//       {
-//          "menu_title": "sidebar.dropzone",
-//          "menu_icon": "zmdi zmdi-dropbox",
-//          "path": "/app/dropzone",
-//          "new_item": false,
-//          "child_routes": null
-//       }
-//    ],
-//    // category7: [
-//    //    {
-//    //       "menu_title": "sidebar.detailEvents",
-//    //       "menu_icon": "zmdi zmdi-view-quilt",
-//    //       "path": "/app/detail-events",
-//    //       "child_routes": null
-//    //    }
-//    // ],
-//    // category7: [
-//    //    {
-//    //       "menu_title": "sidebar.detailEvents",
-//    //       "path": "/app/events/detail-events",
-//    //       "child_routes": null
-//    //    }
-//    // ],
-//    category8: [
-//       {
-//          "menu_title": "sidebar.newDashboard",
-//          "menu_icon": "zmdi zmdi-view-dashboard",
-//          "path": "/app/new-dashboard",
-//          "new_item": false,
-//          "child_routes": null
-//       }
-//    ],
-//    category9: [
-//       {
-//          "menu_title": "sidebar.events",
-//          "menu_icon": "zmdi zmdi-view-compact",
-//          "path": "/app/events"
-//       }
-//    ]
+   //    },
+   //    {
+   //       "menu_title": "sidebar.videoPlayer",
+   //       "menu_icon": "zmdi zmdi-collection-video",
+   //       "path": "/app/video-player",
+   //       "new_item": false,
+   //       "child_routes": null
+   //    },
+   //    {
+   //       "menu_title": "sidebar.dropzone",
+   //       "menu_icon": "zmdi zmdi-dropbox",
+   //       "path": "/app/dropzone",
+   //       "new_item": false,
+   //       "child_routes": null
+   //    }
+   // ],
+   // category7: [
+   //    {
+   //       "menu_title": "sidebar.detailEvents",
+   //       "menu_icon": "zmdi zmdi-view-quilt",
+   //       "path": "/app/detail-events",
+   //       "child_routes": null
+   //    }
+   // ],
+   // category7: [
+   //    {
+   //       "menu_title": "sidebar.detailEvents",
+   //       "path": "/app/events/detail-events",
+   //       "child_routes": null
+   //    }
+   // ],
+   // category8: [
+   //    {
+   //       "menu_title": "sidebar.newDashboard",
+   //       "menu_icon": "zmdi zmdi-view-dashboard",
+   //       "path": "/app/new-dashboard",
+   //       "new_item": false,
+   //       "child_routes": null
+   //    }
+   // ],
+   category9: [
+      {
+         "menu_title": "sidebar.events",
+         "menu_icon": "zmdi zmdi-view-compact",
+         "path": "/app/events"
+      }
+   ],
+   category10: [
+      {
+         "menu_title": "sidebar.locacion",
+         "menu_icon": "zmdi zmdi-view-compact",
+         "path": "/app/locacion"
+      }
+   ],
+   category11: [
+      {
+         "menu_title": "sidebar.campaña",
+         "menu_icon": "zmdi zmdi-view-compact",
+         "path": "/app/campaña"
+      }
+   ],
+   category12: [
+      {
+         "menu_title": "sidebar.zonas",
+         "menu_icon": "zmdi zmdi-view-compact",
+         "path": "/app/zonas"
+      }
+   ],
+   category13: [
+      {
+         "menu_title": "sidebar.dispositivos",
+         "menu_icon": "zmdi zmdi-view-compact",
+         "path": "/app/dispositivos"
+      }
+   ]
+
 }

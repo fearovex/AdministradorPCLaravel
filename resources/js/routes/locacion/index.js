@@ -1,38 +1,29 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import { Helmet } from "react-helmet";
-import PageTitleBar from 'Components/PageTitleBar/PageTitleBar';
-import IntlMessages from 'Util/IntlMessages';
-import { RctCard, RctCardContent } from 'Components/RctCard';
 import SweetAlert from 'react-bootstrap-sweetalert'
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import StepContent from '@material-ui/core/StepContent';
+import PageTitleBar from "Components/PageTitleBar/PageTitleBar";
+import IntlMessages from "Util/IntlMessages";
+import MUIDataTable from "mui-datatables";
+import RctCollapsibleCard from 'Components/RctCollapsibleCard/RctCollapsibleCard';
+import IconButton from "@material-ui/core/IconButton";
+import AddIcon from "@material-ui/icons/Add";
+import './styles.css'
+import { Route, Link } from 'react-router-dom'
 import Button from '@material-ui/core/Button';
 import { Input } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
-import RctCollapsibleCard from 'Components/RctCollapsibleCard/RctCollapsibleCard';
-import { Link } from 'react-router-dom'
 
-import {
-    Card,
-    CardImg,
-    CardTitle,
-    CardText,
-    CardColumns,
-    CardSubtitle,
-    CardBody,
-    CardImgOverlay
- } from 'reactstrap';
-
- function getSteps() {
+function getSteps() {
 	return [<h3>DATOS GENERALES</h3>,<h3>DISPOSITIVOS</h3>];
 }
 
-export default class Locations extends Component {
-
+export default class locacion extends Component {
     constructor(props){
         super(props)
         this.state = {
@@ -55,48 +46,43 @@ export default class Locations extends Component {
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.getStepContent = this.getStepContent.bind(this);
-    }
-    
-    
-    
-    async componentDidMount(){
-        try {
-            let res = await fetch(`${localStorage.urlDomain}api/locations`)
-            let dataLocations = await res.json();
-            this.setState({
-                dataLocations: dataLocations
-            })
-        } catch (error) {
-            this.state = {
-                error: error
-            }
-        }
-     
-    }
-
-    async handleSubmit(e) {
-        e.preventDefault()		
-       try {
-           let config = {
-               method: 'POST',
-               headers: {
-                   'Accept': 'application/json',
-                   'Content-Type': 'application/json'
-               },
-               body: JSON.stringify(this.state.form)
-           };
-           let res = await fetch(`${localStorage.urlDomain}api/locations`, config);
-           let data = await res.json()
-           this.props.history.push('/app/campaña')           
-             
-          } catch (error) {
-             console.log(error);
-           //   this.setState({
-           // 	 error
-           //   });
-          }		
-    }
-    getStepContent(step) {
+	}     
+	
+	async handleSubmit(e) {
+		 e.preventDefault()		
+		try {
+			let config = {
+				method: 'POST',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(this.state.form)
+			};
+			let res = await fetch(`${localStorage.urlDomain}api/locations`, config);
+			let data = await res.json()
+			this.props.history.push('/app/campaña')
+			// console.log(this.state.form);
+			//   if(data.email && data.email != null){
+			// 		this.setState({
+			// 		   data:data
+			// 		})
+			// 	 this.props.signinUserInFirebase(this.state, this.props.history);
+			// 	 NotificationManager.success('User Logged In Succesfully','',4000);
+			// 	 }
+			//   else{
+			// 	 NotificationManager.error("The password is invalid or the user doesn't have a password.",'',4000);
+			//   }
+			  
+		   } catch (error) {
+			  console.log(error);
+			//   this.setState({
+			// 	 error
+			//   });
+		   }		
+	 }
+	
+	 getStepContent(step) {
 		switch (step) {
 		   case 0:
 			  return (
@@ -256,33 +242,37 @@ export default class Locations extends Component {
 	 handleChange(e) {
 		this.state.form[e.target.name] = e.target.value;
 	 }
-    
+	 
 
-   
 
-    render() {
-		const { dataLocations } = this.state;
-		const steps = getSteps();
+     render() {
+        const steps = getSteps();
 		const { activeStep } = this.state;
 		const { basic, withDes, success, warning, customIcon, withHtml, prompt, passwordPrompt, customStyle } = this.state;
-        return (
-            <div className="cardsmasonry-wrapper">
-                <PageTitleBar title={<IntlMessages id="sidebar.locations" />} match={this.props.match} />
-				<div className="sweet-alert-wrapper">				
-					
+		return (
+			<div className="sweet-alert-wrapper">
+				<PageTitleBar title={<IntlMessages id="sidebar.locacion" />} match={this.props.match} />
+				<div className="row">
+					<RctCollapsibleCard
+						customClasses="p-20 text-center"
+						colClasses="col-sm-6 col-lg-12 col-xl-3"
+					>
+						<h5 className="col-lg-12">Crear locacion</h5>
 						<Button
 							variant="contained"
 							color="primary"
-							className="boton"
+							className="text-white"
 							onClick={() => this.openAlert('prompt')}
-						>Crear locacion
+						>
+							Crear locacion
 						</Button>
-			
+					</RctCollapsibleCard>
+				</div>		
 				<SweetAlert
                 
 					btnSize="sm"
 					show={prompt}
-					title="Crear Zona"
+					title={<IntlMessages id='alert.timeOutTitle' />}
 					confirmBtnText={/*<IntlMessages id='alert.timeOutButtom' />*/ 'cancelar'}
 					confirmBtnBsStyle="danger"
 					onConfirm={() =>  this.onCancel('prompt')}
@@ -293,7 +283,7 @@ export default class Locations extends Component {
                   			return (
                      			<Step key={label}>
                         			<StepLabel>{label}</StepLabel>
-                        <StepContent >
+                        <StepContent>
 							
                            <span>{this.getStepContent(index)}</span><br/>
                            <div>
@@ -321,35 +311,6 @@ export default class Locations extends Component {
             
     </SweetAlert>	
 		</div>
-                <div className="row">
-				
-                {dataLocations && dataLocations.map((data) => (
-                    <div key={data.id} className="col-md-4 col-lg-4 col-xs-2 col-sm-6 mb-3">
-                        <Card >
-                        <Link 
-                            to={{
-                                pathname: `/app/locations/${data.nombre}`, 
-                                state: {
-                                    id_location: data.id
-                                }
-                            }}
-                        > 
-                            <CardImg top width="100%" src="http://www.gsfdcy.com/data/img/42/1605654-hotel-wallpaper.jpg" alt="Card image cap" />
-                        </Link>
-                            <CardBody>
-                            {/* <IntlMessages id="" /> */}
-                            
-                            <CardTitle>{data.nombre}</CardTitle>
-                                <CardText>
-                                    {data.descripcion}  
-                                </CardText>
-                                
-                            </CardBody>
-                        </Card>
-                    </div>
-                    ))}
-                </div>
-            </div>
-        );
+		);
 	}
 }

@@ -18,11 +18,12 @@ class RolesTableSeeder extends Seeder
         $rol->save();
 
         $rol = new Role();
-        $rol->id = 3;
-        $rol->rol = 'Administrador Locaciones';
-        $rol->save(); $rol = new Role();
-
         $rol->id = 2;
+        $rol->rol = 'Administrador Locaciones';
+        $rol->save(); 
+        
+        $rol = new Role();
+        $rol->id = 3;
         $rol->rol = 'Administrador Campañas';
         $rol->save();
     }

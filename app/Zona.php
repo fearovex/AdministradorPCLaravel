@@ -4,13 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Location extends Model
+class Zona extends Model
 {
     protected $fillable = [
-        'nombre', 'direccion', 'pais', 'ciudad','telefono','PaginaWeb'
+        'nombre', 'id_locaciones'
     ];
 
     public $timestamps = false;
 
-    protected $table = 'locaciones';
+    protected $table = 'zonas';
 }

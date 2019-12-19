@@ -20,6 +20,10 @@ import VideoPlayer from 'Routes/video-player';
 import Dropzone from 'Routes/dropzone';
 import Events from 'Routes/events';
 import DetailEvents from 'Routes/detail-events';
+import locacion from 'Routes/locacion';
+import campaña from 'Routes/campaña';
+import zonas from 'Routes/zonas';
+import dispositivos from 'Routes/dispositivos';
 import Locations from 'Routes/locations';
 import Analytical from 'Routes/Analytical';
 
@@ -129,15 +133,35 @@ export default [
 		component: Events
 	},
    {
-      path: 'detail-events',
-      component: DetailEvents
+      path: 'locacion',
+      component: locacion
+   },
+   // {
+   // 	path: 'events/detail-events',
+   // 	component: DetailEvents
+   // }
+   {
+      path: 'locations',
+      component: Locations
    },
    {
-		path: 'locations',
-		component: Locations
+      path: 'locations/:location',
+      component: Analytical
    },
-	{
-		path: `locations/:location`,
-		component: Analytical
-	}
+   {
+      path: 'locations/:location/zonas',
+      component: zonas
+   },
+   {
+      path: 'locations/:location/dispositivos',
+      component: dispositivos
+   },
+   {
+      path: 'locations/:location/campañas',
+      component: campaña
+   },
+   {
+      path: 'locations/:location/campañas/:campaña',
+      component: DetailEvents
+   },
 ]

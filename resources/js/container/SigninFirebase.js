@@ -85,12 +85,13 @@ class Signin extends Component {
                   body: JSON.stringify(this.state.Form)
                };
                let res = await fetch(`${localStorage.urlDomain}api/login`, config);
-               let data = await res.json()
-            if(data[0].email && data[0].email != null){
+               let data = await res.json();
+            if(data && data.email){
                this.setState({
                   data:data
                })
                this.props.signinUserInFirebase(this.state, this.props.history);
+               
                NotificationManager.success('User Logged In Succesfully','',4000);
             }
             else{
@@ -98,7 +99,6 @@ class Signin extends Component {
             }
             
          } catch (error) {
-            console.log(error);
             this.setState({
                error
             });
@@ -106,6 +106,9 @@ class Signin extends Component {
       // }else{
          // NotificationManager.error("Please verify the captcha.",'',4000);
       // }
+   }
+   async componentWillUnmount(){
+      window.location.reload();
    }
    forgotPassword(){
       this.props.history.push('/password/email')
