@@ -68,7 +68,7 @@ class LocationsController extends Controller
             $dispositivo->save();
         }
         
-        return $request;
+        return $location->id;
     }
 
     /**

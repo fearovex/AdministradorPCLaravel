@@ -47,9 +47,11 @@ export default class campañas extends Component {
 		
 	}   
 	async componentDidMount(){
+		if(!this.props.location.state){
+            this.props.history.push('/');
+        }
 		const { id_location } = this.props.location.state
 		const { location } = this.props
-
 		try {
 		   let res = await fetch(`${localStorage.urlDomain}api/zonas/${id_location}`)
 		   let data = await res.json()

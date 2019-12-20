@@ -23,12 +23,9 @@ export default class DetailEvents extends Component {
 		super(props)
 
 		if(!this.props.location.state){
-			this.props.location.state = {
-				id_location: 1,
-				id_campain: 1,
-				tb: '',
-			};
-        }
+            this.props.history.push('/');
+		}
+		
 		const { id_location, id_campain, tb } = this.props.location.state;
 		
         let date = moment(new Date, 'YYYY/MM/DD hh:mm a');

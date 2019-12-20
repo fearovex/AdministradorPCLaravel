@@ -39,9 +39,11 @@ export default class Analytical extends Component {
 
     constructor(props){
         super(props)
+
         if(!this.props.location.state){
-            this.props.location.state = {id_location: 1};
+            this.props.history.push('/');
         }
+
         const { id_location } = this.props.location.state;
 
         let date = moment(new Date, 'YYYY/MM/DD hh:mm a');

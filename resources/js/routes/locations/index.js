@@ -75,6 +75,7 @@ export default class Locations extends Component {
     }
 
     async handleSubmit(e) {
+		const { location } = this.props
         e.preventDefault()		
        try {
            let config = {
@@ -86,14 +87,14 @@ export default class Locations extends Component {
                body: JSON.stringify(this.state.form)
            };
            let res = await fetch(`${localStorage.urlDomain}api/locations`, config);
-           let data = await res.json()
-           this.props.history.push('/app/campaña')           
+		   let data = await res.json()
+		   	this.props.history.push({
+				pathname: location.pathname+'/'+this.state.form.nombre+'/campañas',
+				state: { id_location: data }
+			})           
              
           } catch (error) {
-             console.log(error);
-           //   this.setState({
-           // 	 error
-           //   });
+            console.log(error);
           }		
     }
     getStepContent(step) {
