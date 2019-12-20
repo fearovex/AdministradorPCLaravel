@@ -13,3 +13,16 @@
 .botones{
     left: 58% !important; 
 }
+.botonDisZon{
+    float:right;
+    margin-left: 20px;
+}
+.botonDisZon1 {
+    padding-right : 20px;
+    float:right;
+}
+
+
+.mui-tableRes{
+    margin-top: 76px;
+}

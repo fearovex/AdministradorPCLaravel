@@ -34,7 +34,8 @@ export default class dispositivos extends Component {
 				nombre_dispositivo: "",
 				mac_dispositivo: "",
 				tecnologia: "",
-				zona_ap: "",							
+				zona_ap: "",
+				id_location: 0							
 		   },
 		}
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -45,16 +46,18 @@ export default class dispositivos extends Component {
 	}   
 	async componentDidMount(){
 		const { id_location } = this.props.location.state
+		console.log(this.props.location)
 		const { location } = this.props
 		try {
 		   let res = await fetch(`${localStorage.urlDomain}api/zonas/${id_location}`)
 		   let data = await res.json()
 
-		  
-
 		   this.setState({
 			   data: data,
-			   id_location: id_location,
+			   ////////////
+			   form:{
+				   id_location: id_location
+				}
 		   })
 		   
 		} catch (error) {
@@ -213,10 +216,10 @@ export default class dispositivos extends Component {
                     title={<IntlMessages id="sidebar.dispositivos" />}
                     match={this.props.match}
                 />
+						
 					<div className="blank-wrapper">
-					<div className="sweet-alert-wrapper">				
-					
-						<Button
+						
+					<Button
 							variant="contained"
 							color="primary"
 							className="boton"
@@ -224,6 +227,8 @@ export default class dispositivos extends Component {
 						>Agregar Dispositivo
 						</Button>
 			
+					<div className="sweet-alert-wrapper">				
+					
 				<SweetAlert
 
 					btnSize="sm"

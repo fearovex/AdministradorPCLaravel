@@ -102,6 +102,7 @@ class CampañaController extends Controller
                 ->table('campania')
                 ->where('id', $id)
                 ->update(['nombre' => $request->nombre_campaña,'fecha_inicio' => $request->fecha_inicio,'fecha_fin' => $request->fecha_fin,'descripcion' => $request->descripcion,'zona_ap' => $request->zona_ap,'ano_evento' => $request->anio]);
+                SideBarController::getSideBarRol(session('rol'),session('database'));
     }
 
     /**

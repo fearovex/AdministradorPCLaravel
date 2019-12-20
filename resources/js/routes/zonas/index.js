@@ -33,19 +33,20 @@ export default class zona extends Component {
 			zona:[],
             form: {
 				nombre: "",
-								
+				id_location: props.location.state.id_location
 		   },
 		}
+		
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.handleEdit = this.handleEdit.bind(this);
 		this.openAlertTest = this.openAlertTest.bind(this);
-		
 	}     
 	async componentDidMount(){
-		const { id_location } = this.props.location.state
-		const { location } = this.props
-
+		// console.log(this.props)
+		const { id_location } = this.state.form;
+		const { location } = this.props;
+	
 		try {
 		   let res = await fetch(`${localStorage.urlDomain}api/zonas/${id_location}`)
 		   let data = await res.json();
@@ -53,22 +54,20 @@ export default class zona extends Component {
 		   for (let i = 0; i < data.length; i++) {
 			data[i]["acciones"]=<Link to={location.pathname} onClick={() => this.openAlertTest('modaledit',data[i].id)}>Editar</Link>
 		}
-
-		   this.setState({
-			   data: data,
-			   id_location: id_location,
-		   })
-
-		 
+		this.setState({
+			data: data,
+		})
+	
 		} catch (error) {
 		   this.setState({
-			   error
+			   error,
 		   })
 		}
 	}
 
 	async handleSubmit(e) {
-		e.preventDefault()		
+		e.preventDefault()	
+		console.log(this.state.form)
 	   try {
 		   let config = {
 			   method: 'POST',
@@ -78,13 +77,13 @@ export default class zona extends Component {
 			   },
 			   body: JSON.stringify(this.state.form)
 		   };
+		   
 
 		   await fetch(`${localStorage.urlDomain}api/zonas`, config);
 		//    this.props.history.push('zonas') 
 		this.setState({
 			prompt: false
 		})
-		this.componentDidMount();
 		
 			 
 		  } catch (error) {
@@ -96,7 +95,7 @@ export default class zona extends Component {
 	}
 
 	async handleEdit(e) {
-		e.preventDefault()	
+		e.preventDefault();
 		try {
 			let config = {
 				method: 'PATCH',
@@ -108,16 +107,6 @@ export default class zona extends Component {
 			};
 
 			await fetch(`${localStorage.urlDomain}api/zonas/`+this.state.form.id_zona, config);
-			this.setState({
-				modaledit: false
-			})
-			this.componentDidMount();
-
-			// this.setState({
-			// 	state:this.state
-			// })
-			   
-
 		   
 		
 		  } catch (error) {
@@ -137,7 +126,10 @@ export default class zona extends Component {
 	 */
 	
 	openAlert(key) {
+		
 		this.setState({ [key]: true });
+		// console.log(this.state.id_locacion);	
+		
 	}
 
 	async openAlertTest(key,id) {
@@ -197,22 +189,26 @@ export default class zona extends Component {
                     match={this.props.match}
                 />
 					<div className="blank-wrapper">
-					<div className="sweet-alert-wrapper">				
+					<Button
+						variant="contained"
+						color="primary"
+						className="botonDisZon"
+						onClick={() => this.direccionar()}
+						>Agregar dispositivos
+					</Button>
+				
+					<Button
+						style={{'marginRight':'20px'}}
+						variant="contained"
+						color="primary"
+						className="botonDisZon1"
+						onClick={() => this.openAlert('prompt')}
+					>Crear Zona
+					</Button>
+					<div className="sweet-alert-wrapper">
 					
-						<Button
-							variant="contained"
-							color="primary"
-							className="boton"
-							onClick={() => this.openAlert('prompt')}
-						>Crear Zona
-						</Button>
-						<Button
-							variant="contained"
-							color="primary"
-							className="botones"
-							onClick={() => this.direccionar()}
-							>Agregar dispositivos
-						</Button>
+					
+					
 						
 			
 				<SweetAlert
@@ -295,8 +291,9 @@ export default class zona extends Component {
 		<RctCollapsibleCard  fullBlock >
 			
 					<MUIDataTable
+						className="mui-tableRes"
 						title={"Zonas"}
-						data={this.state.data}
+						data={data}
 						columns={columns}
                         options={options}
 					/>
