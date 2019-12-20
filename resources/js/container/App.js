@@ -80,9 +80,9 @@ class App extends Component {
 
    render() {
       const { location, match, user } = this.props;
-     
-      if (location.pathname === '/') {
-         if (user === 'false') {
+      
+      if (location.pathname == '/') {
+         if (user === null) {
             return (<Redirect to={'/signin'} />);
          } else {
             return (<Redirect to={localStorage.user_dashboard} />);
