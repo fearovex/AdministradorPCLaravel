@@ -73,7 +73,7 @@ class Signin extends Component {
 
    async handleSubmit(e) {
       e.preventDefault()
-      if (this.state.isVerified) {
+      // if (this.state.isVerified) {
             try {
                this.state.Form.ip_public = localStorage.ip_client;
                let config = {
@@ -94,9 +94,9 @@ class Signin extends Component {
                
                NotificationManager.success('User Logged In Succesfully','',4000);
             }
-            else{
-               NotificationManager.error("The password is invalid or the user doesn't have a password.",'',4000);
-            }
+            // else{
+            //    NotificationManager.error("The password is invalid or the user doesn't have a password.",'',4000);
+            // }
             
          } catch (error) {
             this.setState({
