@@ -50,6 +50,8 @@ class CampañaController extends Controller
         $campaña->campania= $request->nombre_campaña.$request->fecha_inicio;
 
         $campaña->save();
+
+        SideBarController::getSideBarRol(session('rol'),session('database'));
     }
 
     /**

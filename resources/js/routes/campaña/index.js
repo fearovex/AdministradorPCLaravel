@@ -47,9 +47,11 @@ export default class campañas extends Component {
 		
 	}   
 	async componentDidMount(){
+		if(!this.props.location.state){
+            this.props.history.push('/');
+        }
 		const { id_location } = this.props.location.state
 		const { location } = this.props
-
 		try {
 		   let res = await fetch(`${localStorage.urlDomain}api/zonas/${id_location}`)
 		   let data = await res.json()
@@ -64,25 +66,24 @@ export default class campañas extends Component {
 		   })
 		}
 		try {
-			        let res = await fetch(`${localStorage.urlDomain}api/campanias/${id_location}`)
-					let datacampania = await res.json()
-					for (let i = 0; i < datacampania.length; i++) {
-						datacampania[i]["acciones"]=<Link to={location.pathname} onClick={() => this.openAlertTest('modaledit',datacampania[i].id)}>Editar</Link>
-					}
+			let res = await fetch(`${localStorage.urlDomain}api/campanias/${id_location}`)
+			let datacampania = await res.json()
+			for (let i = 0; i < datacampania.length; i++) {
+				datacampania[i]["acciones"]=<Link to={location.pathname} onClick={() => this.openAlertTest('modaledit',datacampania[i].id)}>Editar</Link>
+			}
+
+			this.setState({
+				datacampania: datacampania,
+				form:{
+					id_location: id_location,
+				}
+			})
 			
-					
-			
-			        this.setState({
-						datacampania: datacampania,
-						id_location: id_location,
-					})
-					
-					
-			    } catch (error) {
-			        this.state = {
-			            error: error
-			        }
-			    }
+		} catch (error) {
+			this.state = {
+				error: error
+			}
+		}
 			 
 	   
 	}   
@@ -106,8 +107,8 @@ export default class campañas extends Component {
 				prompt: false
 			})
 
-			this.componentDidMount();
-			 
+			window.location.reload();
+
 		  } catch (error) {
 			 console.log(error);
 		     this.setState({
@@ -130,10 +131,11 @@ export default class campañas extends Component {
 
 			await fetch(`${localStorage.urlDomain}api/campanias/`+this.state.form.id_campain, config);
 			
+			this.componentDidMount();
+
 			this.setState({
 				modaledit: false
 			})
-			this.componentDidMount();
 			// this.setState({
 			// 	state:this.state
 			// })
@@ -148,6 +150,8 @@ export default class campañas extends Component {
 		     });
 		  }		
 	}
+
+	
 
 	 onConfirm(key) {
 		this.setState({ [key]: false })

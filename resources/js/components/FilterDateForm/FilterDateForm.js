@@ -16,26 +16,31 @@ const FilterDateForm = ({ form, onChange, onChangeFilter, onSubmit, onClick, onC
                 <option value="1">Last 3 days</option>
                 <option value="2">Last 15 days</option>
                 <option value="3">Last 1 month</option>
-                <option value="4" onClick={onClick}>Personalizado</option>
+                <option value="4">Personalizado</option>
             </select>   
         </div>
         {form.filter == 4 &&
             <div className="col-lg-9 col-md-9 col-sm-12">
                 <div className="row justify-content-center">
-                    <Badge className="ml-15 mt-5 col-md-3 pl-1 col-sm-12 col-lg-3" color="dark">
+                    <Badge className="ml-15 mt-5 col-md-3 pl-1 pb-5 col-sm-12 col-lg-3" color="dark">
                         <span style={{margin: '3px 0', paddingBottom: '2px', borderBottom: '1px solid white'}}>Fecha Inicial Seleccionada</span>
                         {String(form.initialDate)}
                     </Badge>
-                    <Badge className="ml-15 mt-5 col-md-3 pl-1 col-sm-12 col-lg-3" color="dark">
+                    <Badge className="ml-15 mt-5 col-md-3 pl-1 pb-5 col-sm-12 col-lg-3" color="dark">
                         <span style={{margin: '3px 0', paddingBottom: '2px', borderBottom: '1px solid white'}}>Fecha Final Seleccionada</span>
                         {String(form.finalDate)}
                     </Badge>
                     {campain &&
-                        <Badge className="ml-15 mt-5 col-md-3 pl-1 col-sm-12 col-lg-3" color="dark">
+                        <Badge className="ml-15 mt-5 col-md-3 pl-1 pb-5 col-sm-12 col-lg-3" color="dark">
                             <span style={{margin: '3px 0', paddingBottom: '2px', borderBottom: '1px solid white'}}>Campañas Seleccionada</span>
                             {String(form.campania)}
                         </Badge>
                     }
+                    <div className="mt-5 col-lg-2 col-md-2 col-sm-12">
+                        <button className="btn btn-warning" onClick={onClick}>
+                            <span>Edit</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         }
@@ -55,7 +60,8 @@ const FilterDateForm = ({ form, onChange, onChangeFilter, onSubmit, onClick, onC
                 <div className="col-lg-6 col-md-6 col-sm-12">
                     <div className="rct-picker">
                         <DateTimePicker 
-                            label="Fecha inicio"
+                            key="Fecha Inicial"
+                            label="Fecha Inicial"
                             value={form.initialDate}
                             format="YYYY/MM/DD hh:mm a"
                             onChange={(event) => onChange(event, 'initialDate')}
@@ -69,7 +75,8 @@ const FilterDateForm = ({ form, onChange, onChangeFilter, onSubmit, onClick, onC
                 <div className="col-lg-6 col-md-6 col-sm-12">
                     <div className="rct-picker">
                         <DateTimePicker 
-                            label="Fecha inicio"
+                            key="Fecha Final"
+                            label="Fecha Final"
                             value={form.finalDate}
                             format="YYYY/MM/DD hh:mm a"
                             onChange={(event) => onChange(event, 'finalDate')}
@@ -86,9 +93,9 @@ const FilterDateForm = ({ form, onChange, onChangeFilter, onSubmit, onClick, onC
                     <div className="form-inline justify-content-center col-12 col-sm-12 col-lg-12">
                         <label className="mr-4">Campañas</label>
                         <select name="id_event" id="id_event" className="form-control" onChange={onChange} value={form.id_event}>
-                            <option value="0" onClick={(event) => onClickCampania('Todas')}>Todas</option>
-                            {events && events.map((data) => (
-                            <option value={data.id} onClick={(event) => onClickCampania(data.nombre)} >{data.nombre}</option>
+                            <option value="0">Todas</option>
+                            {events && events.map((data, key) => (
+                            <option key={key} value={data.id}>{data.nombre}</option>
                             ))}
                         </select>   
                     </div>

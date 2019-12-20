@@ -23,12 +23,9 @@ export default class DetailEvents extends Component {
 		super(props)
 
 		if(!this.props.location.state){
-			this.props.location.state = {
-				id_location: 1,
-				id_campain: 1,
-				tb: '',
-			};
-        }
+            this.props.history.push('/');
+		}
+		
 		const { id_location, id_campain, tb } = this.props.location.state;
 		
         let date = moment(new Date, 'YYYY/MM/DD hh:mm a');
@@ -166,6 +163,9 @@ export default class DetailEvents extends Component {
 			this.state.form.finalDate = (añoActual) + '-' + (mesActual) + '-' + (diaActual) + " " + (horaActual) + ":" + (minutosActual)
 			
 			this.handleDateFilter()
+		}
+		else{
+            this.handleModal();
         }
         this.setState({
             form:{
@@ -190,15 +190,18 @@ export default class DetailEvents extends Component {
 		})
 	}
 	
-	handleModal(e){
-        e.preventDefault()
+	handleModal(e = null){
+        if(e != null){
+            e.preventDefault()
+        }
+        this.state.form.filterPersonalizado = true;
         this.setState({
             form:{
                 ...this.state.form,
                 filterPersonalizado: true,
             }
         });
-	}
+    }
 	
 	handleDateFilterCancel(e){
 		e.preventDefault()
