@@ -68,6 +68,8 @@ class LocationsController extends Controller
             $dispositivo->save();
         }
         
+        SideBarController::getSideBarRol(session('rol'),session('database'));
+
         return $location->id;
     }
 

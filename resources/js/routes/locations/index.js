@@ -78,17 +78,17 @@ export default class Locations extends Component {
 		const { location } = this.props
         e.preventDefault()		
        try {
-           let config = {
-               method: 'POST',
-               headers: {
-                   'Accept': 'application/json',
-                   'Content-Type': 'application/json'
-               },
-               body: JSON.stringify(this.state.form)
-           };
-           let res = await fetch(`${localStorage.urlDomain}api/locations`, config);
-		   let data = await res.json()
-		   	this.props.history.push({
+			let config = {
+				method: 'POST',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(this.state.form)
+			};
+			let res = await fetch(`${localStorage.urlDomain}api/locations`, config);
+			let data = await res.json()
+			this.props.history.push({
 				pathname: location.pathname+'/'+this.state.form.nombre+'/campañas',
 				state: { id_location: data }
 			})           
@@ -96,7 +96,12 @@ export default class Locations extends Component {
           } catch (error) {
             console.log(error);
           }		
-    }
+	}
+	
+	async componentWillUnmount(){
+		window.location.reload();
+	}
+
     getStepContent(step) {
 		switch (step) {
 		   case 0:
