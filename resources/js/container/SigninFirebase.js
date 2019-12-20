@@ -94,18 +94,18 @@ class Signin extends Component {
                
                NotificationManager.success('User Logged In Succesfully','',4000);
             }
-            // else{
-            //    NotificationManager.error("The password is invalid or the user doesn't have a password.",'',4000);
-            // }
+            else{
+               NotificationManager.error("The password is invalid or the user doesn't have a password.",'',4000);
+            }
             
          } catch (error) {
             this.setState({
                error
             });
          }
-       }else{
-          NotificationManager.error("Please verify the captcha.",'',4000);
-       }
+      //  }else{
+      //     NotificationManager.error("Please verify the captcha.",'',4000);
+      //  }
    }
    async componentWillUnmount(){
       window.location.reload();
