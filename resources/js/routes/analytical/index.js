@@ -187,11 +187,11 @@ export default class Analytical extends Component {
 
     handleChange(e, name=null){
         if(e.target){
-            var name = e.target.options[e.target.selectedIndex].innerText;
+            var nameCampain = e.target.options[e.target.selectedIndex].innerText;
             this.setState({
                 form:{
                     ...this.state.form,
-                    campania: name,
+                    campania: nameCampain,
                     [e.target.name]: e.target.value
                 }
             })
