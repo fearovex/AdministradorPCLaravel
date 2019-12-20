@@ -75,7 +75,6 @@ export default class Analytical extends Component {
         this.handleModal = this.handleModal.bind(this)
         this.handleDateFilterCancel = this.handleDateFilterCancel.bind(this)
         this.handleChangeFilter = this.handleChangeFilter.bind(this)
-        this.handleClickCampain = this.handleClickCampain.bind(this)
     }
     
     componentDidMount(){
@@ -173,6 +172,9 @@ export default class Analytical extends Component {
             
             this.ConsultaGraficas()
         }
+        else{
+            this.handleModal();
+        }
         this.setState({
             form:{
                 ...this.state.form,
@@ -183,9 +185,11 @@ export default class Analytical extends Component {
 
     handleChange(e, name=null){
         if(e.target){
+            var name = e.target.options[e.target.selectedIndex].innerText;
             this.setState({
                 form:{
-            		...this.state.form,
+                    ...this.state.form,
+                    campania: name,
                     [e.target.name]: e.target.value
                 }
             })
@@ -206,17 +210,11 @@ export default class Analytical extends Component {
         }
     }
 
-    handleClickCampain(name){
-        this.setState({
-            form:{
-                ...this.state.form,
-                campania: name
-            }
-        })
-    }
-
-    handleModal(e){
-        e.preventDefault()
+    handleModal(e = null){
+        if(e != null){
+            e.preventDefault()
+        }
+        this.state.form.filterPersonalizado = true;
         this.setState({
             form:{
                 ...this.state.form,

@@ -166,6 +166,9 @@ export default class DetailEvents extends Component {
 			this.state.form.finalDate = (añoActual) + '-' + (mesActual) + '-' + (diaActual) + " " + (horaActual) + ":" + (minutosActual)
 			
 			this.handleDateFilter()
+		}
+		else{
+            this.handleModal();
         }
         this.setState({
             form:{
@@ -190,15 +193,18 @@ export default class DetailEvents extends Component {
 		})
 	}
 	
-	handleModal(e){
-        e.preventDefault()
+	handleModal(e = null){
+        if(e != null){
+            e.preventDefault()
+        }
+        this.state.form.filterPersonalizado = true;
         this.setState({
             form:{
                 ...this.state.form,
                 filterPersonalizado: true,
             }
         });
-	}
+    }
 	
 	handleDateFilterCancel(e){
 		e.preventDefault()
