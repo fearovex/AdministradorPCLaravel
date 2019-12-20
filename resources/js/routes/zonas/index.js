@@ -22,7 +22,8 @@ import './styles.css'
 
 export default class zona extends Component {
 	constructor(props){
-        super(props)
+		super(props)
+		
         this.state = {
             data: [],
 			error: null,
@@ -33,7 +34,6 @@ export default class zona extends Component {
 			zona:[],
             form: {
 				nombre: "",
-				id_location: props.location.state.id_location
 		   },
 		}
 		
@@ -43,10 +43,13 @@ export default class zona extends Component {
 		this.openAlertTest = this.openAlertTest.bind(this);
 	}     
 	async componentDidMount(){
-		// console.log(this.props)
-		const { id_location } = this.state.form;
+		if(!this.props.location.state){
+            this.props.history.push('/');
+		}
+		const { id_location } = this.props.location.state;
 		const { location } = this.props;
 	
+		console.log(id_location)
 		try {
 		   let res = await fetch(`${localStorage.urlDomain}api/zonas/${id_location}`)
 		   let data = await res.json();
@@ -56,6 +59,9 @@ export default class zona extends Component {
 		}
 		this.setState({
 			data: data,
+			form: {
+				id_location: id_location
+			}
 		})
 	
 		} catch (error) {
@@ -78,14 +84,13 @@ export default class zona extends Component {
 			   body: JSON.stringify(this.state.form)
 		   };
 		   
+			await fetch(`${localStorage.urlDomain}api/zonas`, config);
 
-		   await fetch(`${localStorage.urlDomain}api/zonas`, config);
-		//    this.props.history.push('zonas') 
-		this.setState({
-			prompt: false
-		})
-		
-			 
+			this.componentDidMount();
+
+			this.setState({
+				prompt: false
+			})
 		  } catch (error) {
 			 console.log(error);
 		     this.setState({
@@ -108,7 +113,8 @@ export default class zona extends Component {
 
 			await fetch(`${localStorage.urlDomain}api/zonas/`+this.state.form.id_zona, config);
 		   
-		
+			this.componentDidMount();
+
 		  } catch (error) {
 			 console.log(error);
 		     this.setState({

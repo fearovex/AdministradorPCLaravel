@@ -21,7 +21,8 @@ import './styles.css'
 
 export default class dispositivos extends Component {
 	constructor(props){
-        super(props)
+		super(props)
+		
         this.state = {
             data: [],
 			error: null,
@@ -34,8 +35,7 @@ export default class dispositivos extends Component {
 				nombre_dispositivo: "",
 				mac_dispositivo: "",
 				tecnologia: "",
-				zona_ap: "",
-				id_location: 0							
+				zona_ap: "",							
 		   },
 		}
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -45,18 +45,20 @@ export default class dispositivos extends Component {
 		
 	}   
 	async componentDidMount(){
+		if(!this.props.location.state){
+            this.props.history.push('/');
+		}
 		const { id_location } = this.props.location.state
-		console.log(this.props.location)
 		const { location } = this.props
+
 		try {
 		   let res = await fetch(`${localStorage.urlDomain}api/zonas/${id_location}`)
 		   let data = await res.json()
 
 		   this.setState({
-			   data: data,
-			   ////////////
-			   form:{
-				   id_location: id_location
+				data: data,
+				form:{
+					id_location: id_location
 				}
 		   })
 		   
@@ -66,26 +68,22 @@ export default class dispositivos extends Component {
 		   })
 		}
 		try {
-			        let res = await fetch(`${localStorage.urlDomain}api/dispositivos/1`)
-					let datadispositivos = await res.json()
-					for (let i = 0; i < datadispositivos.length; i++) {
-						datadispositivos[i]["acciones"]=<Link to={location.pathname} onClick={() => this.openAlertTest('modaledit',datadispositivos[i].id)}>Editar</Link>
-					}
+			let res = await fetch(`${localStorage.urlDomain}api/dispositivos/1`)
+			let datadispositivos = await res.json()
+			for (let i = 0; i < datadispositivos.length; i++) {
+				datadispositivos[i]["acciones"]=<Link to={location.pathname} onClick={() => this.openAlertTest('modaledit',datadispositivos[i].id)}>Editar</Link>
+			}
+	
+			this.setState({
+				datadispositivos: datadispositivos
+			})
 			
-					
 			
-			        this.setState({
-			            datadispositivos: datadispositivos
-					})
-					
-					
-			    } catch (error) {
-			        this.state = {
-			            error: error
-			        }
-			    }
-			 
-	   
+		} catch (error) {
+			this.state = {
+				error: error
+			}
+		}
 	}   
 	
 
@@ -106,6 +104,7 @@ export default class dispositivos extends Component {
 		this.setState({
 			prompt: false
 		})
+
 		this.componentDidMount();
 			 
 		  } catch (error) {

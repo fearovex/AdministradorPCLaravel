@@ -22,7 +22,14 @@ import './styles.css'
 
 export default class campañas extends Component {
 	constructor(props){
-        super(props)
+		super(props)
+		
+		if(!this.props.location.state){
+			this.props.history.push('/');
+		}else{
+			const { id_location } = this.props.location.state
+			this.id_location = id_location
+		}
         this.state = {
             data: [],
 			error: null,
@@ -37,7 +44,7 @@ export default class campañas extends Component {
 				fecha_fin: "",
 				descripcion: "",
 				zona_ap: "",
-				anio: "",								
+				anio: "",							
 		   },
 		}
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -47,17 +54,17 @@ export default class campañas extends Component {
 		
 	}   
 	async componentDidMount(){
-		if(!this.props.location.state){
-            this.props.history.push('/');
-        }
-		const { id_location } = this.props.location.state
 		const { location } = this.props
+
 		try {
-		   let res = await fetch(`${localStorage.urlDomain}api/zonas/${id_location}`)
+		   let res = await fetch(`${localStorage.urlDomain}api/zonas/${this.id_location}`)
 		   let data = await res.json()
 
 		   this.setState({
-			   data: data
+			   	data: data,
+				form: {
+					id_location: this.id_location
+				}
 		   })
 		   
 		} catch (error) {
@@ -66,17 +73,14 @@ export default class campañas extends Component {
 		   })
 		}
 		try {
-			let res = await fetch(`${localStorage.urlDomain}api/campanias/${id_location}`)
+			let res = await fetch(`${localStorage.urlDomain}api/campanias/${this.id_location}`)
 			let datacampania = await res.json()
 			for (let i = 0; i < datacampania.length; i++) {
 				datacampania[i]["acciones"]=<Link to={location.pathname} onClick={() => this.openAlertTest('modaledit',datacampania[i].id)}>Editar</Link>
 			}
 
 			this.setState({
-				datacampania: datacampania,
-				form:{
-					id_location: id_location,
-				}
+				datacampania: datacampania
 			})
 			
 		} catch (error) {
@@ -102,7 +106,7 @@ export default class campañas extends Component {
 		   };
 
 		   	await fetch(`${localStorage.urlDomain}api/campanias`, config);
-			// this.props.history.push('campaña') 
+
 			this.setState({
 				prompt: false
 			})
@@ -131,18 +135,12 @@ export default class campañas extends Component {
 
 			await fetch(`${localStorage.urlDomain}api/campanias/`+this.state.form.id_campain, config);
 			
-			this.componentDidMount();
-
 			this.setState({
 				modaledit: false
 			})
-			// this.setState({
-			// 	state:this.state
-			// })
-			   
 
-		   
-		
+			window.location.reload();
+
 		  } catch (error) {
 			 console.log(error);
 		     this.setState({
