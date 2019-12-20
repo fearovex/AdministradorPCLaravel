@@ -21,7 +21,8 @@ import './styles.css'
 
 export default class dispositivos extends Component {
 	constructor(props){
-        super(props)
+		super(props)
+		
         this.state = {
             data: [],
 			error: null,
@@ -44,17 +45,21 @@ export default class dispositivos extends Component {
 		
 	}   
 	async componentDidMount(){
+		if(!this.props.location.state){
+            this.props.history.push('/');
+		}
 		const { id_location } = this.props.location.state
 		const { location } = this.props
+
 		try {
 		   let res = await fetch(`${localStorage.urlDomain}api/zonas/${id_location}`)
 		   let data = await res.json()
 
-		  
-
 		   this.setState({
-			   data: data,
-			   id_location: id_location,
+				data: data,
+				form:{
+					id_location: id_location
+				}
 		   })
 		   
 		} catch (error) {
@@ -63,26 +68,22 @@ export default class dispositivos extends Component {
 		   })
 		}
 		try {
-			        let res = await fetch(`${localStorage.urlDomain}api/dispositivos/1`)
-					let datadispositivos = await res.json()
-					for (let i = 0; i < datadispositivos.length; i++) {
-						datadispositivos[i]["acciones"]=<Link to={location.pathname} onClick={() => this.openAlertTest('modaledit',datadispositivos[i].id)}>Editar</Link>
-					}
+			let res = await fetch(`${localStorage.urlDomain}api/dispositivos/1`)
+			let datadispositivos = await res.json()
+			for (let i = 0; i < datadispositivos.length; i++) {
+				datadispositivos[i]["acciones"]=<Link to={location.pathname} onClick={() => this.openAlertTest('modaledit',datadispositivos[i].id)}>Editar</Link>
+			}
+	
+			this.setState({
+				datadispositivos: datadispositivos
+			})
 			
-					
 			
-			        this.setState({
-			            datadispositivos: datadispositivos
-					})
-					
-					
-			    } catch (error) {
-			        this.state = {
-			            error: error
-			        }
-			    }
-			 
-	   
+		} catch (error) {
+			this.state = {
+				error: error
+			}
+		}
 	}   
 	
 
@@ -103,6 +104,7 @@ export default class dispositivos extends Component {
 		this.setState({
 			prompt: false
 		})
+
 		this.componentDidMount();
 			 
 		  } catch (error) {
@@ -213,10 +215,10 @@ export default class dispositivos extends Component {
                     title={<IntlMessages id="sidebar.dispositivos" />}
                     match={this.props.match}
                 />
+						
 					<div className="blank-wrapper">
-					<div className="sweet-alert-wrapper">				
-					
-						<Button
+						
+					<Button
 							variant="contained"
 							color="primary"
 							className="boton"
@@ -224,6 +226,8 @@ export default class dispositivos extends Component {
 						>Agregar Dispositivo
 						</Button>
 			
+					<div className="sweet-alert-wrapper">				
+					
 				<SweetAlert
 
 					btnSize="sm"
