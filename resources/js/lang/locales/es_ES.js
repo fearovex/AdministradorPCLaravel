@@ -779,5 +779,7 @@ module.exports = {
    "sidebar.campaña" :"campaña",
    "sidebar.zonas" :"zonas",
    "sidebar.dispositivos" :"dispositivos",
-   "sidebar.locations" :"Locaciones"
+   "sidebar.locations" :"Locaciones",
+   "sidebar.voucher" :"voucher",
+   "sidebar.vouchers" :"vouchers"
 }

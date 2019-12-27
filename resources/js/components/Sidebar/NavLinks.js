@@ -685,6 +685,20 @@ export default {
          "menu_icon": "zmdi zmdi-view-compact",
          "path": "/app/dispositivos"
       }
+   ],
+   category14: [
+      {
+         "menu_title": "sidebar.voucher",
+         "menu_icon": "zmdi zmdi-view-compact",
+         "path": "/app/voucher"
+      }
+   ],
+   category15: [
+      {
+         "menu_title": "sidebar.vouchers",
+         "menu_icon": "zmdi zmdi-view-compact",
+         "path": "/app/vouchers"
+      }
    ]
 
 }
