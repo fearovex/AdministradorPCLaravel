@@ -82,11 +82,17 @@ export default class vouchers extends Component {
         const columns = ['voucher','fecha_inicio','fecha_fin','estado'];
         const { basic, withDes, success, warning, customIcon, withHtml, prompt, passwordPrompt, customStyle, modaledit} = this.state;
 		const options = {
-			filterType: 'dropdown',
 			responsive: 'scrollMaxHeight',
 			print: false,
-			download: false
-		};
+			downloadOptions: { 
+				filename: 'Vouchers.csv',
+				filterOptions: {
+					useDisplayedRowsOnly: true,
+					useDisplayedColumnsOnly: true
+				}
+			},
+			elevation: 0
+		  };
         return (
             <div className="blank-wrapper">
                 <Helmet>

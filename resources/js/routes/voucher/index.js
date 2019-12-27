@@ -35,6 +35,7 @@ export default class campañas extends Component {
 			error: null,
 			activeStep: 0,
 			prompt: false,
+			envio: false,
 			id:0,
 			campania:[],
 			modaledit: false,
@@ -46,7 +47,7 @@ export default class campañas extends Component {
 											
 		   },
 		}
-		this.handleSubmit = this.handleSubmit.bind(this);
+	
 		this.handleChange = this.handleChange.bind(this);
 		
 		
@@ -54,33 +55,6 @@ export default class campañas extends Component {
 	
 	
 
-	async handleSubmit(e) {
-		e.preventDefault()		
-	   try {
-		   let config = {
-			   method: 'POST',
-			   headers: {
-				   'Accept': 'application/json',
-				   'Content-Type': 'application/json'
-			   },
-			   body: JSON.stringify(this.state.form)
-		   };
-
-		   	await fetch(`${localStorage.urlDomain}api/campanias`, config);
-
-			this.setState({
-				prompt: false
-			})
-
-			window.location.reload();
-
-		  } catch (error) {
-			 console.log(error);
-		     this.setState({
-		   	 error
-		     });
-		  }		
-	}
 
 	
 
@@ -95,6 +69,9 @@ export default class campañas extends Component {
 	 * @param {key} key
 	 */
 	openAlert(key) {
+		this.setState({ [key]: true });
+	}
+	openAlerttest(key) {
 		this.setState({ [key]: true });
 	}
 	
@@ -114,13 +91,20 @@ export default class campañas extends Component {
 		const {data} = this.state;
 		const {datacampania} = this.state;
         const columns = ['campaña','Voucher','fecha_inicio','fecha_fin'];
-        const { basic, withDes, success, warning, customIcon, withHtml, prompt, passwordPrompt, customStyle, modaledit} = this.state;
+        const { basic, withDes, success, envio, warning, customIcon, withHtml, prompt, passwordPrompt, customStyle, modaledit} = this.state;
+		
 		const options = {
-			filterType: 'dropdown',
 			responsive: 'scrollMaxHeight',
 			print: false,
-			download: false
-		};
+			downloadOptions: { 
+				filename: 'Vouchers.csv',
+				filterOptions: {
+					useDisplayedRowsOnly: true,
+					useDisplayedColumnsOnly: true
+				}
+			},
+			elevation: 0
+		  };
         return (
             <div className="blank-wrapper">
                 <Helmet>
@@ -135,13 +119,22 @@ export default class campañas extends Component {
 					<div className="blank-wrapper">
 					<div className="sweet-alert-wrapper">				
 					
-						<Button
-							variant="contained"
-							color="primary"
-							className="boton"
-							onClick={() => this.openAlert('prompt')}
-						>Crear
-						</Button>
+					<Button
+						variant="contained"
+						color="primary"
+						className="botonDisZon"
+						onClick={() => this.openAlert('envio')}
+						>enviar por correo
+					</Button>
+				
+					<Button
+						style={{'marginRight':'20px'}}
+						variant="contained"
+						color="primary"
+						className="botonDisZon1"
+						onClick={() => this.openAlert('prompt')}
+					>Crear 
+					</Button>						
 			
 				<SweetAlert
 
@@ -212,6 +205,42 @@ export default class campañas extends Component {
 		   			</form>
             
     </SweetAlert>	
+	<SweetAlert
+
+					btnSize="sm"
+					show={envio}
+					showCancel
+					confirmBtnText="Enviar"
+					cancelBtnText="Cancelar"
+					cancelBtnBsStyle="danger"
+					confirmBtnBsStyle="success"
+					title="Enviar"
+					onConfirm={() => this.handleSubmit(event)}
+					onCancel={() => this.onCancel('envio')}
+			>
+			
+			
+             
+					<form onSubmit={this.handleSubmit}>
+					<div className="row">			
+								<div className="col-lg-5 mb-4 ml-3" >
+									<Input
+									type="email"
+									name="correo"
+									id="correo"									
+									className="has-input input-lg"
+									placeholder="Correo"	
+									onChange={() => this.handleChange(event)}						                 
+										/>
+				   				</div>					
+		
+							
+							</div>	
+								  		
+						   
+		   			</form>
+            
+    </SweetAlert>	
 
 		
 		</div>
@@ -220,6 +249,7 @@ export default class campañas extends Component {
                 
 		<RctCollapsibleCard  fullBlock>
 					<MUIDataTable
+					className="mui-tableRes"
 						data={this.state.datacampania}
 						columns={columns}
                         options={options}
