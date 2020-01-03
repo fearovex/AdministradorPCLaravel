@@ -20,39 +20,39 @@ import './styles.css'
 
 
 
-export default class vouchers extends Component {
-	constructor(props){
+export default class Vouchers extends Component {
+	constructor(props) {
 		super(props)
-		
-		if(!this.props.location.state){
-			this.props.history.push('/');
-		}else{
-			const { id_location } = this.props.location.state
-			this.id_location = id_location
-		}
-        this.state = {
-            data: [],
+
+		// if (!this.props.location.state) {
+		// 	this.props.history.push('/');
+		// } else {
+		// 	const { id_location } = this.props.location.state
+		// 	this.id_location = id_location
+		// }
+		this.state = {
+			data: [],
 			error: null,
 			activeStep: 0,
 			prompt: false,
-			id:0,
-			campania:[],
+			id: 0,
+			campania: [],
 			modaledit: false,
-            form: {
-											
-		   },
+			form: {
+
+			},
 		}
-		
-		
-	}   
-	
-	
 
-	
 
-	
+	}
 
-	 onConfirm(key) {
+
+
+
+
+
+
+	onConfirm(key) {
 		this.setState({ [key]: false })
 	}
 
@@ -63,7 +63,7 @@ export default class vouchers extends Component {
 	openAlert(key) {
 		this.setState({ [key]: true });
 	}
-	
+
 
 	/**
 	 * On Cancel dialog
@@ -74,17 +74,17 @@ export default class vouchers extends Component {
 	}
 	handleChange(e) {
 		this.state.form[e.target.name] = e.target.value;
-	 }
-	 
-    render() {
-		const {data} = this.state;
-		const {datacampania} = this.state;
-        const columns = ['voucher','fecha_inicio','fecha_fin','estado'];
-        const { basic, withDes, success, warning, customIcon, withHtml, prompt, passwordPrompt, customStyle, modaledit} = this.state;
+	}
+
+	render() {
+		const { data } = this.state;
+		const { datacampania } = this.state;
+		const columns = ['voucher', 'fecha_inicio', 'fecha_fin', 'estado'];
+		const { basic, withDes, success, warning, customIcon, withHtml, prompt, passwordPrompt, customStyle, modaledit } = this.state;
 		const options = {
 			responsive: 'scrollMaxHeight',
 			print: false,
-			downloadOptions: { 
+			downloadOptions: {
 				filename: 'Vouchers.csv',
 				filterOptions: {
 					useDisplayedRowsOnly: true,
@@ -92,21 +92,21 @@ export default class vouchers extends Component {
 				}
 			},
 			elevation: 0
-		  };
-        return (
-            <div className="blank-wrapper">
-                <Helmet>
-                    <meta name="description" content="Reactify Blank Page" />
-                </Helmet>
+		};
+		return (
+			<div className="blank-wrapper">
+				<Helmet>
+					<meta name="description" content="Reactify Blank Page" />
+				</Helmet>
 
 
-                <PageTitleBar
-                    title={<IntlMessages id="vouchers" />}
-                    match={this.props.match}
-                />
-					<div className="blank-wrapper">
-					<div className="sweet-alert-wrapper">				
-					
+				<PageTitleBar
+					title={<IntlMessages id="vouchers" />}
+					match={this.props.match}
+				/>
+				<div className="blank-wrapper">
+					<div className="sweet-alert-wrapper">
+
 						<Button
 							variant="contained"
 							color="primary"
@@ -114,60 +114,60 @@ export default class vouchers extends Component {
 							onClick={() => this.openAlert('prompt')}
 						>enviar por correo
 						</Button>
-			
-				<SweetAlert
 
-					btnSize="sm"
-					show={prompt}
-					showCancel
-					confirmBtnText="Enviar"
-					cancelBtnText="Cancelar"
-					cancelBtnBsStyle="danger"
-					confirmBtnBsStyle="success"
-					title="Enviar"
-					onConfirm={() => this.handleSubmit(event)}
-					onCancel={() => this.onCancel('prompt')}
-			>
-			
-			
-             
-					<form onSubmit={this.handleSubmit}>
-					<div className="row">			
-								<div className="col-lg-5 mb-4 ml-3" >
-									<Input
-									type="email"
-									name="correo"
-									id="correo"									
-									className="has-input input-lg"
-									placeholder="Correo"	
-									onChange={() => this.handleChange(event)}						                 
+						<SweetAlert
+
+							btnSize="sm"
+							show={prompt}
+							showCancel
+							confirmBtnText="Enviar"
+							cancelBtnText="Cancelar"
+							cancelBtnBsStyle="danger"
+							confirmBtnBsStyle="success"
+							title="Enviar"
+							onConfirm={() => this.handleSubmit(event)}
+							onCancel={() => this.onCancel('prompt')}
+						>
+
+
+
+							<form onSubmit={this.handleSubmit}>
+								<div className="row">
+									<div className="col-lg-5 mb-4 ml-3" >
+										<Input
+											type="email"
+											name="correo"
+											id="correo"
+											className="has-input input-lg"
+											placeholder="Correo"
+											onChange={() => this.handleChange(event)}
 										/>
-				   				</div>					
-		
-							
-							</div>	
-								  		
-						   
-		   			</form>
-            
-    </SweetAlert>	
+									</div>
 
-	
-		</div>
-		</div>
-			
-                
-		<RctCollapsibleCard  fullBlock>
+
+								</div>
+
+
+							</form>
+
+						</SweetAlert>
+
+
+					</div>
+				</div>
+
+
+				<RctCollapsibleCard fullBlock>
 					<MUIDataTable
 						title={"Lista Vouchers"}
 						data={this.state.datacampania}
 						columns={columns}
-                        options={options}
+						options={options}
 					/>
-				</RctCollapsibleCard>       
-                          
-                    </div>
-		
-        );
-    }
+				</RctCollapsibleCard>
+
+			</div>
+
+		);
+	}
 }
