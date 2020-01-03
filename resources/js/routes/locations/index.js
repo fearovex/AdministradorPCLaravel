@@ -499,7 +499,7 @@ export default class Locations extends Component {
                             <CardTitle>{data.nombre}</CardTitle>
                                 <CardText>
                                     {data.descripcion}
-									<button onClick={() => this.openAlertTest('modaledit',data.id)}>Editar</button>
+									<a onClick={() => this.openAlertTest('modaledit',data.id)} className="botonDisZon">Editar</a>
 									
                                 </CardText>
                                 
