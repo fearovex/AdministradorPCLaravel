@@ -40,11 +40,7 @@ export default class Analytical extends Component {
     constructor(props){
         super(props)
 
-        if(!this.props.location.state){
-            this.props.history.push('/');
-        }
-
-        const { id_location } = this.props.location.state;
+        const id_location = localStorage.user_location
 
         let date = moment(new Date, 'YYYY/MM/DD hh:mm a');
         let año = date.year();

@@ -9,8 +9,8 @@ class GraficasController extends Controller
 {
     public function Consulta(Request $request){
 
-        $fecha_inicial = '"'.$request->initialDate.'"';
-        $fecha_final = '"'.$request->finalDate.'"';
+        $fecha_inicial = '"'.date('Y-m-d H:i:00', strtotime($request->initialDate)).'"';
+        $fecha_final = '"'.date('Y-m-d H:i:00', strtotime($request->finalDate)).'"';
         $campania =$request->id_event;
         $locaccion =$request->id_location;
         $database = session('database');

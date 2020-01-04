@@ -27,16 +27,14 @@ class SideBarController extends Controller
                 }
                 $locationsArray[$count] = (object) array(
                     'menu_title'=>$location->nombre,
-                    'id_campain'=> '',
-                    'tb' => '',
+                    'id_campain'=> 0,
                     'id_location' => $location->id,
                     'type_multi'=>true,
                     'child_routes'=>[
                         (object) array(
                             'menu_title'=>'DetailCampaings',
                             'type_multi'=> false,
-                            'id_campain'=> '',
-                            'tb' => '',
+                            'id_campain'=> 0,
                             'id_location' => $location->id,
                             'path'=>'/app/locations/'.$location->nombre.'/campañas'
                         ),
@@ -48,16 +46,14 @@ class SideBarController extends Controller
                         ),
                         (object) array(
                             'menu_title'=>'Zonas',
-                            'id_campain'=> '',
-                            'tb' => '',
+                            'id_campain'=> 0,
                             'id_location' => $location->id,
                             'type_multi'=> false,
                             'path'=>'/app/locations/'.$location->nombre.'/zonas'
                         ),
                         (object) array(
                             'menu_title'=>'Dispositivos',
-                            'id_campain'=> '',
-                            'tb' => '',
+                            'id_campain'=> 0,
                             'id_location' => $location->id,
                             'type_multi'=> false,
                             'path'=>'/app/locations/'.$location->nombre.'/dispositivos'

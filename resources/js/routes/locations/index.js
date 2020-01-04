@@ -55,6 +55,7 @@ export default class Locations extends Component {
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.getStepContent = this.getStepContent.bind(this);
+		this.ClickNavLink = this.ClickNavLink.bind(this);
     }
     
     
@@ -88,10 +89,8 @@ export default class Locations extends Component {
 			};
 			let res = await fetch(`${localStorage.urlDomain}api/locations`, config);
 			let data = await res.json()
-			this.props.history.push({
-				pathname: location.pathname+'/'+this.state.form.nombre+'/campañas',
-				state: { id_location: data }
-			})           
+			this.props.history.push(location.pathname+'/'+this.state.form.nombre+'/campañas')
+			localStorage.setItem('user_location', data);           
              
           } catch (error) {
             console.log(error);
@@ -263,7 +262,10 @@ export default class Locations extends Component {
 		this.state.form[e.target.name] = e.target.value;
 	 }
     
-
+	ClickNavLink(id_location, id_campain){
+		localStorage.setItem('user_location', id_location);
+		localStorage.setItem('user_campaing', id_campain);
+	}
    
 
     render() {
@@ -333,12 +335,8 @@ export default class Locations extends Component {
                     <div key={data.id} className="col-md-4 col-lg-4 col-xs-2 col-sm-6 mb-3">
                         <Card >
                         <Link 
-                            to={{
-                                pathname: `/app/locations/${data.nombre}`, 
-                                state: {
-                                    id_location: data.id
-                                }
-                            }}
+							to={`/app/locations/${data.nombre}`}
+							onClick = {() => this.ClickNavLink(data.id, 0)}
                         > 
                             <CardImg top width="100%" src={require('Assets/img/location.jpg')} alt="Card image cap" />
                         </Link>

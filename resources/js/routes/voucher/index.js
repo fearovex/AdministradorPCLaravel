@@ -24,12 +24,7 @@ export default class Voucher extends Component {
 	constructor(props) {
 		super(props)
 
-		// if(!this.props.location.state){
-		// 	this.props.history.push('/');
-		// }else{
-		// 	const { id_location } = this.props.location.state
-		// 	this.id_location = id_location
-		// }
+		const id_location = localStorage.user_location
 
 		this.state = {
 			data: [],
@@ -37,7 +32,7 @@ export default class Voucher extends Component {
 			activeStep: 0,
 			prompt: false,
 			envio: false,
-			id: 0,
+			id_location: id_location,
 			campania: [],
 			modaledit: false,
 			form: {

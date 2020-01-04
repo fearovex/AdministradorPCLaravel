@@ -21,6 +21,8 @@ class CreateUsersTable extends Migration
             $table->string('database');
             $table->string('imgdashboard');
             $table->string('dashboard');
+            $table->string('location');
+            $table->string('campaing');
             $table->string('remember_token')->default('token');
             $table->tinyInteger('Conexion')->default(0)->nullable();
             $table->unsignedBigInteger('id_rol');

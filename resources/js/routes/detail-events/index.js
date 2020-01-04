@@ -21,12 +21,9 @@ export default class DetailEvents extends Component {
 
 	constructor(props){
 		super(props)
-
-		if(!this.props.location.state){
-            this.props.history.push('/');
-		}
 		
-		const { id_location, id_campain, tb } = this.props.location.state;
+		const id_location = localStorage.user_location;
+		const id_campain = localStorage.user_campaing;
 		
         let date = moment(new Date, 'YYYY/MM/DD hh:mm a');
         let año = date.year();
@@ -44,8 +41,7 @@ export default class DetailEvents extends Component {
                 initialDate: initialDate,
                 finalDate: finalDate,
                 id_event: id_campain,
-				id_location: id_location,
-				tb: tb
+				id_location: id_location
 			},
 			nameColumns: [],
 			dataDetails: [],
@@ -112,7 +108,7 @@ export default class DetailEvents extends Component {
 			}
 
 			let res = await fetch(`${localStorage.urlDomain}api/detailEvents`, config)
-            let dataDetails = await res.json()
+			let dataDetails = await res.json()
             this.setState({
 				form:{
 					...this.state.form,
@@ -123,8 +119,12 @@ export default class DetailEvents extends Component {
             
         } catch (error) {
 			console.log(error)
+			let array = [];
             this.setState({
-                error
+				error,
+				form:{
+					dataDetails: array
+				}
             })
         }
 	}

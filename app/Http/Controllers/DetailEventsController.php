@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class DetailEventsController extends Controller
 {
     public function getColumnNames(Request $request){
-        $table_name=$request->tb;
+        $table_name= DB::connection(session('database'))->table('campania')->select('campania')->where('id',$request->id_event)->first()->campania;
         $db = session('database');
         $getColumnNames = DB::select("SELECT COLUMN_NAME
         FROM INFORMATION_SCHEMA.COLUMNS
@@ -23,8 +23,7 @@ class DetailEventsController extends Controller
         $totalInitialDate = $request->initialDate;
         $totalFinalDate = $request->finalDate;
 
-        $id_event=$request->id_event;
-        $table_name=$request->tb;
+        $table_name= DB::connection(session('database'))->table('campania')->select('campania')->where('id',$request->id_event)->first()->campania;
 
         $detailEvents = DB::connection(session('database'))->table($table_name)->whereBetween('fecha_creacion',[$totalInitialDate, $totalFinalDate])->get();
 

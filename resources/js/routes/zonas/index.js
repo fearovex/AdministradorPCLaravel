@@ -43,13 +43,9 @@ export default class zona extends Component {
 		this.openAlertTest = this.openAlertTest.bind(this);
 	}     
 	async componentDidMount(){
-		if(!this.props.location.state){
-            this.props.history.push('/');
-		}
-		const { id_location } = this.props.location.state;
+		const id_location = localStorage.user_location;
 		const { location } = this.props;
 	
-		console.log(id_location)
 		try {
 		   let res = await fetch(`${localStorage.urlDomain}api/zonas/${id_location}`)
 		   let data = await res.json();
@@ -114,6 +110,9 @@ export default class zona extends Component {
 			await fetch(`${localStorage.urlDomain}api/zonas/`+this.state.form.id_zona, config);
 		   
 			this.componentDidMount();
+			this.setState({
+				modaledit: false
+			})
 
 		  } catch (error) {
 			 console.log(error);
