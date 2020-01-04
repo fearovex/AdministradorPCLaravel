@@ -25,7 +25,7 @@ export default class Vouchers extends Component {
 		super(props)
 
 		const id_location = localStorage.user_location
-		
+
 		this.state = {
 			data: [],
 			error: null,
@@ -61,8 +61,8 @@ export default class Vouchers extends Component {
 	}
 
 	createVoucher() {
-		const {	location } = this.props;					
-		this.props.history.push(location.pathname+'/create')
+		const { location } = this.props;
+		this.props.history.push(location.pathname + '/create')
 	}
 
 	/**
@@ -79,7 +79,7 @@ export default class Vouchers extends Component {
 	render() {
 		const { data } = this.state;
 		const { datacampania } = this.state;
-		const columns = ['voucher', 'fecha_inicio', 'fecha_fin', 'estado'];
+		const columns = ['voucher', 'fecha_inicio', 'fecha_fin', 'campaña', 'estado'];
 		const { basic, withDes, success, warning, customIcon, withHtml, prompt, passwordPrompt, customStyle, modaledit } = this.state;
 		const options = {
 			responsive: 'scrollMaxHeight',
@@ -133,7 +133,7 @@ export default class Vouchers extends Component {
 
 							<form onSubmit={this.handleSubmit}>
 								<div className="row">
-									<div className="col-lg-5 mb-4 ml-3" >
+									<div className="col-lg-10 mb-4 ml-8" >
 										<Input
 											type="email"
 											name="correo"
@@ -155,17 +155,38 @@ export default class Vouchers extends Component {
 
 					</div>
 				</div>
+				<RctCollapsibleCard fullBlock>
+					<div className="row">
+						<div className="col-lg-6">
 
+
+							<Select name="campaña" native onChange={() => this.handleChange(event)}
+								className="has-input input-lg"
+							>
+								<option value="">Seleccione una campaña</option>
+								{data && data.map((data) => (
+
+									<option key={data.id} value={data.id}>{data.nombre}</option>
+								))}
+
+							</Select>
+						</div>
+						<div className="col-lg-3">
+							<Button
+								variant="contained"
+								color="primary"
+								className="boton"
+								onClick={() => this.createVoucher()}
+							>
+								Crear Vouchers
+							</Button>
+						</div>
+					</div>
+					<br></br>
+				</RctCollapsibleCard>
 
 				<RctCollapsibleCard fullBlock>
-					<Button
-						variant="contained"
-						color="primary"
-						className="boton"
-						onClick={() => this.createVoucher()}
-					>
-						Crear Vouchers
-					</Button>
+
 					<MUIDataTable
 						title={"Lista Vouchers"}
 						data={this.state.datacampania}

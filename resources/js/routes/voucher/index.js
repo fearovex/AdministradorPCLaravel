@@ -40,6 +40,7 @@ export default class Voucher extends Component {
 				fecha_inicio: "",
 				fecha_fin: "",
 				numerovouchers: "",
+				numerodeusos:"",
 
 			},
 		}
@@ -195,6 +196,19 @@ export default class Voucher extends Component {
 										/>
 									</div>
 								</div>
+								<div className="row">
+
+									<div className="col-lg-5 mb-4 ml-3" >
+										<Input
+											type="text"
+											name="numerousos"
+											id="numerousos"
+											className="has-input input-lg"
+											placeholder="Cantidad de usos"
+											onChange={() => this.handleChange(event)}
+										/>
+									</div>
+									</div>
 
 
 
@@ -218,8 +232,8 @@ export default class Voucher extends Component {
 
 
 							<form onSubmit={this.handleSubmit}>
-								<div className="row">
-									<div className="col-lg-5 mb-4 ml-3" >
+							<div className="row">
+									<div className="col-lg-10 mb-4 ml-8" >
 										<Input
 											type="email"
 											name="correo"
