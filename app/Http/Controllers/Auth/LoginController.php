@@ -55,6 +55,8 @@ class LoginController extends Controller
             session(['ip_conection' => $request->ip_public]);
             session(['active' => true ]);
             session(['rol' => $user->id_rol]);
+            session(['location' => $user->location]);
+            session(['campaing' => $user->campaing]);
 
             $log = new Log_Login();
             $log->id_user = session('id_user');

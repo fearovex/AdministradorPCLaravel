@@ -167,11 +167,11 @@ export default [
       component: DetailEvents
    },
    {
-      path: 'locations/:location/voucher',
-      component: Voucher
-   },
-   {
       path: 'locations/:location/vouchers',
       component: Vouchers
+   },
+   {
+      path: 'locations/:location/vouchers/create',
+      component: Voucher
    },
 ]

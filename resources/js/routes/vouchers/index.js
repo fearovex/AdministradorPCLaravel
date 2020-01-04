@@ -39,7 +39,7 @@ export default class Vouchers extends Component {
 			},
 		}
 
-
+		this.createVoucher = this.createVoucher.bind(this)
 	}
 
 
@@ -60,6 +60,10 @@ export default class Vouchers extends Component {
 		this.setState({ [key]: true });
 	}
 
+	createVoucher() {
+		const {	location } = this.props;					
+		this.props.history.push(location.pathname+'/create')
+	}
 
 	/**
 	 * On Cancel dialog
@@ -102,7 +106,6 @@ export default class Vouchers extends Component {
 				/>
 				<div className="blank-wrapper">
 					<div className="sweet-alert-wrapper">
-
 						<Button
 							variant="contained"
 							color="primary"
@@ -110,6 +113,7 @@ export default class Vouchers extends Component {
 							onClick={() => this.openAlert('prompt')}
 						>enviar por correo
 						</Button>
+
 
 						<SweetAlert
 
@@ -154,6 +158,14 @@ export default class Vouchers extends Component {
 
 
 				<RctCollapsibleCard fullBlock>
+					<Button
+						variant="contained"
+						color="primary"
+						className="boton"
+						onClick={() => this.createVoucher()}
+					>
+						Crear Vouchers
+					</Button>
 					<MUIDataTable
 						title={"Lista Vouchers"}
 						data={this.state.datacampania}

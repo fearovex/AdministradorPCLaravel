@@ -8,10 +8,19 @@ use Illuminate\Support\Facades\DB;
 class SideBarController extends Controller
 {
     public static function getSideBarRol($rol, $database){
+        $id_location = session('location');
+        $id_campaing = session('campaing');
         if($rol == 1){
             $locations=DB::connection($database)
                 ->select("select * from locaciones");
             $locationsArray = [];
+            $locationsArray[0] = (object) array(
+                'menu_title'=>'Inicio',
+                'id_campain'=> 0,
+                'id_location' => 0,
+                'type_multi'=>false,
+                'path'=>'/'
+            );
             foreach ($locations as $count => $location){
                 $campaingsArray =[];
                 $campaings=DB::connection($database)
@@ -25,7 +34,7 @@ class SideBarController extends Controller
                         'path'=>'/app/locations/'.$location->nombre.'/campañas/'.$campaing->nombre
                     );
                 }
-                $locationsArray[$count] = (object) array(
+                $locationsArray[$count+1] = (object) array(
                     'menu_title'=>$location->nombre,
                     'id_campain'=> 0,
                     'id_location' => $location->id,
@@ -66,11 +75,18 @@ class SideBarController extends Controller
             session(['sideBar' => $sidebarJSON]);
         }
         else if($rol == 2){
-            $idLocacion = 1;
+            $idLocacion = $id_location;
             $locations=DB::connection($database)
                 ->select("select * from locaciones where id=".$idLocacion);
             $locationsArray = [];
             $campaingsArray =[];
+            $locationsArray[0] = (object) array(
+                'menu_title'=>'Inicio',
+                'id_campain'=> 0,
+                'id_location' => 0,
+                'type_multi'=>false,
+                'path'=>'/'
+            );
             $campaings=DB::connection($database)
                 ->select("select * from campania where id_locacion =".$idLocacion);
                 foreach($campaings as $countC => $campaing){
@@ -79,7 +95,7 @@ class SideBarController extends Controller
                         'path'=>'/app/locations/'.$locations[0]->nombre.'/campañas/ '.$campaing->nombre
                     );
                 }
-                $locationsArray[0] = (object) array(
+                $locationsArray[1] = (object) array(
                     'menu_title'=>$locations[0]->nombre,
                     'child_routes'=>$campaingsArray
                 );
@@ -88,14 +104,42 @@ class SideBarController extends Controller
             session(['sideBar' => $sidebarJSON]);
         }
         else if($rol == 3){
-            $idLocacion = 1;
-            $campania = 'publicidad_a_2019_campania';
+            $idLocacion = $id_location;
+            $campania = DB::connection(session('database'))->table('campania')->select('campania')->where('id',$id_campaing)->first()->campania;
             $campaingArray = [];
+            $campaingArray[0] = (object) array(
+                'menu_title'=>'Inicio',
+                'id_campain'=> 0,
+                'id_location' => 0,
+                'type_multi'=>false,
+                'path'=>'/'
+            );
             $campaing=DB::connection($database)
                 ->select('select * from campania where campania = "'.$campania.'" and id_locacion='.$idLocacion);
-            $campaingArray[0] = (object) array(
+            $campaingArray[1] = (object) array(
                 'menu_title'=>$campaing[0]->nombre,
                 'path'=> '/app/locations/'.$idLocacion.'/campañas/'+$campaing[0]->nombre
+            );
+
+            $sidebarJSON = (object) array('category1' => $campaingArray); 
+            
+            session(['sideBar' => $sidebarJSON]);
+        }
+        else if($rol == 4){
+            $idLocacion = $id_location;
+            $locations=DB::connection($database)
+                ->select("select * from locaciones where id=".$idLocacion);
+            $campaingArray = [];
+            $campaingArray[0] = (object) array(
+                'menu_title'=>'Inicio',
+                'id_campain'=> 0,
+                'id_location' => 0,
+                'type_multi'=>false,
+                'path'=>'/'
+            );
+            $campaingArray[1] = (object) array(
+                'menu_title'=>"Vouchers",
+                'path'=> '/app/locations/'.$locations[0]->nombre.'/vouchers'
             );
 
             $sidebarJSON = (object) array('category1' => $campaingArray); 
