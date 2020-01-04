@@ -79,7 +79,7 @@ export default class Vouchers extends Component {
 	render() {
 		const { data } = this.state;
 		const { datacampania } = this.state;
-		const columns = ['voucher', 'fecha_inicio', 'fecha_fin', 'estado'];
+		const columns = ['voucher', 'fecha_inicio', 'fecha_fin', 'campaña','estado'];
 		const { basic, withDes, success, warning, customIcon, withHtml, prompt, passwordPrompt, customStyle, modaledit } = this.state;
 		const options = {
 			responsive: 'scrollMaxHeight',
@@ -133,7 +133,7 @@ export default class Vouchers extends Component {
 
 							<form onSubmit={this.handleSubmit}>
 								<div className="row">
-									<div className="col-lg-5 mb-4 ml-3" >
+									<div className="col-lg-10 mb-4 ml-8" >
 										<Input
 											type="email"
 											name="correo"
@@ -155,9 +155,26 @@ export default class Vouchers extends Component {
 
 					</div>
 				</div>
-
-
 				<RctCollapsibleCard fullBlock>
+				
+				<div className="col-lg-6">
+					
+								<Select name="campaña" native onChange={() => this.handleChange(event)}
+									 className="has-input input-lg"
+									 >
+									<option value="">Seleccione una campaña</option>
+									{data && data.map((data) => (
+
+									<option key={data.id} value={data.id}>{data.nombre}</option>
+									))}
+									
+							</Select>
+				   				</div>
+								<br></br>
+								   </RctCollapsibleCard>
+								   
+				<RctCollapsibleCard fullBlock>
+				
 					<MUIDataTable
 						title={"Lista Vouchers"}
 						data={this.state.datacampania}
