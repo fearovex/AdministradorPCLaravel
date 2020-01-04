@@ -61,5 +61,15 @@ class userseedertable extends Seeder
         $user->dashboard = "/app/locations";
         $user->id_rol = 1;
         $user->save();
+
+        $user = new User();
+        $user->name = 'Vouchers Admin';
+        $user->email = 'voucher@ermita.com';
+        $user->password = 'v0uch3r3rm1t4';
+        $user->database = 'portal_oxohotel';
+        $user->imgdashboard = 'ipfi.png';
+        $user->dashboard = "/app/locations/Hotel AC Cartagena/vouchers";
+        $user->id_rol = 4;
+        $user->save();
     }
 }

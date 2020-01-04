@@ -40,6 +40,7 @@ export default class Locations extends Component {
 			error: null,
 			activeStep: 0,
 			prompt: false,
+			modaledit:false,
             form: {
 				nombre: "",
 				direccion: "",
@@ -55,6 +56,8 @@ export default class Locations extends Component {
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.getStepContent = this.getStepContent.bind(this);
+		this.handleEdit = this.handleEdit.bind(this);
+		this.openAlertTest = this.openAlertTest.bind(this);
     }
     
     
@@ -70,8 +73,9 @@ export default class Locations extends Component {
             this.state = {
                 error: error
             }
-        }
-     
+		}
+		
+		    
     }
 
     async handleSubmit(e) {
@@ -100,6 +104,50 @@ export default class Locations extends Component {
 	
 	async componentWillUnmount(){
 		window.location.reload();
+	}
+	async handleEdit(e) {
+		e.preventDefault();
+		try {
+			let config = {
+				method: 'PATCH',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(this.state.form)
+			};
+
+			await fetch(`${localStorage.urlDomain}api/locations/`+this.state.form.id, config);
+		   
+			this.setState({
+				modaledit: false
+			})
+
+			window.location.reload();
+
+		  } catch (error) {
+			 console.log(error);
+		     this.setState({
+		   	 error
+		     });
+		  }		
+	}
+	async openAlertTest(key,id) {
+		this.setState({ [key]: true});
+		let res = await fetch(`${localStorage.urlDomain}api/locations/${id}/edit`);
+		let locacion = await res.json();
+
+		   this.setState({ form:{
+			   nombre: locacion.nombre,
+			   direccion: locacion.direccion,
+			   pais: locacion.pais,
+			   ciudad: locacion.ciudad,
+			   telefono: locacion.telefono,
+			   PaginaWeb: locacion.PaginaWeb,
+			   id: locacion.id
+
+		   } });
+		 
 	}
 
     getStepContent(step) {
@@ -262,15 +310,24 @@ export default class Locations extends Component {
 	 handleChange(e) {
 		this.state.form[e.target.name] = e.target.value;
 	 }
+	 handleChangeEdit(e) {
+		this.setState({
+			form:{
+			   ...this.state.form,
+			   [e.target.name] : e.target.value
+			}
+		})
+	}
     
 
    
 
     render() {
 		const { dataLocations } = this.state;
+		const { dataLocation } = this.state;
 		const steps = getSteps();
 		const { activeStep } = this.state;
-		const { basic, withDes, success, warning, customIcon, withHtml, prompt, passwordPrompt, customStyle } = this.state;
+		const { basic, withDes, success, warning, customIcon, withHtml, prompt, passwordPrompt,modaledit, customStyle } = this.state;
         return (
             <div className="cardsmasonry-wrapper">
                 <PageTitleBar title={<IntlMessages id="sidebar.locations" />} match={this.props.match} />
@@ -325,7 +382,101 @@ export default class Locations extends Component {
             )}
          </div>
             
-    </SweetAlert>	
+    </SweetAlert>
+	<SweetAlert
+
+					btnSize="sm"
+					show={modaledit}
+					showCancel
+					confirmBtnText="Editar"
+					cancelBtnText="Cancelar"
+					cancelBtnBsStyle="danger"
+					confirmBtnBsStyle="success"
+					title="Editar locacion"
+					onConfirm={() => this.handleEdit(event)}
+					onCancel={() => this.onCancel('modaledit')}
+			>
+             
+					<form onSubmit={this.handleEdit}>
+					<div className="row">			
+					<div className="row">			
+						 <div className="col-lg-6">
+							<Input
+							type="text"
+							name="nombre"
+							id="nombre"
+							value={this.state.form.nombre}
+							className="has-input input-lg"
+							placeholder="Nombre"
+							onChange={() => this.handleChangeEdit(event)}						                 
+							   />
+						</div>
+					<div className="col-lg-6">
+							<Input
+							type="text"
+							name="direccion"
+							id="direccion"
+							className="has-input input-lg"
+							placeholder="Direccion"
+							value={this.state.form.direccion}
+							onChange={() => this.handleChangeEdit(event)}                  
+							   />
+					</div>
+				</div>
+				<div className="row">			
+						 <div className="col-lg-6">
+							<Input
+							type="text"
+							name="pais"
+							id="pais"
+							className="has-input input-lg"
+							placeholder="Pais"
+							value={this.state.form.pais}
+							onChange={() => this.handleChangeEdit(event)}                  
+							   />
+						</div>
+					<div className="col-lg-6">
+							<Input
+							type="text"
+							name="ciudad"
+							id="ciudad"
+							className="has-input input-lg"
+							placeholder="Ciudad" 
+							value={this.state.form.ciudad}
+							onChange={() => this.handleChangeEdit(event)}                 
+							   />
+					</div>
+				</div>
+				<div className="row">			
+						 <div className="col-lg-6">
+							<Input
+							type="number"
+							name="telefono"
+							id="telefono"
+							className="has-input input-lg"
+							placeholder="Telefono"
+							value={this.state.form.telefono}
+							onChange={() => this.handleChangeEdit(event)}                  
+							   />
+						</div>
+					<div className="col-lg-6">
+							<Input
+							type="text"
+							name="PaginaWeb"
+							id="PaginaWeb"
+							className="has-input input-lg"
+							placeholder="Pagina Web" 
+							value={this.state.form.PaginaWeb}
+							onChange={() => this.handleChangeEdit(event)}                 
+							   />
+					</div>
+				</div>				
+						</div>
+						
+						</form>
+			
+            
+    </SweetAlert>		
 		</div>
                 <div className="row">
 				
@@ -347,7 +498,9 @@ export default class Locations extends Component {
                             
                             <CardTitle>{data.nombre}</CardTitle>
                                 <CardText>
-                                    {data.descripcion}  
+                                    {data.descripcion}
+									<a onClick={() => this.openAlertTest('modaledit',data.id)} className="botonDisZon">Editar</a>
+									
                                 </CardText>
                                 
                             </CardBody>

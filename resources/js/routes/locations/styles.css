@@ -8,3 +8,12 @@
     top: 40% !important ;
     
 }
+
+.botonDisZon{
+    float:right;
+    margin-left: 20px;
+}
+.botonDisZon1 {
+    padding-right : 20px;
+    float:right;
+}

@@ -81,7 +81,13 @@ class LocationsController extends Controller
      */
     public function show($id)
     {
-        //
+        $locaciones = DB::connection(session('database'))
+            ->table('locaciones')
+            ->where('id', $id)
+            ->get();
+            
+        return response()->json($locaciones, 200);
+
     }
 
     /**
@@ -92,7 +98,16 @@ class LocationsController extends Controller
      */
     public function edit($id)
     {
-        //
+        try {
+            $locaciones = DB::connection(session('database'))
+                ->table('locaciones')
+                ->where('id', $id)
+                ->first();
+                return response()->json($locaciones, 200);
+        } catch (\Throwable $th) {
+            return response()->json($locaciones, 500);
+        }
+        
     }
 
     /**
@@ -104,7 +119,10 @@ class LocationsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $locaciones = DB::connection(session('database'))
+                ->table('locaciones')
+                ->where('id', $id)
+                ->update(['nombre' => $request->nombre,'direccion' => $request->direccion,'pais' => $request->pais,'ciudad' => $request->ciudad,'telefono' => $request->telefono,'PaginaWeb' => $request->PaginaWeb]);
     }
 
     /**
@@ -115,6 +133,6 @@ class LocationsController extends Controller
      */
     public function destroy($id)
     {
-        //
+       //
     }
 }

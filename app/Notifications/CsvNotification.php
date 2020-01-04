@@ -46,7 +46,7 @@ class CsvNotification extends Notification
     public function toMail($notifiable)
     {
         $urlDefaultFromEnv = env('APP_URL');
-        $aliasFrom = env('ALIAS_MAIL_FROM');
+        $aliasFrom = env('ALIAS_MAIL_FROM_VOUCHERS');
         date_default_timezone_set('America/Bogota');
         $filename = 'Vouchers'.date("Y-m-d-His").'.csv';
         $fp = fopen($filename, 'w');
@@ -68,9 +68,9 @@ class CsvNotification extends Notification
         fclose($fp);
 
         return (new MailMessage)
-            ->from($aliasFrom,'Soporte IPfi')
+            ->from($aliasFrom,'Vouchers IPfi')
             ->subject(Lang::get('Notificación de envío de CSV vouchers'))
-            ->line(Lang::get('Aquí está su solicitud!'))
+            ->line(Lang::get('Aquí está su solicitud de envío de CSV Vouchers adjunto!'))
             ->attach($filename);
             // ->line(Lang::get('If you did not request a password reset, no further action is required. Token: ==>'. $this->token));
     }

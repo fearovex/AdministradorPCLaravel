@@ -11,12 +11,8 @@ import RctCollapsibleCard from 'Components/RctCollapsibleCard/RctCollapsibleCard
 // intl messages
 import IntlMessages from 'Util/IntlMessages';
 import FilterDateForm from 'Components/FilterDateForm/FilterDateForm';
+import queryString from 'query-string'
 import '../events/styles.css';
-import CustomToolbar from "./CustomToolbar";
-import SweetAlert from 'react-bootstrap-sweetalert'
-import { Input } from '@material-ui/core';
-
-import { NotificationContainer, NotificationManager } from 'react-notifications';
 
 
 
@@ -25,6 +21,7 @@ export default class DetailEvents extends Component {
 
 	constructor(props){
 		super(props)
+		
 		if(!this.props.location.state){
             this.props.history.push('/');
 		}
@@ -38,12 +35,9 @@ export default class DetailEvents extends Component {
         let hora = date.hour();
         let minutos = date.minute();
         let initialDate = (año) + '-' + (mes) + '-' + (dia) + " 00:00";
-		let finalDate = (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos);
-		
-		
+        let finalDate = (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos);
 		
         this.state = {
-			modalEmailCsv: false,
 			error: null,
             form: {
 				filterPersonalizado: false,
@@ -51,29 +45,20 @@ export default class DetailEvents extends Component {
                 finalDate: finalDate,
                 id_event: id_campain,
 				id_location: id_location,
-				tb: tb,
-			},
-			form2: {
-				email: '',
-				columns: [],
-				rows: [],
+				tb: tb
 			},
 			nameColumns: [],
 			dataDetails: [],
 		}
-		
 		
 		this.handleDateFilter=this.handleDateFilter.bind(this)
 		this.handleChange=this.handleChange.bind(this)
 		this.handleModal = this.handleModal.bind(this)
 		this.handleDateFilterCancel = this.handleDateFilterCancel.bind(this)
 		this.handleChangeFilter = this.handleChangeFilter.bind(this)
-		this.handleSubmit = this.handleSubmit.bind(this)
 	}
-
 	
 	async componentDidMount(){	
-		
 		try {
 			//Consulta Nombre Columnas  -> Se hace la consulta de los nombres de las columnas de la tabla correspondiente
 			let onlyTableConfig = {
@@ -101,7 +86,6 @@ export default class DetailEvents extends Component {
 
 			this.setState({
 				nameColumns: arrayNames,
-		
 			})
 			//fin Consulta Detalle
 				
@@ -134,7 +118,7 @@ export default class DetailEvents extends Component {
 					...this.state.form,
 					filterPersonalizado: false,
 				},
-				dataDetails: dataDetails,
+			   	dataDetails: dataDetails,
             })
             
         } catch (error) {
@@ -229,76 +213,13 @@ export default class DetailEvents extends Component {
 		});
 		this.handleDateFilter()
 	}
-	// Email Csv //
-	handleChangeEmailCsv(e) {
-		this.setState({
-			form2:{
-				...this.state.form2,
-			   [e.target.name] : e.target.value,
-			   columns: this.state.nameColumns,
-			   rows: this.state.dataDetails
-			}
-		})
-	 }
-	
-	 async handleSubmit(e) {
-		e.preventDefault()	
-	
-	   try {
-		   let config = {
-			   method: 'POST',
-			   headers: {
-				   'Accept': 'application/json',
-				   'Content-Type': 'application/json'
-			   },
-			   body: JSON.stringify(this.state.form2)
-		   };
-
-		   	let res = await fetch(`${localStorage.urlDomain}api/csvEmail`, config);
-			let data = await res.json();
-
-			if(data.error){
-				NotificationManager.error(data.error,'',4000);
-			 }
-			 if(data.message && !data.errors){
-				NotificationManager.success(data.message,'',4000);
-				this.setState({
-					modalEmailCsv: false
-				})
-			 }
-			 if(data.errors.email){
-				NotificationManager.error(data.errors.email,'',4000);
-			 }
-	// 		window.location.reload();
-
-		  } catch (error) {
-			 console.log(error);
-		     this.setState({
-		   	 error
-		     });
-		  }		
-	}
-
-	openAlert(key) {
-		this.setState({ [key]: true });
-	}
-
-	onConfirm(key) {
-		this.setState({ [key]: false })
-	}
-	onCancel(key) {
-		this.setState({ [key]: false })
-	}
-
-	//////////////
 	
 	render() {
 		const columns = this.state.nameColumns;
-		const { form, modalEmailCsv} = this.state;
-		///////////
-	
+		const { form } = this.state;
+
 		const options = {
-			responsive: 'scrollMaxHeight',
+			responsive: 'stacked',
 			print: false,
 			downloadOptions: { 
 				filename: 'DetallesEventoTabla.csv',
@@ -307,13 +228,6 @@ export default class DetailEvents extends Component {
 					useDisplayedColumnsOnly: true
 				}
 			},
-			customToolbar: () => {
-				
-				
-				return (
-				  <CustomToolbar columns={columns} data={this.state.dataDetails} alertOpen={() => this.openAlert('modalEmailCsv')}/>
-				);
-			  },/////////////
 			elevation: 0
 		  };
 	  
@@ -341,38 +255,6 @@ export default class DetailEvents extends Component {
 						options={options}
 					/>
 				</RctCollapsibleCard>
-				///////////////
-				<SweetAlert
-					btnSize="sm"
-					show={modalEmailCsv}
-					showCancel
-					confirmBtnText="Send"
-					cancelBtnText="Cancel"
-					cancelBtnBsStyle="danger"
-					confirmBtnBsStyle="success"
-					title="Send Email CSV"
-					onConfirm={() => this.handleSubmit(event)}
-					onCancel={() => this.onCancel('modalEmailCsv')}
-				>
-             
-					<form onSubmit={this.handleSubmit}>
-					<div className="row">			
-						<div className="col-6 mb-6 ml-6 offset-3">
-							<Input
-								type="email"
-								name="email"
-								id="email"	
-								value={this.state.form2.emailCsv}							
-								className="has-input input-lg"
-								placeholder="Email Csv"	
-								onChange={() => this.handleChangeEmailCsv(event)}						                 
-							/>
-				   		</div>			
-						
-				   		</div>
-		   			</form>
-    			</SweetAlert>
-				///////////	
 			</div>
 		)
 	}

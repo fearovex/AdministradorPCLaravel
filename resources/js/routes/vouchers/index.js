@@ -4,170 +4,184 @@ import PageTitleBar from "Components/PageTitleBar/PageTitleBar";
 import IntlMessages from "Util/IntlMessages";
 import MUIDataTable from "mui-datatables";
 import RctCollapsibleCard from 'Components/RctCollapsibleCard/RctCollapsibleCard';
-import IconButton from "@material-ui/core/IconButton";
-import AddIcon from "@material-ui/icons/Add";
-import { Route, Link } from 'react-router-dom'
 import SweetAlert from 'react-bootstrap-sweetalert'
-import Button from '@material-ui/core/Button';
+import CustomToolbar from "../../util/CustomToolbar";
 import { Input } from '@material-ui/core';
-import PropTypes from 'prop-types';
-import Select from '@material-ui/core/Select';
-import queryString from 'query-string';
-import moment from "moment";
+import { NotificationContainer, NotificationManager } from 'react-notifications';
 
 import './styles.css'
 
-
-
-
 export default class Vouchers extends Component {
-	constructor(props){
+	constructor(props) {
 		super(props)
-		
-		if(!this.props.location.state){
-			this.props.history.push('/');
-		}else{
-			const { id_location } = this.props.location.state
-			this.id_location = id_location
-		}
-        this.state = {
-            data: [],
+
+		// if (!this.props.location.state) {
+		// 	this.props.history.push('/');
+		// } else {
+		// 	const { id_location } = this.props.location.state
+		// 	this.id_location = id_location
+		// }
+		this.state = {
+			data: [],
 			error: null,
 			activeStep: 0,
 			prompt: false,
-			id:0,
-			campania:[],
+			id: 0,
+			campania: [],
 			modaledit: false,
-            form: {
-											
-		   },
+			form: {
+				email: '',
+				columns: [],
+				rows: [],
+			},
+			nameColumns: ['voucher', 'fecha_inicio', 'fecha_fin', 'estado'],
+			dataVouchers: [],
+			modalEmailCsv: false,
 		}
-		
-		
-	}   
-	
-	
+		this.handleSubmit = this.handleSubmit.bind(this)
 
-	
-
-	
-
-	 onConfirm(key) {
-		this.setState({ [key]: false })
 	}
 
-	/**
-	 * Open Alert
-	 * @param {key} key
-	 */
+	// CSV //
+	handleChangeEmailCsv(e) {
+		this.setState({
+			form:{
+				...this.state.form,
+			   [e.target.name] : e.target.value,
+			   columns: this.state.nameColumns,
+			   rows: this.state.dataVouchers
+			}
+		})
+	 }
+	
+	async handleSubmit(e) {
+		e.preventDefault()	
+	
+	   try {
+		   let config = {
+			   method: 'POST',
+			   headers: {
+				   'Accept': 'application/json',
+				   'Content-Type': 'application/json'
+			   },
+			   body: JSON.stringify(this.state.form)
+		   };
+
+		   	let res = await fetch(`${localStorage.urlDomain}api/csvEmail`, config);
+			let data = await res.json();
+
+
+			if(data.error){
+				NotificationManager.error(data.error,'',4000);
+			}
+			if(data.message && !data.errors){
+				NotificationManager.success(data.message,'',4000);
+				this.setState({
+					modalEmailCsv: false
+				})
+			 }
+
+		  } catch (error) {
+			 console.log(error);
+		     this.setState({
+		   	 error
+		     });
+		  }		
+	}
+
+
+
 	openAlert(key) {
 		this.setState({ [key]: true });
 	}
-	
-
-	/**
-	 * On Cancel dialog
-	 * @param {string} key
-	 */
 	onCancel(key) {
 		this.setState({ [key]: false })
 	}
+	
 	handleChange(e) {
 		this.state.form[e.target.name] = e.target.value;
-	 }
-	 
-    render() {
-		const {data} = this.state;
-		const {datacampania} = this.state;
-        const columns = ['voucher','fecha_inicio','fecha_fin','estado'];
-        const { basic, withDes, success, warning, customIcon, withHtml, prompt, passwordPrompt, customStyle, modaledit} = this.state;
+	}
+
+	render() {
+		const { dataVouchers, modalEmailCsv } = this.state;
+		const columns =  this.state.nameColumns;
 		const options = {
 			responsive: 'scrollMaxHeight',
 			print: false,
-			downloadOptions: { 
+			downloadOptions: {
 				filename: 'Vouchers.csv',
 				filterOptions: {
 					useDisplayedRowsOnly: true,
 					useDisplayedColumnsOnly: true
 				}
 			},
+			customToolbar: () => {
+				return (
+				  <CustomToolbar columns={columns} data={dataVouchers} alertOpen={() => this.openAlert('modalEmailCsv')}/>
+				);
+			  },
 			elevation: 0
-		  };
-        return (
-            <div className="blank-wrapper">
-                <Helmet>
-                    <meta name="description" content="Reactify Blank Page" />
-                </Helmet>
+		};
+		return (
+			<div className="blank-wrapper">
+				<Helmet>
+					<meta name="description" content="Reactify Blank Page" />
+				</Helmet>
 
 
-                <PageTitleBar
-                    title={<IntlMessages id="vouchers" />}
-                    match={this.props.match}
-                />
-					<div className="blank-wrapper">
-					<div className="sweet-alert-wrapper">				
-					
-						<Button
-							variant="contained"
-							color="primary"
-							className="boton"
-							onClick={() => this.openAlert('prompt')}
-						>enviar por correo
-						</Button>
-			
-				<SweetAlert
+				<PageTitleBar
+					title={<IntlMessages id="vouchers" />}
+					match={this.props.match}
+				/>
+				<div className="blank-wrapper">
+					<div className="sweet-alert-wrapper">
 
+					<SweetAlert
 					btnSize="sm"
-					show={prompt}
+					show={modalEmailCsv}
 					showCancel
-					confirmBtnText="Enviar"
-					cancelBtnText="Cancelar"
+					confirmBtnText="Send"
+					cancelBtnText="Cancel"
 					cancelBtnBsStyle="danger"
 					confirmBtnBsStyle="success"
-					title="Enviar"
+					title="Send Email CSV"
 					onConfirm={() => this.handleSubmit(event)}
-					onCancel={() => this.onCancel('prompt')}
-			>
-			
-			
+					onCancel={() => this.onCancel('modalEmailCsv')}
+				>
              
 					<form onSubmit={this.handleSubmit}>
 					<div className="row">			
-								<div className="col-lg-5 mb-4 ml-3" >
-									<Input
-									type="email"
-									name="correo"
-									id="correo"									
-									className="has-input input-lg"
-									placeholder="Correo"	
-									onChange={() => this.handleChange(event)}						                 
-										/>
-				   				</div>					
-		
-							
-							</div>	
-								  		
-						   
+						<div className="col-6 mb-6 ml-6 offset-3">
+							<Input
+								type="email"
+								name="email"
+								id="email"	
+								value={this.state.form.email}							
+								className="has-input input-lg"
+								placeholder="Email Csv"	
+								onChange={() => this.handleChangeEmailCsv(event)}						                 
+							/>
+				   		</div>			
+						
+				   		</div>
 		   			</form>
-            
-    </SweetAlert>	
+    			</SweetAlert>
 
-	
-		</div>
-		</div>
-			
-                
-		<RctCollapsibleCard  fullBlock>
+					</div>
+				</div>
+
+
+				<RctCollapsibleCard fullBlock>
 					<MUIDataTable
 						title={"Lista Vouchers"}
-						data={this.state.datacampania}
+						data={this.state.dataVouchers}
 						columns={columns}
-                        options={options}
+						options={options}
 					/>
-				</RctCollapsibleCard>       
-                          
-                    </div>
-		
-        );
-    }
+				</RctCollapsibleCard>
+
+			</div>
+
+		);
+	}
 }
