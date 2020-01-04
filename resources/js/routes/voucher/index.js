@@ -218,7 +218,24 @@ export default class Voucher extends Component {
 										/>
 									</div>
 								</div>
+								<div className="row">
+
+									<div className="col-lg-5 mb-4 ml-3" >
+										<Input
+											type="text"
+											name="numerousos"
+											id="numerousos"
+											className="has-input input-lg"
+											placeholder="Cantidad de usos"
+											onChange={() => this.handleChange(event)}
+										/>
+									</div>
+									</div>
+
+
+
 							</form>
+
 						</SweetAlert>
 
 					</div>
