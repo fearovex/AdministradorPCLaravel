@@ -13,7 +13,7 @@ import { NotificationContainer, NotificationManager } from 'react-notifications'
 
 export default class ForgotPassword extends Component {
 
-
+   
       state = {
          error: null,
          form: {

@@ -20,7 +20,7 @@ import './styles.css'
 
 
 
-export default class campañas extends Component {
+export default class Voucher extends Component {
 	constructor(props){
 		super(props)
 		

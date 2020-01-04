@@ -37,7 +37,7 @@ Route::group(['middleware' => 'cors'], function() {
         
         Route::resource('/locations','LocationsController');
         
-        // Route::get('/evento', 'EventsController@UltimoEvento');
+        
         
         Route::get('/logout', 'Auth\LoginController@logout');
 
@@ -51,6 +51,7 @@ Route::group(['middleware' => 'cors'], function() {
 
          Route::resource('/editdispositivo','DispositivoController');
 
-         //Route::resource("/campanias/{id}","CampañaController");
+         Route::post('/csvEmail', 'Api\CsvEmail@sendResetLinkEmail');
+         //Route::resource("/campanias/{id}","CampañaController");csvEmail
     });
  });

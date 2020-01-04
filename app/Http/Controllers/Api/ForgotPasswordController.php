@@ -21,14 +21,15 @@ class ForgotPasswordController extends Controller
 
     use SendsPasswordResetEmails;
 
-    // public function __construct()
-    // {
-    //     $this->middleware('guest');
-    // }
+    public function __construct()
+    {
+        session(['emailValidate' => 'Reset']);
+    }
 
 
     protected function sendResetLinkResponse(Request $request, $response)
     {
+        
         return response(['message'=> trans($response)]);
 
     }

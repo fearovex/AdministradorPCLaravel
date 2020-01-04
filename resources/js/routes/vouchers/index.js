@@ -20,7 +20,7 @@ import './styles.css'
 
 
 
-export default class vouchers extends Component {
+export default class Vouchers extends Component {
 	constructor(props){
 		super(props)
 		
