@@ -55,6 +55,8 @@ Route::group(['middleware' => 'cors'], function() {
 
          Route::post("/vouchers/store","VouchersController@store");
 
+         Route::post("/vouchers","VouchersController@index");
+
          Route::post('/csvEmail', 'Api\CsvEmail@sendResetLinkEmail');
     });
  });

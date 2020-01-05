@@ -29,8 +29,9 @@ export default class Vouchers extends Component {
 				email: '',
 				columns: [],
 				rows: [],
+				id_location: id_location,
 			},
-			nameColumns: ['voucher', 'fecha_inicio', 'fecha_fin', 'estado'],
+			nameColumns: ['Campaña','Voucher', 'Fecha Inicio', 'Fecha Fin', 'Estado'],
 			dataVouchers: [],
 			modalEmailCsv: false,
 		}
@@ -38,6 +39,28 @@ export default class Vouchers extends Component {
 		this.createVoucher = this.createVoucher.bind(this)
 		this.handleSubmit = this.handleSubmit.bind(this)
 
+	}
+
+	async componentDidMount(){
+		try {
+			let config = {
+				method: 'POST',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(this.state.form)
+			};
+			let res = await fetch(`${localStorage.urlDomain}api/vouchers`, config);
+			let datavouchers = await res.json()
+
+			this.setState({ 
+				dataVouchers: datavouchers,
+			});
+
+		} catch (error) {
+			console.log(error)
+		}
 	}
 
 	// CSV //
@@ -108,6 +131,7 @@ export default class Vouchers extends Component {
 
 	handleChange(e) {
 		this.state.form[e.target.name] = e.target.value;
+		this.componentDidMount();
 	}
 
 	render() {
@@ -181,16 +205,16 @@ export default class Vouchers extends Component {
 					<div className="row">
 						<div className="col-lg-6">
 
-							<Select name="campaña" native onChange={() => this.handleChange(event)}
+							{/* <Select name="campaña" native onChange={() => this.handleChange(event)}
 								className="has-input input-lg"
 							>
 								<option value="">Seleccione una campaña</option>
-								{/* {data && data.map((data) => (
+								{data && data.map((data) => (
 
 									<option key={data.id} value={data.id}>{data.nombre}</option>
-								))} */}
+								))}
 
-							</Select>
+							</Select> */}
 						</div>
 						<div className="col-lg-3">
 							<Button

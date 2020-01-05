@@ -8,6 +8,17 @@ use App\Voucher;
 
 class VouchersController extends Controller
 {
+    public function index(Request $request){
+        $vouchers = DB::connection(session('database'))
+            ->table('vouchers as v')
+            ->join('campania as c', 'v.id_campania', '=', 'c.id')
+            ->select('c.nombre as Campaña', 'v.voucher as Voucher', 'v.fecha_inicio as Fecha Inicio', 'v.fecha_fin as Fecha Fin', 'v.estado as Estado')
+            ->where('v.id_locacion', $request->id_location)
+            ->get();
+
+        return response()->json($vouchers);
+    }
+
     public function create(Request $request){
         $campanias = DB::connection(session('database'))
             ->table('campania')
@@ -70,7 +81,7 @@ class VouchersController extends Controller
         $vouchersRecienCreados = DB::connection(session('database'))
             ->table('vouchers as v')
             ->join('campania as c', 'v.id_campania', '=', 'c.id')
-            ->select('c.nombre as campaña', 'v.voucher as Voucher', 'v.fecha_inicio', 'v.fecha_fin')
+            ->select('c.nombre as Campaña', 'v.voucher as Voucher', 'v.fecha_inicio as Fecha Inicio', 'v.fecha_fin as Fecha Fin')
             ->where('v.id_campania', $request->campaña)
             ->where('v.id_locacion', $request->id_location)
             ->orderBy('v.id_voucher', 'desc')

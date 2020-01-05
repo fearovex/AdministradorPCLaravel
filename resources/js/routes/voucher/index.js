@@ -44,7 +44,7 @@ export default class Voucher extends Component {
 				columns: [],
 				rows: [],
 			},
-			nameColumns: ['campaña', 'Voucher', 'fecha_inicio', 'fecha_fin'],
+			nameColumns: ['Campaña', 'Voucher', 'Fecha Inicio', 'Fecha Fin'],
 			dataVoucher: [],
 			modalEmailCsv: false,
 		}
