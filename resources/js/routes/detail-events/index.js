@@ -54,7 +54,7 @@ export default class DetailEvents extends Component {
 		this.handleChangeFilter = this.handleChangeFilter.bind(this)
 	}
 	
-	async componentDidMount(){		
+	async componentDidMount(){	
 		try {
 			//Consulta Nombre Columnas  -> Se hace la consulta de los nombres de las columnas de la tabla correspondiente
 			let onlyTableConfig = {
@@ -219,7 +219,7 @@ export default class DetailEvents extends Component {
 		const { form } = this.state;
 
 		const options = {
-			responsive: 'scrollMaxHeight',
+			responsive: 'stacked',
 			print: false,
 			downloadOptions: { 
 				filename: 'DetallesEventoTabla.csv',

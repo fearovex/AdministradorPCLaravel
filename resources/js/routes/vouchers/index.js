@@ -4,21 +4,12 @@ import PageTitleBar from "Components/PageTitleBar/PageTitleBar";
 import IntlMessages from "Util/IntlMessages";
 import MUIDataTable from "mui-datatables";
 import RctCollapsibleCard from 'Components/RctCollapsibleCard/RctCollapsibleCard';
-import IconButton from "@material-ui/core/IconButton";
-import AddIcon from "@material-ui/icons/Add";
-import { Route, Link } from 'react-router-dom'
 import SweetAlert from 'react-bootstrap-sweetalert'
-import Button from '@material-ui/core/Button';
-import { Input } from '@material-ui/core';
-import PropTypes from 'prop-types';
-import Select from '@material-ui/core/Select';
-import queryString from 'query-string';
-import moment from "moment";
+import CustomToolbar from "../../util/CustomToolbar";
+import { Input, Select, Button } from '@material-ui/core';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
 
 import './styles.css'
-
-
-
 
 export default class Vouchers extends Component {
 	constructor(props) {
@@ -35,27 +26,69 @@ export default class Vouchers extends Component {
 			campania: [],
 			modaledit: false,
 			form: {
-
+				email: '',
+				columns: [],
+				rows: [],
 			},
+			nameColumns: ['voucher', 'fecha_inicio', 'fecha_fin', 'estado'],
+			dataVouchers: [],
+			modalEmailCsv: false,
 		}
 
 		this.createVoucher = this.createVoucher.bind(this)
+		this.handleSubmit = this.handleSubmit.bind(this)
+
+	}
+
+	// CSV //
+	handleChangeEmailCsv(e) {
+		this.setState({
+			form: {
+				...this.state.form,
+				[e.target.name]: e.target.value,
+				columns: this.state.nameColumns,
+				rows: this.state.dataVouchers
+			}
+		})
+	}
+
+	async handleSubmit(e) {
+		e.preventDefault()
+
+		try {
+			let config = {
+				method: 'POST',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(this.state.form)
+			};
+
+			let res = await fetch(`${localStorage.urlDomain}api/csvEmail`, config);
+			let data = await res.json();
+
+
+			if (data.error) {
+				NotificationManager.error(data.error, '', 4000);
+			}
+			if (data.message && !data.errors) {
+				NotificationManager.success(data.message, '', 4000);
+				this.setState({
+					modalEmailCsv: false
+				})
+			}
+
+		} catch (error) {
+			console.log(error);
+			this.setState({
+				error
+			});
+		}
 	}
 
 
 
-
-
-
-
-	onConfirm(key) {
-		this.setState({ [key]: false })
-	}
-
-	/**
-	 * Open Alert
-	 * @param {key} key
-	 */
 	openAlert(key) {
 		this.setState({ [key]: true });
 	}
@@ -72,15 +105,14 @@ export default class Vouchers extends Component {
 	onCancel(key) {
 		this.setState({ [key]: false })
 	}
+
 	handleChange(e) {
 		this.state.form[e.target.name] = e.target.value;
 	}
 
 	render() {
-		const { data } = this.state;
-		const { datacampania } = this.state;
-		const columns = ['voucher', 'fecha_inicio', 'fecha_fin', 'campaña', 'estado'];
-		const { basic, withDes, success, warning, customIcon, withHtml, prompt, passwordPrompt, customStyle, modaledit } = this.state;
+		const { dataVouchers, modalEmailCsv } = this.state;
+		const columns = this.state.nameColumns;
 		const options = {
 			responsive: 'scrollMaxHeight',
 			print: false,
@@ -90,6 +122,11 @@ export default class Vouchers extends Component {
 					useDisplayedRowsOnly: true,
 					useDisplayedColumnsOnly: true
 				}
+			},
+			customToolbar: () => {
+				return (
+					<CustomToolbar columns={columns} data={dataVouchers} alertOpen={() => this.openAlert('modalEmailCsv')} />
+				);
 			},
 			elevation: 0
 		};
@@ -106,52 +143,37 @@ export default class Vouchers extends Component {
 				/>
 				<div className="blank-wrapper">
 					<div className="sweet-alert-wrapper">
-						<Button
-							variant="contained"
-							color="primary"
-							className="boton"
-							onClick={() => this.openAlert('prompt')}
-						>enviar por correo
-						</Button>
-
 
 						<SweetAlert
-
 							btnSize="sm"
-							show={prompt}
+							show={modalEmailCsv}
 							showCancel
-							confirmBtnText="Enviar"
-							cancelBtnText="Cancelar"
+							confirmBtnText="Send"
+							cancelBtnText="Cancel"
 							cancelBtnBsStyle="danger"
 							confirmBtnBsStyle="success"
-							title="Enviar"
+							title="Send Email CSV"
 							onConfirm={() => this.handleSubmit(event)}
-							onCancel={() => this.onCancel('prompt')}
+							onCancel={() => this.onCancel('modalEmailCsv')}
 						>
-
-
 
 							<form onSubmit={this.handleSubmit}>
 								<div className="row">
-									<div className="col-lg-10 mb-4 ml-8" >
+									<div className="col-6 mb-6 ml-6 offset-3">
 										<Input
 											type="email"
-											name="correo"
-											id="correo"
+											name="email"
+											id="email"
+											value={this.state.form.email}
 											className="has-input input-lg"
-											placeholder="Correo"
-											onChange={() => this.handleChange(event)}
+											placeholder="Email Csv"
+											onChange={() => this.handleChangeEmailCsv(event)}
 										/>
 									</div>
 
-
 								</div>
-
-
 							</form>
-
 						</SweetAlert>
-
 
 					</div>
 				</div>
@@ -159,15 +181,14 @@ export default class Vouchers extends Component {
 					<div className="row">
 						<div className="col-lg-6">
 
-
 							<Select name="campaña" native onChange={() => this.handleChange(event)}
 								className="has-input input-lg"
 							>
 								<option value="">Seleccione una campaña</option>
-								{data && data.map((data) => (
+								{/* {data && data.map((data) => (
 
 									<option key={data.id} value={data.id}>{data.nombre}</option>
-								))}
+								))} */}
 
 							</Select>
 						</div>
@@ -189,7 +210,7 @@ export default class Vouchers extends Component {
 
 					<MUIDataTable
 						title={"Lista Vouchers"}
-						data={this.state.datacampania}
+						data={this.state.dataVouchers}
 						columns={columns}
 						options={options}
 					/>

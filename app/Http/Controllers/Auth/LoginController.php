@@ -42,6 +42,9 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+
+       
+    
     }
 
     public function login (Request $request){
@@ -57,6 +60,7 @@ class LoginController extends Controller
             session(['rol' => $user->id_rol]);
             session(['location' => $user->location]);
             session(['campaing' => $user->campaing]);
+
 
             $log = new Log_Login();
             $log->id_user = session('id_user');
@@ -80,7 +84,7 @@ class LoginController extends Controller
             ]);
             
             SideBarController::getSideBarRol($user->id_rol,$user->database);
-            
+            session(['emailValidate' => 'CSV']);
             return response()->json($user, 200);
 
         }else{
@@ -102,8 +106,7 @@ class LoginController extends Controller
         $user->where('id', session('id_user'))
             ->update(["conexion" => 0]);
         
-
-        session()->forget(['database', 'email', 'password', 'id_user', 'browser', 'ip_conection','active']);
+        session()->forget(['emailValidate','database', 'email', 'password', 'id_user', 'browser', 'ip_conection','active']);
         
         return redirect()->route('home', ['/']);
     }
