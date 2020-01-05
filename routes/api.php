@@ -51,6 +51,8 @@ Route::group(['middleware' => 'cors'], function() {
 
          Route::resource('/editdispositivo','DispositivoController');
 
-         //Route::resource("/campanias/{id}","CampañaController");
+         Route::post("/vouchers/create","VouchersController@create");
+
+         Route::post("/vouchers/store","VouchersController@store");
     });
  });

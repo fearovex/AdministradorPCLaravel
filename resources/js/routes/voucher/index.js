@@ -27,35 +27,75 @@ export default class Voucher extends Component {
 		const id_location = localStorage.user_location
 
 		this.state = {
-			data: [],
+			vouchers: [],
 			error: null,
-			activeStep: 0,
 			prompt: false,
 			envio: false,
-			id_location: id_location,
-			campania: [],
+			campanias: [],
 			modaledit: false,
 			form: {
 				campaña: "",
 				fecha_inicio: "",
 				fecha_fin: "",
 				numerovouchers: "",
-				numerodeusos:"",
-
+				numerousos:"",
+				id_location: id_location,
 			},
 		}
 
 		this.handleChange = this.handleChange.bind(this);
 
-
 	}
 
+	async componentDidMount(){
+		try {
+			let config = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                
+                body: JSON.stringify(this.state.form)
+            }
 
+            let res = await fetch(`${localStorage.urlDomain}api/vouchers/create`, config);
+			let datacampania = await res.json()
+			
+			this.setState({ campanias: datacampania });
 
+			if(this.state.vouchers.length == 0){
+				this.setState({ prompt: true });
+			}
 
+		} catch (error) {
+			console.log(error)
+		}
+	}
 
+	async handleSubmit(e){
+		e.preventDefault()
+		try {
+			let config = {
+				method: 'POST',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(this.state.form)
+			};
+			let res = await fetch(`${localStorage.urlDomain}api/vouchers/store`, config);
+			let datavouchers = await res.json()
 
+			this.setState({ 
+				vouchers: datavouchers,
+				prompt: false
+			});
 
+		} catch (error) {
+			console.log(error)
+		}
+	}
 
 	onConfirm(key) {
 		this.setState({ [key]: false })
@@ -68,6 +108,7 @@ export default class Voucher extends Component {
 	openAlert(key) {
 		this.setState({ [key]: true });
 	}
+
 	openAlerttest(key) {
 		this.setState({ [key]: true });
 	}
@@ -85,8 +126,7 @@ export default class Voucher extends Component {
 	}
 
 	render() {
-		const { data } = this.state;
-		const { datacampania } = this.state;
+		const { form, campanias } = this.state;
 		const columns = ['campaña', 'Voucher', 'fecha_inicio', 'fecha_fin'];
 		const { basic, withDes, success, envio, warning, customIcon, withHtml, prompt, passwordPrompt, customStyle, modaledit } = this.state;
 
@@ -152,21 +192,24 @@ export default class Voucher extends Component {
 							<form onSubmit={this.handleSubmit}>
 								<div className="row">
 									<div className="col-lg-5 mb-4 ml-3" >
-										<Input
-											type="text"
-											name="campaña"
-											id="campaña"
+										<Select name="campaña" native onChange={() => this.handleChange(event)}
 											className="has-input input-lg"
-											placeholder="campaña"
-											onChange={() => this.handleChange(event)}
-										/>
+										>
+											<option value="">Seleccione una campaña</option>
+											{campanias && campanias.map((data) => (
+
+												<option key={data.id} value={data.id}>{data.nombre}</option>
+											))}
+
+										</Select>
 									</div>
 									<div className="col-lg-5 mb-4 ml-3" >
 
 										<Input
 											type="number"
-											name="numeroVouchers"
-											id="numeroVouchers"
+											name="numerovouchers"
+											id="numerovouchers"
+											max={500}
 											className="has-input input-lg"
 											placeholder="numero Vouchers"
 											onChange={() => this.handleChange(event)}
@@ -208,10 +251,8 @@ export default class Voucher extends Component {
 											onChange={() => this.handleChange(event)}
 										/>
 									</div>
-									</div>
 
-
-
+								</div>
 							</form>
 
 						</SweetAlert>
@@ -258,9 +299,10 @@ export default class Voucher extends Component {
 
 
 				<RctCollapsibleCard fullBlock>
+					{console.log(this.state.vouchers)}
 					<MUIDataTable
 						className="mui-tableRes"
-						data={this.state.datacampania}
+						data={this.state.vouchers}
 						columns={columns}
 						options={options}
 					/>
