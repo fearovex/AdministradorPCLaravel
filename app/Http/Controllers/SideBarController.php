@@ -66,6 +66,13 @@ class SideBarController extends Controller
                             'id_location' => $location->id,
                             'type_multi'=> false,
                             'path'=>'/app/locations/'.$location->nombre.'/dispositivos'
+                        ),
+                        (object) array(
+                            'menu_title'=>"Vouchers",
+                            'id_campain'=> 0,
+                            'id_location' => $location->id,
+                            'type_multi'=> false,
+                            'path'=> '/app/locations/'.$location->nombre.'/vouchers'
                         )
                     ]
                 );

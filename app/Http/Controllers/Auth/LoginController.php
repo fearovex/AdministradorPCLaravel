@@ -106,7 +106,7 @@ class LoginController extends Controller
         $user->where('id', session('id_user'))
             ->update(["conexion" => 0]);
         
-        session()->forget(['emailValidate','database', 'email', 'password', 'id_user', 'browser', 'ip_conection','active']);
+        session()->forget(['emailValidate','database', 'email', 'password', 'id_user', 'browser', 'ip_conection','active', 'rol','location','campaing']);
         
         return redirect()->route('home', ['/']);
     }
