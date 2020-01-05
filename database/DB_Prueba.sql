@@ -12,6 +12,7 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 -- Volcando estructura para tabla portal_oxohotel.campania
+DROP TABLE IF EXISTS `campania`;
 CREATE TABLE IF NOT EXISTS `campania` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_locacion` int(11) DEFAULT NULL,
@@ -27,147 +28,15 @@ CREATE TABLE IF NOT EXISTS `campania` (
   CONSTRAINT `id_locacion` FOREIGN KEY (`id_locacion`) REFERENCES `locaciones` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4;
 
--- Volcando datos para la tabla portal_oxohotel.campania: ~3 rows (aproximadamente)
+-- Volcando datos para la tabla portal_oxohotel.campania: ~2 rows (aproximadamente)
 /*!40000 ALTER TABLE `campania` DISABLE KEYS */;
-INSERT INTO `campania` (`id`, `id_locacion`, `nombre`, `descripcion`, `fecha_inicio`, `fecha_fin`, `ano_evento`, `campania`, `zona_ap`) VALUES
-	(12, 1, 'publicidad_a_2019_campania', 'Portal cautivo que cuenta con un banner con publicidad', '2019-12-14', '2019-12-18', 3451, 'publicidad_a_2019_campania', '10'),
-	(13, 1, 'publicidad_b_2019_campania', 'Portal cautivo que cuenta con un banner con publicidad', '2019-12-13', '2019-12-27', 2435, 'publicidad_b_2019_campania', '10'),
-	(15, 1, 'publicidad_a_2019_campania', 'Portal cautivo que cuenta con un banner con publicidad', '2019-12-18', '2019-12-20', 2019, 'publicidad_a_2019_campania', '33');
+REPLACE INTO `campania` (`id`, `id_locacion`, `nombre`, `descripcion`, `fecha_inicio`, `fecha_fin`, `ano_evento`, `campania`, `zona_ap`) VALUES
+	(12, 1, 'campania_uno', 'Portal cautivo que cuenta con un banner con publicidad', '2019-12-14', '2019-12-18', 3451, 'publicidad_a_2019_campania', '10'),
+	(13, 1, 'campania_dos', 'Portal cautivo que cuenta con un banner con publicidad', '2019-12-13', '2019-12-27', 2435, 'publicidad_b_2019_campania', '10');
 /*!40000 ALTER TABLE `campania` ENABLE KEYS */;
 
--- Volcando estructura para tabla portal_oxohotel.ciudades
-CREATE TABLE IF NOT EXISTS `ciudades` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(45) DEFAULT NULL,
-  `descripcion` varchar(45) DEFAULT NULL,
-  `fecha_creacion` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `Id_Ciudad_UNIQUE` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- Volcando datos para la tabla portal_oxohotel.ciudades: ~0 rows (aproximadamente)
-/*!40000 ALTER TABLE `ciudades` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ciudades` ENABLE KEYS */;
-
--- Volcando estructura para procedimiento portal_oxohotel.create_evento
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `create_evento`(
-	in id_locacion int,
-	in nombre_evento varchar(250),
-    in descripcion_evento varchar(1000),
-    in ano_evento int,
-    in fecha_inicio_evento datetime,
-    in fecha_fin_evento datetime  
-)
-BEGIN	
-	/*DEFINIMOS LAS VARIABLES INTERNAS*/
-	DECLARE NOMBRE_CAMPANIA_EVENTO VARCHAR(250) DEFAULT '';
-    
-	/*INSERTAMOS EL EVENTO*/
-	INSERT INTO eventos (
-		id_locacion, 
-        nombre, 
-        descripcion, 
-        ano_evento,
-        fecha_inicio,
-        fecha_fin) 
-	VALUES (
-		id_locacion,
-        nombre_evento, 
-        descripcion_evento,
-        ano_evento,
-        fecha_inicio_evento,
-        fecha_fin_evento
-	);
-    
-    /*CREAMOS LA CAMPAÑA, ESTOS DATOS POR EL MOMENTO ESTAN QUEMADOS */
-    /*PERO CUANDO SE REALIZE EL CMS SE INGRESARIAN AL PROCEDIMIENTO */
-    /*DEFINIMOS EL NOMBRE QUE TENDRA LA TABLA DE LA CAMPAÑA*/	
-    SET NOMBRE_CAMPANIA_EVENTO = concat(nombre_evento, '_', ano_evento, '_campania');
-    /*CREACION DE LA TABLA*/
-    SET @QUERY_CREATE_TABLE = CONCAT(
-		'CREATE TABLE ',
-        NOMBRE_CAMPANIA_EVENTO,
-		' (
-		  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-		  `id_evento` bigint(20) NOT NULL,
-		  `fecha_creacion` datetime DEFAULT CURRENT_TIMESTAMP,
-		  `nombre` varchar(255) DEFAULT NULL,
-		  `email` varchar(255) DEFAULT NULL,
-		  `edad` varchar(255) DEFAULT NULL,
-		  `telefono` varchar(255) DEFAULT NULL,
-		  `genero` varchar(255) DEFAULT NULL,
-		  `ssid` varchar(250) DEFAULT NULL,
-		  `mac_cliente` varchar(250) DEFAULT NULL,
-          `ip_cliente` varchar(250) DEFAULT NULL,
-		  `ip_ap` varchar(250) DEFAULT NULL,
-          `mac_ap` varchar(250) DEFAULT NULL,
-		  PRIMARY KEY (`id`)
-		);'
-    );
-	 PREPARE QUERY_RESULT FROM @QUERY_CREATE_TABLE;
-     EXECUTE QUERY_RESULT;
-     DEALLOCATE PREPARE QUERY_RESULT;
-END//
-DELIMITER ;
-
--- Volcando estructura para procedimiento portal_oxohotel.create_evento_voucher
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `create_evento_voucher`(
-	in id_locacion int,
-	in nombre_evento varchar(250),
-    in descripcion_evento varchar(1000),
-    in ano_evento int,
-    in fecha_inicio_evento datetime,
-    in fecha_fin_evento datetime  
-)
-BEGIN	
-	/*DEFINIMOS LAS VARIABLES INTERNAS*/
-	DECLARE NOMBRE_CAMPANIA_EVENTO VARCHAR(250) DEFAULT '';
-    
-	/*INSERTAMOS EL EVENTO*/
-	INSERT INTO eventos (
-		id_locacion, 
-        nombre, 
-        descripcion, 
-        ano_evento,
-        fecha_inicio,
-        fecha_fin) 
-	VALUES (
-		id_locacion,
-        nombre_evento, 
-        descripcion_evento,
-        ano_evento,
-        fecha_inicio_evento,
-        fecha_fin_evento
-	);
-    
-    /*CREAMOS LA CAMPAÑA, ESTOS DATOS POR EL MOMENTO ESTAN QUEMADOS */
-    /*PERO CUANDO SE REALIZE EL CMS SE INGRESARIAN AL PROCEDIMIENTO */
-    /*DEFINIMOS EL NOMBRE QUE TENDRA LA TABLA DE LA CAMPAÑA*/	
-    SET NOMBRE_CAMPANIA_EVENTO = concat(nombre_evento, '_', ano_evento, '_campania');
-    /*CREACION DE LA TABLA*/
-    SET @QUERY_CREATE_TABLE = CONCAT(
-		'CREATE TABLE ',
-        NOMBRE_CAMPANIA_EVENTO,
-		' (
-		  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-		  `id_evento` bigint(20) NOT NULL,
-		  `fecha_creacion` datetime DEFAULT CURRENT_TIMESTAMP,
-		  `consecutivo` varchar(255) DEFAULT NULL,
-		  `ssid` varchar(250) DEFAULT NULL,
-		  `mac_cliente` varchar(250) DEFAULT NULL,
-		  `nombre_ap` varchar(250) DEFAULT NULL,
-		  PRIMARY KEY (`id`)
-		);'
-    );
-	 PREPARE QUERY_RESULT FROM @QUERY_CREATE_TABLE;
-     EXECUTE QUERY_RESULT;
-     DEALLOCATE PREPARE QUERY_RESULT;
-END//
-DELIMITER ;
-
 -- Volcando estructura para tabla portal_oxohotel.dispositivos
+DROP TABLE IF EXISTS `dispositivos`;
 CREATE TABLE IF NOT EXISTS `dispositivos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre_dispositivo` varchar(100) NOT NULL DEFAULT '',
@@ -181,23 +50,8 @@ CREATE TABLE IF NOT EXISTS `dispositivos` (
 /*!40000 ALTER TABLE `dispositivos` DISABLE KEYS */;
 /*!40000 ALTER TABLE `dispositivos` ENABLE KEYS */;
 
--- Volcando estructura para tabla portal_oxohotel.licencias_usuario
-CREATE TABLE IF NOT EXISTS `licencias_usuario` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `fecha_inicial` datetime DEFAULT NULL,
-  `fecha_final` datetime DEFAULT NULL,
-  `Descripcion` varchar(1000) DEFAULT NULL,
-  `id_usuario` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
-
--- Volcando datos para la tabla portal_oxohotel.licencias_usuario: ~1 rows (aproximadamente)
-/*!40000 ALTER TABLE `licencias_usuario` DISABLE KEYS */;
-INSERT INTO `licencias_usuario` (`id`, `fecha_inicial`, `fecha_final`, `Descripcion`, `id_usuario`) VALUES
-	(1, '2019-10-15 00:00:00', '2020-10-15 23:59:59', 'Licencia del aplicativo de portales cautivos del 15 de noviembre de 2019 al 15 de noviembre de 2020', 1);
-/*!40000 ALTER TABLE `licencias_usuario` ENABLE KEYS */;
-
 -- Volcando estructura para tabla portal_oxohotel.locaciones
+DROP TABLE IF EXISTS `locaciones`;
 CREATE TABLE IF NOT EXISTS `locaciones` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(250) DEFAULT NULL,
@@ -211,11 +65,12 @@ CREATE TABLE IF NOT EXISTS `locaciones` (
 
 -- Volcando datos para la tabla portal_oxohotel.locaciones: ~1 rows (aproximadamente)
 /*!40000 ALTER TABLE `locaciones` DISABLE KEYS */;
-INSERT INTO `locaciones` (`id`, `nombre`, `direccion`, `pais`, `ciudad`, `telefono`, `PaginaWeb`) VALUES
-	(1, 'Prueba', 'direccion', 'colombia', 'cartagena', '3212243289', 'paginaWeb');
+REPLACE INTO `locaciones` (`id`, `nombre`, `direccion`, `pais`, `ciudad`, `telefono`, `PaginaWeb`) VALUES
+	(1, 'Primera Locacion ', 'direccion', 'colombia', 'cartagena', '3212243289', 'paginaWeb');
 /*!40000 ALTER TABLE `locaciones` ENABLE KEYS */;
 
 -- Volcando estructura para tabla portal_oxohotel.paises
+DROP TABLE IF EXISTS `paises`;
 CREATE TABLE IF NOT EXISTS `paises` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre_esp` varchar(250) DEFAULT NULL,
@@ -229,7 +84,7 @@ CREATE TABLE IF NOT EXISTS `paises` (
 
 -- Volcando datos para la tabla portal_oxohotel.paises: ~208 rows (aproximadamente)
 /*!40000 ALTER TABLE `paises` DISABLE KEYS */;
-INSERT INTO `paises` (`id`, `nombre_esp`, `nombre_en`, `nombre_fr`, `iso2`, `iso3`, `indicativo`) VALUES
+REPLACE INTO `paises` (`id`, `nombre_esp`, `nombre_en`, `nombre_fr`, `iso2`, `iso3`, `indicativo`) VALUES
 	(1, 'Afganistán', 'Afghanistan', 'Afghanistan', 'AF', 'AFG', 93),
 	(2, 'Albania', 'Albania', 'Albanie', 'AL', 'ALB', 355),
 	(3, 'Alemania', 'Germany', 'Allemagne', 'DE', 'DEU', 49),
@@ -441,6 +296,7 @@ INSERT INTO `paises` (`id`, `nombre_esp`, `nombre_en`, `nombre_fr`, `iso2`, `iso
 /*!40000 ALTER TABLE `paises` ENABLE KEYS */;
 
 -- Volcando estructura para tabla portal_oxohotel.publicidad_a_2019_campania
+DROP TABLE IF EXISTS `publicidad_a_2019_campania`;
 CREATE TABLE IF NOT EXISTS `publicidad_a_2019_campania` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `id_evento` bigint(20) NOT NULL,
@@ -462,8 +318,8 @@ CREATE TABLE IF NOT EXISTS `publicidad_a_2019_campania` (
 
 -- Volcando datos para la tabla portal_oxohotel.publicidad_a_2019_campania: ~24 rows (aproximadamente)
 /*!40000 ALTER TABLE `publicidad_a_2019_campania` DISABLE KEYS */;
-INSERT INTO `publicidad_a_2019_campania` (`id`, `id_evento`, `fecha_creacion`, `nombre`, `email`, `edad`, `telefono`, `genero`, `os`, `ssid`, `mac_cliente`, `ip_cliente`, `ip_ap`, `mac_ap`, `id_pais`) VALUES
-	(1, 1, '2019-10-24 11:37:31', 'Juan David pachon Suzunaga', 'juan.suzunaga@gmail.com', '32', '3223650805', 'Mujer', 'Android', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', NULL, '1'),
+REPLACE INTO `publicidad_a_2019_campania` (`id`, `id_evento`, `fecha_creacion`, `nombre`, `email`, `edad`, `telefono`, `genero`, `os`, `ssid`, `mac_cliente`, `ip_cliente`, `ip_ap`, `mac_ap`, `id_pais`) VALUES
+	(1, 1, '2020-01-06 11:37:31', 'Juan David pachon Suzunaga', 'juan.suzunaga@gmail.com', '32', '3223650805', 'Mujer', 'Android', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', NULL, '1'),
 	(2, 1, '2019-10-25 11:56:10', 'Juan david', 'juan.suzunaga@email.com', '21', '3223650805', 'Hombre', 'Windows', 'oxohotel_1', '30074d8595f0', '192.168.0.12', '192.168.0.23', '60d02c2d04f0', '2'),
 	(3, 1, '0000-00-00 00:00:00', 'Soporte', 'soport@soporte.com', '66', '2131472580', 'Hombre', 'MacOS', 'oxohotel_1', 'd0c5f3c5da5a', '192.168.0.14', '192.168.0.23', '60d02c2d04f0', '2'),
 	(4, 1, '2019-10-24 11:57:59', 'Hola', 'hoq@gsjd.xon', '77', '2312536325', 'Hombre', 'Windows', 'oxohotel_1', 'd0c5f3c5da5a', '192.168.0.14', '192.168.0.23', '60d02c2d04f0', '4'),
@@ -474,7 +330,7 @@ INSERT INTO `publicidad_a_2019_campania` (`id`, `id_evento`, `fecha_creacion`, `
 	(9, 1, '2019-10-31 02:49:16', 'Gerardo Mendoza', 'ger@correo.com', '35', '3445633432', 'Hombre', 'Windows', 'oxohotel_1', '34e12d43a922', '192.168.0.13', '192.168.0.23', '60d02c2d04f0', '13'),
 	(10, 1, '2019-10-24 05:11:39', 'sdjflsd sdjfsdkjf', 'sdsds@gmail.com', '34', '3156726860', 'Otro', 'Linux', '', '', '', '', '', '22'),
 	(11, 1, '2019-10-28 09:24:21', 'Juan David', 'juan.suzunaga@gmail.com', '30', '3223650805', 'Hombre', 'MacOS', 'oxohotel_1', '34e12d43a922', '192.168.0.11', '192.168.0.13', '60d02c2d04f0', '15'),
-	(12, 1, '2019-10-28 04:25:30', 'Juan', 'juan.suzunaga@gmail.com', '23', '1234567654321', 'Mujer', 'Android', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '12'),
+	(12, 1, '2020-01-07 03:25:30', 'Juan', 'juan.suzunaga@gmail.com', '23', '1234567654321', 'Mujer', 'Android', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '12'),
 	(13, 1, '2019-10-30 03:17:30', '', '', '', '', '', '', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '50'),
 	(14, 1, '2019-10-30 03:18:45', '', '', '', '', '', '', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '208'),
 	(15, 1, '2019-10-30 03:21:34', 'pedro', 'pepe@hotmail.com', '12', '12345234124', 'Mujer', '', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '22'),
@@ -482,14 +338,15 @@ INSERT INTO `publicidad_a_2019_campania` (`id`, `id_evento`, `fecha_creacion`, `
 	(17, 1, '2019-10-30 03:53:03', 'Juan David', 'juan.suzunaga@gmail.com', '12', '1234567890', 'Hombre', 'Windows', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '1'),
 	(18, 1, '2019-10-30 03:53:28', 'QWERTY', 'juan.suzunaga@gmail.com', '12', '23452345676543', 'Hombre', 'Windows', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '1'),
 	(19, 1, '2019-10-30 03:54:08', 'Juan David', 'juan.suzunaga@gmail.com', '32', '12345623452', 'Hombre', 'Windows', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '2'),
-	(20, 1, '2019-10-30 03:58:57', 'Juan David', 'juan.suzunaga@gmail.com', '12', '1234567890', 'Hombre', 'Windows', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '1'),
+	(20, 1, '2020-01-05 03:58:57', 'Juan David', 'juan.suzunaga@gmail.com', '12', '1234567890', 'Hombre', 'Windows', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '1'),
 	(21, 1, '2019-10-30 04:01:06', 'Juan David', 'juan.suzunaga@gmail.com', '23', '1234567812', 'Hombre', 'Windows', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '1'),
 	(22, 1, '2019-10-30 06:32:39', 'Jorge Eduardo', 'jpqjp@com', '34', '3223453456', 'Hombre', 'Otro', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '10'),
-	(23, 1, '2019-11-14 09:51:27', 'dccsd', 'dsf@email.com', '23', '3213424234324', 'Mujer', 'Windows', '', '', '', '', '', NULL),
-	(24, 1, '2019-11-14 10:08:50', 'dsads', 'sfds@email.com', '22', '3212234335', 'Mujer', 'Windows', '', '', '', '', '', '40');
+	(23, 1, '2019-12-14 09:51:27', 'dccsd', 'dsf@email.com', '23', '3213424234324', 'Mujer', 'Windows', '', '', '', '', '', NULL),
+	(24, 1, '2020-01-07 20:08:50', 'dsads', 'sfds@email.com', '22', '3212234335', 'Mujer', 'Windows', '', '', '', '', '', '40');
 /*!40000 ALTER TABLE `publicidad_a_2019_campania` ENABLE KEYS */;
 
 -- Volcando estructura para tabla portal_oxohotel.publicidad_b_2019_campania
+DROP TABLE IF EXISTS `publicidad_b_2019_campania`;
 CREATE TABLE IF NOT EXISTS `publicidad_b_2019_campania` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `id_evento` bigint(20) NOT NULL,
@@ -504,7 +361,7 @@ CREATE TABLE IF NOT EXISTS `publicidad_b_2019_campania` (
 
 -- Volcando datos para la tabla portal_oxohotel.publicidad_b_2019_campania: ~13 rows (aproximadamente)
 /*!40000 ALTER TABLE `publicidad_b_2019_campania` DISABLE KEYS */;
-INSERT INTO `publicidad_b_2019_campania` (`id`, `id_evento`, `fecha_creacion`, `ssid`, `mac_cliente`, `ip_cliente`, `ip_ap`, `mac_ap`) VALUES
+REPLACE INTO `publicidad_b_2019_campania` (`id`, `id_evento`, `fecha_creacion`, `ssid`, `mac_cliente`, `ip_cliente`, `ip_ap`, `mac_ap`) VALUES
 	(1, 1, '2019-10-24 10:19:09', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', NULL),
 	(2, 1, '2019-10-25 10:25:44', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0'),
 	(3, 1, '2019-10-30 11:36:21', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0'),
@@ -520,42 +377,50 @@ INSERT INTO `publicidad_b_2019_campania` (`id`, `id_evento`, `fecha_creacion`, `
 	(13, 1, '2019-10-24 02:51:40', 'oxohotel_2', '34e12d43a922', '192.168.0.13', '192.168.0.23', '60d02c2d04f0');
 /*!40000 ALTER TABLE `publicidad_b_2019_campania` ENABLE KEYS */;
 
--- Volcando estructura para tabla portal_oxohotel.roles_usuarios
-CREATE TABLE IF NOT EXISTS `roles_usuarios` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(250) DEFAULT NULL,
-  `descripcion` varchar(1000) DEFAULT NULL,
-  `fecha_creacion` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+-- Volcando estructura para tabla portal_oxohotel.vouchers
+DROP TABLE IF EXISTS `vouchers`;
+CREATE TABLE IF NOT EXISTS `vouchers` (
+  `id_voucher` int(11) NOT NULL AUTO_INCREMENT,
+  `voucher` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
+  `fecha_inicio` date NOT NULL,
+  `fecha_fin` date NOT NULL,
+  `estado` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
+  `id_campania` int(11) NOT NULL,
+  `num_usos` int(11) NOT NULL,
+  `id_locacion` int(11) NOT NULL,
+  PRIMARY KEY (`id_voucher`),
+  UNIQUE KEY `voucher` (`voucher`)
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
--- Volcando datos para la tabla portal_oxohotel.roles_usuarios: ~1 rows (aproximadamente)
-/*!40000 ALTER TABLE `roles_usuarios` DISABLE KEYS */;
-INSERT INTO `roles_usuarios` (`id`, `nombre`, `descripcion`, `fecha_creacion`) VALUES
-	(1, 'administrador', 'rol de super usuario, que permite el uso de la totalidad de caracteristicas de la plataforma', '2019-08-18 12:03:36');
-/*!40000 ALTER TABLE `roles_usuarios` ENABLE KEYS */;
-
--- Volcando estructura para tabla portal_oxohotel.usuarios
-CREATE TABLE IF NOT EXISTS `usuarios` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(250) DEFAULT NULL,
-  `email` varchar(250) DEFAULT NULL,
-  `username` varchar(250) DEFAULT NULL,
-  `password` varchar(250) DEFAULT NULL,
-  `id_rol` int(11) DEFAULT NULL,
-  `fecha_creacion` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `id_rol` (`id_rol`),
-  CONSTRAINT `id_rol` FOREIGN KEY (`id_rol`) REFERENCES `roles_usuarios` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
-
--- Volcando datos para la tabla portal_oxohotel.usuarios: ~1 rows (aproximadamente)
-/*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` (`id`, `nombre`, `email`, `username`, `password`, `id_rol`, `fecha_creacion`) VALUES
-	(1, 'admin', 'mauricio.pascuas@ipwork.com.co', 'admin', 'IPwork2019.', 1, '2019-08-18 12:03:37');
-/*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
+-- Volcando datos para la tabla portal_oxohotel.vouchers: ~22 rows (aproximadamente)
+/*!40000 ALTER TABLE `vouchers` DISABLE KEYS */;
+REPLACE INTO `vouchers` (`id_voucher`, `voucher`, `fecha_inicio`, `fecha_fin`, `estado`, `id_campania`, `num_usos`, `id_locacion`) VALUES
+	(1, 'f05de4', '2020-01-01', '2020-01-15', 'Sin Uso', 12, 3, 1),
+	(2, '3064b9', '2020-01-01', '2020-01-15', 'Sin Uso', 12, 3, 1),
+	(3, '497ee4', '2020-01-01', '2020-01-15', 'Sin Uso', 12, 3, 1),
+	(4, '9d62d5', '2020-01-01', '2020-01-15', 'Sin Uso', 12, 3, 1),
+	(5, 'dcc4f5', '2020-01-01', '2020-01-15', 'Sin Uso', 12, 3, 1),
+	(6, '9d0a11', '2020-01-01', '2020-01-15', 'Sin Uso', 12, 3, 1),
+	(7, 'a5a3fe', '2020-01-01', '2020-01-15', 'Sin Uso', 12, 3, 1),
+	(8, 'a3db30', '2020-01-01', '2020-01-15', 'Sin Uso', 12, 3, 1),
+	(9, '177c4e', '2020-01-01', '2020-01-15', 'Sin Uso', 12, 3, 1),
+	(10, '93aa3b', '2020-01-01', '2020-01-15', 'Sin Uso', 12, 3, 1),
+	(11, 'c270ff', '2020-01-08', '2020-02-01', 'Sin Uso', 13, 3, 1),
+	(12, '2224df', '2020-01-08', '2020-02-01', 'Sin Uso', 13, 3, 1),
+	(13, 'ef4f64', '2020-01-08', '2020-02-01', 'Sin Uso', 13, 3, 1),
+	(14, 'ef9866', '2020-01-08', '2020-02-01', 'Sin Uso', 13, 3, 1),
+	(15, 'f1e576', '2020-01-08', '2020-02-01', 'Sin Uso', 13, 3, 1),
+	(16, '66610e', '2020-01-08', '2020-02-01', 'Sin Uso', 13, 3, 1),
+	(17, '94573d', '2020-01-08', '2020-02-01', 'Sin Uso', 13, 3, 1),
+	(18, '3f29f7', '2020-01-08', '2020-02-01', 'Sin Uso', 13, 3, 1),
+	(19, 'dcc805', '2020-01-08', '2020-02-01', 'Sin Uso', 13, 3, 1),
+	(20, 'ffedfc', '2020-01-08', '2020-02-01', 'Sin Uso', 13, 3, 1),
+	(21, '193fe6', '2020-01-08', '2020-02-01', 'Sin Uso', 13, 3, 1),
+	(22, '846d32', '2020-01-08', '2020-02-01', 'Sin Uso', 13, 3, 1);
+/*!40000 ALTER TABLE `vouchers` ENABLE KEYS */;
 
 -- Volcando estructura para tabla portal_oxohotel.zonas
+DROP TABLE IF EXISTS `zonas`;
 CREATE TABLE IF NOT EXISTS `zonas` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) NOT NULL DEFAULT '',
