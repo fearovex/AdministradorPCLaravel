@@ -59,9 +59,9 @@ class CsvNotification extends Notification
             }
         }else{
             foreach ($this->rows as $row) {
-                unset($row['id']);
-                unset($row['id_evento']);
-                unset($row['id_pais']);
+                unset($row['id_voucher']);
+                unset($row['id_locacion']);
+                unset($row['id_campania']);
                 fputcsv($fp, $row);
             }
         }

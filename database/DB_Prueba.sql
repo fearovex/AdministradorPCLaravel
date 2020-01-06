@@ -32,7 +32,8 @@ CREATE TABLE IF NOT EXISTS `campania` (
 /*!40000 ALTER TABLE `campania` DISABLE KEYS */;
 REPLACE INTO `campania` (`id`, `id_locacion`, `nombre`, `descripcion`, `fecha_inicio`, `fecha_fin`, `ano_evento`, `campania`, `zona_ap`) VALUES
 	(12, 1, 'campania_uno', 'Portal cautivo que cuenta con un banner con publicidad', '2019-12-14', '2019-12-18', 3451, 'publicidad_a_2019_campania', '10'),
-	(13, 1, 'campania_dos', 'Portal cautivo que cuenta con un banner con publicidad', '2019-12-13', '2019-12-27', 2435, 'publicidad_b_2019_campania', '10');
+	(13, 1, 'campania_dos', 'Portal cautivo que cuenta con un banner con publicidad', '2019-12-13', '2019-12-27', 2435, 'publicidad_b_2019_campania', '10'),
+	(14, 1, 'Habitaciones', 'Portal Cautivo para los huespedes', '2019-12-06', '2019-12-20', 2019, 'portal_cautivo_habitaciones', '10');
 /*!40000 ALTER TABLE `campania` ENABLE KEYS */;
 
 -- Volcando estructura para tabla portal_oxohotel.dispositivos
@@ -295,6 +296,8 @@ REPLACE INTO `paises` (`id`, `nombre_esp`, `nombre_en`, `nombre_fr`, `iso2`, `is
 	(208, 'Zimbabue', 'Zimbabwe', 'Zimbabwe', 'ZW', 'ZWE', 263);
 /*!40000 ALTER TABLE `paises` ENABLE KEYS */;
 
+
+
 -- Volcando estructura para tabla portal_oxohotel.publicidad_a_2019_campania
 DROP TABLE IF EXISTS `publicidad_a_2019_campania`;
 CREATE TABLE IF NOT EXISTS `publicidad_a_2019_campania` (
@@ -377,6 +380,24 @@ REPLACE INTO `publicidad_b_2019_campania` (`id`, `id_evento`, `fecha_creacion`, 
 	(13, 1, '2019-10-24 02:51:40', 'oxohotel_2', '34e12d43a922', '192.168.0.13', '192.168.0.23', '60d02c2d04f0');
 /*!40000 ALTER TABLE `publicidad_b_2019_campania` ENABLE KEYS */;
 
+-- Volcando estructura para tabla portal_oxohotel_vouchers.portal_cautivo_habitaciones
+CREATE TABLE IF NOT EXISTS `portal_cautivo_habitaciones` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id_evento` bigint(20) NOT NULL,
+  `fecha_creacion` datetime DEFAULT CURRENT_TIMESTAMP,
+  `nombre` varchar(255) DEFAULT NULL,
+  `apellidos` varchar(250) DEFAULT NULL,
+  `num_habitacion` varchar(255) DEFAULT NULL,
+  `num_voucher` varchar(255) DEFAULT NULL,
+  `os` varchar(255) DEFAULT NULL,
+  `ssid` varchar(250) DEFAULT NULL,
+  `mac_cliente` varchar(250) DEFAULT NULL,
+  `ip_cliente` varchar(250) DEFAULT NULL,
+  `ip_ap` varchar(250) DEFAULT NULL,
+  `mac_ap` varchar(250) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4;
+
 -- Volcando estructura para tabla portal_oxohotel.vouchers
 DROP TABLE IF EXISTS `vouchers`;
 CREATE TABLE IF NOT EXISTS `vouchers` (
@@ -418,6 +439,120 @@ REPLACE INTO `vouchers` (`id_voucher`, `voucher`, `fecha_inicio`, `fecha_fin`, `
 	(21, '193fe6', '2020-01-08', '2020-02-01', 'Sin Uso', 13, 3, 1),
 	(22, '846d32', '2020-01-08', '2020-02-01', 'Sin Uso', 13, 3, 1);
 /*!40000 ALTER TABLE `vouchers` ENABLE KEYS */;
+
+-- Volcando estructura para tabla portal_oxohotel_vouchers.habitaciones
+CREATE TABLE IF NOT EXISTS `habitaciones` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `piso` varchar(45) DEFAULT NULL,
+  `bloque` varchar(45) DEFAULT NULL,
+  `num_habitacion` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4;
+
+-- Volcando datos para la tabla portal_oxohotel_vouchers.habitaciones: ~99 rows (aproximadamente)
+DELETE FROM `habitaciones`;
+/*!40000 ALTER TABLE `habitaciones` DISABLE KEYS */;
+INSERT INTO `habitaciones` (`id`, `piso`, `bloque`, `num_habitacion`) VALUES
+	(1, '1', 'B', '101'),
+	(2, '1', 'B', '102'),
+	(3, '1', 'B', '105'),
+	(4, '1', 'B', '106'),
+	(5, '1', 'B', '107'),
+	(6, '1', 'B', '108'),
+	(7, '1', 'B', '109'),
+	(8, '1', 'B', '110'),
+	(9, '1', 'B', '111'),
+	(10, '1', 'B', '112'),
+	(11, '1', 'B', '113'),
+	(12, '1', 'C', '115'),
+	(13, '1', 'C', '116'),
+	(14, '1', 'C', '119'),
+	(15, '1', 'C', '120'),
+	(16, '1', 'C', '121'),
+	(17, '1', 'C', '122'),
+	(18, '1', 'C', '123'),
+	(19, '1', 'C', '124'),
+	(20, '1', 'C', '125'),
+	(21, '1', 'C', '126'),
+	(22, '2', 'A', '227'),
+	(23, '2', 'A', '228'),
+	(24, '2', 'A', '229'),
+	(25, '2', 'A', '230'),
+	(26, '2', 'A', '231'),
+	(27, '2', 'A', '233'),
+	(28, '2', 'A', '234'),
+	(29, '2', 'A', '235'),
+	(30, '2', 'A', '236'),
+	(31, '2', 'A', '237'),
+	(32, '2', 'A', '238'),
+	(33, '2', 'A', '239'),
+	(34, '2', 'A', '240'),
+	(35, '2', 'A', '241'),
+	(36, '2', 'A', '242'),
+	(37, '2', 'A', '243'),
+	(38, '2', 'A', '245'),
+	(39, '2', 'B', '201'),
+	(40, '2', 'B', '202'),
+	(41, '2', 'B', '203'),
+	(42, '2', 'B', '204'),
+	(43, '2', 'B', '205'),
+	(44, '2', 'B', '206'),
+	(45, '2', 'B', '207'),
+	(46, '2', 'B', '208'),
+	(47, '2', 'B', '209'),
+	(48, '2', 'B', '210'),
+	(49, '2', 'B', '211'),
+	(50, '2', 'B', '212'),
+	(51, '2', 'B', '213'),
+	(52, '2', 'C', '215'),
+	(53, '2', 'C', '216'),
+	(54, '2', 'C', '217'),
+	(55, '2', 'C', '218'),
+	(56, '2', 'C', '219'),
+	(57, '2', 'C', '220'),
+	(58, '2', 'C', '221'),
+	(59, '2', 'C', '222'),
+	(60, '2', 'C', '223'),
+	(61, '2', 'C', '224'),
+	(62, '2', 'C', '225'),
+	(63, '2', 'C', '226'),
+	(64, '3', 'A', '333'),
+	(65, '3', 'A', '334'),
+	(66, '3', 'A', '335'),
+	(67, '3', 'A', '336'),
+	(68, '3', 'A', '337'),
+	(69, '3', 'A', '338'),
+	(70, '3', 'A', '339'),
+	(71, '3', 'A', '340'),
+	(72, '3', 'A', '341'),
+	(73, '3', 'A', '342'),
+	(74, '3', 'A', '343'),
+	(75, '3', 'A', '345'),
+	(76, '3', 'B', '301'),
+	(77, '3', 'B', '302'),
+	(78, '3', 'B', '303'),
+	(79, '3', 'B', '304'),
+	(80, '3', 'B', '305'),
+	(81, '3', 'B', '306'),
+	(82, '3', 'B', '307'),
+	(83, '3', 'B', '308'),
+	(84, '3', 'B', '309'),
+	(85, '3', 'B', '310'),
+	(86, '3', 'B', '311'),
+	(87, '3', 'B', '312'),
+	(88, '3', 'C', '315'),
+	(89, '3', 'C', '316'),
+	(90, '3', 'C', '317'),
+	(91, '3', 'C', '318'),
+	(92, '3', 'C', '319'),
+	(93, '3', 'C', '320'),
+	(94, '3', 'C', '321'),
+	(95, '3', 'C', '322'),
+	(96, '3', 'C', '323'),
+	(97, '3', 'C', '324'),
+	(98, '3', 'C', '325'),
+	(99, '3', 'C', '326');
+/*!40000 ALTER TABLE `habitaciones` ENABLE KEYS */;
 
 -- Volcando estructura para tabla portal_oxohotel.zonas
 DROP TABLE IF EXISTS `zonas`;
