@@ -6,6 +6,9 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Notifications\PasswordResetNotification;
+use App\Notifications\CsvNotification;
+use Session;
+
 class User extends Authenticatable
 {
     use Notifiable;
@@ -16,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','locale'
+        'name', 'email', 'password','database','imgdashboard','dashboard','location','campaing','Conexion'
     ];
 
     /**
@@ -42,8 +45,15 @@ class User extends Authenticatable
   
     public function sendPasswordResetNotification($token)
     {
-        $this->notify(new PasswordResetNotification($token));
+        if(session('emailValidate') == 'CSV'){
+            $this->notify(new CsvNotification(request()->columns,request()->rows));
+
+        }
+        if(session('emailValidate') == 'Reset'){
+            $this->notify(new PasswordResetNotification($token));
+        }
     }
+
 
     public function preferredLocale()
     {

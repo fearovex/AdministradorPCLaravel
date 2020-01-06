@@ -13,22 +13,14 @@ class userseedertable extends Seeder
     public function run()
     {
         $user = new User();
-        $user->name = 'IPwork';
-        $user->email = 'administrador@ipwork.com.co';
-        $user->password = 'IPwork2019.';
-        $user->database = 'portal_oxohotel';
-        $user->imgdashboard = 'ipfi.png';
-        $user->dashboard = "/app/locations/Hotel AC Cartagena";
-        $user->id_rol = 2;
-        $user->save();
-
-        $user = new User();
-        $user->name = 'Oxohotel';
+        $user->name = 'Ermita';
         $user->email = 'admin@ermita.com';
         $user->password = '3rm1t42019';
         $user->database = 'portal_oxohotel';
         $user->imgdashboard = 'oxohotel.png';
         $user->dashboard = "/app/locations";
+        $user->location = 0;
+        $user->campaing = 0;
         $user->id_rol = 1;
         $user->save();
 
@@ -39,16 +31,8 @@ class userseedertable extends Seeder
         $user->database = 'unicentro';
         $user->imgdashboard = 'unicentro.png';
         $user->dashboard = "/app/locations";
-        $user->id_rol = 1;
-        $user->save();
-
-        $user = new User();
-        $user->name = 'IPfi Admin';
-        $user->email = 'ipfi_admin@ipwork.com.co';
-        $user->password = 'IPwork2019.';
-        $user->database = 'unicentro';
-        $user->imgdashboard = 'ipfi.png';
-        $user->dashboard = "/app/locations";
+        $user->location = 0;
+        $user->campaing = 0;
         $user->id_rol = 1;
         $user->save();
 
@@ -59,7 +43,33 @@ class userseedertable extends Seeder
         $user->database = 'unicentro';
         $user->imgdashboard = 'ipfi.png';
         $user->dashboard = "/app/locations";
+        $user->location = 0;
+        $user->campaing = 0;
         $user->id_rol = 1;
+        $user->save();
+
+        $user = new User();
+        $user->name = 'Locations Admin';
+        $user->email = 'locations@ermita.com';
+        $user->password = 'l0c4t10n3rm1t4';
+        $user->database = 'portal_oxohotel';
+        $user->imgdashboard = 'oxohotel.png';
+        $user->dashboard = "/app/locations/Prueba";
+        $user->location = 1;
+        $user->campaing = 0;
+        $user->id_rol = 2;
+        $user->save();
+
+        $user = new User();
+        $user->name = 'Vouchers Admin';
+        $user->email = 'voucher@ermita.com';
+        $user->password = 'v0uch3r3rm1t4';
+        $user->database = 'portal_oxohotel';
+        $user->imgdashboard = 'oxohotel.png';
+        $user->dashboard = "/app/locations/Prueba/vouchers";
+        $user->location = 1;
+        $user->campaing = 0;
+        $user->id_rol = 4;
         $user->save();
     }
 }

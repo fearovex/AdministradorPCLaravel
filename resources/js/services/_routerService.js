@@ -26,6 +26,8 @@ import zonas from 'Routes/zonas';
 import dispositivos from 'Routes/dispositivos';
 import Locations from 'Routes/locations';
 import Analytical from 'Routes/analytical';
+import Voucher from 'Routes/voucher';
+import Vouchers from 'Routes/vouchers';
 
 // async component
 import {
@@ -163,5 +165,13 @@ export default [
    {
       path: 'locations/:location/campañas/:camp',
       component: DetailEvents
+   },
+   {
+      path: 'locations/:location/vouchers',
+      component: Vouchers
+   },
+   {
+      path: 'locations/:location/vouchers/create',
+      component: Voucher
    },
 ]

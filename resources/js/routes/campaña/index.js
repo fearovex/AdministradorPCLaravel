@@ -23,19 +23,15 @@ import './styles.css'
 export default class campañas extends Component {
 	constructor(props){
 		super(props)
-		
-		if(!this.props.location.state){
-			this.props.history.push('/');
-		}else{
-			const { id_location } = this.props.location.state
-			this.id_location = id_location
-		}
+
+		const id_location = localStorage.user_location
+
         this.state = {
             data: [],
 			error: null,
 			activeStep: 0,
 			prompt: false,
-			id:0,
+			id_location: id_location,
 			campania:[],
 			modaledit: false,
             form: {
@@ -54,16 +50,16 @@ export default class campañas extends Component {
 		
 	}   
 	async componentDidMount(){
+		const id_location  = localStorage.user_location
 		const { location } = this.props
-
 		try {
-		   let res = await fetch(`${localStorage.urlDomain}api/zonas/${this.id_location}`)
+		   let res = await fetch(`${localStorage.urlDomain}api/zonas/${id_location}`)
 		   let data = await res.json()
 
 		   this.setState({
 			   	data: data,
 				form: {
-					id_location: this.id_location
+					id_location: id_location
 				}
 		   })
 		   
@@ -73,7 +69,7 @@ export default class campañas extends Component {
 		   })
 		}
 		try {
-			let res = await fetch(`${localStorage.urlDomain}api/campanias/${this.id_location}`)
+			let res = await fetch(`${localStorage.urlDomain}api/campanias/${id_location}`)
 			let datacampania = await res.json()
 			for (let i = 0; i < datacampania.length; i++) {
 				datacampania[i]["acciones"]=<Link to={location.pathname} onClick={() => this.openAlertTest('modaledit',datacampania[i].id)}>Editar</Link>

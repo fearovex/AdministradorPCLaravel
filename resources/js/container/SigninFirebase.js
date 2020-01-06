@@ -49,8 +49,6 @@ const auth = new Auth();
 class Signin extends Component {
 
    constructor(props) {
-
-      
      
       super(props)
       this.state = {
@@ -69,6 +67,8 @@ class Signin extends Component {
       this.handleSubmit = this.handleSubmit.bind(this);      
       this.onloadCallback = this.onloadCallback.bind(this);
       this.verifyCallback = this.verifyCallback.bind(this);
+
+      
    }
 
    async handleSubmit(e) {
@@ -91,7 +91,7 @@ class Signin extends Component {
                   data:data
                })
                this.props.signinUserInFirebase(this.state, this.props.history);
-               
+              
                NotificationManager.success('User Logged In Succesfully','',4000);
             }
             else{

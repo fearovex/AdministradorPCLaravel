@@ -7,20 +7,23 @@ use Illuminate\Support\Facades\Lang;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Excel;
 
-class PasswordResetNotification extends Notification
+class CsvNotification extends Notification
 {
     use Queueable;
-    public $token;
+    public $columns;
+    public $rows;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($token)
+    public function __construct($columns, $rows)
     {
-        $this->token=$token;
+        $this->columns=$columns;
+        $this->rows=$rows;
     }
 
     /**
@@ -43,15 +46,32 @@ class PasswordResetNotification extends Notification
     public function toMail($notifiable)
     {
         $urlDefaultFromEnv = env('APP_URL');
-        $aliasFrom = env('ALIAS_MAIL_FROM');
-        $urlToResetForm =$urlDefaultFromEnv."password/reset/?token=". $this->token;
+        $aliasFrom = env('ALIAS_MAIL_FROM_VOUCHERS');
+        date_default_timezone_set('America/Bogota');
+        $filename = 'Vouchers'.date("Y-m-d-His").'.csv';
+        $fp = fopen($filename, 'w');
+
+        fputcsv($fp, $this->columns);
+
+        if(empty($this->rows)){
+            foreach ($this->rows as $row) {
+                fputcsv($fp, $row);
+            }
+        }else{
+            foreach ($this->rows as $row) {
+                unset($row['id_voucher']);
+                unset($row['id_locacion']);
+                unset($row['id_campania']);
+                fputcsv($fp, $row);
+            }
+        }
+        fclose($fp);
+
         return (new MailMessage)
-            ->from($aliasFrom,'Soporte IPfi')
-            ->subject(Lang::get('Notificación para restablecer de contraseña'))
-            ->line(Lang::get('Aquí está su solicitud de restablecimiento de contraseña!'))
-            ->action(Lang::get('Restablecer contraseña'), $urlToResetForm)
-            ->line(Lang::get('Este enlace de restablecimiento de contraseña caducará en 60 minutos.', ['count' => config('auth.passwords.users.expire')]))
-            ->line(Lang::get('Si no solicitó un restablecimiento de contraseña, no se requiere ninguna otra acción..'));
+            ->from($aliasFrom,'Vouchers IPfi')
+            ->subject(Lang::get('Notificación de envío de CSV vouchers'))
+            ->line(Lang::get('Aquí está su solicitud de envío de CSV Vouchers adjunto!'))
+            ->attach($filename);
             // ->line(Lang::get('If you did not request a password reset, no further action is required. Token: ==>'. $this->token));
     }
 

@@ -569,6 +569,14 @@ const AsyncLocationsComponent = Loadable({
    loader: () => import("Routes/locations"),
    loading: () => <RctPageLoader />,
 });
+const AsyncvoucherComponent = Loadable({
+   loader: () => import("Routes/voucher"),
+   loading: () => <RctPageLoader />,
+});
+const AsyncvouchersComponent = Loadable({
+   loader: () => import("Routes/vouchers"),
+   loading: () => <RctPageLoader />,
+});
 export {
    AsyncUserWidgetComponent,
    AsyncUserChartsComponent,
@@ -665,6 +673,9 @@ export {
    AsynccampañaComponent,
    AsynczonasComponent,
    AsyncdispositivosComponent,
-   AsyncLocationsComponent
+   AsyncLocationsComponent,
+   AsyncvoucherComponent,
+   AsyncvouchersComponent
+   
    
 };

@@ -17,10 +17,16 @@ import IntlMessages from 'Util/IntlMessages';
 
 class NavMenuItem extends Component {
 
-   state = {
-      subMenuOpen: '',
-      
+   constructor(props){
+      super(props)
+
+      this.state = {
+         subMenuOpen: '',
+      }
+
+      this.ClickNavLink = this.ClickNavLink.bind(this)
    }
+
 
 	/**
    * On Toggle Collapse Menu
@@ -39,6 +45,11 @@ class NavMenuItem extends Component {
       else {
          this.setState({ subMenuOpen: '' });
       }
+   }
+
+   ClickNavLink(id_location, id_campain){
+      localStorage.setItem('user_location', id_location);
+      localStorage.setItem('user_campaing', id_campain);
    }
 
    render() {
@@ -68,12 +79,8 @@ class NavMenuItem extends Component {
                               return (
                                  <ListItem button component="li" key={index}>
                                     <NavLink 
-                                       to={{
-                                          pathname: subMenu.path, 
-                                          state: {
-                                              id_location: subMenu.id
-                                          }
-                                       }}
+                                       to={subMenu.path}
+                                       onClick = {() => this.ClickNavLink()}
                                        activeClassName="item-active"
                                     >
                                        <span className="menu">
@@ -109,14 +116,8 @@ class NavMenuItem extends Component {
                                                 <ListItem button component="li" key={nestedKey}>
                                                    <NavLink 
                                                       activeClassName="item-active" 
-                                                      to={{
-                                                         pathname: `${nestedMenu.path}`, 
-                                                         state: {
-                                                            id_campain: nestedMenu.id_campain,
-                                                            tb: nestedMenu.tb,
-                                                            id_location: nestedMenu.id_location
-                                                         }
-                                                      }}
+                                                      to={nestedMenu.path}
+                                                      onClick = {() => this.ClickNavLink(nestedMenu.id_location, nestedMenu.id_campain)}
                                                    >
                                                       <span className="menu pl-10 d-inline-block">
                                                          {nestedMenu.menu_title} 
@@ -134,14 +135,8 @@ class NavMenuItem extends Component {
                                     <Fragment key={index}>
                                        <ListItem button component="li" >
                                           <NavLink 
-                                             to={{
-                                                pathname: subMenu.path, 
-                                                state: {
-                                                   id_campain: subMenu.id_campain,
-                                                   tb: subMenu.tb,
-                                                   id_location: subMenu.id_location
-                                                }
-                                             }}
+                                             to={subMenu.path}
+                                             onClick = {() => this.ClickNavLink(subMenu.id_location, subMenu.id_campain)}
                                              activeClassName="item-active"
                                           >
                                              <span className="menu">

@@ -45,10 +45,7 @@ export default class dispositivos extends Component {
 		
 	}   
 	async componentDidMount(){
-		if(!this.props.location.state){
-            this.props.history.push('/');
-		}
-		const { id_location } = this.props.location.state
+		const id_location = localStorage.user_location
 		const { location } = this.props
 
 		try {

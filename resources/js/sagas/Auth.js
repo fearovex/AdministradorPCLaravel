@@ -101,6 +101,8 @@ function* signInUserWithEmailPassword({ payload }) {
             localStorage.setItem('user_database', signInUser.database);
             localStorage.setItem('user_imgdashboard', signInUser.imgdashboard);
             localStorage.setItem('user_dashboard', signInUser.dashboard);
+            localStorage.setItem('user_location', signInUser.location);
+            localStorage.setItem('user_campaing', signInUser.campaing);
             if(signInUser.id_rol == 1){
                 localStorage.setItem('user_module', 'Locations');
             }
@@ -196,12 +198,7 @@ function* signinUserWithGithubAccount({ payload }) {
 function* signOut() {
     try {
         yield call(signOutRequest);
-        localStorage.removeItem('user_id');
-        localStorage.removeItem('user_name');
-        localStorage.removeItem('user_email');
-        localStorage.removeItem('user_database');
-        localStorage.removeItem('user_imgdashboard');
-        localStorage.removeItem('user_dashboard');
+        localStorage.clear();
         yield put(logoutUserFromFirebaseSuccess())
     } catch (error) {
         yield put(logoutUserFromFirebaseFailure());

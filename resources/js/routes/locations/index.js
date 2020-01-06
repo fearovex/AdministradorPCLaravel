@@ -40,6 +40,7 @@ export default class Locations extends Component {
 			error: null,
 			activeStep: 0,
 			prompt: false,
+			modaledit:false,
             form: {
 				nombre: "",
 				direccion: "",
@@ -55,6 +56,9 @@ export default class Locations extends Component {
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.getStepContent = this.getStepContent.bind(this);
+		this.ClickNavLink = this.ClickNavLink.bind(this);
+		this.handleEdit = this.handleEdit.bind(this);
+		this.openAlertTest = this.openAlertTest.bind(this);
     }
     
     
@@ -70,8 +74,9 @@ export default class Locations extends Component {
             this.state = {
                 error: error
             }
-        }
-     
+		}
+		
+		    
     }
 
     async handleSubmit(e) {
@@ -88,10 +93,8 @@ export default class Locations extends Component {
 			};
 			let res = await fetch(`${localStorage.urlDomain}api/locations`, config);
 			let data = await res.json()
-			this.props.history.push({
-				pathname: location.pathname+'/'+this.state.form.nombre+'/campañas',
-				state: { id_location: data }
-			})           
+			this.props.history.push(location.pathname+'/'+this.state.form.nombre+'/campañas')
+			localStorage.setItem('user_location', data);           
              
           } catch (error) {
             console.log(error);
@@ -100,6 +103,50 @@ export default class Locations extends Component {
 	
 	async componentWillUnmount(){
 		window.location.reload();
+	}
+	async handleEdit(e) {
+		e.preventDefault();
+		try {
+			let config = {
+				method: 'PATCH',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(this.state.form)
+			};
+
+			await fetch(`${localStorage.urlDomain}api/locations/`+this.state.form.id, config);
+		   
+			this.setState({
+				modaledit: false
+			})
+
+			window.location.reload();
+
+		  } catch (error) {
+			 console.log(error);
+		     this.setState({
+		   	 error
+		     });
+		  }		
+	}
+	async openAlertTest(key,id) {
+		this.setState({ [key]: true});
+		let res = await fetch(`${localStorage.urlDomain}api/locations/${id}/edit`);
+		let locacion = await res.json();
+
+		   this.setState({ form:{
+			   nombre: locacion.nombre,
+			   direccion: locacion.direccion,
+			   pais: locacion.pais,
+			   ciudad: locacion.ciudad,
+			   telefono: locacion.telefono,
+			   PaginaWeb: locacion.PaginaWeb,
+			   id: locacion.id
+
+		   } });
+		 
 	}
 
     getStepContent(step) {
@@ -262,15 +309,27 @@ export default class Locations extends Component {
 	 handleChange(e) {
 		this.state.form[e.target.name] = e.target.value;
 	 }
+	 handleChangeEdit(e) {
+		this.setState({
+			form:{
+			   ...this.state.form,
+			   [e.target.name] : e.target.value
+			}
+		})
+	}
     
-
+	ClickNavLink(id_location, id_campain){
+		localStorage.setItem('user_location', id_location);
+		localStorage.setItem('user_campaing', id_campain);
+	}
    
 
     render() {
 		const { dataLocations } = this.state;
+		const { dataLocation } = this.state;
 		const steps = getSteps();
 		const { activeStep } = this.state;
-		const { basic, withDes, success, warning, customIcon, withHtml, prompt, passwordPrompt, customStyle } = this.state;
+		const { basic, withDes, success, warning, customIcon, withHtml, prompt, passwordPrompt,modaledit, customStyle } = this.state;
         return (
             <div className="cardsmasonry-wrapper">
                 <PageTitleBar title={<IntlMessages id="sidebar.locations" />} match={this.props.match} />
@@ -325,7 +384,101 @@ export default class Locations extends Component {
             )}
          </div>
             
-    </SweetAlert>	
+    </SweetAlert>
+	<SweetAlert
+
+					btnSize="sm"
+					show={modaledit}
+					showCancel
+					confirmBtnText="Editar"
+					cancelBtnText="Cancelar"
+					cancelBtnBsStyle="danger"
+					confirmBtnBsStyle="success"
+					title="Editar locacion"
+					onConfirm={() => this.handleEdit(event)}
+					onCancel={() => this.onCancel('modaledit')}
+			>
+             
+					<form onSubmit={this.handleEdit}>
+					<div className="row">			
+					<div className="row">			
+						 <div className="col-lg-6">
+							<Input
+							type="text"
+							name="nombre"
+							id="nombre"
+							value={this.state.form.nombre}
+							className="has-input input-lg"
+							placeholder="Nombre"
+							onChange={() => this.handleChangeEdit(event)}						                 
+							   />
+						</div>
+					<div className="col-lg-6">
+							<Input
+							type="text"
+							name="direccion"
+							id="direccion"
+							className="has-input input-lg"
+							placeholder="Direccion"
+							value={this.state.form.direccion}
+							onChange={() => this.handleChangeEdit(event)}                  
+							   />
+					</div>
+				</div>
+				<div className="row">			
+						 <div className="col-lg-6">
+							<Input
+							type="text"
+							name="pais"
+							id="pais"
+							className="has-input input-lg"
+							placeholder="Pais"
+							value={this.state.form.pais}
+							onChange={() => this.handleChangeEdit(event)}                  
+							   />
+						</div>
+					<div className="col-lg-6">
+							<Input
+							type="text"
+							name="ciudad"
+							id="ciudad"
+							className="has-input input-lg"
+							placeholder="Ciudad" 
+							value={this.state.form.ciudad}
+							onChange={() => this.handleChangeEdit(event)}                 
+							   />
+					</div>
+				</div>
+				<div className="row">			
+						 <div className="col-lg-6">
+							<Input
+							type="number"
+							name="telefono"
+							id="telefono"
+							className="has-input input-lg"
+							placeholder="Telefono"
+							value={this.state.form.telefono}
+							onChange={() => this.handleChangeEdit(event)}                  
+							   />
+						</div>
+					<div className="col-lg-6">
+							<Input
+							type="text"
+							name="PaginaWeb"
+							id="PaginaWeb"
+							className="has-input input-lg"
+							placeholder="Pagina Web" 
+							value={this.state.form.PaginaWeb}
+							onChange={() => this.handleChangeEdit(event)}                 
+							   />
+					</div>
+				</div>				
+						</div>
+						
+						</form>
+			
+            
+    </SweetAlert>		
 		</div>
                 <div className="row">
 				
@@ -333,12 +486,8 @@ export default class Locations extends Component {
                     <div key={data.id} className="col-md-4 col-lg-4 col-xs-2 col-sm-6 mb-3">
                         <Card >
                         <Link 
-                            to={{
-                                pathname: `/app/locations/${data.nombre}`, 
-                                state: {
-                                    id_location: data.id
-                                }
-                            }}
+							to={`/app/locations/${data.nombre}`}
+							onClick = {() => this.ClickNavLink(data.id, 0)}
                         > 
                             <CardImg top width="100%" src={require('Assets/img/location.jpg')} alt="Card image cap" />
                         </Link>
@@ -347,7 +496,9 @@ export default class Locations extends Component {
                             
                             <CardTitle>{data.nombre}</CardTitle>
                                 <CardText>
-                                    {data.descripcion}  
+                                    {data.descripcion}
+									<a onClick={() => this.openAlertTest('modaledit',data.id)} className="botonDisZon">Editar</a>
+									
                                 </CardText>
                                 
                             </CardBody>

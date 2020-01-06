@@ -37,7 +37,7 @@ Route::group(['middleware' => 'cors'], function() {
         
         Route::resource('/locations','LocationsController');
         
-        // Route::get('/evento', 'EventsController@UltimoEvento');
+        
         
         Route::get('/logout', 'Auth\LoginController@logout');
 
@@ -51,6 +51,12 @@ Route::group(['middleware' => 'cors'], function() {
 
          Route::resource('/editdispositivo','DispositivoController');
 
-         //Route::resource("/campanias/{id}","CampañaController");
+         Route::post("/vouchers/create","VouchersController@create");
+
+         Route::post("/vouchers/store","VouchersController@store");
+
+         Route::post("/vouchers","VouchersController@index");
+
+         Route::post('/csvEmail', 'Api\CsvEmail@sendResetLinkEmail');
     });
  });
