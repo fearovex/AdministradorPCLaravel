@@ -66,7 +66,7 @@ class CsvNotification extends Notification
             }
         }
         fclose($fp);
-
+        $aliasFrom = env('ALIAS_MAIL_FROM');
         return (new MailMessage)
             ->from($aliasFrom,'Vouchers IPfi')
             ->subject(Lang::get('Notificación de envío de CSV vouchers'))
