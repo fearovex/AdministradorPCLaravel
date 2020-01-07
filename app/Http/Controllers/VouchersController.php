@@ -64,10 +64,11 @@ class VouchersController extends Controller
                         $voucher->id_locacion = $request->id_location;
                         $voucher->voucher = $vouchersDiferentes[$key];
                         $voucher->estado = "Sin Uso";
-                        $voucher->fecha_inicio = $request->fecha_inicio;
-                        $voucher->fecha_fin = $request->fecha_fin;
+                        $voucher->fecha_inicio = date('Y-m-d H:i:00', strtotime($request->fecha_inicio));
+                        $voucher->fecha_fin = date('Y-m-d H:i:00', strtotime($request->fecha_fin));
                         $voucher->id_campania = $request->campaña;
                         $voucher->num_usos = $request->numerousos;
+                        $voucher->total_num_usos = $request->numerousos;
                         $voucher->save();
                         $creados++;
                 }

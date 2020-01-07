@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `campania` (
   CONSTRAINT `id_locacion` FOREIGN KEY (`id_locacion`) REFERENCES `locaciones` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4;
 
--- Volcando datos para la tabla portal_oxohotel.campania: ~2 rows (aproximadamente)
+-- Volcando datos para la tabla portal_oxohotel.campania: ~3 rows (aproximadamente)
 /*!40000 ALTER TABLE `campania` DISABLE KEYS */;
 REPLACE INTO `campania` (`id`, `id_locacion`, `nombre`, `descripcion`, `fecha_inicio`, `fecha_fin`, `ano_evento`, `campania`, `zona_ap`) VALUES
 	(12, 1, 'campania_uno', 'Portal cautivo que cuenta con un banner con publicidad', '2019-12-14', '2019-12-18', 3451, 'publicidad_a_2019_campania', '10'),
@@ -51,6 +51,120 @@ CREATE TABLE IF NOT EXISTS `dispositivos` (
 /*!40000 ALTER TABLE `dispositivos` DISABLE KEYS */;
 /*!40000 ALTER TABLE `dispositivos` ENABLE KEYS */;
 
+-- Volcando estructura para tabla portal_oxohotel.habitaciones
+DROP TABLE IF EXISTS `habitaciones`;
+CREATE TABLE IF NOT EXISTS `habitaciones` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `piso` varchar(45) DEFAULT NULL,
+  `bloque` varchar(45) DEFAULT NULL,
+  `num_habitacion` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4;
+
+-- Volcando datos para la tabla portal_oxohotel.habitaciones: ~99 rows (aproximadamente)
+/*!40000 ALTER TABLE `habitaciones` DISABLE KEYS */;
+REPLACE INTO `habitaciones` (`id`, `piso`, `bloque`, `num_habitacion`) VALUES
+	(1, '1', 'B', '101'),
+	(2, '1', 'B', '102'),
+	(3, '1', 'B', '105'),
+	(4, '1', 'B', '106'),
+	(5, '1', 'B', '107'),
+	(6, '1', 'B', '108'),
+	(7, '1', 'B', '109'),
+	(8, '1', 'B', '110'),
+	(9, '1', 'B', '111'),
+	(10, '1', 'B', '112'),
+	(11, '1', 'B', '113'),
+	(12, '1', 'C', '115'),
+	(13, '1', 'C', '116'),
+	(14, '1', 'C', '119'),
+	(15, '1', 'C', '120'),
+	(16, '1', 'C', '121'),
+	(17, '1', 'C', '122'),
+	(18, '1', 'C', '123'),
+	(19, '1', 'C', '124'),
+	(20, '1', 'C', '125'),
+	(21, '1', 'C', '126'),
+	(22, '2', 'A', '227'),
+	(23, '2', 'A', '228'),
+	(24, '2', 'A', '229'),
+	(25, '2', 'A', '230'),
+	(26, '2', 'A', '231'),
+	(27, '2', 'A', '233'),
+	(28, '2', 'A', '234'),
+	(29, '2', 'A', '235'),
+	(30, '2', 'A', '236'),
+	(31, '2', 'A', '237'),
+	(32, '2', 'A', '238'),
+	(33, '2', 'A', '239'),
+	(34, '2', 'A', '240'),
+	(35, '2', 'A', '241'),
+	(36, '2', 'A', '242'),
+	(37, '2', 'A', '243'),
+	(38, '2', 'A', '245'),
+	(39, '2', 'B', '201'),
+	(40, '2', 'B', '202'),
+	(41, '2', 'B', '203'),
+	(42, '2', 'B', '204'),
+	(43, '2', 'B', '205'),
+	(44, '2', 'B', '206'),
+	(45, '2', 'B', '207'),
+	(46, '2', 'B', '208'),
+	(47, '2', 'B', '209'),
+	(48, '2', 'B', '210'),
+	(49, '2', 'B', '211'),
+	(50, '2', 'B', '212'),
+	(51, '2', 'B', '213'),
+	(52, '2', 'C', '215'),
+	(53, '2', 'C', '216'),
+	(54, '2', 'C', '217'),
+	(55, '2', 'C', '218'),
+	(56, '2', 'C', '219'),
+	(57, '2', 'C', '220'),
+	(58, '2', 'C', '221'),
+	(59, '2', 'C', '222'),
+	(60, '2', 'C', '223'),
+	(61, '2', 'C', '224'),
+	(62, '2', 'C', '225'),
+	(63, '2', 'C', '226'),
+	(64, '3', 'A', '333'),
+	(65, '3', 'A', '334'),
+	(66, '3', 'A', '335'),
+	(67, '3', 'A', '336'),
+	(68, '3', 'A', '337'),
+	(69, '3', 'A', '338'),
+	(70, '3', 'A', '339'),
+	(71, '3', 'A', '340'),
+	(72, '3', 'A', '341'),
+	(73, '3', 'A', '342'),
+	(74, '3', 'A', '343'),
+	(75, '3', 'A', '345'),
+	(76, '3', 'B', '301'),
+	(77, '3', 'B', '302'),
+	(78, '3', 'B', '303'),
+	(79, '3', 'B', '304'),
+	(80, '3', 'B', '305'),
+	(81, '3', 'B', '306'),
+	(82, '3', 'B', '307'),
+	(83, '3', 'B', '308'),
+	(84, '3', 'B', '309'),
+	(85, '3', 'B', '310'),
+	(86, '3', 'B', '311'),
+	(87, '3', 'B', '312'),
+	(88, '3', 'C', '315'),
+	(89, '3', 'C', '316'),
+	(90, '3', 'C', '317'),
+	(91, '3', 'C', '318'),
+	(92, '3', 'C', '319'),
+	(93, '3', 'C', '320'),
+	(94, '3', 'C', '321'),
+	(95, '3', 'C', '322'),
+	(96, '3', 'C', '323'),
+	(97, '3', 'C', '324'),
+	(98, '3', 'C', '325'),
+	(99, '3', 'C', '326');
+/*!40000 ALTER TABLE `habitaciones` ENABLE KEYS */;
+
 -- Volcando estructura para tabla portal_oxohotel.locaciones
 DROP TABLE IF EXISTS `locaciones`;
 CREATE TABLE IF NOT EXISTS `locaciones` (
@@ -64,7 +178,7 @@ CREATE TABLE IF NOT EXISTS `locaciones` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
--- Volcando datos para la tabla portal_oxohotel.locaciones: ~1 rows (aproximadamente)
+-- Volcando datos para la tabla portal_oxohotel.locaciones: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `locaciones` DISABLE KEYS */;
 REPLACE INTO `locaciones` (`id`, `nombre`, `direccion`, `pais`, `ciudad`, `telefono`, `PaginaWeb`) VALUES
 	(1, 'Primera Locacion ', 'direccion', 'colombia', 'cartagena', '3212243289', 'paginaWeb');
@@ -296,7 +410,28 @@ REPLACE INTO `paises` (`id`, `nombre_esp`, `nombre_en`, `nombre_fr`, `iso2`, `is
 	(208, 'Zimbabue', 'Zimbabwe', 'Zimbabwe', 'ZW', 'ZWE', 263);
 /*!40000 ALTER TABLE `paises` ENABLE KEYS */;
 
+-- Volcando estructura para tabla portal_oxohotel.portal_cautivo_habitaciones
+DROP TABLE IF EXISTS `portal_cautivo_habitaciones`;
+CREATE TABLE IF NOT EXISTS `portal_cautivo_habitaciones` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id_evento` bigint(20) NOT NULL,
+  `fecha_creacion` datetime DEFAULT CURRENT_TIMESTAMP,
+  `nombre` varchar(255) DEFAULT NULL,
+  `apellidos` varchar(250) DEFAULT NULL,
+  `num_habitacion` varchar(255) DEFAULT NULL,
+  `num_voucher` varchar(255) DEFAULT NULL,
+  `os` varchar(255) DEFAULT NULL,
+  `ssid` varchar(250) DEFAULT NULL,
+  `mac_cliente` varchar(250) DEFAULT NULL,
+  `ip_cliente` varchar(250) DEFAULT NULL,
+  `ip_ap` varchar(250) DEFAULT NULL,
+  `mac_ap` varchar(250) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4;
 
+-- Volcando datos para la tabla portal_oxohotel.portal_cautivo_habitaciones: ~0 rows (aproximadamente)
+/*!40000 ALTER TABLE `portal_cautivo_habitaciones` DISABLE KEYS */;
+/*!40000 ALTER TABLE `portal_cautivo_habitaciones` ENABLE KEYS */;
 
 -- Volcando estructura para tabla portal_oxohotel.publicidad_a_2019_campania
 DROP TABLE IF EXISTS `publicidad_a_2019_campania`;
@@ -322,30 +457,30 @@ CREATE TABLE IF NOT EXISTS `publicidad_a_2019_campania` (
 -- Volcando datos para la tabla portal_oxohotel.publicidad_a_2019_campania: ~24 rows (aproximadamente)
 /*!40000 ALTER TABLE `publicidad_a_2019_campania` DISABLE KEYS */;
 REPLACE INTO `publicidad_a_2019_campania` (`id`, `id_evento`, `fecha_creacion`, `nombre`, `email`, `edad`, `telefono`, `genero`, `os`, `ssid`, `mac_cliente`, `ip_cliente`, `ip_ap`, `mac_ap`, `id_pais`) VALUES
-	(1, 1, '2020-01-06 11:37:31', 'Juan David pachon Suzunaga', 'juan.suzunaga@gmail.com', '32', '3223650805', 'Mujer', 'Android', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', NULL, '1'),
-	(2, 1, '2019-10-25 11:56:10', 'Juan david', 'juan.suzunaga@email.com', '21', '3223650805', 'Hombre', 'Windows', 'oxohotel_1', '30074d8595f0', '192.168.0.12', '192.168.0.23', '60d02c2d04f0', '2'),
-	(3, 1, '0000-00-00 00:00:00', 'Soporte', 'soport@soporte.com', '66', '2131472580', 'Hombre', 'MacOS', 'oxohotel_1', 'd0c5f3c5da5a', '192.168.0.14', '192.168.0.23', '60d02c2d04f0', '2'),
-	(4, 1, '2019-10-24 11:57:59', 'Hola', 'hoq@gsjd.xon', '77', '2312536325', 'Hombre', 'Windows', 'oxohotel_1', 'd0c5f3c5da5a', '192.168.0.14', '192.168.0.23', '60d02c2d04f0', '4'),
-	(5, 1, '2019-10-25 12:00:32', 'Juan', 'juan.suzunaga@gmail.com', '23', '2345678654321', 'Hombre', 'Windows', 'oxohotel_1', '34e12d43a922', '192.168.0.13', '192.168.0.23', '60d02c2d04f0', '5'),
-	(6, 1, '2019-10-24 12:31:33', 'Hola', 'ge@gsjd.com', '66', '3214569807', 'Mujer', 'Android', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '20'),
-	(7, 1, '2019-10-30 02:47:20', 'Gerardo Mendoza', 'ger@correo.com.co', '34', '1231234565', 'Hombre', 'MacOS', 'oxohotel_1', '34e12d43a922', '192.168.0.13', '192.168.0.23', '60d02c2d04f0', '30'),
-	(8, 1, '2019-10-24 02:48:16', 'Gerardp Mendoza', 'ger@correo.com', '32', '32222121212', 'Hombre', 'Windows', 'oxohotel_1', '34e12d43a922', '192.168.0.13', '192.168.0.23', '60d02c2d04f0', '50'),
-	(9, 1, '2019-10-31 02:49:16', 'Gerardo Mendoza', 'ger@correo.com', '35', '3445633432', 'Hombre', 'Windows', 'oxohotel_1', '34e12d43a922', '192.168.0.13', '192.168.0.23', '60d02c2d04f0', '13'),
-	(10, 1, '2019-10-24 05:11:39', 'sdjflsd sdjfsdkjf', 'sdsds@gmail.com', '34', '3156726860', 'Otro', 'Linux', '', '', '', '', '', '22'),
-	(11, 1, '2019-10-28 09:24:21', 'Juan David', 'juan.suzunaga@gmail.com', '30', '3223650805', 'Hombre', 'MacOS', 'oxohotel_1', '34e12d43a922', '192.168.0.11', '192.168.0.13', '60d02c2d04f0', '15'),
-	(12, 1, '2020-01-07 03:25:30', 'Juan', 'juan.suzunaga@gmail.com', '23', '1234567654321', 'Mujer', 'Android', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '12'),
-	(13, 1, '2019-10-30 03:17:30', '', '', '', '', '', '', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '50'),
-	(14, 1, '2019-10-30 03:18:45', '', '', '', '', '', '', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '208'),
-	(15, 1, '2019-10-30 03:21:34', 'pedro', 'pepe@hotmail.com', '12', '12345234124', 'Mujer', '', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '22'),
-	(16, 1, '2019-10-30 03:44:32', 'Juan David', 'juan.suzunaga@gmail.com', '12', '123456712345', 'Hombre', 'Windows', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '5'),
-	(17, 1, '2019-10-30 03:53:03', 'Juan David', 'juan.suzunaga@gmail.com', '12', '1234567890', 'Hombre', 'Windows', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '1'),
-	(18, 1, '2019-10-30 03:53:28', 'QWERTY', 'juan.suzunaga@gmail.com', '12', '23452345676543', 'Hombre', 'Windows', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '1'),
-	(19, 1, '2019-10-30 03:54:08', 'Juan David', 'juan.suzunaga@gmail.com', '32', '12345623452', 'Hombre', 'Windows', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '2'),
-	(20, 1, '2020-01-05 03:58:57', 'Juan David', 'juan.suzunaga@gmail.com', '12', '1234567890', 'Hombre', 'Windows', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '1'),
-	(21, 1, '2019-10-30 04:01:06', 'Juan David', 'juan.suzunaga@gmail.com', '23', '1234567812', 'Hombre', 'Windows', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '1'),
-	(22, 1, '2019-10-30 06:32:39', 'Jorge Eduardo', 'jpqjp@com', '34', '3223453456', 'Hombre', 'Otro', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '10'),
-	(23, 1, '2019-12-14 09:51:27', 'dccsd', 'dsf@email.com', '23', '3213424234324', 'Mujer', 'Windows', '', '', '', '', '', NULL),
-	(24, 1, '2020-01-07 20:08:50', 'dsads', 'sfds@email.com', '22', '3212234335', 'Mujer', 'Windows', '', '', '', '', '', '40');
+	(1, 1, '2020-01-07 14:20:00', 'Juan David pachon Suzunaga', 'juan.suzunaga@gmail.com', '32', '3223650805', 'Mujer', 'Android', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', NULL, '1'),
+	(2, 1, '2020-01-07 14:20:00', 'Juan david', 'juan.suzunaga@email.com', '21', '3223650805', 'Hombre', 'Windows', 'oxohotel_1', '30074d8595f0', '192.168.0.12', '192.168.0.23', '60d02c2d04f0', '2'),
+	(3, 1, '2020-01-07 14:20:00', 'Soporte', 'soport@soporte.com', '66', '2131472580', 'Hombre', 'MacOS', 'oxohotel_1', 'd0c5f3c5da5a', '192.168.0.14', '192.168.0.23', '60d02c2d04f0', '2'),
+	(4, 1, '2020-01-07 14:20:00', 'Hola', 'hoq@gsjd.xon', '77', '2312536325', 'Hombre', 'Windows', 'oxohotel_1', 'd0c5f3c5da5a', '192.168.0.14', '192.168.0.23', '60d02c2d04f0', '4'),
+	(5, 1, '2020-01-07 14:20:00', 'Juan', 'juan.suzunaga@gmail.com', '23', '2345678654321', 'Hombre', 'Windows', 'oxohotel_1', '34e12d43a922', '192.168.0.13', '192.168.0.23', '60d02c2d04f0', '5'),
+	(6, 1, '2020-01-07 14:20:00', 'Hola', 'ge@gsjd.com', '66', '3214569807', 'Mujer', 'Android', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '20'),
+	(7, 1, '2020-01-07 14:20:00', 'Gerardo Mendoza', 'ger@correo.com.co', '34', '1231234565', 'Hombre', 'MacOS', 'oxohotel_1', '34e12d43a922', '192.168.0.13', '192.168.0.23', '60d02c2d04f0', '30'),
+	(8, 1, '2020-01-07 14:20:00', 'Gerardp Mendoza', 'ger@correo.com', '32', '32222121212', 'Hombre', 'Windows', 'oxohotel_1', '34e12d43a922', '192.168.0.13', '192.168.0.23', '60d02c2d04f0', '50'),
+	(9, 1, '2020-01-07 14:20:00', 'Gerardo Mendoza', 'ger@correo.com', '35', '3445633432', 'Hombre', 'Windows', 'oxohotel_1', '34e12d43a922', '192.168.0.13', '192.168.0.23', '60d02c2d04f0', '13'),
+	(10, 1, '2020-01-07 14:20:00', 'sdjflsd sdjfsdkjf', 'sdsds@gmail.com', '34', '3156726860', 'Otro', 'Linux', '', '', '', '', '', '22'),
+	(11, 1, '2020-01-07 14:20:00', 'Juan David', 'juan.suzunaga@gmail.com', '30', '3223650805', 'Hombre', 'MacOS', 'oxohotel_1', '34e12d43a922', '192.168.0.11', '192.168.0.13', '60d02c2d04f0', '15'),
+	(12, 1, '2020-01-07 14:20:00', 'Juan', 'juan.suzunaga@gmail.com', '23', '1234567654321', 'Mujer', 'Android', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '12'),
+	(13, 1, '2020-01-07 14:20:00', '', '', '', '', '', '', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '50'),
+	(14, 1, '2020-01-07 14:20:00', '', '', '', '', '', '', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '208'),
+	(15, 1, '2020-01-07 14:20:00', 'pedro', 'pepe@hotmail.com', '12', '12345234124', 'Mujer', '', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '22'),
+	(16, 1, '2020-01-07 14:20:00', 'Juan David', 'juan.suzunaga@gmail.com', '12', '123456712345', 'Hombre', 'Windows', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '5'),
+	(17, 1, '2020-01-07 14:20:00', 'Juan David', 'juan.suzunaga@gmail.com', '12', '1234567890', 'Hombre', 'Windows', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '1'),
+	(18, 1, '2020-01-07 14:20:00', 'QWERTY', 'juan.suzunaga@gmail.com', '12', '23452345676543', 'Hombre', 'Windows', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '1'),
+	(19, 1, '2020-01-07 14:20:00', 'Juan David', 'juan.suzunaga@gmail.com', '32', '12345623452', 'Hombre', 'Windows', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '2'),
+	(20, 1, '2020-01-07 14:20:00', 'Juan David', 'juan.suzunaga@gmail.com', '12', '1234567890', 'Hombre', 'Windows', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '1'),
+	(21, 1, '2020-01-07 14:20:00', 'Juan David', 'juan.suzunaga@gmail.com', '23', '1234567812', 'Hombre', 'Windows', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '1'),
+	(22, 1, '2020-01-07 14:20:00', 'Jorge Eduardo', 'jpqjp@com', '34', '3223453456', 'Hombre', 'Otro', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '10'),
+	(23, 1, '2020-01-07 14:20:00', 'dccsd', 'dsf@email.com', '23', '3213424234324', 'Mujer', 'Windows', '', '', '', '', '', NULL),
+	(24, 1, '2020-01-07 14:20:00', 'dsads', 'sfds@email.com', '22', '3212234335', 'Mujer', 'Windows', '', '', '', '', '', '40');
 /*!40000 ALTER TABLE `publicidad_a_2019_campania` ENABLE KEYS */;
 
 -- Volcando estructura para tabla portal_oxohotel.publicidad_b_2019_campania
@@ -380,31 +515,13 @@ REPLACE INTO `publicidad_b_2019_campania` (`id`, `id_evento`, `fecha_creacion`, 
 	(13, 1, '2019-10-24 02:51:40', 'oxohotel_2', '34e12d43a922', '192.168.0.13', '192.168.0.23', '60d02c2d04f0');
 /*!40000 ALTER TABLE `publicidad_b_2019_campania` ENABLE KEYS */;
 
--- Volcando estructura para tabla portal_oxohotel_vouchers.portal_cautivo_habitaciones
-CREATE TABLE IF NOT EXISTS `portal_cautivo_habitaciones` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `id_evento` bigint(20) NOT NULL,
-  `fecha_creacion` datetime DEFAULT CURRENT_TIMESTAMP,
-  `nombre` varchar(255) DEFAULT NULL,
-  `apellidos` varchar(250) DEFAULT NULL,
-  `num_habitacion` varchar(255) DEFAULT NULL,
-  `num_voucher` varchar(255) DEFAULT NULL,
-  `os` varchar(255) DEFAULT NULL,
-  `ssid` varchar(250) DEFAULT NULL,
-  `mac_cliente` varchar(250) DEFAULT NULL,
-  `ip_cliente` varchar(250) DEFAULT NULL,
-  `ip_ap` varchar(250) DEFAULT NULL,
-  `mac_ap` varchar(250) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4;
-
 -- Volcando estructura para tabla portal_oxohotel.vouchers
 DROP TABLE IF EXISTS `vouchers`;
 CREATE TABLE IF NOT EXISTS `vouchers` (
   `id_voucher` int(11) NOT NULL AUTO_INCREMENT,
   `voucher` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
-  `fecha_inicio` date NOT NULL,
-  `fecha_fin` date NOT NULL,
+  `fecha_inicio` datetime NOT NULL,
+  `fecha_fin` datetime NOT NULL,
   `estado` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
   `id_campania` int(11) NOT NULL,
   `num_usos` int(11) NOT NULL,
@@ -413,146 +530,32 @@ CREATE TABLE IF NOT EXISTS `vouchers` (
   PRIMARY KEY (`id_voucher`)
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
--- Volcando datos para la tabla portal_oxohotel.vouchers: ~22 rows (aproximadamente)
+-- Volcando datos para la tabla portal_oxohotel.vouchers: ~15 rows (aproximadamente)
 /*!40000 ALTER TABLE `vouchers` DISABLE KEYS */;
-REPLACE INTO `vouchers` (`id_voucher`, `voucher`, `fecha_inicio`, `fecha_fin`, `estado`, `id_campania`, `num_usos`,`total_num_usos`, `id_locacion`) VALUES
-	(1, 'f05de4', '2020-01-01', '2020-01-15', 'Sin Uso', 12, 3, 3, 1),
-	(2, '3064b9', '2020-01-01', '2020-01-15', 'Sin Uso', 12, 3, 3, 1),
-	(3, '497ee4', '2020-01-01', '2020-01-15', 'Sin Uso', 12, 3, 3, 1),
-	(4, '9d62d5', '2020-01-01', '2020-01-15', 'Sin Uso', 12, 3, 3, 1),
-	(5, 'dcc4f5', '2020-01-01', '2020-01-15', 'Sin Uso', 12, 3, 3, 1),
-	(6, '9d0a11', '2020-01-01', '2020-01-15', 'Sin Uso', 12, 3, 3, 1),
-	(7, 'a5a3fe', '2020-01-01', '2020-01-15', 'Sin Uso', 12, 3, 3, 1),
-	(8, 'a3db30', '2020-01-01', '2020-01-15', 'Sin Uso', 12, 3, 3, 1),
-	(9, '177c4e', '2020-01-01', '2020-01-15', 'Sin Uso', 12, 3, 3, 1),
-	(10, '93aa3b', '2020-01-01', '2020-01-15', 'Sin Uso', 12, 3, 3, 1),
-	(11, 'c270ff', '2020-01-08', '2020-02-01', 'Sin Uso', 13, 3, 3, 1),
-	(12, '2224df', '2020-01-08', '2020-02-01', 'Sin Uso', 13, 3, 3, 1),
-	(13, 'ef4f64', '2020-01-08', '2020-02-01', 'Sin Uso', 13, 3, 3, 1),
-	(14, 'ef9866', '2020-01-08', '2020-02-01', 'Sin Uso', 13, 3, 3, 1),
-	(15, 'f1e576', '2020-01-08', '2020-02-01', 'Sin Uso', 13, 3, 3, 1),
-	(16, '66610e', '2020-01-08', '2020-02-01', 'Sin Uso', 13, 3, 3, 1),
-	(17, '94573d', '2020-01-08', '2020-02-01', 'Sin Uso', 13, 3, 3, 1),
-	(18, '3f29f7', '2020-01-08', '2020-02-01', 'Sin Uso', 13, 3, 3, 1),
-	(19, 'dcc805', '2020-01-08', '2020-02-01', 'Sin Uso', 13, 3, 3, 1),
-	(20, 'ffedfc', '2020-01-08', '2020-02-01', 'Sin Uso', 13, 3, 3, 1),
-	(21, '193fe6', '2020-01-08', '2020-02-01', 'Sin Uso', 13, 3, 3, 1),
-	(22, '846d32', '2020-01-08', '2020-02-01', 'Sin Uso', 13, 3, 3, 1);
+REPLACE INTO `vouchers` (`id_voucher`, `voucher`, `fecha_inicio`, `fecha_fin`, `estado`, `id_campania`, `num_usos`, `total_num_usos`, `id_locacion`) VALUES
+	(1, 'f05de4', '2020-01-01 00:00:00', '2020-01-15 00:00:00', 'Sin Uso', 12, 3, 3, 1),
+	(2, '3064b9', '2020-01-01 00:00:00', '2020-01-15 00:00:00', 'Sin Uso', 12, 3, 3, 1),
+	(3, '497ee4', '2020-01-01 00:00:00', '2020-01-15 00:00:00', 'Sin Uso', 12, 3, 3, 1),
+	(4, '9d62d5', '2020-01-01 00:00:00', '2020-01-15 00:00:00', 'Sin Uso', 12, 3, 3, 1),
+	(5, 'dcc4f5', '2020-01-01 00:00:00', '2020-01-15 00:00:00', 'Sin Uso', 12, 3, 3, 1),
+	(6, '9d0a11', '2020-01-01 00:00:00', '2020-01-15 00:00:00', 'Sin Uso', 12, 3, 3, 1),
+	(7, 'a5a3fe', '2020-01-01 00:00:00', '2020-01-15 00:00:00', 'Sin Uso', 12, 3, 3, 1),
+	(8, 'a3db30', '2020-01-01 00:00:00', '2020-01-15 00:00:00', 'Sin Uso', 12, 3, 3, 1),
+	(9, '177c4e', '2020-01-01 00:00:00', '2020-01-15 00:00:00', 'Sin Uso', 12, 3, 3, 1),
+	(10, '93aa3b', '2020-01-01 00:00:00', '2020-01-15 00:00:00', 'Sin Uso', 12, 3, 3, 1),
+	(11, 'c270ff', '2020-01-08 00:00:00', '2020-02-01 00:00:00', 'Sin Uso', 13, 3, 3, 1),
+	(12, '2224df', '2020-01-08 00:00:00', '2020-02-01 00:00:00', 'Sin Uso', 13, 3, 3, 1),
+	(13, 'ef4f64', '2020-01-08 00:00:00', '2020-02-01 00:00:00', 'Sin Uso', 13, 3, 3, 1),
+	(14, 'ef9866', '2020-01-08 00:00:00', '2020-02-01 00:00:00', 'Sin Uso', 13, 3, 3, 1),
+	(15, 'f1e576', '2020-01-08 00:00:00', '2020-02-01 00:00:00', 'Sin Uso', 13, 3, 3, 1),
+	(16, '66610e', '2020-01-08 00:00:00', '2020-02-01 00:00:00', 'Sin Uso', 13, 3, 3, 1),
+	(17, '94573d', '2020-01-08 00:00:00', '2020-02-01 00:00:00', 'Sin Uso', 13, 3, 3, 1),
+	(18, '3f29f7', '2020-01-08 00:00:00', '2020-02-01 00:00:00', 'Sin Uso', 13, 3, 3, 1),
+	(19, 'dcc805', '2020-01-08 00:00:00', '2020-02-01 00:00:00', 'Sin Uso', 13, 3, 3, 1),
+	(20, 'ffedfc', '2020-01-08 00:00:00', '2020-02-01 00:00:00', 'Sin Uso', 13, 3, 3, 1),
+	(21, '193fe6', '2020-01-08 00:00:00', '2020-02-01 00:00:00', 'Sin Uso', 13, 3, 3, 1),
+	(22, '846d32', '2020-01-08 00:00:00', '2020-02-01 00:00:00', 'Sin Uso', 13, 3, 3, 1);
 /*!40000 ALTER TABLE `vouchers` ENABLE KEYS */;
-
--- Volcando estructura para tabla portal_oxohotel_vouchers.habitaciones
-CREATE TABLE IF NOT EXISTS `habitaciones` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `piso` varchar(45) DEFAULT NULL,
-  `bloque` varchar(45) DEFAULT NULL,
-  `num_habitacion` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4;
-
--- Volcando datos para la tabla portal_oxohotel_vouchers.habitaciones: ~99 rows (aproximadamente)
-DELETE FROM `habitaciones`;
-/*!40000 ALTER TABLE `habitaciones` DISABLE KEYS */;
-INSERT INTO `habitaciones` (`id`, `piso`, `bloque`, `num_habitacion`) VALUES
-	(1, '1', 'B', '101'),
-	(2, '1', 'B', '102'),
-	(3, '1', 'B', '105'),
-	(4, '1', 'B', '106'),
-	(5, '1', 'B', '107'),
-	(6, '1', 'B', '108'),
-	(7, '1', 'B', '109'),
-	(8, '1', 'B', '110'),
-	(9, '1', 'B', '111'),
-	(10, '1', 'B', '112'),
-	(11, '1', 'B', '113'),
-	(12, '1', 'C', '115'),
-	(13, '1', 'C', '116'),
-	(14, '1', 'C', '119'),
-	(15, '1', 'C', '120'),
-	(16, '1', 'C', '121'),
-	(17, '1', 'C', '122'),
-	(18, '1', 'C', '123'),
-	(19, '1', 'C', '124'),
-	(20, '1', 'C', '125'),
-	(21, '1', 'C', '126'),
-	(22, '2', 'A', '227'),
-	(23, '2', 'A', '228'),
-	(24, '2', 'A', '229'),
-	(25, '2', 'A', '230'),
-	(26, '2', 'A', '231'),
-	(27, '2', 'A', '233'),
-	(28, '2', 'A', '234'),
-	(29, '2', 'A', '235'),
-	(30, '2', 'A', '236'),
-	(31, '2', 'A', '237'),
-	(32, '2', 'A', '238'),
-	(33, '2', 'A', '239'),
-	(34, '2', 'A', '240'),
-	(35, '2', 'A', '241'),
-	(36, '2', 'A', '242'),
-	(37, '2', 'A', '243'),
-	(38, '2', 'A', '245'),
-	(39, '2', 'B', '201'),
-	(40, '2', 'B', '202'),
-	(41, '2', 'B', '203'),
-	(42, '2', 'B', '204'),
-	(43, '2', 'B', '205'),
-	(44, '2', 'B', '206'),
-	(45, '2', 'B', '207'),
-	(46, '2', 'B', '208'),
-	(47, '2', 'B', '209'),
-	(48, '2', 'B', '210'),
-	(49, '2', 'B', '211'),
-	(50, '2', 'B', '212'),
-	(51, '2', 'B', '213'),
-	(52, '2', 'C', '215'),
-	(53, '2', 'C', '216'),
-	(54, '2', 'C', '217'),
-	(55, '2', 'C', '218'),
-	(56, '2', 'C', '219'),
-	(57, '2', 'C', '220'),
-	(58, '2', 'C', '221'),
-	(59, '2', 'C', '222'),
-	(60, '2', 'C', '223'),
-	(61, '2', 'C', '224'),
-	(62, '2', 'C', '225'),
-	(63, '2', 'C', '226'),
-	(64, '3', 'A', '333'),
-	(65, '3', 'A', '334'),
-	(66, '3', 'A', '335'),
-	(67, '3', 'A', '336'),
-	(68, '3', 'A', '337'),
-	(69, '3', 'A', '338'),
-	(70, '3', 'A', '339'),
-	(71, '3', 'A', '340'),
-	(72, '3', 'A', '341'),
-	(73, '3', 'A', '342'),
-	(74, '3', 'A', '343'),
-	(75, '3', 'A', '345'),
-	(76, '3', 'B', '301'),
-	(77, '3', 'B', '302'),
-	(78, '3', 'B', '303'),
-	(79, '3', 'B', '304'),
-	(80, '3', 'B', '305'),
-	(81, '3', 'B', '306'),
-	(82, '3', 'B', '307'),
-	(83, '3', 'B', '308'),
-	(84, '3', 'B', '309'),
-	(85, '3', 'B', '310'),
-	(86, '3', 'B', '311'),
-	(87, '3', 'B', '312'),
-	(88, '3', 'C', '315'),
-	(89, '3', 'C', '316'),
-	(90, '3', 'C', '317'),
-	(91, '3', 'C', '318'),
-	(92, '3', 'C', '319'),
-	(93, '3', 'C', '320'),
-	(94, '3', 'C', '321'),
-	(95, '3', 'C', '322'),
-	(96, '3', 'C', '323'),
-	(97, '3', 'C', '324'),
-	(98, '3', 'C', '325'),
-	(99, '3', 'C', '326');
-/*!40000 ALTER TABLE `habitaciones` ENABLE KEYS */;
 
 -- Volcando estructura para tabla portal_oxohotel.zonas
 DROP TABLE IF EXISTS `zonas`;

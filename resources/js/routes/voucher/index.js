@@ -5,12 +5,13 @@ import IntlMessages from "Util/IntlMessages";
 import MUIDataTable from "mui-datatables";
 import RctCollapsibleCard from 'Components/RctCollapsibleCard/RctCollapsibleCard';
 import IconButton from "@material-ui/core/IconButton";
-import AddIcon from "@material-ui/icons/Add";
+import { DateTimePicker } from '@material-ui/pickers';
+import moment from "moment";
 import { Route, Link } from 'react-router-dom'
 import SweetAlert from 'react-bootstrap-sweetalert'
 import Button from '@material-ui/core/Button';
 import CustomToolbar from "../../util/CustomToolbar";
-import { Input, Select } from '@material-ui/core';
+import { Input, TextField , Select, InputLabel, MenuItem } from '@material-ui/core';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 
 import './styles.css'
@@ -33,8 +34,8 @@ export default class Voucher extends Component {
 			
 			form: {
 				campaña: "",
-				fecha_inicio: "",
-				fecha_fin: "",
+				fecha_inicio: moment(new Date, 'YYYY/MM/DD hh:mm a'),
+				fecha_fin: moment(new Date, 'YYYY/MM/DD hh:mm a'),
 				numerovouchers: "",
 				numerousos:"",
 				id_location: id_location,
@@ -156,15 +157,43 @@ export default class Voucher extends Component {
 	}
 
 	openAlert(key) {
-		this.setState({ [key]: true });
+		const id_location = localStorage.user_location
+		this.setState({ 
+			[key]: true,
+			form: {
+				campaña: "",
+				fecha_inicio: moment(new Date, 'YYYY/MM/DD hh:mm a'),
+				fecha_fin: moment(new Date, 'YYYY/MM/DD hh:mm a'),
+				numerovouchers: "",
+				numerousos:"",
+				id_location: id_location,
+			}
+		});
 	}
 
 	onCancel(key) {
 		this.setState({ [key]: false })
 	}
-	handleChange(e) {
-		this.state.form[e.target.name] = e.target.value;
-	}
+
+	handleChange(e, name=null){
+        if(e.target){
+            this.state.form[e.target.name] = e.target.value;
+        }
+        else if(e._d){
+            let date = moment(e._d, 'YYYY/MM/DD hh:mm a');
+            let año = date.year();
+            let mes = date.month()+1;
+            let dia = date.date();
+            let hora = date.hour();
+			let minutos = date.minute();
+			this.setState({
+                form:{
+            		...this.state.form,
+                    [name]: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos)
+                }
+            })
+        }
+    }
 
 	render() {
 		const columns = this.state.nameColumns;
@@ -211,16 +240,17 @@ export default class Voucher extends Component {
 						Crear
 					</Button>
 						<SweetAlert
-							btnSize="sm"
+							// btnSize="sm"
 							show={prompt}
-							showCancel
-							confirmBtnText="Guardar"
-							cancelBtnText="Cancelar"
-							cancelBtnBsStyle="danger"
-							confirmBtnBsStyle="success"
+							showConfirm={false}
+							// showCancel
+							// confirmBtnText="Guardar"
+							// cancelBtnText="Cancelar"
+							// cancelBtnBsStyle="danger"
+							// confirmBtnBsStyle="success"
 							title="Crear Vouchers"
 							onConfirm={() => this.handleSubmitVouchers(event)}
-							onCancel={() => this.onCancel('prompt')}
+							// onCancel={() => this.onCancel('prompt')}
 						>
 							<form onSubmit={this.handleSubmitVouchers}>
 								<div className="row">
@@ -236,53 +266,86 @@ export default class Voucher extends Component {
 										</Select>
 									</div>
 									<div className="col-lg-5 mb-4 ml-3" >
-
-										<Input
+										<TextField 
+											label="N° Vouchers"
 											type="number"
 											name="numerovouchers"
 											id="numerovouchers"
 											max={500}
+											required
 											className="has-input input-lg"
-											placeholder="numero Vouchers"
 											onChange={() => this.handleChange(event)}
 										/>
 									</div>
 								</div>
 								<div className="row">
 									<div className="col-lg-5 mb-4 ml-3" >
-										<Input
-											type="date"
-											name="fecha_inicio"
-											id="fecha_inicio"
+										<DateTimePicker 
 											className="has-input input-lg"
-											placeholder="Fecha Inicial"
-											onChange={() => this.handleChange(event)}
+											key="fecha_inicio"
+											label="Fecha Inicio"
+											required
+											value={form.fecha_inicio}
+											minDate={moment(new Date, 'YYYY/MM/DD hh:mm a')}
+											format="YYYY/MM/DD hh:mm a"
+											onChange={(event) => this.handleChange(event, 'fecha_inicio')}
+											animateYearScrolling={false}
+											leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
+											rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
+											showTodayButton={true}
 										/>
 									</div>
-									<div className="col-lg-6">
-										<Input
-											type="date"
-											name="fecha_fin"
-											id="fecha_fin"
+									<div className="col-lg-5 mb-4 ml-3">
+										<DateTimePicker 
 											className="has-input input-lg"
-											placeholder="Fecha Final"
-											onChange={() => this.handleChange(event)}
+											key="fecha_fin"
+											label="Fecha Fin"
+											required
+											value={form.fecha_fin}
+											minDate={moment(form.fecha_inicio, 'YYYY/MM/DD hh:mm a')}
+											format="YYYY/MM/DD hh:mm a"
+											onChange={(event) => this.handleChange(event, 'fecha_fin')}
+											animateYearScrolling={false}
+											leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
+											rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
+											showTodayButton={true}
 										/>
 									</div>
 								</div>
 								<div className="row">
 
 									<div className="col-lg-5 mb-4 ml-3" >
-										<Input
+										<TextField 
 											type="text"
+											label="N° de Dispositivos por Voucher"
 											name="numerousos"
 											id="numerousos"
+											required={true}
 											className="has-input input-lg"
 											placeholder="Cantidad de usos"
 											onChange={() => this.handleChange(event)}
 										/>
 									</div>
 
+								</div>
+								<div className="row">
+									<div className="col-lg-3 col-md-3 col-sm-12 offset-lg-3 offset-md-3">
+										<Button
+											type="submit"
+											className="btn btn-danger mr-1"
+											onClick={() => this.onCancel('prompt')}
+										>
+											Cancelar
+										</Button>
+									</div>
+									<div className="col-lg-3 col-md-3 col-sm-12">
+										<Button
+											type="submit"
+											className="btn btn-success ml-1"
+										>
+											Guardar
+										</Button>
+									</div>
 								</div>
 							</form>
 
@@ -317,7 +380,7 @@ export default class Voucher extends Component {
 					<form onSubmit={this.handleSubmit}>
 					<div className="row">			
 						<div className="col-6 mb-6 ml-6 offset-3">
-							<Input
+							<TextField 
 								type="email"
 								name="email"
 								id="email"	
