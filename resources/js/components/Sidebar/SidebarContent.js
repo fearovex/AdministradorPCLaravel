@@ -58,6 +58,7 @@ class SidebarContent extends Component {
                 
                     <List
                         className="rct-mainMenu p-0 m-0 list-unstyled"
+                        subheader={<ListSubheader className="side-title" component="li"></ListSubheader>}
                     >
                         {sidebarMenus.category1.map((menu, key) => (
                             <NavMenuItem
