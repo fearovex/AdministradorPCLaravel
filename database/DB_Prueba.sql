@@ -410,7 +410,6 @@ CREATE TABLE IF NOT EXISTS `vouchers` (
   `num_usos` int(11) NOT NULL,
   `id_locacion` int(11) NOT NULL,
   PRIMARY KEY (`id_voucher`),
-  UNIQUE KEY `voucher` (`voucher`)
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 -- Volcando datos para la tabla portal_oxohotel.vouchers: ~22 rows (aproximadamente)
