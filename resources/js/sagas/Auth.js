@@ -198,7 +198,15 @@ function* signinUserWithGithubAccount({ payload }) {
 function* signOut() {
     try {
         yield call(signOutRequest);
-        localStorage.clear();
+        localStorage.removeItem('user_id');
+        localStorage.removeItem('user_name');
+        localStorage.removeItem('user_email');
+        localStorage.removeItem('user_database');
+        localStorage.removeItem('user_imgdashboard');
+        localStorage.removeItem('user_dashboard');
+        localStorage.removeItem('user_location');
+        localStorage.removeItem('user_campaing');
+        localStorage.removeItem('user_module');
         yield put(logoutUserFromFirebaseSuccess())
     } catch (error) {
         yield put(logoutUserFromFirebaseFailure());
