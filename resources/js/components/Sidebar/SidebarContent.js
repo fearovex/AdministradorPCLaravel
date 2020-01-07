@@ -52,14 +52,12 @@ class SidebarContent extends Component {
     // <IntlMessages id="sidebar.events" />
     render() {
         const { sidebarMenus } = this.props.sidebar;
-        const { user_module } = localStorage;
         return (
             <div className="rct-sidebar-nav">
                 <nav className="navigation">
                 
                     <List
                         className="rct-mainMenu p-0 m-0 list-unstyled"
-                        subheader={<ListSubheader className="side-title" component="li">{user_module}</ListSubheader>}
                     >
                         {sidebarMenus.category1.map((menu, key) => (
                             <NavMenuItem
