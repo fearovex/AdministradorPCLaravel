@@ -28,7 +28,12 @@ class DetailEventsController extends Controller
         $select = "";
         foreach ($request->nameColumns as $column){
             $diccionario = DB::connection(session('database'))->table('diccionario')->select('name_column')->where('alias_column',$column)->first();
-            $select .= $diccionario->name_column."' ".$column."',";
+            if($diccionario){
+                $select .= $diccionario->name_column."' ".$column."',";
+            }
+            else{
+                $select .= $column.",";
+            }
         }        
         $select = substr($select, 0, -1);
         $totalInitialDate = $request->initialDate;

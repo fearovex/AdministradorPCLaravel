@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import MUIDataTable from "mui-datatables";
+import {createMuiTheme, MuiThemeProvider, withStyles} from '@material-ui/core/styles';
 import moment from "moment";
 
 // page title bar
@@ -55,6 +56,17 @@ export default class DetailEvents extends Component {
 		this.handleChangeFilter = this.handleChangeFilter.bind(this)
 	}
 	
+	getMuiTheme = () => createMuiTheme({
+		overrides: {
+			MUIDataTableHeadCell: {
+				root: {
+					// backgroundColor: "#000",
+					fontWeight: "bold",
+				}
+			}
+		}
+	});
+
 	async componentDidMount(){	
 		try {
 			//Consulta Nombre Columnas  -> Se hace la consulta de los nombres de las columnas de la tabla correspondiente
@@ -76,7 +88,7 @@ export default class DetailEvents extends Component {
 			for (let i = 0; i < dataNameColumns.length; i++) {
 				arrayNames.push.apply(arrayNames, Object.values(dataNameColumns[i]))
 			}
-			arrayNames = arrayNames.filter(names => names != 'id' && names != 'id_evento' && names != 'id_pais')
+			arrayNames = arrayNames.filter(names => names != 'id' && names != 'Campania' && names != 'Pais')
 			 // fin Proceso DataTable
 
 			 //Consulta Detalle -> Se consulta el detalle del evento de acuerdo a su tabla en la bd
@@ -237,30 +249,32 @@ export default class DetailEvents extends Component {
 		  };
 	  
 		return (
-			<div className="data-table-wrapper">
-				
-				<PageTitleBar title={<IntlMessages id="sidebar.detailEvents" />} match={this.props.match} />
-				
-				<RctCollapsibleCard>
-					<FilterDateForm
-						form={form}
-						onChange={this.handleChange}
-						onSubmit={this.handleDateFilter}
-						onClick={this.handleModal}
-						onChangeFilter={this.handleChangeFilter}
-						onCancel={this.handleDateFilterCancel}
-						campain={false}
-					/>
-				</RctCollapsibleCard>
-				<RctCollapsibleCard heading="Tabla de Datos" fullBlock>
-					<MUIDataTable
-						title={"Detalle Eventos"}
-						data={this.state.dataDetails}
-						columns={columns}
-						options={options}
-					/>
-				</RctCollapsibleCard>
-			</div>
+			<MuiThemeProvider theme={this.getMuiTheme()}>
+				<div className="data-table-wrapper">
+					
+					<PageTitleBar title={<IntlMessages id="sidebar.detailEvents" />} match={this.props.match} />
+					
+					<RctCollapsibleCard>
+						<FilterDateForm
+							form={form}
+							onChange={this.handleChange}
+							onSubmit={this.handleDateFilter}
+							onClick={this.handleModal}
+							onChangeFilter={this.handleChangeFilter}
+							onCancel={this.handleDateFilterCancel}
+							campain={false}
+						/>
+					</RctCollapsibleCard>
+					<RctCollapsibleCard heading="Tabla de Datos" fullBlock>
+						<MUIDataTable
+							title={"Detalle Eventos"}
+							data={this.state.dataDetails}
+							columns={columns}
+							options={options}
+						/>
+					</RctCollapsibleCard>
+				</div>
+			</MuiThemeProvider>
 		)
 	}
 }
