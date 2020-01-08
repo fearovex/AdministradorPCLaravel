@@ -64,6 +64,7 @@ class CampañaController extends Controller
     {
         $zonas = DB::connection(session('database'))
             ->table('campania')
+            ->select('id','nombre as Nombre','descripcion as Descripcion','fecha_inicio as Fecha Inicio','fecha_fin as Fecha Fin')
             ->where('id_locacion', $id)
             ->get();
             

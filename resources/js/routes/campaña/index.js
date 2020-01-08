@@ -47,6 +47,7 @@ export default class campañas extends Component {
 		this.handleChange = this.handleChange.bind(this);
 		this.handleEdit = this.handleEdit.bind(this);
 		this.openAlertTest = this.openAlertTest.bind(this);
+		this.DataCampania = this.DataCampania.bind(this);
 		
 	}   
 	async componentDidMount(){
@@ -72,7 +73,8 @@ export default class campañas extends Component {
 			let res = await fetch(`${localStorage.urlDomain}api/campanias/${id_location}`)
 			let datacampania = await res.json()
 			for (let i = 0; i < datacampania.length; i++) {
-				datacampania[i]["acciones"]=<Link to={location.pathname} onClick={() => this.openAlertTest('modaledit',datacampania[i].id)}>Editar</Link>
+				datacampania[i]["Editar"]=<Link to={location.pathname} onClick={() => this.openAlertTest('modaledit',datacampania[i].id)}>Editar</Link>
+				datacampania[i]["Datos"]=<Link to={location.pathname+'/'+datacampania[i].Nombre} onClick={() => this.DataCampania(datacampania[i].id)}>Datos</Link>
 			}
 
 			this.setState({
@@ -147,9 +149,15 @@ export default class campañas extends Component {
 
 	
 
-	 onConfirm(key) {
+	onConfirm(key) {
 		this.setState({ [key]: false })
 	}
+
+
+	DataCampania(id_campain) {
+		localStorage.setItem('user_campaing', id_campain);
+	}
+
 
 	/**
 	 * Open Alert
@@ -196,7 +204,7 @@ export default class campañas extends Component {
     render() {
 		const {data} = this.state;
 		const {datacampania} = this.state;
-        const columns = ['nombre','descripcion','fecha_inicio','fecha_fin','acciones'];
+        const columns = ['Nombre','Descripcion','Fecha Inicio','Fecha Fin','Editar','Datos'];
         const { basic, withDes, success, warning, customIcon, withHtml, prompt, passwordPrompt, customStyle, modaledit} = this.state;
 		const options = {
 			filterType: 'dropdown',

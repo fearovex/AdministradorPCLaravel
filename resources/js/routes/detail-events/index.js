@@ -41,7 +41,8 @@ export default class DetailEvents extends Component {
                 initialDate: initialDate,
                 finalDate: finalDate,
                 id_event: id_campain,
-				id_location: id_location
+				id_location: id_location,
+				nameColumns: [],
 			},
 			nameColumns: [],
 			dataDetails: [],
@@ -82,6 +83,10 @@ export default class DetailEvents extends Component {
 
 			this.setState({
 				nameColumns: arrayNames,
+				form:{
+					...this.state.form,
+					nameColumns: arrayNames,
+				}
 			})
 			//fin Consulta Detalle
 				

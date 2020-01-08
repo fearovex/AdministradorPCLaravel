@@ -35,28 +35,26 @@ Route::group(['middleware' => 'cors'], function() {
         
         Route::post('/nameColumnNames','DetailEventsController@getColumnNames');
         
-        Route::resource('/locations','LocationsController');
-        
-        
+        Route::resource('/locations','LocationsController');    
         
         Route::get('/logout', 'Auth\LoginController@logout');
 
-         Route::resource('/campanias','CampañaController');
+        Route::resource('/campanias','CampañaController');
 
-         Route::resource('/zonas','ZonaController');
+        Route::resource('/zonas','ZonaController');
 
-         Route::resource('/dispositivos','DispositivoController');
+        Route::resource('/dispositivos','DispositivoController');
 
-         Route::resource('/editzona','ZonaController');
+        Route::resource('/editzona','ZonaController');
 
-         Route::resource('/editdispositivo','DispositivoController');
+        Route::resource('/editdispositivo','DispositivoController');
 
-         Route::post("/vouchers/create","VouchersController@create");
+        Route::post("/vouchers/create","VouchersController@create");
 
-         Route::post("/vouchers/store","VouchersController@store");
+        Route::post("/vouchers/store","VouchersController@store");
 
-         Route::post("/vouchers","VouchersController@index");
+        Route::post("/vouchers","VouchersController@index");
 
-         Route::post('/csvEmail', 'Api\CsvEmail@sendResetLinkEmail');
+        Route::post('/csvEmail', 'Api\CsvEmail@sendResetLinkEmail');
     });
  });
