@@ -59,7 +59,7 @@ export default class Analytical extends Component {
                 initialDate: initialDate,
                 finalDate: finalDate,
                 id_event: 0,
-                columns: ["genero","ip_ap","id_pais","os","fecha_creacion","edad"],
+                columns: ["genero","mac_ap","id_pais","os","fecha_creacion","edad"],
                 id_location: id_location,
                 campania: 'Todas',
             },
@@ -256,7 +256,7 @@ export default class Analytical extends Component {
                         <CardBody>
                             <CardTitle><IntlMessages id="graphics.ap" /></CardTitle>
                         </CardBody>
-                        <ChartAp data={this.state.data.ip_ap} paddingRight={20}/>
+                        <ChartAp data={this.state.data.mac_ap} paddingRight={20}/>
                     </Card>
                     <Card>
                         <CardBody>

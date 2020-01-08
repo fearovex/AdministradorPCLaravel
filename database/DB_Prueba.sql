@@ -36,6 +36,37 @@ REPLACE INTO `campania` (`id`, `id_locacion`, `nombre`, `descripcion`, `fecha_in
 	(14, 1, 'Habitaciones', 'Portal Cautivo para los huespedes', '2019-12-06', '2019-12-20', 2019, 'portal_cautivo_habitaciones', '10');
 /*!40000 ALTER TABLE `campania` ENABLE KEYS */;
 
+-- Volcando estructura para tabla portal_oxohotel.diccionario
+DROP TABLE IF EXISTS `diccionario`;
+CREATE TABLE IF NOT EXISTS `diccionario` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name_column` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  `alias_column` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+-- Volcando datos para la tabla portal_oxohotel.diccionario: ~17 rows (aproximadamente)
+/*!40000 ALTER TABLE `diccionario` DISABLE KEYS */;
+REPLACE INTO `diccionario` (`id`, `name_column`, `alias_column`) VALUES
+	(1, 'id_evento', 'Campania'),
+	(2, 'fecha_creacion', 'Fecha Registro'),
+	(3, 'nombre', 'Nombre'),
+	(4, 'email', 'Email'),
+	(5, 'edad', 'Edad'),
+	(6, 'telefono', 'Telefono'),
+	(7, 'genero', 'Genero'),
+	(8, 'os', 'Sistema Operativo'),
+	(9, 'ssid', 'Ssid'),
+	(10, 'mac_cliente', 'Mac Cliente'),
+	(11, 'ip_cliente', 'Ip Cliente'),
+	(12, 'ip_ap', 'Ip Dispositivo'),
+	(13, 'mac_ap', 'Mac Dispositivo'),
+	(14, 'id_pais', 'Pais'),
+	(15, 'piso', 'Piso'),
+	(16, 'bloque', 'Bloque'),
+	(17, 'num_habitacion', 'N° Habitacion');
+/*!40000 ALTER TABLE `diccionario` ENABLE KEYS */;
+
 -- Volcando estructura para tabla portal_oxohotel.dispositivos
 DROP TABLE IF EXISTS `dispositivos`;
 CREATE TABLE IF NOT EXISTS `dispositivos` (
@@ -49,6 +80,9 @@ CREATE TABLE IF NOT EXISTS `dispositivos` (
 
 -- Volcando datos para la tabla portal_oxohotel.dispositivos: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `dispositivos` DISABLE KEYS */;
+REPLACE INTO `dispositivos` (`id`, `nombre_dispositivo`, `mac_dispositivo`, `id_zona`, `tecnologia`) VALUES
+	(1, 'Primer Ap', '60d02c2d04f0', 10, 'Rukus'),
+	(2, 'Segundo Ap', 'miguelmac', 10, 'Miguel');
 /*!40000 ALTER TABLE `dispositivos` ENABLE KEYS */;
 
 -- Volcando estructura para tabla portal_oxohotel.habitaciones
@@ -178,7 +212,7 @@ CREATE TABLE IF NOT EXISTS `locaciones` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
--- Volcando datos para la tabla portal_oxohotel.locaciones: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla portal_oxohotel.locaciones: ~1 rows (aproximadamente)
 /*!40000 ALTER TABLE `locaciones` DISABLE KEYS */;
 REPLACE INTO `locaciones` (`id`, `nombre`, `direccion`, `pais`, `ciudad`, `telefono`, `PaginaWeb`) VALUES
 	(1, 'Primera Locacion ', 'direccion', 'colombia', 'cartagena', '3212243289', 'paginaWeb');
@@ -460,7 +494,7 @@ REPLACE INTO `publicidad_a_2019_campania` (`id`, `id_evento`, `fecha_creacion`, 
 	(1, 1, '2020-01-07 14:20:00', 'Juan David pachon Suzunaga', 'juan.suzunaga@gmail.com', '32', '3223650805', 'Mujer', 'Android', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', NULL, '1'),
 	(2, 1, '2020-01-07 14:20:00', 'Juan david', 'juan.suzunaga@email.com', '21', '3223650805', 'Hombre', 'Windows', 'oxohotel_1', '30074d8595f0', '192.168.0.12', '192.168.0.23', '60d02c2d04f0', '2'),
 	(3, 1, '2020-01-07 14:20:00', 'Soporte', 'soport@soporte.com', '66', '2131472580', 'Hombre', 'MacOS', 'oxohotel_1', 'd0c5f3c5da5a', '192.168.0.14', '192.168.0.23', '60d02c2d04f0', '2'),
-	(4, 1, '2020-01-07 14:20:00', 'Hola', 'hoq@gsjd.xon', '77', '2312536325', 'Hombre', 'Windows', 'oxohotel_1', 'd0c5f3c5da5a', '192.168.0.14', '192.168.0.23', '60d02c2d04f0', '4'),
+	(4, 1, '2020-01-07 14:20:00', 'Hola', 'hoq@gsjd.xon', '77', '2312536325', 'Hombre', 'Windows', 'oxohotel_1', 'd0c5f3c5da5a', '192.168.0.14', '192.168.0.23', 'miguelmac', '4'),
 	(5, 1, '2020-01-07 14:20:00', 'Juan', 'juan.suzunaga@gmail.com', '23', '2345678654321', 'Hombre', 'Windows', 'oxohotel_1', '34e12d43a922', '192.168.0.13', '192.168.0.23', '60d02c2d04f0', '5'),
 	(6, 1, '2020-01-07 14:20:00', 'Hola', 'ge@gsjd.com', '66', '3214569807', 'Mujer', 'Android', 'Test_R', '34e12d43a922', '10.165.0.16', '10.165.0.8', '60d02c2d04f0', '20'),
 	(7, 1, '2020-01-07 14:20:00', 'Gerardo Mendoza', 'ger@correo.com.co', '34', '1231234565', 'Hombre', 'MacOS', 'oxohotel_1', '34e12d43a922', '192.168.0.13', '192.168.0.23', '60d02c2d04f0', '30'),
@@ -530,7 +564,7 @@ CREATE TABLE IF NOT EXISTS `vouchers` (
   PRIMARY KEY (`id_voucher`)
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
--- Volcando datos para la tabla portal_oxohotel.vouchers: ~15 rows (aproximadamente)
+-- Volcando datos para la tabla portal_oxohotel.vouchers: ~22 rows (aproximadamente)
 /*!40000 ALTER TABLE `vouchers` DISABLE KEYS */;
 REPLACE INTO `vouchers` (`id_voucher`, `voucher`, `fecha_inicio`, `fecha_fin`, `estado`, `id_campania`, `num_usos`, `total_num_usos`, `id_locacion`) VALUES
 	(1, 'f05de4', '2020-01-01 00:00:00', '2020-01-15 00:00:00', 'Sin Uso', 12, 3, 3, 1),
