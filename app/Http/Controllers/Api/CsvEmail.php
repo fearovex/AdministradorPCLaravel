@@ -7,7 +7,9 @@ use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Password;
-
+use App\Notifications\CsvNotification;
+// use Illuminate\Notifications\Notification;
+use Notification;
 
 class CsvEmail extends Controller
 {
@@ -23,6 +25,7 @@ class CsvEmail extends Controller
     */
 
     use SendsPasswordResetEmails;
+   
     
     // public function __construct()
     // {
@@ -46,18 +49,21 @@ class CsvEmail extends Controller
     protected function sendResetLinkEmail(Request $request)
     {
         // session(['validateSendEmails' => 'false']);
-        $this->validateEmail($request);
-        
-        // We will send the password reset link to this user. Once we have attempted
-        // to send the link, we will examine the response then see the message we
-        // need to show to the user. Finally, we'll send out a proper response.
-        $response = $this->broker()->sendResetLink(
-            $this->credentials($request)
-        );
+        $response = $this->validateEmail($request);
+       
+        // return $->name_campaing;
+        // if(session('emailValidate') == 'CSV'){
+// return $request->email;
+// return (string)($request->email);
+            Notification::route('mail', "$request->email")
+                        ->notify(new CsvNotification($request->columns,$request->rows,$request->name_campaing));
+        // }
 
-        return $response == Password::RESET_LINK_SENT
+        return $response == null
                     ? $this->sendResetLinkResponse($request, $response)
                     : $this->sendResetLinkFailedResponse($request, $response);
     }
+
+    
 
 }

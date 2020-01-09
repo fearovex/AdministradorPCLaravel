@@ -215,7 +215,7 @@ CREATE TABLE IF NOT EXISTS `locaciones` (
 -- Volcando datos para la tabla portal_oxohotel.locaciones: ~1 rows (aproximadamente)
 /*!40000 ALTER TABLE `locaciones` DISABLE KEYS */;
 REPLACE INTO `locaciones` (`id`, `nombre`, `direccion`, `pais`, `ciudad`, `telefono`, `PaginaWeb`) VALUES
-	(1, 'Primera Locacion ', 'direccion', 'colombia', 'cartagena', '3212243289', 'paginaWeb');
+	(1, 'Primera Locacion', 'direccion', 'colombia', 'cartagena', '3212243289', 'paginaWeb');
 /*!40000 ALTER TABLE `locaciones` ENABLE KEYS */;
 
 -- Volcando estructura para tabla portal_oxohotel.paises

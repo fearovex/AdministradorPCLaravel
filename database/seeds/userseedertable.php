@@ -54,7 +54,7 @@ class userseedertable extends Seeder
         $user->password = 'l0c4t10n3rm1t4';
         $user->database = 'portal_oxohotel';
         $user->imgdashboard = 'oxohotel.png';
-        $user->dashboard = "/app/locations/Prueba";
+        $user->dashboard = "/app/locations/Primera Locacion";
         $user->location = 1;
         $user->campaing = 0;
         $user->id_rol = 2;
@@ -66,7 +66,7 @@ class userseedertable extends Seeder
         $user->password = 'v0uch3r3rm1t4';
         $user->database = 'portal_oxohotel';
         $user->imgdashboard = 'oxohotel.png';
-        $user->dashboard = "/app/locations/Prueba/vouchers";
+        $user->dashboard = "/app/locations/Primera Locacion/vouchers";
         $user->location = 1;
         $user->campaing = 0;
         $user->id_rol = 4;
