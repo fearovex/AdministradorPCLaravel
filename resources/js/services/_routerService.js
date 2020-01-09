@@ -156,7 +156,7 @@ export default [
       component: zonas
    },
    {
-      path: 'locations/:location/dispositivos',
+      path: 'locations/:location/zonas/dispositivos',
       component: dispositivos
    },
    {

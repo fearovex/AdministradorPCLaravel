@@ -58,6 +58,7 @@ class DispositivoController extends Controller
     {
         $dispositivos = DB::connection(session('database'))
             ->table('dispositivos')
+            ->select('nombre_dispositivo as Nombre Dispositivo','mac_dispositivo as Mac Dispositivo','tecnologia as Tecnologia')
             ->where('id_zona', $id)
             ->get();
             
