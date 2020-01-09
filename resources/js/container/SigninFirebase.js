@@ -167,10 +167,7 @@ class Signin extends Component {
                                  </div>
                               </Toolbar>
                            </AppBar>
-                           <div className="session-body text-center ">
-                              <div className="session-head mb-30">
-                                 <h2 className="font-weight-bold">Administrador Portal Cautivo</h2>
-                              </div>
+                           <div className="session-body text-center login-body">
                               <Form>
                                  <FormGroup className="has-wrapper">
                                     <Input
