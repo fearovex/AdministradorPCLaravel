@@ -45,13 +45,9 @@ class User extends Authenticatable
   
     public function sendPasswordResetNotification($token)
     {
-        if(session('emailValidate') == 'CSV'){
-            $this->notify(new CsvNotification(request()->columns,request()->rows));
-
-        }
-        if(session('emailValidate') == 'Reset'){
+        // if(session('emailValidate') == 'Reset'){
             $this->notify(new PasswordResetNotification($token));
-        }
+        // }
     }
 
 

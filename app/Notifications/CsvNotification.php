@@ -14,16 +14,18 @@ class CsvNotification extends Notification
     use Queueable;
     public $columns;
     public $rows;
+    public $name_campaing;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($columns, $rows)
+    public function __construct($columns, $rows, $name_campaing)
     {
         $this->columns=$columns;
         $this->rows=$rows;
+        $this->name_campaing=$name_campaing;
     }
 
     /**
@@ -67,12 +69,12 @@ class CsvNotification extends Notification
         }
         fclose($fp);
         $aliasFrom = env('ALIAS_MAIL_FROM');
+        $campaing = $this->name_campaing;
         return (new MailMessage)
             ->from($aliasFrom,'Vouchers IPfi')
             ->subject(Lang::get('Notificación de envío de CSV vouchers'))
-            ->line(Lang::get('Aquí está su solicitud de envío de CSV Vouchers adjunto!'))
+            ->line(Lang::get("Se te ha enviado un listado de vouchers de la campaña: <strong>$campaing</strong>, el cual ha sido adjuntado en formato CSV!"))
             ->attach($filename);
-            // ->line(Lang::get('If you did not request a password reset, no further action is required. Token: ==>'. $this->token));
     }
 
     /**
