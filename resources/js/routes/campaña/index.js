@@ -21,89 +21,89 @@ import './styles.css'
 
 
 export default class campañas extends Component {
-	constructor(props){
+	constructor(props) {
 		super(props)
 
 		const id_location = localStorage.user_location
 
-        this.state = {
-            data: [],
+		this.state = {
+			data: [],
 			error: null,
 			activeStep: 0,
 			prompt: false,
 			id_location: id_location,
-			campania:[],
+			campania: [],
 			modaledit: false,
-            form: {
+			form: {
 				nombre_campaña: "",
 				fecha_inicio: "",
 				fecha_fin: "",
 				descripcion: "",
 				zona_ap: "",
-				anio: "",							
-		   },
+				anio: "",
+			},
 		}
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.handleEdit = this.handleEdit.bind(this);
 		this.openAlertTest = this.openAlertTest.bind(this);
 		this.DataCampania = this.DataCampania.bind(this);
-		
-	}   
-	async componentDidMount(){
-		const id_location  = localStorage.user_location
+
+	}
+	async componentDidMount() {
+		const id_location = localStorage.user_location
 		const { location } = this.props
 		try {
-		   let res = await fetch(`${localStorage.urlDomain}api/zonas/${id_location}`)
-		   let data = await res.json()
+			let res = await fetch(`${localStorage.urlDomain}api/zonas/${id_location}`)
+			let data = await res.json()
 
-		   this.setState({
-			   	data: data,
+			this.setState({
+				data: data,
 				form: {
 					id_location: id_location
 				}
-		   })
-		   
+			})
+
 		} catch (error) {
-		   this.setState({
-			   error
-		   })
+			this.setState({
+				error
+			})
 		}
 		try {
 			let res = await fetch(`${localStorage.urlDomain}api/campanias/${id_location}`)
 			let datacampania = await res.json()
 			for (let i = 0; i < datacampania.length; i++) {
-				datacampania[i]["Editar"]=<Link to={location.pathname} onClick={() => this.openAlertTest('modaledit',datacampania[i].id)}>Editar</Link>
-				datacampania[i]["Datos"]=<Link to={location.pathname+'/'+datacampania[i].Nombre} onClick={() => this.DataCampania(datacampania[i].id)}>Datos</Link>
+				datacampania[i]["Editar"] = <Link to={location.pathname} onClick={() => this.openAlertTest('modaledit', datacampania[i].id)}>Editar</Link>
+				datacampania[i]["Datos"] = <Link to={location.pathname + '/' + datacampania[i].Nombre} onClick={() => this.DataCampania(datacampania[i].id)}>Datos</Link>
 			}
 
 			this.setState({
 				datacampania: datacampania
 			})
-			
+
 		} catch (error) {
 			this.state = {
 				error: error
 			}
 		}
-			 
-	   
-	}   
-	
+
+
+	}
+
 
 	async handleSubmit(e) {
-		e.preventDefault()		
-	   try {
-		   let config = {
-			   method: 'POST',
-			   headers: {
-				   'Accept': 'application/json',
-				   'Content-Type': 'application/json'
-			   },
-			   body: JSON.stringify(this.state.form)
-		   };
+		e.preventDefault()
+		try {
+			let config = {
+				method: 'POST',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(this.state.form)
+			};
 
-		   	await fetch(`${localStorage.urlDomain}api/campanias`, config);
+			await fetch(`${localStorage.urlDomain}api/campanias`, config);
 
 			this.setState({
 				prompt: false
@@ -111,16 +111,16 @@ export default class campañas extends Component {
 
 			window.location.reload();
 
-		  } catch (error) {
-			 console.log(error);
-		     this.setState({
-		   	 error
-		     });
-		  }		
+		} catch (error) {
+			console.log(error);
+			this.setState({
+				error
+			});
+		}
 	}
 
 	async handleEdit(e) {
-		e.preventDefault()	
+		e.preventDefault()
 		try {
 			let config = {
 				method: 'PATCH',
@@ -131,23 +131,23 @@ export default class campañas extends Component {
 				body: JSON.stringify(this.state.form)
 			};
 
-			await fetch(`${localStorage.urlDomain}api/campanias/`+this.state.form.id_campain, config);
-			
+			await fetch(`${localStorage.urlDomain}api/campanias/` + this.state.form.id_campain, config);
+
 			this.setState({
 				modaledit: false
 			})
 
 			window.location.reload();
 
-		  } catch (error) {
-			 console.log(error);
-		     this.setState({
-		   	 error
-		     });
-		  }		
+		} catch (error) {
+			console.log(error);
+			this.setState({
+				error
+			});
+		}
 	}
 
-	
+
 
 	onConfirm(key) {
 		this.setState({ [key]: false })
@@ -166,21 +166,23 @@ export default class campañas extends Component {
 	openAlert(key) {
 		this.setState({ [key]: true });
 	}
-	async openAlertTest(key,id) {
-		this.setState({ [key]: true});
+	async openAlertTest(key, id) {
+		this.setState({ [key]: true });
 		let res = await fetch(`${localStorage.urlDomain}api/campanias/${id}/edit`);
 		let campania = await res.json();
-		   this.setState({ form:{
-			nombre_campaña: campania.nombre,
-			fecha_inicio: campania.fecha_inicio,
-			fecha_fin: campania.fecha_fin,
-			descripcion: campania.descripcion,
-			zona_ap: campania.zona_ap,
-			anio: campania.ano_evento,
-			id_campain: id,
-			   
-		   } });
-		 
+		this.setState({
+			form: {
+				nombre_campaña: campania.nombre,
+				fecha_inicio: campania.fecha_inicio,
+				fecha_fin: campania.fecha_fin,
+				descripcion: campania.descripcion,
+				zona_ap: campania.zona_ap,
+				anio: campania.ano_evento,
+				id_campain: id,
+
+			}
+		});
+
 	}
 
 	/**
@@ -192,40 +194,40 @@ export default class campañas extends Component {
 	}
 	handleChange(e) {
 		this.state.form[e.target.name] = e.target.value;
-	 }
-	 handleChangeEdit(e) {
+	}
+	handleChangeEdit(e) {
 		this.setState({
-			form:{
-			   ...this.state.form,
-			   [e.target.name] : e.target.value
+			form: {
+				...this.state.form,
+				[e.target.name]: e.target.value
 			}
 		})
 	}
-    render() {
-		const {data} = this.state;
-		const {datacampania} = this.state;
-        const columns = ['Nombre','Descripcion','Fecha Inicio','Fecha Fin','Editar','Datos'];
-        const { basic, withDes, success, warning, customIcon, withHtml, prompt, passwordPrompt, customStyle, modaledit} = this.state;
+	render() {
+		const { data } = this.state;
+		const { datacampania } = this.state;
+		const columns = ['Nombre', 'Descripcion', 'Fecha Inicio', 'Fecha Fin', 'Editar', 'Datos'];
+		const { basic, withDes, success, warning, customIcon, withHtml, prompt, passwordPrompt, customStyle, modaledit } = this.state;
 		const options = {
 			filterType: 'dropdown',
 			responsive: 'scrollMaxHeight',
 			print: false,
 			download: false
 		};
-        return (
-            <div className="blank-wrapper">
-                <Helmet>
-                    <meta name="description" content="Reactify Blank Page" />
-                </Helmet>
+		return (
+			<div className="blank-wrapper">
+				<Helmet>
+					<meta name="description" content="Reactify Blank Page" />
+				</Helmet>
 
 
-                <PageTitleBar
-                    title={<IntlMessages id="sidebar.campaña" />}
-                    match={this.props.match}
-                />
-					<div className="blank-wrapper">
-					<div className="sweet-alert-wrapper">				
-					
+				<PageTitleBar
+					title={<IntlMessages id="sidebar.campaña" />}
+					match={this.props.match}
+				/>
+				<div className="blank-wrapper">
+					<div className="sweet-alert-wrapper">
+
 						<Button
 							variant="contained"
 							color="primary"
@@ -233,211 +235,210 @@ export default class campañas extends Component {
 							onClick={() => this.openAlert('prompt')}
 						>Crear campaña
 						</Button>
-			
-				<SweetAlert
 
-					btnSize="sm"
-					show={prompt}
-					showCancel
-					confirmBtnText="Guardar"
-					cancelBtnText="Cancelar"
-					cancelBtnBsStyle="danger"
-					confirmBtnBsStyle="success"
-					title="Agregar campaña"
-					onConfirm={() => this.handleSubmit(event)}
-					onCancel={() => this.onCancel('prompt')}
-			>
-			
-			
-             
-					<form onSubmit={this.handleSubmit}>
-					<div className="row">			
-								<div className="col-lg-5 mb-4 ml-3" >
-									<Input
-									type="text"
-									name="nombre_campaña"
-									id="nombre_campaña"									
-									className="has-input input-lg"
-									placeholder="Nombre campaña"	
-									onChange={() => this.handleChange(event)}						                 
-										/>
-				   				</div>			
-							<div className="col-lg-6">
-								<Select name="zona_ap" native onChange={() => this.handleChange(event)}
-									 className="has-input input-lg"
-									 >
-									<option value="">Seleccione una zona</option>
-									{data && data.map((data) => (
+						<SweetAlert
 
-									<option key={data.id} value={data.id}>{data.nombre}</option>
-									))}
-									
-							</Select>
-				   				</div>
-							</div>		   	
-							<div className="row">			
-								<div className="col-lg-5 mb-4 ml-3" >
-									<Input
-									type="date"
-									name="fecha_inicio"
-									id="fecha_inicio"									
-									className="has-input input-lg"
-									placeholder="Fecha Inicial"	
-									onChange={() => this.handleChange(event)}						                 
-										/>
-				   				</div>			
-							<div className="col-lg-6">
-							<Input
-									type="date"
-									name="fecha_fin"
-									id="fecha_fin"									
-									className="has-input input-lg"
-									placeholder="Fecha Final"	
-									onChange={() => this.handleChange(event)}						                 
-										/>
-				   				</div>
-							</div>		  
-							<div className="row">			
-								<div className="col-lg-5 mb-4 ml-3" >
-									
+							btnSize="sm"
+							show={prompt}
+							showCancel
+							confirmBtnText="Guardar"
+							cancelBtnText="Cancelar"
+							cancelBtnBsStyle="danger"
+							confirmBtnBsStyle="success"
+							title="Agregar campaña"
+							onConfirm={() => this.handleSubmit(event)}
+							onCancel={() => this.onCancel('prompt')}
+						>
+
+
+
+							<form onSubmit={this.handleSubmit}>
+								<div className="row">
+									<div className="col-lg-5 mb-4 ml-3" >
 										<Input
-									type="text"
-									name="descripcion"
-									id="descripcion"									
-									className="has-input input-lg"
-									placeholder="Descripciòn"	
-									onChange={() => this.handleChange(event)}						                 
+											type="text"
+											name="nombre_campaña"
+											id="nombre_campaña"
+											className="has-input input-lg"
+											placeholder="Nombre campaña"
+											onChange={() => this.handleChange(event)}
 										/>
-				   				</div>			
-							<div className="col-lg-6">
-							<Input
-									type="text"
-									name="anio"
-									id="anio"									
-									className="has-input input-lg"
-									placeholder="Año"	
-									onChange={() => this.handleChange(event)}						                 
-										/>
-				   				</div>
-							</div>	
-								  		
-						   
-		   			</form>
-            
-    </SweetAlert>	
+									</div>
+									<div className="col-lg-6">
+										<Select name="zona_ap" native onChange={() => this.handleChange(event)}
+											className="has-input input-lg"
+										>
+											<option value="">Seleccione una zona</option>
+											{data && data.map((data) => (
 
-	<SweetAlert
+												<option key={data.id} value={data.id}>{data.nombre}</option>
+											))}
 
-					btnSize="sm"
-					show={modaledit}
-					showCancel
-					confirmBtnText="editar"
-					cancelBtnText="Cancelar"
-					cancelBtnBsStyle="danger"
-					confirmBtnBsStyle="success"
-					title="editar campaña"
-					onConfirm={() => this.handleEdit(event)}
-					onCancel={() => this.onCancel('modaledit')}
-			>
-			
-			
-             
-					<form onSubmit={this.handleEdit}>
-					<div className="row">			
-								<div className="col-lg-5 mb-4 ml-3" >
-									<Input
-									type="text"
-									name="nombre_campaña"
-									id="nombre_campaña"	
-									value={this.state.form.nombre_campaña}							
-									className="has-input input-lg"
-									placeholder="Nombre campaña"	
-									onChange={() => this.handleChangeEdit(event)}						                 
-										/>
-				   				</div>			
-							<div className="col-lg-6">
-								<Select name="zona_ap" native onChange={() => this.handleChangeEdit(event)}
-					 				className="has-input input-lg"
-									value={this.state.form.zona_ap}
-								>
-									<option value="">Seleccione una zona</option>
-									{data && data.map((data) => (
-
-									<option key={data.id} value={data.id}>{data.nombre}</option>
-									))}
-									
-							</Select>
-				   				</div>
-							</div>		   	
-							<div className="row">			
-								<div className="col-lg-5 mb-4 ml-3" >
-									<Input
-									type="date"
-									name="fecha_inicio"
-									id="fecha_inicio"	
-									value={moment(this.state.form.fecha_inicio).format('YYYY-MM-DD')}									
-									className="has-input input-lg"
-									placeholder="Fecha Inicial"	
-									onChange={() => this.handleChangeEdit(event)}						                 
-										/>
-				   				</div>			
-							<div className="col-lg-6">
-							<Input
-									type="date"
-									name="fecha_fin"
-									id="fecha_fin"
-									value={moment(this.state.form.fecha_fin).format('YYYY-MM-DD')}								
-									className="has-input input-lg"
-									placeholder="Fecha Final"	
-									onChange={() => this.handleChangeEdit(event)}						                 
-										/>
-				   				</div>
-							</div>		  
-							<div className="row">			
-								<div className="col-lg-5 mb-4 ml-3" >
-									
+										</Select>
+									</div>
+								</div>
+								<div className="row">
+									<div className="col-lg-5 mb-4 ml-3" >
 										<Input
-									type="text"
-									name="descripcion"
-									id="descripcion"		
-									value={this.state.form.descripcion}								
-									className="has-input input-lg"
-									placeholder="Descripciòn"	
-									onChange={() => this.handleChangeEdit(event)}						                 
+											type="date"
+											name="fecha_inicio"
+											id="fecha_inicio"
+											className="has-input input-lg"
+											placeholder="Fecha Inicial"
+											onChange={() => this.handleChange(event)}
 										/>
-				   				</div>			
-							<div className="col-lg-6">
-							<Input
-									type="text"
-									name="anio"
-									id="anio"	
-									value={this.state.form.anio}									
-									className="has-input input-lg"
-									placeholder="Año"	
-									onChange={() => this.handleChangeEdit(event)}						                 
+									</div>
+									<div className="col-lg-6">
+										<Input
+											type="date"
+											name="fecha_fin"
+											id="fecha_fin"
+											className="has-input input-lg"
+											placeholder="Fecha Final"
+											onChange={() => this.handleChange(event)}
 										/>
-				   				</div>
-							</div>	
-								  		
-						   
-		   			</form>
-            
-    </SweetAlert>	
-		</div>
-		</div>
-			
-                
-		<RctCollapsibleCard  fullBlock>
+									</div>
+								</div>
+								<div className="row">
+									<div className="col-lg-5 mb-4 ml-3" >
+
+										<Input
+											type="text"
+											name="descripcion"
+											id="descripcion"
+											className="has-input input-lg"
+											placeholder="Descripciòn"
+											onChange={() => this.handleChange(event)}
+										/>
+									</div>
+									<div className="col-lg-6">
+										<Input
+											type="text"
+											name="anio"
+											id="anio"
+											className="has-input input-lg"
+											placeholder="Año"
+											onChange={() => this.handleChange(event)}
+										/>
+									</div>
+								</div>
+
+
+							</form>
+
+						</SweetAlert>
+
+						<SweetAlert
+
+							btnSize="sm"
+							show={modaledit}
+							showCancel
+							confirmBtnText="editar"
+							cancelBtnText="Cancelar"
+							cancelBtnBsStyle="danger"
+							confirmBtnBsStyle="success"
+							title="editar campaña"
+							onConfirm={() => this.handleEdit(event)}
+							onCancel={() => this.onCancel('modaledit')}
+						>
+
+
+
+							<form onSubmit={this.handleEdit}>
+								<div className="row">
+									<div className="col-lg-5 mb-4 ml-3" >
+										<Input
+											type="text"
+											name="nombre_campaña"
+											id="nombre_campaña"
+											value={this.state.form.nombre_campaña}
+											className="has-input input-lg"
+											placeholder="Nombre campaña"
+											onChange={() => this.handleChangeEdit(event)}
+										/>
+									</div>
+									<div className="col-lg-6">
+										<Select name="zona_ap" native onChange={() => this.handleChangeEdit(event)}
+											className="has-input input-lg"
+											value={this.state.form.zona_ap}
+										>
+											<option value="">Seleccione una zona</option>
+											{data && data.map((data) => (
+
+												<option key={data.id} value={data.id}>{data.nombre}</option>
+											))}
+
+										</Select>
+									</div>
+								</div>
+								<div className="row">
+									<div className="col-lg-5 mb-4 ml-3" >
+										<Input
+											type="date"
+											name="fecha_inicio"
+											id="fecha_inicio"
+											value={moment(this.state.form.fecha_inicio).format('YYYY-MM-DD')}
+											className="has-input input-lg"
+											placeholder="Fecha Inicial"
+											onChange={() => this.handleChangeEdit(event)}
+										/>
+									</div>
+									<div className="col-lg-6">
+										<Input
+											type="date"
+											name="fecha_fin"
+											id="fecha_fin"
+											value={moment(this.state.form.fecha_fin).format('YYYY-MM-DD')}
+											className="has-input input-lg"
+											placeholder="Fecha Final"
+											onChange={() => this.handleChangeEdit(event)}
+										/>
+									</div>
+								</div>
+								<div className="row">
+									<div className="col-lg-5 mb-4 ml-3" >
+
+										<Input
+											type="text"
+											name="descripcion"
+											id="descripcion"
+											value={this.state.form.descripcion}
+											className="has-input input-lg"
+											placeholder="Descripciòn"
+											onChange={() => this.handleChangeEdit(event)}
+										/>
+									</div>
+									<div className="col-lg-6">
+										<Input
+											type="text"
+											name="anio"
+											id="anio"
+											value={this.state.form.anio}
+											className="has-input input-lg"
+											placeholder="Año"
+											onChange={() => this.handleChangeEdit(event)}
+										/>
+									</div>
+								</div>
+
+
+							</form>
+
+						</SweetAlert>
+					</div>
+				</div>
+
+
+				<RctCollapsibleCard fullBlock>
 					<MUIDataTable
-						title={"Campañas"}
 						data={this.state.datacampania}
 						columns={columns}
-                        options={options}
+						options={options}
 					/>
-				</RctCollapsibleCard>       
-                          
-                    </div>
-		
-        );
-    }
+				</RctCollapsibleCard>
+
+			</div>
+
+		);
+	}
 }
