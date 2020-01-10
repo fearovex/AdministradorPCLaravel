@@ -240,19 +240,24 @@ export default class DetailEvents extends Component {
 		return (
 			<div className="data-table-wrapper">
 				
-				<PageTitleBar title={<IntlMessages id="sidebar.detailEvents" />} match={this.props.match} />
+				<PageTitleBar 
+					title={<IntlMessages id="sidebar.detailEvents" />} 
+					match={this.props.match} 
+					history={this.props.history}
+				/>
 				
-				<RctCollapsibleCard>
-					<FilterDateForm
-						form={form}
-						onChange={this.handleChange}
-						onSubmit={this.handleDateFilter}
-						onClick={this.handleModal}
-						onChangeFilter={this.handleChangeFilter}
-						onCancel={this.handleDateFilterCancel}
-						campain={false}
-					/>
-				</RctCollapsibleCard>
+				<FilterDateForm
+					form={form}
+					onChange={this.handleChange}
+					onSubmit={this.handleDateFilter}
+					onClick={this.handleModal}
+					onChangeFilter={this.handleChangeFilter}
+					onCancel={this.handleDateFilterCancel}
+					campain={false}
+				/>
+				<div className="blank-wrapper" style={{marginBottom: '20px'}}>
+
+				</div>
 				<RctCollapsibleCard fullBlock>
 					<MUIDataTable
 						data={this.state.dataDetails}

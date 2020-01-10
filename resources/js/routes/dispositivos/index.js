@@ -4,15 +4,12 @@ import PageTitleBar from "Components/PageTitleBar/PageTitleBar";
 import IntlMessages from "Util/IntlMessages";
 import MUIDataTable from "mui-datatables";
 import RctCollapsibleCard from 'Components/RctCollapsibleCard/RctCollapsibleCard';
-import IconButton from "@material-ui/core/IconButton";
-import AddIcon from "@material-ui/icons/Add";
 import { Route, Link } from 'react-router-dom'
 import SweetAlert from 'react-bootstrap-sweetalert'
 import Button from '@material-ui/core/Button';
 import { Input } from '@material-ui/core';
-import PropTypes from 'prop-types';
 import Select from '@material-ui/core/Select';
-import queryString from 'query-string';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 
 import './styles.css'
 
@@ -54,7 +51,11 @@ export default class dispositivos extends Component {
 			let res = await fetch(`${localStorage.urlDomain}api/dispositivos/` + id_zona)
 			let datadispositivos = await res.json()
 			for (let i = 0; i < datadispositivos.length; i++) {
-				datadispositivos[i]["Editar"] = <Link to={location.pathname} onClick={() => this.openAlertTest('modaledit', datadispositivos[i].id)}>Editar</Link>
+				datadispositivos[i]["Editar"] = <Link to={location.pathname} onClick={() => this.openAlertTest('modaledit', datadispositivos[i].id)}>
+					<ListItemIcon className="menu-icon">
+						<i className='ti-pencil-alt' style={{ margin: "0 auto" }}></i>
+					</ListItemIcon>
+				</Link>
 			}
 
 			this.setState({
@@ -200,19 +201,19 @@ export default class dispositivos extends Component {
 				<PageTitleBar
 					title={<IntlMessages id="sidebar.dispositivos" />}
 					match={this.props.match}
+					history={this.props.history}
 				/>
 
 				<div className="blank-wrapper">
-					<RctCollapsibleCard fullBlock>
-						<Button
-							variant="contained"
-							color="primary"
-							className="boton"
-							onClick={() => this.openAlert('prompt')}
-						>
-							Agregar Dispositivo
-						</Button>
-					</RctCollapsibleCard>
+
+					<Button
+						variant="contained"
+						color="primary"
+						className="botonDisp"
+						onClick={() => this.openAlert('prompt')}
+					>
+						Agregar Dispositivo
+					</Button>
 
 					<div className="sweet-alert-wrapper">
 
@@ -224,11 +225,13 @@ export default class dispositivos extends Component {
 							confirmBtnText="Guardar"
 							cancelBtnText="Cancelar"
 							cancelBtnBsStyle="danger"
-							confirmBtnBsStyle="success"
+							confirmBtnBsStyle="primary"
 							title="Agregar Dispositivo"
 							onConfirm={() => this.handleSubmit(event)}
 							onCancel={() => this.onCancel('prompt')}
 						>
+
+
 
 							<form onSubmit={this.handleSubmit}>
 								<div className="row">
@@ -242,6 +245,9 @@ export default class dispositivos extends Component {
 											onChange={() => this.handleChange(event)}
 
 										/>
+
+
+
 									</div>
 									<div className=" col-lg-5 mb-4 ml-3">
 										<Input
@@ -266,6 +272,21 @@ export default class dispositivos extends Component {
 											onChange={() => this.handleChange(event)}
 
 										/>
+
+
+
+									</div>
+									<div className=" col-lg-5 mb-4 ml-3">
+										<Select name="id_zona" native onChange={() => this.handleChange(event)}
+											className="has-input input-lg"
+										>
+											<option value="">Seleccione una zona</option>
+											{data && data.map((data) => (
+
+												<option key={data.id} value={data.id}>{data.nombre}</option>
+											))}
+
+										</Select>
 									</div>
 								</div>
 
@@ -361,6 +382,7 @@ export default class dispositivos extends Component {
 
 				<RctCollapsibleCard fullBlock>
 					<MUIDataTable
+						className={'mui-tableRes'}
 						title={"Dispositivos"}
 						data={this.state.datadispositivos}
 						columns={columns}

@@ -234,19 +234,19 @@ export default class Voucher extends Component {
 				<PageTitleBar
 					title="crear voucher"
 					match={this.props.match}
+					history={this.props.history}
 				/>
+				
 				<div className="blank-wrapper">
 					<div className="sweet-alert-wrapper">
-
 						<Button
-							style={{ 'marginRight': '20px' }}
 							variant="contained"
 							color="primary"
 							className="botonDisZon1"
 							onClick={() => this.openAlert('prompt')}
 						>
 							Crear
-					</Button>
+						</Button>
 						<SweetAlert
 							// btnSize="sm"
 							show={prompt}

@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 
 // intl messages
 import IntlMessages from 'Util/IntlMessages';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 
 // get display string
 const getDisplayString = (sub, index, subPath, title) => {
@@ -33,14 +34,19 @@ const getUrlString = (path, sub, index) => {
    }
 };
 
-const PageTitleBar = ({ title, match, enableBreadCrumb }) => {
+const PageTitleBar = ({ title, match, enableBreadCrumb, history }) => {
    const path = match.path.substr(1);
    const subPath = path.split('/');
+   enableBreadCrumb = false;
    return (
       <div className="page-title d-flex justify-content-between align-items-center">
          {title &&
             <div className="page-title-wrap">
-               {/* <i className="ti-angle-left"></i> */}
+               {history &&
+                  <ListItemIcon className="menu-icon">
+                     <i className="ti-angle-left" style={{cursor: 'pointer'}} onClick={() => history.goBack()}></i>
+                  </ListItemIcon>
+               }
                <h2 className="">{title}</h2>
             </div>
          }

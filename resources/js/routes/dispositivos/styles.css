@@ -7,7 +7,13 @@
     /* left: 40% !important; */
     
 }
-.boton{
-    left: 83% !important; 
+
+.botonDisp {
+    padding-right : 20px;
+    float:right;
+}
+
+.mui-tableRes{
+    margin-top: 76px;
 }
 

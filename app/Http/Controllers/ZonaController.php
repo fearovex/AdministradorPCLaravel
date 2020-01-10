@@ -55,7 +55,7 @@ class ZonaController extends Controller
     {
         $zonas = DB::connection(session('database'))
             ->table('zonas')
-            ->select('id', 'nombre as Nombre', 'id_locaciones')
+            ->select('id','nombre as Nombre')
             ->where('id_locaciones', $id)
             ->get();
             

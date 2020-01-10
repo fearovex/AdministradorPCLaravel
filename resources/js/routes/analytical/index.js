@@ -236,21 +236,26 @@ export default class Analytical extends Component {
         const { events,form } = this.state;
         const { location } = this.props.match.params
         return (
-            <div className="cardsmasonry-wrapper">
-                <PageTitleBar title={location} match={this.props.match} />
-                <RctCollapsibleCard>
-					<FilterDateForm
-							form={form}
-							onChange={this.handleChange}
-                            onSubmit={this.handleDateFilter}
-                            onClick={this.handleModal}
-                            onChangeFilter={this.handleChangeFilter}
-                            onCancel={this.handleDateFilterCancel}
-                            campain={true}
-                            events={events}
-                            onClickCampania={this.handleClickCampain}
-					/>
-				</RctCollapsibleCard>
+            <div className="cardsmasonry-wrapper" >
+                <PageTitleBar 
+                    title={location} 
+                    match={this.props.match} 
+                    history={this.props.history}
+                />
+                <FilterDateForm
+                        form={form}
+                        onChange={this.handleChange}
+                        onSubmit={this.handleDateFilter}
+                        onClick={this.handleModal}
+                        onChangeFilter={this.handleChangeFilter}
+                        onCancel={this.handleDateFilterCancel}
+                        campain={true}
+                        events={events}
+                        onClickCampania={this.handleClickCampain}
+                />
+                <div className="blank-wrapper" style={{marginBottom: '20px'}}>
+
+                </div>
                 <CardColumns>
                     <Card>
                         <CardBody>
