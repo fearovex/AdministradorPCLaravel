@@ -14,10 +14,10 @@ const AppConfig = {
    isDarkSidenav: true,                                   // Set true to dark sidebar
    enableThemeOptions: false,                              // Enable Theme Options
    locale: {
-      languageId: 'english',
-      locale: 'en',
-      name: 'English',
-      icon: 'en',
+      languageId: 'spanish',
+      locale: 'es',
+      name: 'Spanish',
+      icon: 'es',
    },
    enableUserTour: process.env.NODE_ENV === 'production' ? true : false,  // Enable / Disable User Tour
    copyRightText: 'Reactify © 2019 All Rights Reserved.',      // Copy Right Text
