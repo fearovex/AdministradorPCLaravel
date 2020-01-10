@@ -15,10 +15,11 @@ class SideBarController extends Controller
                 ->select("select * from locaciones");
             $locationsArray = [];
             $locationsArray[0] = (object) array(
-                'menu_title'=>'Inicio',
+                'menu_title'=>'Locaciones',
                 'id_campain'=> 0,
                 'id_location' => 0,
                 'type_multi'=>false,
+                'menu_icon'=>'zmdi zmdi-city',
                 'path'=>'/'
             );
             foreach ($locations as $count => $location){
@@ -31,47 +32,48 @@ class SideBarController extends Controller
                         'id_campain'=> $campaing->id,
                         'tb' => $campaing->campania,
                         'id_location' => $location->id,
+                        'menu_icon'=>'ti-layout-grid2',
                         'path'=>'/app/locations/'.$location->nombre.'/campañas/'.$campaing->nombre
                     );
                 }
                 $locationsArray[$count+1] = (object) array(
                     'menu_title'=>$location->nombre,
                     'id_campain'=> 0,
+                    'id_zona'=> 0,
                     'id_location' => $location->id,
-                    'type_multi'=>true,
+                    'menu_icon'=>'zmdi zmdi-pin',
+                    'type_multi'=>false,
                     'child_routes'=>[
                         (object) array(
-                            'menu_title'=>'DetailCampaings',
+                            'menu_title'=>'Dashboard',
                             'type_multi'=> false,
                             'id_campain'=> 0,
+                            'menu_icon'=>'ti-pie-chart',
+                            'id_location' => $location->id,
+                            'path'=>'/app/locations/'.$location->nombre
+                        ),
+                        (object) array(
+                            'menu_title'=>'Campañas',
+                            'type_multi'=> false,
+                            'id_campain'=> 0,
+                            'menu_icon'=>'ti-view-grid',
                             'id_location' => $location->id,
                             'path'=>'/app/locations/'.$location->nombre.'/campañas'
                         ),
                         (object) array(
-                            'menu_title'=>'Campaings',
-                            'type_multi'=>true,
-                            'menu_icon'=>'zmdi zmdi-view-compact',
-                            'child_routes'=> $campaingsArray
-                        ),
-                        (object) array(
-                            'menu_title'=>'Zonas',
+                            'menu_title'=>'Zonas/Dispositivos',
                             'id_campain'=> 0,
                             'id_location' => $location->id,
                             'type_multi'=> false,
+                            'menu_icon'=>'zmdi zmdi-view-carousel',
                             'path'=>'/app/locations/'.$location->nombre.'/zonas'
-                        ),
-                        (object) array(
-                            'menu_title'=>'Dispositivos',
-                            'id_campain'=> 0,
-                            'id_location' => $location->id,
-                            'type_multi'=> false,
-                            'path'=>'/app/locations/'.$location->nombre.'/dispositivos'
                         ),
                         (object) array(
                             'menu_title'=>"Vouchers",
                             'id_campain'=> 0,
                             'id_location' => $location->id,
                             'type_multi'=> false,
+                            'menu_icon'=>'icon-tag',
                             'path'=> '/app/locations/'.$location->nombre.'/vouchers'
                         )
                     ]
@@ -83,49 +85,61 @@ class SideBarController extends Controller
         }
         else if($rol == 2){
             $idLocacion = $id_location;
-            $locations=DB::connection($database)
+            $location=DB::connection($database)
                 ->select("select * from locaciones where id=".$idLocacion);
             $locationsArray = [];
-            $campaingsArray =[];
             $locationsArray[0] = (object) array(
-                'menu_title'=>'Inicio',
-                'id_campain'=> 0,
-                'id_location' => 0,
-                'type_multi'=>false,
-                'path'=>'/'
+                'menu_title'=>$location[0]->nombre,
+                'menu_icon'=>'zmdi zmdi-pin',
+                'child_routes'=>[
+                    (object) array(
+                        'menu_title'=>'Dashboard',
+                        'type_multi'=> false,
+                        'id_campain'=> 0,
+                        'menu_icon'=>'ti-pie-chart',
+                        'id_location' => $location[0]->id,
+                        'path'=>'/app/locations/'.$location[0]->nombre
+                    ),
+                    (object) array(
+                        'menu_title'=>'Campañas',
+                        'type_multi'=> false,
+                        'id_campain'=> 0,
+                        'menu_icon'=>'ti-view-grid',
+                        'id_location' => $location[0]->id,
+                        'path'=>'/app/locations/'.$location[0]->nombre.'/campañas'
+                    ),
+                    (object) array(
+                        'menu_title'=>'Zonas/Dispositivos',
+                        'id_campain'=> 0,
+                        'id_location' => $location[0]->id,
+                        'type_multi'=> false,
+                        'menu_icon'=>'zmdi zmdi-view-carousel',
+                        'path'=>'/app/locations/'.$location[0]->nombre.'/zonas'
+                    ),
+                    (object) array(
+                        'menu_title'=>"Vouchers",
+                        'id_campain'=> 0,
+                        'id_location' => $location[0]->id,
+                        'type_multi'=> false,
+                        'menu_icon'=>'icon-tag',
+                        'path'=> '/app/locations/'.$location[0]->nombre.'/vouchers'
+                    )
+                ]
             );
-            $campaings=DB::connection($database)
-                ->select("select * from campania where id_locacion =".$idLocacion);
-                foreach($campaings as $countC => $campaing){
-                    $campaingsArray[$countC] = (object) array(
-                        'menu_title'=>$campaing->nombre,
-                        'path'=>'/app/locations/'.$locations[0]->nombre.'/campañas/ '.$campaing->nombre
-                    );
-                }
-                $locationsArray[1] = (object) array(
-                    'menu_title'=>$locations[0]->nombre,
-                    'child_routes'=>$campaingsArray
-                );
             $sidebarJSON = (object) array('category1' => $locationsArray); 
             
             session(['sideBar' => $sidebarJSON]);
         }
         else if($rol == 3){
             $idLocacion = $id_location;
-            $campania = DB::connection(session('database'))->table('campania')->select('campania')->where('id',$id_campaing)->first()->campania;
+            $campania = DB::connection($database)->table('campania')->select('campania')->where('id',$id_campaing)->first();
+            // dd($campania->campania);
             $campaingArray = [];
-            $campaingArray[0] = (object) array(
-                'menu_title'=>'Inicio',
-                'id_campain'=> 0,
-                'id_location' => 0,
-                'type_multi'=>false,
-                'path'=>'/'
-            );
             $campaing=DB::connection($database)
-                ->select('select * from campania where campania = "'.$campania.'" and id_locacion='.$idLocacion);
-            $campaingArray[1] = (object) array(
+                ->select('select * from campania where campania = "'.$campania->campania.'" and id_locacion='.$idLocacion);
+            $campaingArray[0] = (object) array(
                 'menu_title'=>$campaing[0]->nombre,
-                'path'=> '/app/locations/'.$idLocacion.'/campañas/'+$campaing[0]->nombre
+                'path'=> '/app/locations/'.$idLocacion.'/campañas/'.$campaing[0]->nombre
             );
 
             $sidebarJSON = (object) array('category1' => $campaingArray); 
@@ -137,15 +151,10 @@ class SideBarController extends Controller
             $locations=DB::connection($database)
                 ->select("select * from locaciones where id=".$idLocacion);
             $campaingArray = [];
+         
             $campaingArray[0] = (object) array(
-                'menu_title'=>'Inicio',
-                'id_campain'=> 0,
-                'id_location' => 0,
-                'type_multi'=>false,
-                'path'=>'/'
-            );
-            $campaingArray[1] = (object) array(
                 'menu_title'=>"Vouchers",
+                'menu_icon'=>'icon-tag',
                 'path'=> '/app/locations/'.$locations[0]->nombre.'/vouchers'
             );
 

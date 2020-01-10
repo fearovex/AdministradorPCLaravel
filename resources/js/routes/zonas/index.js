@@ -4,15 +4,11 @@ import PageTitleBar from "Components/PageTitleBar/PageTitleBar";
 import IntlMessages from "Util/IntlMessages";
 import MUIDataTable from "mui-datatables";
 import RctCollapsibleCard from 'Components/RctCollapsibleCard/RctCollapsibleCard';
-import IconButton from "@material-ui/core/IconButton";
-import AddIcon from "@material-ui/icons/Add";
-import { Route, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import SweetAlert from 'react-bootstrap-sweetalert'
 import Button from '@material-ui/core/Button';
 import { Input } from '@material-ui/core';
-import PropTypes from 'prop-types';
-import Select from '@material-ui/core/Select';
-import queryString from 'query-string';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 
 
 import './styles.css'
@@ -51,7 +47,12 @@ export default class zona extends Component {
 		   let data = await res.json();
 		   
 		   for (let i = 0; i < data.length; i++) {
-			data[i]["acciones"]=<Link to={location.pathname} onClick={() => this.openAlertTest('modaledit',data[i].id)}>Editar</Link>
+			data[i]["Editar"]=
+			<Link to={location.pathname} onClick={() => this.openAlertTest('modaledit',data[i].id)}>
+				<ListItemIcon className="menu-icon">
+					<i className='ti-pencil-alt' style={{margin:"0 auto"}}></i>
+				</ListItemIcon>
+			</Link>
 		}
 		this.setState({
 			data: data,
@@ -141,9 +142,9 @@ export default class zona extends Component {
 		this.setState({ [key]: true});
 		let res = await fetch(`${localStorage.urlDomain}api/zonas/${id}/edit`);
 		let zona = await res.json();
-
+		console.log(zona)
 		   this.setState({ form:{
-			   nombre: zona.nombre,
+			   nombre: zona.Nombre,
 			   id_zona: id,
 		   } });
 		 
@@ -174,8 +175,8 @@ export default class zona extends Component {
 	 }
     render() {
 		const {data} = this.state;
-        const columns = ['nombre','acciones'];
-        const { basic, withDes, success, warning, customIcon, withHtml, prompt, passwordPrompt, customStyle,modaledit } = this.state;
+        const columns = ['Nombre','Editar'];
+        const { prompt, modaledit } = this.state;
 		const options = {
 			filterType: 'dropdown',
 			responsive: 'scrollMaxHeight',
@@ -187,114 +188,89 @@ export default class zona extends Component {
                 <Helmet>
                     <meta name="description" content="Reactify Blank Page" />
                 </Helmet>
-
-
                 <PageTitleBar
                     title={<IntlMessages id="sidebar.zonas" />}
                     match={this.props.match}
                 />
 					<div className="blank-wrapper">
-					<Button
-						variant="contained"
-						color="primary"
-						className="botonDisZon"
-						onClick={() => this.direccionar()}
-						>Agregar dispositivos
-					</Button>
-				
-					<Button
-						style={{'marginRight':'20px'}}
-						variant="contained"
-						color="primary"
-						className="botonDisZon1"
-						onClick={() => this.openAlert('prompt')}
-					>Crear Zona
-					</Button>
-					<div className="sweet-alert-wrapper">
-					
-					
-					
-						
-			
-				<SweetAlert
-
-					btnSize="sm"
-					show={prompt}
-					showCancel
-					confirmBtnText="Guardar"
-					cancelBtnText="Cancelar"
-					cancelBtnBsStyle="danger"
-					confirmBtnBsStyle="success"
-					title="Crear Zona"
-					onConfirm={() => this.handleSubmit(event)}
-					onCancel={() => this.onCancel('prompt')}
-			>
-			
-			
-             
-					<form onSubmit={this.handleSubmit}>
-					<div className="row">			
-						 <div className=" col-lg-5 mb-4 ml-3">
-							<Input
-							type="text"
-							name="nombre"
-							id="nombre"
+						<Button
+							variant="contained"
+							color="primary"
+							className="botonDisZon"
+							onClick={() => this.direccionar()}
+							>Agregar dispositivos
+						</Button>
+						<Button
+							style={{'marginRight':'20px'}}
+							variant="contained"
+							color="primary"
+							className="botonDisZon1"
+							onClick={() => this.openAlert('prompt')}
+						>
+							Crear Zona
+						</Button>
+						<div className="sweet-alert-wrapper">
+							<SweetAlert
+								btnSize="sm"
+								show={prompt}
+								showCancel
+								confirmBtnText="Guardar"
+								cancelBtnText="Cancelar"
+								cancelBtnBsStyle="danger"
+								confirmBtnBsStyle="primary"
+								title="Crear Zona"
+								onConfirm={() => this.handleSubmit(event)}
+								onCancel={() => this.onCancel('prompt')}
+							>
+							<form onSubmit={this.handleSubmit}>
+								<div className="row">			
+									<div className=" col-lg-5 offset-lg-3">
+										<Input
+										type="text"
+										name="nombre"
+										id="nombre"
+										className="has-input input-lg"
+										placeholder="Nombre"
+										onChange={() => this.handleChange(event)}
+										/>
+									</div>
+								</div>
+							</form>
+							</SweetAlert>	
+							<SweetAlert
+									btnSize="sm"
+									show={modaledit}
+									showCancel
+									confirmBtnText="Editar"
+									cancelBtnText="Cancelar"
+									cancelBtnBsStyle="danger"
+									confirmBtnBsStyle="primary"
+									title="Editar Zona"
+									onConfirm={() => this.handleEdit(event)}
+									onCancel={() => this.onCancel('modaledit')}
+							>
 							
-							className="has-input input-lg"
-							placeholder="Nombre"
-							onChange={() => this.handleChange(event)}
+								<form onSubmit={this.handleEdit}>
+								<div className="row">			
+									<div className=" col-lg-5 offset-lg-3">
+										<Input
+										type="text"
+										name="nombre"
+										id="nombre"
+										value={this.state.form.nombre}
+										className="has-input input-lg"
+										placeholder="Nombre"
+										onChange={() => this.handleChangeEdit(event)}
 
-							   />
-							   
+										/>
+										
+									</div>
+								</div>
+							</form>
+						</SweetAlert>	
 						</div>
-						</div>
-						
-						</form>
-			
-            
-    </SweetAlert>	
-	<SweetAlert
-
-					btnSize="sm"
-					show={modaledit}
-					showCancel
-					confirmBtnText="Editar"
-					cancelBtnText="Cancelar"
-					cancelBtnBsStyle="danger"
-					confirmBtnBsStyle="success"
-					title="Editar Zona"
-					onConfirm={() => this.handleEdit(event)}
-					onCancel={() => this.onCancel('modaledit')}
-			>
-             
-					<form onSubmit={this.handleEdit}>
-					<div className="row">			
-						 <div className=" col-lg-5 mb-4 ml-3">
-							<Input
-							type="text"
-							name="nombre"
-							id="nombre"
-							value={this.state.form.nombre}
-							className="has-input input-lg"
-							placeholder="Nombre"
-							onChange={() => this.handleChangeEdit(event)}
-
-							/>
-							   
-						</div>
-						</div>
-						
-						</form>
-			
-            
-    </SweetAlert>	
-		</div>
-		</div>
-	
-				
-                
-		<RctCollapsibleCard  fullBlock >
-			
+					</div>
+				<RctCollapsibleCard  fullBlock >
 					<MUIDataTable
 						className="mui-tableRes"
 						title={"Zonas"}
@@ -303,12 +279,7 @@ export default class zona extends Component {
                         options={options}
 					/>
 				</RctCollapsibleCard>       
-                          
-                    </div>
-                
-                
-		
-        	
+			</div>
         );
     }
 }

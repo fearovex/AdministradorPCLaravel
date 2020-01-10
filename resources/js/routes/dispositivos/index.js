@@ -216,12 +216,13 @@ export default class dispositivos extends Component {
 					<div className="blank-wrapper">
 						
 					<Button
-							variant="contained"
-							color="primary"
-							className="boton"
-							onClick={() => this.openAlert('prompt')}
-						>Agregar Dispositivo
-						</Button>
+						variant="contained"
+						color="primary"
+						className="botonDisp"
+						onClick={() => this.openAlert('prompt')}
+					>
+						Agregar Dispositivo
+					</Button>
 			
 					<div className="sweet-alert-wrapper">				
 					
@@ -233,7 +234,7 @@ export default class dispositivos extends Component {
 					confirmBtnText="Guardar"
 					cancelBtnText="Cancelar"
 					cancelBtnBsStyle="danger"
-					confirmBtnBsStyle="success"
+					confirmBtnBsStyle="primary"
 					title="Agregar Dispositivo"
 					onConfirm={() => this.handleSubmit(event)}
 					onCancel={() => this.onCancel('prompt')}
@@ -390,6 +391,7 @@ export default class dispositivos extends Component {
                 
 		<RctCollapsibleCard  fullBlock>
 					<MUIDataTable
+						className={'mui-tableRes'}
 						title={"Dispositivos"}
 						data={this.state.datadispositivos}
 						columns={columns}

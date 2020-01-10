@@ -10,7 +10,7 @@ class VouchersController extends Controller
 {
     public function index(Request $request){
         $vouchers = DB::connection(session('database'))
-                    ->select(DB::raw("select c.id, c.id_locacion, c.nombre as Campaña, c.fecha_inicio as 'Fecha Inicio', c.fecha_fin as 'Fecha Fin', (select count(v.id_voucher) from vouchers as v where c.id = v.id_campania and c.id_locacion = $request->id_locacion) as '# Vouchers' from campania as c"));
+                    ->select(DB::raw("select c.id, c.id_locacion, c.nombre as Campaña, c.fecha_inicio as 'Fecha Inicio', c.fecha_fin as 'Fecha Fin', (select count(v.id_voucher) from vouchers as v where c.id = v.id_campania and c.id_locacion = $request->id_locacion) as '# Vouchers' from campania as c where id_locacion = $request->id_locacion"));
         return response()->json($vouchers);
     }
 

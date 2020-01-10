@@ -166,7 +166,14 @@ export default class VoucherInfo extends Component {
 				/>
 				<div className="blank-wrapper">
 					<div className="sweet-alert-wrapper">
-
+						<Button
+							variant="contained"
+							color="primary"
+							className="botonVoucher"
+							onClick={() => this.createVoucher()}
+						>
+							Crear Vouchers
+						</Button>
 						<SweetAlert
 							btnSize="sm"
 							show={modalEmailCsv}
@@ -174,7 +181,7 @@ export default class VoucherInfo extends Component {
 							confirmBtnText="Send"
 							cancelBtnText="Cancel"
 							cancelBtnBsStyle="danger"
-							confirmBtnBsStyle="success"
+							confirmBtnBsStyle="primary"
 							title="Send Email CSV"
 							onConfirm={() => this.handleSubmit(event)}
 							onCancel={() => this.onCancel('modalEmailCsv')}
@@ -200,26 +207,10 @@ export default class VoucherInfo extends Component {
 
 					</div>
 				</div>
-				<RctCollapsibleCard fullBlock>
-					<div className="row">
-				
-						<div className="col-lg-3">
-							<Button
-								variant="contained"
-								color="primary"
-								className="boton"
-								onClick={() => this.createVoucher()}
-							>
-								Crear Vouchers
-							</Button>
-						</div>
-					</div>
-					<br></br>
-				</RctCollapsibleCard>
 
 				<RctCollapsibleCard fullBlock>
-
 					<MUIDataTable
+						className="mui-tableRes"
 						title={"Lista Vouchers"}
 						data={this.state.dataVouchers}
 						columns={columns}

@@ -236,9 +236,8 @@ export default class Analytical extends Component {
         const { events,form } = this.state;
         const { location } = this.props.match.params
         return (
-            <div className="cardsmasonry-wrapper">
+            <div className="cardsmasonry-wrapper" >
                 <PageTitleBar title={location} match={this.props.match} />
-                <RctCollapsibleCard>
 					<FilterDateForm
 							form={form}
 							onChange={this.handleChange}
@@ -250,7 +249,9 @@ export default class Analytical extends Component {
                             events={events}
                             onClickCampania={this.handleClickCampain}
 					/>
-				</RctCollapsibleCard>
+                    <div className="blank-wrapper" style={{marginBottom: '20px'}}>
+
+                    </div>
                 <CardColumns>
                     <Card>
                         <CardBody>

@@ -334,7 +334,6 @@ export default class Locations extends Component {
             <div className="cardsmasonry-wrapper">
                 <PageTitleBar title={<IntlMessages id="sidebar.locations" />} match={this.props.match} />
 				<div className="sweet-alert-wrapper">				
-					
 						<Button
 							variant="contained"
 							color="primary"
@@ -386,97 +385,90 @@ export default class Locations extends Component {
             
     </SweetAlert>
 	<SweetAlert
-
 					btnSize="sm"
 					show={modaledit}
 					showCancel
 					confirmBtnText="Editar"
 					cancelBtnText="Cancelar"
 					cancelBtnBsStyle="danger"
-					confirmBtnBsStyle="success"
+					confirmBtnBsStyle="primary"
 					title="Editar locacion"
 					onConfirm={() => this.handleEdit(event)}
 					onCancel={() => this.onCancel('modaledit')}
 			>
              
 					<form onSubmit={this.handleEdit}>
-					<div className="row">			
-					<div className="row">			
-						 <div className="col-lg-6">
-							<Input
-							type="text"
-							name="nombre"
-							id="nombre"
-							value={this.state.form.nombre}
-							className="has-input input-lg"
-							placeholder="Nombre"
-							onChange={() => this.handleChangeEdit(event)}						                 
-							   />
-						</div>
-					<div className="col-lg-6">
-							<Input
-							type="text"
-							name="direccion"
-							id="direccion"
-							className="has-input input-lg"
-							placeholder="Direccion"
-							value={this.state.form.direccion}
-							onChange={() => this.handleChangeEdit(event)}                  
-							   />
-					</div>
-				</div>
-				<div className="row">			
-						 <div className="col-lg-6">
-							<Input
-							type="text"
-							name="pais"
-							id="pais"
-							className="has-input input-lg"
-							placeholder="Pais"
-							value={this.state.form.pais}
-							onChange={() => this.handleChangeEdit(event)}                  
-							   />
-						</div>
-					<div className="col-lg-6">
-							<Input
-							type="text"
-							name="ciudad"
-							id="ciudad"
-							className="has-input input-lg"
-							placeholder="Ciudad" 
-							value={this.state.form.ciudad}
-							onChange={() => this.handleChangeEdit(event)}                 
-							   />
-					</div>
-				</div>
-				<div className="row">			
-						 <div className="col-lg-6">
-							<Input
-							type="number"
-							name="telefono"
-							id="telefono"
-							className="has-input input-lg"
-							placeholder="Telefono"
-							value={this.state.form.telefono}
-							onChange={() => this.handleChangeEdit(event)}                  
-							   />
-						</div>
-					<div className="col-lg-6">
-							<Input
-							type="text"
-							name="PaginaWeb"
-							id="PaginaWeb"
-							className="has-input input-lg"
-							placeholder="Pagina Web" 
-							value={this.state.form.PaginaWeb}
-							onChange={() => this.handleChangeEdit(event)}                 
-							   />
-					</div>
-				</div>				
-						</div>
+
 						
-						</form>
-			
+						<div className="row">			
+							<div className="col-lg-5 ml-3">
+								<Input
+								type="text"
+								name="nombre"
+								id="nombre"
+								value={this.state.form.nombre}
+								className="has-input input-lg"
+								placeholder="Nombre"
+								onChange={() => this.handleChangeEdit(event)}						                 
+								/>
+							</div>
+							<div className="col-lg-5 ml-3">
+									<Input
+									type="text"
+									name="direccion"
+									id="direccion"
+									className="has-input input-lg"
+									placeholder="Direccion"
+									value={this.state.form.direccion}
+									onChange={() => this.handleChangeEdit(event)}                  
+									/>
+							</div>
+							<div className="col-lg-5 ml-3">
+								<Input
+								type="text"
+								name="pais"
+								id="pais"
+								className="has-input input-lg"
+								placeholder="Pais"
+								value={this.state.form.pais}
+								onChange={() => this.handleChangeEdit(event)}                  
+								/>
+							</div>
+							<div className="col-lg-5 ml-3">
+									<Input
+									type="text"
+									name="ciudad"
+									id="ciudad"
+									className="has-input input-lg"
+									placeholder="Ciudad" 
+									value={this.state.form.ciudad}
+									onChange={() => this.handleChangeEdit(event)}                 
+									/>
+							</div>
+							<div className="col-lg-5 ml-3">
+								<Input
+								type="number"
+								name="telefono"
+								id="telefono"
+								className="has-input input-lg"
+								placeholder="Telefono"
+								value={this.state.form.telefono}
+								onChange={() => this.handleChangeEdit(event)}                  
+								/>
+							</div>
+							<div className="col-lg-5 ml-3">
+									<Input
+									type="text"
+									name="PaginaWeb"
+									id="PaginaWeb"
+									className="has-input input-lg"
+									placeholder="Pagina Web" 
+									value={this.state.form.PaginaWeb}
+									onChange={() => this.handleChangeEdit(event)}                 
+									/>
+							</div>
+						</div>
+				</form>
             
     </SweetAlert>		
 		</div>

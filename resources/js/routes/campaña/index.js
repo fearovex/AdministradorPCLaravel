@@ -14,6 +14,7 @@ import PropTypes from 'prop-types';
 import Select from '@material-ui/core/Select';
 import queryString from 'query-string';
 import moment from "moment";
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 
 import './styles.css'
 
@@ -73,8 +74,18 @@ export default class campañas extends Component {
 			let res = await fetch(`${localStorage.urlDomain}api/campanias/${id_location}`)
 			let datacampania = await res.json()
 			for (let i = 0; i < datacampania.length; i++) {
-				datacampania[i]["Editar"] = <Link to={location.pathname} onClick={() => this.openAlertTest('modaledit', datacampania[i].id)}>Editar</Link>
-				datacampania[i]["Datos"] = <Link to={location.pathname + '/' + datacampania[i].Nombre} onClick={() => this.DataCampania(datacampania[i].id)}>Datos</Link>
+				datacampania[i]["Editar"] = 
+				<Link to={location.pathname} onClick={() => this.openAlertTest('modaledit', datacampania[i].id)}>
+					<ListItemIcon className="menu-icon">
+						<i className='ti-pencil-alt' style={{margin:"0 auto"}}></i>
+					</ListItemIcon>
+				</Link>
+				datacampania[i]["Datos"] = 
+				<Link to={location.pathname + '/' + datacampania[i].Nombre} onClick={() => this.DataCampania(datacampania[i].id)}>
+					<ListItemIcon className="menu-icon">
+						<i className='ti-eye' style={{margin:"0 auto"}}></i>
+					</ListItemIcon>
+				</Link>
 			}
 
 			this.setState({
@@ -244,7 +255,7 @@ export default class campañas extends Component {
 							confirmBtnText="Guardar"
 							cancelBtnText="Cancelar"
 							cancelBtnBsStyle="danger"
-							confirmBtnBsStyle="success"
+							confirmBtnBsStyle="primary"
 							title="Agregar campaña"
 							onConfirm={() => this.handleSubmit(event)}
 							onCancel={() => this.onCancel('prompt')}
@@ -336,7 +347,7 @@ export default class campañas extends Component {
 							confirmBtnText="editar"
 							cancelBtnText="Cancelar"
 							cancelBtnBsStyle="danger"
-							confirmBtnBsStyle="success"
+							confirmBtnBsStyle="primary"
 							title="editar campaña"
 							onConfirm={() => this.handleEdit(event)}
 							onCancel={() => this.onCancel('modaledit')}

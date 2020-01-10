@@ -4,10 +4,8 @@ import PageTitleBar from "Components/PageTitleBar/PageTitleBar";
 import IntlMessages from "Util/IntlMessages";
 import MUIDataTable from "mui-datatables";
 import RctCollapsibleCard from 'Components/RctCollapsibleCard/RctCollapsibleCard';
-import SweetAlert from 'react-bootstrap-sweetalert'
-import { Input, Select, Button } from '@material-ui/core';
-import { Route, Link } from 'react-router-dom'
-import { NotificationContainer, NotificationManager } from 'react-notifications';
+import { Link } from 'react-router-dom'
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 
 import './styles.css'
 
@@ -17,7 +15,7 @@ export default class Vouchers extends Component {
 		const id_location = localStorage.user_location
 		this.state = {
 			error: null,
-			nameColumns: ['Campaña','Fecha Inicio', 'Fecha Fin', '# Vouchers', 'Acciones'],
+			nameColumns: ['Campaña','Fecha Inicio', 'Fecha Fin', '# Vouchers', 'Ver Vouchers'],
 			dataVouchers: [],
 			form:{
 				id_locacion: id_location
@@ -32,7 +30,6 @@ export default class Vouchers extends Component {
 		localStorage.setItem('user_campaing', id_campaing);
 		localStorage.setItem('user_name_campaing', name_campaing);
 	 }
-
 	async componentDidMount(){
 		try {
 			let config = {
@@ -48,7 +45,12 @@ export default class Vouchers extends Component {
 
 		
 			for (let i = 0; i < datavouchers.length; i++) {
-                datavouchers[i]["Acciones"]=<Link to={this.props.history.location.pathname+"/voucher-info"} onClick = {() => this.clickNavLink(this.state.form.id_locacion, datavouchers[i].id, datavouchers[i]['Campaña'])} >Ver Más</Link>
+                datavouchers[i]["Ver Vouchers"]=
+				<Link to={this.props.history.location.pathname+"/voucher-info"} onClick = {() => this.clickNavLink(this.state.form.id_locacion, datavouchers[i].id, datavouchers[i]['Campaña'])} >
+					<ListItemIcon className="menu-icon">
+						<i className='ti-eye' style={{margin:"0 auto"}}></i>
+					</ListItemIcon>
+				</Link>
                 // delete datavouchers[i].id
                 // delete datavouchers[i].id_locacion
             }

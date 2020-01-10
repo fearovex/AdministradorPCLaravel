@@ -3,6 +3,7 @@ import { DateTimePicker } from '@material-ui/pickers';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import IntlMessages from 'Util/IntlMessages';
 import { Badge } from 'reactstrap';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 // import "react-datepicker/dist/react-datepicker.css";
 // import './styles.css';
 
@@ -36,9 +37,11 @@ const FilterDateForm = ({ form, onChange, onChangeFilter, onSubmit, onClick, onC
                             {String(form.campania)}
                         </Badge>
                     }
-                    <div className="mt-5 col-lg-2 col-md-2 col-sm-12">
-                        <button className="btn btn-warning" onClick={onClick}>
-                            <span>Edit</span>
+                    <div className="mt-5 col-lg-1 col-md-2 col-sm-12">
+                        <button className="btn btn-info" onClick={onClick}>
+                            <ListItemIcon className="menu-icon">
+                                <i className='ti-pencil-alt'></i>
+                            </ListItemIcon>
                         </button>
                     </div>
                 </div>
@@ -50,7 +53,7 @@ const FilterDateForm = ({ form, onChange, onChangeFilter, onSubmit, onClick, onC
             showCancel
             title="Filtro Perzonalizado"
             confirmBtnText="Filtrar"
-            confirmBtnBsStyle="success"
+            confirmBtnBsStyle="primary"
             cancelBtnText="Cancelar"
             cancelBtnBsStyle="danger"
             onConfirm={onSubmit}
