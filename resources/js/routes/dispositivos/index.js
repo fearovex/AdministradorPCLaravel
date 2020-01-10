@@ -48,6 +48,23 @@ export default class dispositivos extends Component {
 		const { location } = this.props
 
 		try {
+			let res = await fetch(`${localStorage.urlDomain}api/zonas/${id_location}`)
+			let data = await res.json()
+
+			this.setState({
+				data: data,
+				form: {
+					id_location: id_location
+				}
+			})
+
+		} catch (error) {
+			this.setState({
+				error
+			})
+		}
+
+		try {
 			let res = await fetch(`${localStorage.urlDomain}api/dispositivos/` + id_zona)
 			let datadispositivos = await res.json()
 			for (let i = 0; i < datadispositivos.length; i++) {
@@ -181,10 +198,9 @@ export default class dispositivos extends Component {
 	}
 	render() {
 		const { data } = this.state;
-		const { datadispositivos } = this.state;
 		const columns = ['Nombre Dispositivo', 'Mac Dispositivo', 'Tecnologia'
 			, 'Editar'];
-		const { basic, withDes, success, warning, customIcon, withHtml, prompt, passwordPrompt, customStyle, modaledit } = this.state;
+		const { prompt,modaledit } = this.state;
 		const options = {
 			filterType: 'dropdown',
 			responsive: 'scrollMaxHeight',
@@ -365,7 +381,7 @@ export default class dispositivos extends Component {
 											<option value="">Seleccione una zona</option>
 											{data && data.map((data) => (
 
-												<option key={data.id} value={data.id}>{data.nombre}</option>
+												<option key={data.id} value={data.id}>{data.Nombre}</option>
 											))}
 
 										</Select>
