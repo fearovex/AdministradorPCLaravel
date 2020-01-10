@@ -63,7 +63,7 @@ class NavMenuItem extends Component {
                   <ListItemIcon className="menu-icon">
                      <i className={menu.menu_icon}></i>
                   </ListItemIcon>
-                  <span className="menu text-capitalize">
+                  <span className="menu text-capitalize" style={{fontSize: 13}}>
                      {menu.menu_title} 
                   </span>
                   {menu.new_item && menu.new_item === true ?
@@ -87,7 +87,7 @@ class NavMenuItem extends Component {
                                        <ListItemIcon className="menu-icon">
                                           <i className={subMenu.menu_icon}></i>
                                        </ListItemIcon>
-                                       <span className="menu">
+                                       <span className="menu" style={{fontSize: 12}}>
                                          {subMenu.menu_title}
                                        </span>
                                        {subMenu.new_item && subMenu.new_item === true ?
@@ -150,7 +150,7 @@ class NavMenuItem extends Component {
                                              <ListItemIcon className="menu-icon">
                                                 <i className={subMenu.menu_icon}></i>
                                              </ListItemIcon>
-                                             <span className="menu">
+                                             <span className="menu" style={{fontSize: 12}}>
                                              {subMenu.menu_title}
                                              </span>
                                           </NavLink>
