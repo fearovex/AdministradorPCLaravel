@@ -15,6 +15,7 @@ import Select from '@material-ui/core/Select';
 import queryString from 'query-string';
 import moment from "moment";
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import { DateTimePicker } from '@material-ui/pickers';
 
 import './styles.css'
 
@@ -119,8 +120,8 @@ export default class campañas extends Component {
 			this.setState({
 				prompt: false
 			})
-
-			window.location.reload();
+			
+			this.componentDidMount();
 
 		} catch (error) {
 			console.log(error);
@@ -148,7 +149,7 @@ export default class campañas extends Component {
 				modaledit: false
 			})
 
-			window.location.reload();
+			this.componentDidMount();
 
 		} catch (error) {
 			console.log(error);
@@ -203,8 +204,29 @@ export default class campañas extends Component {
 	onCancel(key) {
 		this.setState({ [key]: false })
 	}
-	handleChange(e) {
-		this.state.form[e.target.name] = e.target.value;
+	handleChange(e, name=null) {
+		if(e.target){
+            this.setState({
+                form:{
+                    ...this.state.form,
+                    [e.target.name]: e.target.value
+                }
+            })
+        }
+        else if(e._d){
+            let date = moment(e._d, 'YYYY/MM/DD hh:mm a');
+            let año = date.year();
+            let mes = date.month()+1;
+            let dia = date.date();
+            let hora = date.hour();
+            let minutos = date.minute();
+            this.setState({
+                form:{
+            		...this.state.form,
+                    [name]: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos)
+                }
+            })
+        }
 	}
 	handleChangeEdit(e) {
 		this.setState({
@@ -215,7 +237,7 @@ export default class campañas extends Component {
 		})
 	}
 	render() {
-		const { data } = this.state;
+		const { data, form } = this.state;
 		const columns = ['Nombre', 'Descripcion', 'Fecha Inicio', 'Fecha Fin', 'Editar', 'Datos'];
 		const { prompt, modaledit } = this.state;
 		const options = {
@@ -256,7 +278,7 @@ export default class campañas extends Component {
 							cancelBtnText="Cancelar"
 							cancelBtnBsStyle="danger"
 							confirmBtnBsStyle="primary"
-							title="Agregar campaña"
+							title="Agregar Campaña"
 							onConfirm={() => this.handleSubmit(event)}
 							onCancel={() => this.onCancel('prompt')}
 						>
@@ -290,23 +312,34 @@ export default class campañas extends Component {
 								</div>
 								<div className="row">
 									<div className="col-lg-5 mb-4 ml-3" >
-										<Input
-											type="date"
-											name="fecha_inicio"
-											id="fecha_inicio"
+										<DateTimePicker
 											className="has-input input-lg"
-											placeholder="Fecha Inicial"
-											onChange={() => this.handleChange(event)}
+											key="fecha_inicio"
+											label="Fecha Inicio"
+											required
+											value={form.fecha_inicio}
+											format="YYYY/MM/DD hh:mm a"
+											onChange={(event) => this.handleChange(event, 'fecha_inicio')}
+											animateYearScrolling={false}
+											leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
+											rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
+											showTodayButton={true}
 										/>
 									</div>
 									<div className="col-lg-6">
-										<Input
-											type="date"
-											name="fecha_fin"
-											id="fecha_fin"
+										<DateTimePicker
 											className="has-input input-lg"
-											placeholder="Fecha Final"
-											onChange={() => this.handleChange(event)}
+											key="fecha_fin"
+											label="Fecha Fin"
+											required
+											value={form.fecha_fin}
+											minDate={moment(form.fecha_inicio, 'YYYY/MM/DD hh:mm a')}
+											format="YYYY/MM/DD hh:mm a"
+											onChange={(event) => this.handleChange(event, 'fecha_fin')}
+											animateYearScrolling={false}
+											leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
+											rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
+											showTodayButton={true}
 										/>
 									</div>
 								</div>
@@ -344,11 +377,11 @@ export default class campañas extends Component {
 							btnSize="sm"
 							show={modaledit}
 							showCancel
-							confirmBtnText="editar"
+							confirmBtnText="Editar"
 							cancelBtnText="Cancelar"
 							cancelBtnBsStyle="danger"
 							confirmBtnBsStyle="primary"
-							title="editar campaña"
+							title="Editar Campaña"
 							onConfirm={() => this.handleEdit(event)}
 							onCancel={() => this.onCancel('modaledit')}
 						>
@@ -374,7 +407,6 @@ export default class campañas extends Component {
 											value={this.state.form.zona_ap}
 										>
 											<option value="">Seleccione una zona</option>
-											{console.log(this.state.form)}
 											{data && data.map((data) => (
 
 												<option key={data.id} value={data.id}>{data.Nombre}</option>
@@ -385,25 +417,34 @@ export default class campañas extends Component {
 								</div>
 								<div className="row">
 									<div className="col-lg-5 mb-4 ml-3" >
-										<Input
-											type="date"
-											name="fecha_inicio"
-											id="fecha_inicio"
-											value={moment(this.state.form.fecha_inicio).format('YYYY-MM-DD')}
+										<DateTimePicker
 											className="has-input input-lg"
-											placeholder="Fecha Inicial"
-											onChange={() => this.handleChangeEdit(event)}
+											key="fecha_inicio"
+											label="Fecha Inicio"
+											required
+											value={form.fecha_inicio}
+											format="YYYY/MM/DD hh:mm a"
+											onChange={(event) => this.handleChange(event, 'fecha_inicio')}
+											animateYearScrolling={false}
+											leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
+											rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
+											showTodayButton={true}
 										/>
 									</div>
 									<div className="col-lg-6">
-										<Input
-											type="date"
-											name="fecha_fin"
-											id="fecha_fin"
-											value={moment(this.state.form.fecha_fin).format('YYYY-MM-DD')}
+										<DateTimePicker
 											className="has-input input-lg"
-											placeholder="Fecha Final"
-											onChange={() => this.handleChangeEdit(event)}
+											key="fecha_fin"
+											label="Fecha Fin"
+											required
+											value={form.fecha_fin}
+											minDate={moment(form.fecha_inicio, 'YYYY/MM/DD hh:mm a')}
+											format="YYYY/MM/DD hh:mm a"
+											onChange={(event) => this.handleChange(event, 'fecha_fin')}
+											animateYearScrolling={false}
+											leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
+											rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
+											showTodayButton={true}
 										/>
 									</div>
 								</div>

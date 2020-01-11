@@ -316,11 +316,11 @@ export default class dispositivos extends Component {
 							btnSize="sm"
 							show={modaledit}
 							showCancel
-							confirmBtnText="editar"
+							confirmBtnText="Editar"
 							cancelBtnText="Cancelar"
 							cancelBtnBsStyle="danger"
-							confirmBtnBsStyle="success"
-							title="editar Dispositivo"
+							confirmBtnBsStyle="primary"
+							title="Editar Dispositivo"
 							onConfirm={() => this.handleEdit(event)}
 							onCancel={() => this.onCancel('modaledit')}
 						>

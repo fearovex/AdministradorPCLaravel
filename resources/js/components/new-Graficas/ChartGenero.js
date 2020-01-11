@@ -147,7 +147,7 @@ class ChartGenero extends Component {
                      show={prompt}
                      confirmBtnText="Cancelar"
                      confirmBtnBsStyle="danger"
-                     title="Detalle"
+                     title="Detalle Genero"
                      onConfirm={() => this.onCancel('prompt')}
                >
                   <MUIDataTable
