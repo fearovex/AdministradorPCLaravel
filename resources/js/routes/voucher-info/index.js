@@ -161,7 +161,7 @@ export default class VoucherInfo extends Component {
 
 
 				<PageTitleBar
-					title="vouchers-info"
+					title="Información de Vouchers"
 					match={this.props.match}
 					history={this.props.history}
 				/>
@@ -212,7 +212,7 @@ export default class VoucherInfo extends Component {
 				<RctCollapsibleCard fullBlock>
 					<MUIDataTable
 						className="mui-tableRes"
-						title={"Lista Vouchers"}
+						title={"Lista de Vouchers"}
 						data={this.state.dataVouchers}
 						columns={columns}
 						options={options}
