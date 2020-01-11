@@ -155,7 +155,7 @@ export default class zona extends Component {
 		let zona = await res.json();
 		this.setState({
 			form: {
-				nombre: zona.Nombre,
+				nombre: zona.nombre,
 				id_zona: id,
 			}
 		});

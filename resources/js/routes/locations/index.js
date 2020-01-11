@@ -345,7 +345,7 @@ export default class Locations extends Component {
 						btnSize="sm"
 						show={prompt}
 						title="Crear Zona"
-						confirmBtnText={/*<IntlMessages id='alert.timeOutButtom' />*/ 'cancelar'}
+						confirmBtnText={/*<IntlMessages id='alert.timeOutButtom' />*/ 'Cancelar'}
 						confirmBtnBsStyle="danger"
 						onConfirm={() => this.onCancel('prompt')}
 					>
@@ -390,7 +390,7 @@ export default class Locations extends Component {
 						cancelBtnText="Cancelar"
 						cancelBtnBsStyle="danger"
 						confirmBtnBsStyle="primary"
-						title="Editar locacion"
+						title="Editar Locacion"
 						onConfirm={() => this.handleEdit(event)}
 						onCancel={() => this.onCancel('modaledit')}
 					>

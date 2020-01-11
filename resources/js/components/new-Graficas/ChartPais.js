@@ -125,7 +125,7 @@ class ChartPais extends Component {
                      show={prompt}
                      confirmBtnText="Cancelar"
                      confirmBtnBsStyle="danger"
-                     title="Detalle"
+                     title="Detalle Pais"
                      onConfirm={() => this.onCancel('prompt')}
                >
                   <MUIDataTable

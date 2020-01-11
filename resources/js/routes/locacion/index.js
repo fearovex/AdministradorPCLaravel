@@ -273,7 +273,7 @@ export default class locacion extends Component {
 					btnSize="sm"
 					show={prompt}
 					title={<IntlMessages id='alert.timeOutTitle' />}
-					confirmBtnText={'cancelar'}
+					confirmBtnText="Cancelar"
 					confirmBtnBsStyle="danger"
 					onConfirm={() =>  this.onCancel('prompt')}
 				>

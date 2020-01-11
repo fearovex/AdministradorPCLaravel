@@ -179,11 +179,11 @@ export default class VoucherInfo extends Component {
 							btnSize="sm"
 							show={modalEmailCsv}
 							showCancel
-							confirmBtnText="Send"
-							cancelBtnText="Cancel"
+							confirmBtnText="Enviar"
+							cancelBtnText="Cancelar"
 							cancelBtnBsStyle="danger"
 							confirmBtnBsStyle="primary"
-							title="Send Email CSV"
+							title="Enviar Email CSV"
 							onConfirm={() => this.handleSubmit(event)}
 							onCancel={() => this.onCancel('modalEmailCsv')}
 						>

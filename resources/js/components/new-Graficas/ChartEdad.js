@@ -149,7 +149,7 @@ class ChartEdad extends Component {
                      show={prompt}
                      confirmBtnText="Cancelar"
                      confirmBtnBsStyle="danger"
-                     title="Detalle"
+                     title="Detalle Edad"
                      onConfirm={() => this.onCancel('prompt')}
                >
                   <MUIDataTable
