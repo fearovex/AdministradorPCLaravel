@@ -28,6 +28,7 @@ import Locations from 'Routes/locations';
 import Analytical from 'Routes/analytical';
 import Voucher from 'Routes/voucher';
 import Vouchers from 'Routes/vouchers';
+import VoucherInfo from 'Routes/voucher-info';
 
 // async component
 import {
@@ -155,7 +156,7 @@ export default [
       component: zonas
    },
    {
-      path: 'locations/:location/dispositivos',
+      path: 'locations/:location/zonas/dispositivos',
       component: dispositivos
    },
    {
@@ -171,7 +172,11 @@ export default [
       component: Vouchers
    },
    {
-      path: 'locations/:location/vouchers/create',
+      path: 'locations/:location/vouchers/voucher-info',
+      component: VoucherInfo
+   },
+   {
+      path: 'locations/:location/vouchers/voucher-info/create',
       component: Voucher
    },
 ]

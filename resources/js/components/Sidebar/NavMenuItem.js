@@ -48,6 +48,7 @@ class NavMenuItem extends Component {
    }
 
    ClickNavLink(id_location, id_campain){
+      console.log(id_location)
       localStorage.setItem('user_location', id_location);
       localStorage.setItem('user_campaing', id_campain);
    }
@@ -62,7 +63,7 @@ class NavMenuItem extends Component {
                   <ListItemIcon className="menu-icon">
                      <i className={menu.menu_icon}></i>
                   </ListItemIcon>
-                  <span className="menu text-capitalize">
+                  <span className="menu text-capitalize" style={{fontSize: 13}}>
                      {menu.menu_title} 
                   </span>
                   {menu.new_item && menu.new_item === true ?
@@ -80,10 +81,13 @@ class NavMenuItem extends Component {
                                  <ListItem button component="li" key={index}>
                                     <NavLink 
                                        to={subMenu.path}
-                                       onClick = {() => this.ClickNavLink()}
+                                       onClick = {() => this.ClickNavLink(subMenu.id_location, subMenu.id_campain)}
                                        activeClassName="item-active"
                                     >
-                                       <span className="menu">
+                                       <ListItemIcon className="menu-icon">
+                                          <i className={subMenu.menu_icon}></i>
+                                       </ListItemIcon>
+                                       <span className="menu" style={{fontSize: 12}}>
                                          {subMenu.menu_title}
                                        </span>
                                        {subMenu.new_item && subMenu.new_item === true ?
@@ -114,11 +118,15 @@ class NavMenuItem extends Component {
                                           <List className="list-unstyled py-0">
                                              {subMenu.child_routes.map((nestedMenu, nestedKey) => (
                                                 <ListItem button component="li" key={nestedKey}>
+                                                   <ListItemIcon className="menu-icon">
+                                                      <i className={subMenu.menu_icon}></i>
+                                                   </ListItemIcon>
                                                    <NavLink 
                                                       activeClassName="item-active" 
                                                       to={nestedMenu.path}
                                                       onClick = {() => this.ClickNavLink(nestedMenu.id_location, nestedMenu.id_campain)}
                                                    >
+                                                      
                                                       <span className="menu pl-10 d-inline-block">
                                                          {nestedMenu.menu_title} 
                                                       </span>
@@ -139,7 +147,10 @@ class NavMenuItem extends Component {
                                              onClick = {() => this.ClickNavLink(subMenu.id_location, subMenu.id_campain)}
                                              activeClassName="item-active"
                                           >
-                                             <span className="menu">
+                                             <ListItemIcon className="menu-icon">
+                                                <i className={subMenu.menu_icon}></i>
+                                             </ListItemIcon>
+                                             <span className="menu" style={{fontSize: 12}}>
                                              {subMenu.menu_title}
                                              </span>
                                           </NavLink>

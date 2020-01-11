@@ -6,17 +6,7 @@ import List from '@material-ui/core/List';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-
-import update from 'react-addons-update';
-import { TOGGLE_MENU, AGENCY_TOGGLE_MENU } from 'Actions/types';
-
-
-// import IntlMessages from 'Util/IntlMessages';
-
 import NavMenuItem from './NavMenuItem';
-
-
-// redux actions
 import { onToggleMenu } from 'Actions';
 
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import MUIDataTable from "mui-datatables";
+import {createMuiTheme, MuiThemeProvider, withStyles} from '@material-ui/core/styles';
 import moment from "moment";
 
 // page title bar
@@ -41,7 +42,8 @@ export default class DetailEvents extends Component {
                 initialDate: initialDate,
                 finalDate: finalDate,
                 id_event: id_campain,
-				id_location: id_location
+				id_location: id_location,
+				nameColumns: [],
 			},
 			nameColumns: [],
 			dataDetails: [],
@@ -53,7 +55,7 @@ export default class DetailEvents extends Component {
 		this.handleDateFilterCancel = this.handleDateFilterCancel.bind(this)
 		this.handleChangeFilter = this.handleChangeFilter.bind(this)
 	}
-	
+
 	async componentDidMount(){	
 		try {
 			//Consulta Nombre Columnas  -> Se hace la consulta de los nombres de las columnas de la tabla correspondiente
@@ -75,13 +77,17 @@ export default class DetailEvents extends Component {
 			for (let i = 0; i < dataNameColumns.length; i++) {
 				arrayNames.push.apply(arrayNames, Object.values(dataNameColumns[i]))
 			}
-			arrayNames = arrayNames.filter(names => names != 'id' && names != 'id_evento' && names != 'id_pais')
+			arrayNames = arrayNames.filter(names => names != 'id' && names != 'Campania' && names != 'Pais')
 			 // fin Proceso DataTable
 
 			 //Consulta Detalle -> Se consulta el detalle del evento de acuerdo a su tabla en la bd
 
 			this.setState({
 				nameColumns: arrayNames,
+				form:{
+					...this.state.form,
+					nameColumns: arrayNames,
+				}
 			})
 			//fin Consulta Detalle
 				
@@ -234,22 +240,26 @@ export default class DetailEvents extends Component {
 		return (
 			<div className="data-table-wrapper">
 				
-				<PageTitleBar title={<IntlMessages id="sidebar.detailEvents" />} match={this.props.match} />
+				<PageTitleBar 
+					title={<IntlMessages id="sidebar.detailEvents" />} 
+					match={this.props.match} 
+					history={this.props.history}
+				/>
 				
-				<RctCollapsibleCard>
-					<FilterDateForm
-						form={form}
-						onChange={this.handleChange}
-						onSubmit={this.handleDateFilter}
-						onClick={this.handleModal}
-						onChangeFilter={this.handleChangeFilter}
-						onCancel={this.handleDateFilterCancel}
-						campain={false}
-					/>
-				</RctCollapsibleCard>
-				<RctCollapsibleCard heading="Tabla de Datos" fullBlock>
+				<FilterDateForm
+					form={form}
+					onChange={this.handleChange}
+					onSubmit={this.handleDateFilter}
+					onClick={this.handleModal}
+					onChangeFilter={this.handleChangeFilter}
+					onCancel={this.handleDateFilterCancel}
+					campain={false}
+				/>
+				<div className="blank-wrapper" style={{marginBottom: '20px'}}>
+
+				</div>
+				<RctCollapsibleCard fullBlock>
 					<MUIDataTable
-						title={"Detalle Eventos"}
 						data={this.state.dataDetails}
 						columns={columns}
 						options={options}

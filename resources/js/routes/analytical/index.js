@@ -59,7 +59,7 @@ export default class Analytical extends Component {
                 initialDate: initialDate,
                 finalDate: finalDate,
                 id_event: 0,
-                columns: ["genero","ip_ap","id_pais","os","fecha_creacion","edad"],
+                columns: ["genero","mac_ap","id_pais","os","fecha_creacion","edad"],
                 id_location: id_location,
                 campania: 'Todas',
             },
@@ -236,27 +236,32 @@ export default class Analytical extends Component {
         const { events,form } = this.state;
         const { location } = this.props.match.params
         return (
-            <div className="cardsmasonry-wrapper">
-                <PageTitleBar title={location} match={this.props.match} />
-                <RctCollapsibleCard>
-					<FilterDateForm
-							form={form}
-							onChange={this.handleChange}
-                            onSubmit={this.handleDateFilter}
-                            onClick={this.handleModal}
-                            onChangeFilter={this.handleChangeFilter}
-                            onCancel={this.handleDateFilterCancel}
-                            campain={true}
-                            events={events}
-                            onClickCampania={this.handleClickCampain}
-					/>
-				</RctCollapsibleCard>
+            <div className="cardsmasonry-wrapper" >
+                <PageTitleBar 
+                    title={location} 
+                    match={this.props.match} 
+                    history={this.props.history}
+                />
+                <FilterDateForm
+                        form={form}
+                        onChange={this.handleChange}
+                        onSubmit={this.handleDateFilter}
+                        onClick={this.handleModal}
+                        onChangeFilter={this.handleChangeFilter}
+                        onCancel={this.handleDateFilterCancel}
+                        campain={true}
+                        events={events}
+                        onClickCampania={this.handleClickCampain}
+                />
+                <div className="blank-wrapper" style={{marginBottom: '20px'}}>
+
+                </div>
                 <CardColumns>
                     <Card>
                         <CardBody>
                             <CardTitle><IntlMessages id="graphics.ap" /></CardTitle>
                         </CardBody>
-                        <ChartAp data={this.state.data.ip_ap} paddingRight={20}/>
+                        <ChartAp data={this.state.data.mac_ap} paddingRight={20}/>
                     </Card>
                     <Card>
                         <CardBody>

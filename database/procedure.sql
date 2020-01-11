@@ -89,16 +89,16 @@ BEGIN
         set @columnName = (select replace(@columnName, '"', ''));
         if @columnName = 'id_pais' then
         		set @insertData = concat('
-	            insert into dataColumns (people, dataColumn, nameColumn) SELECT COUNT(t.',@columnName,') AS people, paises.nombre_esp as dataColumn, "',@columnName,'" as nameColumn FROM (',@queryTotal,') as t inner join ',nameDataBase,'.paises on t.id_pais = paises.id GROUP BY dataColumn ORDER BY people DESC LIMIT 5
+	            insert into dataColumns (people, dataColumn, nameColumn) SELECT COUNT(t.',@columnName,') AS people, paises.nombre_esp as dataColumn, "',@columnName,'" as nameColumn FROM (',@queryTotal,') as t inner join ',nameDataBase,'.paises on t.id_pais = paises.id GROUP BY dataColumn HAVING COUNT(t.',@columnName,') <> 0 ORDER BY people DESC LIMIT 5
 	        ');
 		   else
 		   	if @columnName = 'fecha_creacion' then 
 		   		set @insertData = concat('
-	            	insert into dataColumns (people, dataColumn, nameColumn) SELECT COUNT(t.',@columnName,') AS people, date(t.',@columnName,') as dataColumn, "',@columnName,'" as nameColumn FROM (',@queryTotal,') as t GROUP BY dataColumn ORDER BY people DESC LIMIT 5
+	            	insert into dataColumns (people, dataColumn, nameColumn) SELECT COUNT(t.',@columnName,') AS people, date(t.',@columnName,') as dataColumn, "',@columnName,'" as nameColumn FROM (',@queryTotal,') as t GROUP BY dataColumn HAVING COUNT(t.',@columnName,') <> 0 ORDER BY people DESC LIMIT 5
 	        		');
 		   	else
 			   	set @insertData = concat('
-	            	insert into dataColumns (people, dataColumn, nameColumn) SELECT COUNT(t.',@columnName,') AS people, t.',@columnName,' as dataColumn, "',@columnName,'" as nameColumn FROM (',@queryTotal,') as t GROUP BY dataColumn ORDER BY people DESC LIMIT 5
+	            	insert into dataColumns (people, dataColumn, nameColumn) SELECT COUNT(t.',@columnName,') AS people, t.',@columnName,' as dataColumn, "',@columnName,'" as nameColumn FROM (',@queryTotal,') as t GROUP BY dataColumn HAVING COUNT(t.',@columnName,') <> 0 ORDER BY people DESC LIMIT 5
 	        		');
 	        	end if;
 		   end if;

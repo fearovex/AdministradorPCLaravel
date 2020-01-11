@@ -28,22 +28,29 @@ class GraficasController extends Controller
         $countData = 0;
         $countColumns = 0;
         foreach ($dataColumns as $key){
-            if($key->nameColumn ==  $columns[$countColumns]){
-                $DatosGraficas[$key->nameColumn][$countData] = array();
-                $DatosGraficas[$key->nameColumn][$countData] = array(
-                    "personas" => $key->people,
-                    $key->nameColumn => $key->dataColumn
-                );
-                $countData++;
-            }
-            else{
-                $countData = 0;
-                $countColumns++;
-            }
+            do{
+                if($key->nameColumn ==  $columns[$countColumns]){
+                    $DatosGraficas[$key->nameColumn][$countData] = array();
+                    if($key->nameColumn === "mac_ap"){
+                        $nombre_dispositivo = DB::connection(session('database'))->table('dispositivos')->select('nombre_dispositivo')->where('mac_dispositivo', $key->dataColumn)->first();
+                        if($nombre_dispositivo){
+                            $key->dataColumn = $nombre_dispositivo->nombre_dispositivo; 
+                        }
+                    }
+                    $DatosGraficas[$key->nameColumn][$countData] = array(
+                        "personas" => $key->people,
+                        $key->nameColumn => $key->dataColumn
+                    );
+                    $countData++;
+                    $repitetir = false;
+                }
+                else{
+                    $countData = 0;
+                    $repitetir = true;
+                    $countColumns++;
+                }
+            }while ($repitetir);
         }
-        return $DatosGraficas;
-        exit;
-        
         // $DatosGraficas['genero'] = DB::connection(session('database'))
         //     ->table($Evento->campania)
         //     ->select(DB::raw('genero, COUNT(*) AS personas'))

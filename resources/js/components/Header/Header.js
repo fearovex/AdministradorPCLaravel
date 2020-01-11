@@ -144,7 +144,7 @@ class Header extends Component {
 								</Tooltip>
 							</li>
 						} */}
-						<LanguageProvider />
+						{/* <LanguageProvider /> */}
 						{/* <Notifications /> */}
 						{/* <Cart /> */}
 						{/* <li className="list-inline-item setting-icon">

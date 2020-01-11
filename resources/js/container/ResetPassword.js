@@ -141,10 +141,9 @@ import { logoutUserFromFirebase } from 'Actions';
                   </AppBar>
                   <div className="row">
                      <div className="col-sm-8 col-lg-5 mx-auto">
-                        <div className="session-body text-center">
+                        <div className="session-body text-center login-body">
                            <div className="session-head mb-30">
-                              <h2>Reset Your Password</h2>
-                              <p className="mb-0">Fill correctly the fields for reset succesfully your password</p>
+                              <h2 className="forgotPasswordTitle">Reset Your Password</h2>
                            </div>
                            <Form>
                               <FormGroup className="has-wrapper">

@@ -21,7 +21,16 @@
     padding-right : 20px;
     float:right;
 }
-
+.voucherNum{
+    margin-left: 2.7rem !important;
+    margin-top: 1.8rem !important;
+    margin-bottom: 0.5rem !important;
+}
+.generalMarginVoucherInputs{
+    margin-top: 1.8rem !important;
+    margin-left: 0.3rem !important;
+    margin-bottom: 0.5rem !important;
+}
 
 .mui-tableRes{
     margin-top: 76px;
