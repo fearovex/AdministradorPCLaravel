@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `campania` (
 -- Volcando datos para la tabla portal_oxohotel.campania: ~3 rows (aproximadamente)
 /*!40000 ALTER TABLE `campania` DISABLE KEYS */;
 REPLACE INTO `campania` (`id`, `id_locacion`, `nombre`, `descripcion`, `fecha_inicio`, `fecha_fin`, `ano_evento`, `campania`, `zona_ap`) VALUES
-    (1,1,'Coworking','Portal cautivo que cuenta con un banner con publicidad','2019-11-21 00:00:00','2019-12-31 23:59:59'2019,'Coworking',1),
+    (1,1,'Coworking','Portal cautivo que cuenta con un banner con publicidad','2019-11-21 00:00:00','2019-12-31 23:59:59',2019,'Coworking',1),
     (2,1,'Gammer','Portal cautivo que cuenta con un banner con publicidad y un formulario de registro','2019-11-21 00:00:00','2019-12-31 23:59:59',2019,'Gammer',1);
 /*!40000 ALTER TABLE `campania` ENABLE KEYS */;
 
