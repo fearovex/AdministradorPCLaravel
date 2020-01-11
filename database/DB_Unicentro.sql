@@ -63,7 +63,7 @@ REPLACE INTO `diccionario` (`id`, `name_column`, `alias_column`) VALUES
 	(14, 'id_pais', 'Pais'),
 	(15, 'piso', 'Piso'),
 	(16, 'bloque', 'Bloque'),
-	(17, 'num_habitacion', 'N° Habitacion');
+	(17, 'apellidos', 'Apellidos');
 /*!40000 ALTER TABLE `diccionario` ENABLE KEYS */;
 
 -- Volcando estructura para tabla portal_oxohotel.dispositivos
@@ -80,10 +80,10 @@ CREATE TABLE IF NOT EXISTS `dispositivos` (
 -- Volcando datos para la tabla portal_oxohotel.dispositivos: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `dispositivos` DISABLE KEYS */;
 REPLACE INTO `dispositivos` (`id`, `nombre_dispositivo`, `mac_dispositivo`, `id_zona`, `tecnologia`) VALUES
-	(1, 'Coworking', '60d02c2d04f0', 1, 'Ruckus'),
-    (2, 'Coworking', 'b479c805e0d0', 1, 'Ruckus'),
-    (3, 'Gammer', '60d02c2d054f3', 2, 'Ruckus'),
-    (4, 'Gammer', 'b479c805e130', 2, 'Ruckus');
+	(1, 'Coworking-1', '60d02c2d04f0', 1, 'Ruckus'),
+    (2, 'Coworking-2', 'b479c805e0d0', 1, 'Ruckus'),
+    (3, 'Gammer-1', '60d02c2d054f3', 2, 'Ruckus'),
+    (4, 'Gammer-2', 'b479c805e130', 2, 'Ruckus');
 /*!40000 ALTER TABLE `dispositivos` ENABLE KEYS */;
 
 DROP TABLE IF EXISTS `locaciones`;
