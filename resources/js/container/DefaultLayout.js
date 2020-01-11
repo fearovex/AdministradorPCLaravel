@@ -17,7 +17,7 @@ class DefaultLayout extends Component {
 		return (
 			<RctAppLayout>
 				{routerService && routerService.map((route,key)=>
-					<Route key={key} path={`${match.url}/${route.path}`} component={route.component} />
+					<Route key={key} exact path={`${match.url}/${route.path}`} component={route.component} />
 				)}
 			</RctAppLayout>
 		);

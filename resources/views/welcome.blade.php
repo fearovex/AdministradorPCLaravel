@@ -35,12 +35,22 @@
         @if(!session('active'))
             localStorage.clear();
         @endif
-      localStorage.setItem('urlDomain', '{{env("APP_URL")}}');
+       
+        localStorage.setItem('urlDomain', '{{env("APP_URL")}}');
+        
+        @if(session('sideBar'))
+            localStorage.setItem('navLinks', '{!!json_encode(session("sideBar"))!!}');
+        @else
+            localStorage.setItem('navLinks', '{!!json_encode($navLinks)!!}');
+            
+        @endif
     </script> 
 
     <script type="application/javascript">
         function getIP(json) {
             localStorage.setItem('ip_client', json.ip);
+            
+            
         }
     </script>
 
@@ -57,6 +67,7 @@
     <noscript>
         You need to enable JavaScript to run this app.
     </noscript>
+    
     <div id="root"></div>
     <script type="text/javascript" src="{{asset('js/index.js')}}"></script>
 </body>

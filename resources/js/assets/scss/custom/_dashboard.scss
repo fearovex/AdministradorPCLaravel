@@ -456,3 +456,17 @@
     }
   }
 }
+.MuiDialog-root{
+  z-index: 5600 !important;
+}
+.MuiPaper-rounded{
+  padding: 10px !important;
+  background-color: #2c3644 !important;
+}
+.MuiTableCell-head{
+  font-weight: bold !important;
+  background-color: #313131 !important;
+}
+.MuiTableCell-body {
+  background-color: #424242 !important;
+}

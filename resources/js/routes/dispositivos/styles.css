@@ -1,0 +1,19 @@
+.MuiTableCell-head{
+    z-index: 98!important;
+}
+.sweet-alert{    
+    width: 480pz !important;
+    padding: 17px !important;
+    /* left: 40% !important; */
+    
+}
+
+.botonDisp {
+    padding-right : 20px;
+    float:right;
+}
+
+.mui-tableRes{
+    margin-top: 76px;
+}
+

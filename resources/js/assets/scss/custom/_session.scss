@@ -18,10 +18,19 @@
 .forgotPassword{
   padding-bottom: 10px;
 }
+.forgotPasswordTitle{
+  font-size: 23px !important;
+  font-weight: bolder !important;
+}
 
 .imgLogoIPFi{
-  width: 250px;
+  width: 300px;
   padding-bottom: 20px;
+}
+
+.login-body{
+  background-color: transparent !important;
+  color: black;
 }
 
 .reCaptcha{

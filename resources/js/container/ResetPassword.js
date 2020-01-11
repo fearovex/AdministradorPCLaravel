@@ -141,10 +141,9 @@ import { logoutUserFromFirebase } from 'Actions';
                   </AppBar>
                   <div className="row">
                      <div className="col-sm-8 col-lg-5 mx-auto">
-                        <div className="session-body text-center">
+                        <div className="session-body text-center login-body">
                            <div className="session-head mb-30">
-                              <h2>Reset Your Password</h2>
-                              <p className="mb-0">Fill correctly the fields for reset succesfully your password</p>
+                              <h2 className="forgotPasswordTitle">Reset Your Password</h2>
                            </div>
                            <Form>
                               <FormGroup className="has-wrapper">
@@ -152,6 +151,7 @@ import { logoutUserFromFirebase } from 'Actions';
                                  type="mail" 
                                  name="email" 
                                  id="email" 
+                                 autocomplete="off"
                                  required
                                  className="has-input input-lg" 
                                  placeholder="Enter Email Address"
@@ -164,6 +164,7 @@ import { logoutUserFromFirebase } from 'Actions';
                                     type="password" 
                                     name="password" 
                                     id="password" 
+                                    autocomplete="off"
                                     required
                                     className="has-input input-lg" 
                                     placeholder="Enter New Password"
@@ -176,6 +177,7 @@ import { logoutUserFromFirebase } from 'Actions';
                                  name="password_confirmation" 
                                  id="password_confirmation" 
                                  required
+                                 autocomplete="off"
                                  className="has-input input-lg" 
                                  placeholder="Verify New Password"
                                  onChange={() => this.handleChange(event)}

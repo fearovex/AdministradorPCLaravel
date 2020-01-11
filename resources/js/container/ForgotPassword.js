@@ -13,7 +13,7 @@ import { NotificationContainer, NotificationManager } from 'react-notifications'
 
 export default class ForgotPassword extends Component {
 
-
+   
       state = {
          error: null,
          form: {
@@ -85,10 +85,9 @@ export default class ForgotPassword extends Component {
                   </AppBar>
                   <div className="row">
                      <div className="col-sm-8 col-lg-5 mx-auto">
-                        <div className="session-body text-center">
+                        <div className="session-body text-center login-body">
                            <div className="session-head mb-30">
-                              <h2>Forgot The Password?</h2>
-                              <p className="mb-0">Put your email for receive a notification with your password</p>
+                              <h2 className="forgotPasswordTitle">Forgot The Password?</h2> 
                            </div>
                            <Form>
                               <FormGroup className="has-wrapper">

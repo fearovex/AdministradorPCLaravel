@@ -91,7 +91,7 @@ function* signInUserWithEmailPassword({ payload }) {
     try {
         // const signInUser = {message: "The password is invalid or the user does not have a password."};
         const signInUser = data;
-      
+        console.log(signInUser);
         if (signInUser.message) {
             yield put(signinUserFailure(signInUser.message));
         } else {
@@ -100,6 +100,18 @@ function* signInUserWithEmailPassword({ payload }) {
             localStorage.setItem('user_email', signInUser.email);
             localStorage.setItem('user_database', signInUser.database);
             localStorage.setItem('user_imgdashboard', signInUser.imgdashboard);
+            localStorage.setItem('user_dashboard', signInUser.dashboard);
+            localStorage.setItem('user_location', signInUser.location);
+            localStorage.setItem('user_campaing', signInUser.campaing);
+            if(signInUser.id_rol == 1){
+                localStorage.setItem('user_module', 'Locations');
+            }
+            if(signInUser.id_rol == 2){
+                localStorage.setItem('user_module', 'Location');
+            }
+            if(signInUser.id_rol == 3){
+                localStorage.setItem('user_module', 'Campaing');
+            }
             yield put(signinUserSuccess(signInUser));
             history.push('/');
         }
@@ -191,6 +203,10 @@ function* signOut() {
         localStorage.removeItem('user_email');
         localStorage.removeItem('user_database');
         localStorage.removeItem('user_imgdashboard');
+        localStorage.removeItem('user_dashboard');
+        localStorage.removeItem('user_location');
+        localStorage.removeItem('user_campaing');
+        localStorage.removeItem('user_module');
         yield put(logoutUserFromFirebaseSuccess())
     } catch (error) {
         yield put(logoutUserFromFirebaseFailure());

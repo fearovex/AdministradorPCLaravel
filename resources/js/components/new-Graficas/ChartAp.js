@@ -8,6 +8,8 @@ import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 am4core.useTheme(am4themes_animated);
+import SweetAlert from 'react-bootstrap-sweetalert'
+import MUIDataTable from "mui-datatables";
 
 // rct card box
 import { RctCardContent } from 'Components/RctCard';
@@ -16,9 +18,20 @@ import { RctCardContent } from 'Components/RctCard';
 class ChartAp extends Component {
    constructor(props){
       super(props)
-
+      
       this.state={
-         props: ''
+         props: '',
+         columns: [],
+         data: [],
+         error: null,
+         id:0,
+         prompt: false,
+         modaledit:false,
+         zona:[],
+                  		
+         form: {
+            nombre: ""
+            }
       }
    }
 
@@ -28,6 +41,9 @@ class ChartAp extends Component {
 
    componentDidUpdate() {
       if(this.state.props != this.props.data){
+         if (this.chart) {
+            this.chart.dispose();
+         }
          this.handleChart(this.props.data)
          this.setState({
             props: this.props.data
@@ -45,7 +61,9 @@ class ChartAp extends Component {
 
       // Create axes
       let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-      categoryAxis.dataFields.category = "ap";
+      categoryAxis.dataFields.category = "mac_ap";
+      categoryAxis.title.text = "Access Point";
+      categoryAxis.title.fontWeight = "bold";
       categoryAxis.renderer.grid.template.location = 0;
       categoryAxis.renderer.minGridDistance = 30;
       categoryAxis.renderer.labels.template.horizontalCenter = "right";
@@ -55,13 +73,15 @@ class ChartAp extends Component {
       categoryAxis.renderer.minHeight = 110;
 
       let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+      valueAxis.title.text = "People";
+      valueAxis.title.fontWeight = "bold";
       valueAxis.renderer.minWidth = 50;
 
       // Create series
       let series = chart.series.push(new am4charts.ColumnSeries());
       series.sequencedInterpolation = true;
       series.dataFields.valueY = "personas";
-      series.dataFields.categoryX = "ap";
+      series.dataFields.categoryX = "mac_ap";
       series.columns.template.strokeWidth = 0;
 
       series.tooltip.pointerOrientation = "vertical";
@@ -82,6 +102,8 @@ class ChartAp extends Component {
 
       // Cursor
       chart.cursor = new am4charts.XYCursor();
+      this.chart = chart;
+      
    }
 
    componentWillUnmount() {
@@ -91,9 +113,11 @@ class ChartAp extends Component {
    }
 
    render() {
+      
       return (
          <RctCardContent>
-            <div id="chartap" style={{ width: "100%", height: "300px" }}></div>
+            <div id="chartap" style={{ width: "100%", height: "300px" }}>
+            </div>
          </RctCardContent>
       );
    }

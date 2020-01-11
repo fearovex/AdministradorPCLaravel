@@ -1,0 +1,43 @@
+.MuiTableCell-head{
+    z-index: 98!important;
+}
+.sweet-alert{    
+    width: 480pz !important;
+    padding: 17px !important;
+    /* left: 40% !important; */
+    
+}
+.boton{
+    left: 85% !important; 
+}
+.botones{
+    left: 58% !important; 
+}
+.botonDisZon{
+    float:right;
+    margin-left: 20px;
+}
+.botonDisZon1 {
+    padding-right : 20px;
+    float:right;
+}
+.voucherNum{
+    margin-left: 2.7rem !important;
+    margin-top: 1.8rem !important;
+    margin-bottom: 0.5rem !important;
+}
+.generalMarginVoucherInputs{
+    margin-top: 1.8rem !important;
+    margin-left: 0.3rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.mui-tableRes{
+    margin-top: 76px;
+}
+.has-input{
+
+    left: 10%!important;} 
+    .input-lg{
+        left: 10%!important;
+    }

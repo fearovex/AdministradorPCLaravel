@@ -1,68 +1,110 @@
 import React, { useState} from "react";
 import { DateTimePicker } from '@material-ui/pickers';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
+import SweetAlert from 'react-bootstrap-sweetalert';
 import IntlMessages from 'Util/IntlMessages';
-import moment from "moment";
-import MomentUtils from "@date-io/moment";
-// import DatePicker from "react-datepicker";
+import { Badge } from 'reactstrap';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 // import "react-datepicker/dist/react-datepicker.css";
 // import './styles.css';
 
-const FilterDateForm = ({ form, onChange, onSubmit}) => (
-    <form className="form-inline justify-content-center"
-          onSubmit={onSubmit}
+const FilterDateForm = ({ form, onChange, onChangeFilter, onSubmit, onClick, onCancel, campain=false, events=null, onClickCampania}) => (
+    <form className="form-inline justify-content-start"
           style={{'padding':' 0 10px'}}
-    >
-        <div className="input-group mx-sm-2 mb-2">
-            <label className="mr-3">Fecha inicio</label>
-            <div className="input-group-prepend">
-                <div className="input-group-text"><i className="zmdi zmdi-calendar"></i></div>
+    >   
+        <div className="form-inline col-md-3 col-sm-12 col-lg-3">
+            <select name="filter" id="filter" className="form-control" onChange={onChangeFilter} value={form.filter}>
+                <option value="0">Today</option>
+                <option value="1">Last 3 days</option>
+                <option value="2">Last 15 days</option>
+                <option value="3">Last 1 month</option>
+                <option value="4">Personalizado</option>
+            </select>   
+        </div>
+        {form.filter == 4 &&
+            <div className="col-lg-9 col-md-9 col-sm-12">
+                <div className="row justify-content-center">
+                    <Badge className="ml-15 mt-5 col-md-3 pl-1 pb-5 col-sm-12 col-lg-3" color="dark">
+                        <span style={{margin: '3px 0', paddingBottom: '2px', borderBottom: '1px solid white'}}>Fecha Inicial Seleccionada</span>
+                        {String(form.initialDate)}
+                    </Badge>
+                    <Badge className="ml-15 mt-5 col-md-3 pl-1 pb-5 col-sm-12 col-lg-3" color="dark">
+                        <span style={{margin: '3px 0', paddingBottom: '2px', borderBottom: '1px solid white'}}>Fecha Final Seleccionada</span>
+                        {String(form.finalDate)}
+                    </Badge>
+                    {campain &&
+                        <Badge className="ml-15 mt-5 col-md-3 pl-1 pb-5 col-sm-12 col-lg-3" color="dark">
+                            <span style={{margin: '3px 0', paddingBottom: '2px', borderBottom: '1px solid white'}}>Campañas Seleccionada</span>
+                            {String(form.campania)}
+                        </Badge>
+                    }
+                    <div className="mt-5 col-lg-1 col-md-2 col-sm-12">
+                        <button className="btn btn-info" onClick={onClick}>
+                            <ListItemIcon className="menu-icon">
+                                <i className='ti-pencil-alt'></i>
+                            </ListItemIcon>
+                        </button>
+                    </div>
+                </div>
             </div>
-            
-            <input
-                type="date"
-                className="form-control"
-                placeholder="Fecha Inicial"
-                id="initialDate"
-                name="initialDate"
-                value={form.initialDate}
-                onChange={onChange}
-            />
-                       
-            <input
-                type="time"
-                className="form-control"
-                placeholder="Fecha Inicial"
-                name="initialTime"
-                value={form.initialTime}
-                onChange={onChange}
-            />
-        </div>
-        <div className="input-group mx-sm-2 mb-2">
-            <label className="mr-3">Fecha fin &nbsp;&nbsp;</label>
-            <div className="input-group-prepend">
-                <div className="input-group-text"><i className="zmdi zmdi-calendar"></i></div>
+        }
+        <SweetAlert
+            btnSize="sm"
+            show={form.filterPersonalizado}
+            showCancel
+            title="Filtro Perzonalizado"
+            confirmBtnText="Filtrar"
+            confirmBtnBsStyle="primary"
+            cancelBtnText="Cancelar"
+            cancelBtnBsStyle="danger"
+            onConfirm={onSubmit}
+            onCancel={onCancel}
+        >
+            <div className="row mt-40 mb-40">
+                <div className="col-lg-6 col-md-6 col-sm-12">
+                    <div className="rct-picker">
+                        <DateTimePicker 
+                            key="Fecha Inicial"
+                            label="Fecha Inicial"
+                            value={form.initialDate}
+                            format="YYYY/MM/DD hh:mm a"
+                            onChange={(event) => onChange(event, 'initialDate')}
+                            animateYearScrolling={false}
+                            leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
+                            rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
+                            showTodayButton={true}
+                        />
+                    </div>
+                </div>
+                <div className="col-lg-6 col-md-6 col-sm-12">
+                    <div className="rct-picker">
+                        <DateTimePicker 
+                            key="Fecha Final"
+                            label="Fecha Final"
+                            value={form.finalDate}
+                            format="YYYY/MM/DD hh:mm a"
+                            onChange={(event) => onChange(event, 'finalDate')}
+                            animateYearScrolling={false}
+                            leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
+                            rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
+                            showTodayButton={true}
+                        />
+                    </div>
+                </div>
             </div>
-            <input 
-                type="date" 
-                className="form-control" 
-                id="finalDate"
-                name="finalDate"
-                value={form.finalDate}
-                onChange={onChange}
-                />
-            <input 
-                type="time" 
-                className="form-control" 
-                name="finalTime"
-                value={form.finalTime}
-                onChange={onChange}
-                />
-        </div>
-        <div className="form-inline justify-content-center">
-            <button type="submit" className="btn btn-primary mb-2">Filtrar</button>
-        </div>
+            <div className="row mb-40">
+                {campain &&
+                    <div className="form-inline justify-content-center col-12 col-sm-12 col-lg-12">
+                        <label className="mr-4">Campañas</label>
+                        <select name="id_event" id="id_event" className="form-control" onChange={onChange} value={form.id_event}>
+                            <option value="0">Todas</option>
+                            {events && events.map((data, key) => (
+                            <option key={key} value={data.id}>{data.nombre}</option>
+                            ))}
+                        </select>   
+                    </div>
+                }
+            </div>
+        </SweetAlert>
     </form>
 );
 

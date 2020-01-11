@@ -42,8 +42,6 @@ class PasswordResetNotification extends Notification
      */
     public function toMail($notifiable)
     {
-
-        
         $urlDefaultFromEnv = env('APP_URL');
         $aliasFrom = env('ALIAS_MAIL_FROM');
         $urlToResetForm =$urlDefaultFromEnv."password/reset/?token=". $this->token;
