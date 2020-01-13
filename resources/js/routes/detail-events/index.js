@@ -227,6 +227,7 @@ export default class DetailEvents extends Component {
 		const options = {
 			responsive: 'stacked',
 			print: false,
+			selectableRows: false,
 			downloadOptions: { 
 				filename: 'DetalleCampañasTabla.csv',
 				filterOptions: {

@@ -186,6 +186,7 @@ export default class zona extends Component {
 		const { prompt, modaledit } = this.state;
 		const options = {
 			filterType: 'dropdown',
+			selectableRows: false,
 			responsive: 'scrollMaxHeight',
 			print: false,
 			download: false

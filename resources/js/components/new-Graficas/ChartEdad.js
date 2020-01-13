@@ -139,7 +139,8 @@ class ChartEdad extends Component {
       const data = this.state.data;
 		
 		const options = {
-			filterType: 'dropdown',
+         filterType: 'dropdown',
+         selectableRows: false,
 			responsive: 'scrollMaxHeight'
 		};
       return (
@@ -153,7 +154,6 @@ class ChartEdad extends Component {
                      onConfirm={() => this.onCancel('prompt')}
                >
                   <MUIDataTable
-                     title={"edad"}
                      data={data}
                      columns={columns}
                      options={options}
