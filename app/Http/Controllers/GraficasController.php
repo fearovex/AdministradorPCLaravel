@@ -14,7 +14,7 @@ class GraficasController extends Controller
         $campania =$request->id_event;
         $locaccion =$request->id_location;
         $database = session('database');
-        $columns = $request->columns;
+        $columns = $request->column;
         $columnsQuery = '["'.implode('","',$columns).'"]';
         
         $dataColumns = DB::select(

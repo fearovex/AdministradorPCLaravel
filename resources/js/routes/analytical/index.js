@@ -21,6 +21,7 @@ import ChartPais from "Components/new-Graficas/ChartPais";
 import ChartEdad from "Components/new-Graficas/ChartEdad";
 import ChartOS from "Components/new-Graficas/ChartOS";
 import ChartFecha from "Components/new-Graficas/ChartFecha";
+import ChartZona from "Components/new-Graficas/ChartZona";
 
 import {
     Card,
@@ -59,7 +60,7 @@ export default class Analytical extends Component {
                 initialDate: initialDate,
                 finalDate: finalDate,
                 id_event: 0,
-                columns: ["genero","mac_ap","id_pais","os","fecha_creacion","edad"],
+                column: ["fecha_creacion"],
                 id_location: id_location,
                 campania: 'Todas',
             },
@@ -73,14 +74,26 @@ export default class Analytical extends Component {
         this.handleModal = this.handleModal.bind(this)
         this.handleDateFilterCancel = this.handleDateFilterCancel.bind(this)
         this.handleChangeFilter = this.handleChangeFilter.bind(this)
+        this.handleReload = this.handleReload.bind(this)
     }
     
     componentDidMount(){
         this.ConsultaEventos()
-        this.ConsultaGraficas()
+        let column = "fecha_creacion"; //"genero","mac_ap","os",
+        this.state.form.column = [column];
+        this.ConsultaGraficas(column)
+        column = "mac_ap"; //"genero","mac_ap","os",
+        this.state.form.column = [column];
+        this.ConsultaGraficas(column)
+        column = "os"; //"genero","mac_ap","os",
+        this.state.form.column = [column];
+        this.ConsultaGraficas(column)
+        column = "id_evento"; //"genero","mac_ap","os",
+        this.state.form.column = [column];
+        this.ConsultaGraficas(column)
     }
 
-    async ConsultaGraficas(){
+    async ConsultaGraficas(column = "fecha_creacion"){
         try {
             let config = {
                 method: 'POST',
@@ -94,10 +107,11 @@ export default class Analytical extends Component {
 
             let res = await fetch(`${localStorage.urlDomain}api/graficas`, config);
             let datagraph = await res.json()
-
+            this.state.data[column] = datagraph[column];
             this.setState({
-                data: datagraph
+                data: [ [column] = datagraph.column ]
             })
+            console.log(this.state.data)
             
          } catch (error) {
                this.setState({ 
@@ -116,7 +130,7 @@ export default class Analytical extends Component {
                 filterPersonalizado: false,
             }
         });
-        this.ConsultaGraficas()
+        this.componentDidMount()
     }
     
     async ConsultaEventos(){
@@ -168,7 +182,7 @@ export default class Analytical extends Component {
             this.state.form.initialDate = (añoAtras) + '-' + (mesAtras) + '-' + (diaAtras) + " " + (horaAtras) + ":" + (minutosAtras)
             this.state.form.finalDate = (añoActual) + '-' + (mesActual) + '-' + (diaActual) + " " + (horaActual) + ":" + (minutosActual)
             
-            this.ConsultaGraficas()
+            this.componentDidMount()
         }
         else{
             this.handleModal();
@@ -229,7 +243,11 @@ export default class Analytical extends Component {
                 filterPersonalizado: false,
             }
         });
-        this.ConsultaGraficas()
+        this.componentDidMount()
+    }
+
+    handleReload(column){
+        this.ConsultaGraficas(column)
     }
 
     render() {
@@ -256,44 +274,50 @@ export default class Analytical extends Component {
                 <div className="blank-wrapper" style={{marginBottom: '20px'}}>
 
                 </div>
-                <CardColumns>
-                    <Card>
-                        <CardBody>
-                            <CardTitle><IntlMessages id="graphics.ap" /></CardTitle>
-                        </CardBody>
-                        <ChartAp data={this.state.data.mac_ap} paddingRight={20}/>
-                    </Card>
-                    <Card>
-                        <CardBody>
-                            <CardTitle><IntlMessages id="graphics.gender" /></CardTitle>
-                        </CardBody>
-                        <ChartGenero data={this.state.data.genero} paddingRight={20}/>
-                    </Card>
-                    <Card>
-                        <CardBody>
-                            <CardTitle><IntlMessages id="graphics.os" /></CardTitle>
-                        </CardBody>
-                        <ChartOS data={this.state.data.os}/>
-                    </Card>
-                    <Card>
-                        <CardBody>
-                            <CardTitle><IntlMessages id="graphics.pais" /></CardTitle>
-                        </CardBody>
-                        <ChartPais data={this.state.data.id_pais}/>
-                    </Card>
-                    <Card>
-                        <CardBody>
-                            <CardTitle><IntlMessages id="graphics.date" /></CardTitle>
-                        </CardBody>
+                <div className="row">
+                    <RctCollapsibleCard
+                        colClasses="col-sm-12 col-md-12 col-lg-12 w-xs-full"
+                        heading={<IntlMessages id="graphics.date" />}
+                        collapsible
+                        reloadable={this.handleReload('fecha_creacion')}
+                        fullBlock
+                        customClasses="overflow-hidden"
+                    >
                         <ChartFecha data={this.state.data.fecha_creacion}/>
-                    </Card>
-                    <Card>
-                        <CardBody>
-                            <CardTitle><IntlMessages id="graphics.edad" /></CardTitle>
-                        </CardBody>
-                        <ChartEdad data={this.state.data.edad}/>
-                    </Card>
-                </CardColumns>
+                    </RctCollapsibleCard>
+                </div>
+                <div className="row">
+                    <RctCollapsibleCard
+                        colClasses="col-sm-12 col-md-4 col-lg-4 w-xs-full"
+                        heading={<IntlMessages id="graphics.ap" />}
+                        collapsible
+                        reloadable={this.handleReload('mac_ap')}
+                        fullBlock
+                        customClasses="overflow-hidden"
+                    >
+                        <ChartAp data={this.state.data.mac_ap} paddingRight={20}/>
+                    </RctCollapsibleCard>
+                    <RctCollapsibleCard
+                        colClasses="col-sm-12 col-md-4 col-lg-4 w-xs-full"
+                        heading={<IntlMessages id="graphics.os" />}
+                        collapsible
+                        reloadable={this.handleReload('os')}
+                        fullBlock
+                        customClasses="overflow-hidden"
+                    >
+                        <ChartOS data={this.state.data.os}/>
+                    </RctCollapsibleCard>
+                    <RctCollapsibleCard
+                        colClasses="col-sm-12 col-md-4 col-lg-4 w-xs-full"
+                        heading={<IntlMessages id="graphics.zone" />}
+                        collapsible
+                        reloadable={this.handleReload('id_evento')}
+                        fullBlock
+                        customClasses="overflow-hidden"
+                    >
+                        <ChartZona data={this.state.data.id_evento} paddingRight={20}/>
+                    </RctCollapsibleCard>
+                </div>
             </div>
         );
 	}

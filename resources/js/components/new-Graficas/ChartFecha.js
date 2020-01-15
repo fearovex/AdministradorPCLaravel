@@ -65,13 +65,12 @@ class ChartFecha extends Component {
       
       // Create axes
       var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-      dateAxis.renderer.minGridDistance = 50;
-      dateAxis.title.text = "Date";
+      // dateAxis.renderer.minGridDistance = 50;
+      dateAxis.title.text = "Fecha";
       dateAxis.title.fontWeight = "bold";
-
       // Create value axis
       var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-      valueAxis.title.text = "People";
+      valueAxis.title.text = "Personas";
       valueAxis.title.fontWeight = "bold";
 
       // Create series
@@ -104,7 +103,7 @@ class ChartFecha extends Component {
       
       return (
          <RctCardContent>
-            <div id="chartfecha" style={{ width: "300px", height: "300px" }}>
+            <div id="chartfecha" style={{ width: "100%", height: "300px" }}>
                </div>
          </RctCardContent>
       );

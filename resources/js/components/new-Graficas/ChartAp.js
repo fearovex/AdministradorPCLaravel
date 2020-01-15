@@ -62,7 +62,7 @@ class ChartAp extends Component {
       // Create axes
       let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
       categoryAxis.dataFields.category = "mac_ap";
-      categoryAxis.title.text = "Access Point";
+      categoryAxis.title.text = "Dispositivos";
       categoryAxis.title.fontWeight = "bold";
       categoryAxis.renderer.grid.template.location = 0;
       categoryAxis.renderer.minGridDistance = 30;
@@ -73,7 +73,7 @@ class ChartAp extends Component {
       categoryAxis.renderer.minHeight = 110;
 
       let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-      valueAxis.title.text = "People";
+      valueAxis.title.text = "Personas";
       valueAxis.title.fontWeight = "bold";
       valueAxis.renderer.minWidth = 50;
 

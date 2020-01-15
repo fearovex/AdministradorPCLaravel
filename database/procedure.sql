@@ -7,7 +7,7 @@ CREATE PROCEDURE dataColumnsCampaings(
     IN nameDataBase VARCHAR(100),
     IN locationId INT,
 	IN campaniaId INT,
-    IN columnsNames JSON,
+    IN columnName JSON,
     IN fechainicial VARCHAR(50),
     IN fechafinal VARCHAR(50)
 )
@@ -45,11 +45,11 @@ BEGIN
         );
         prepare campains from @queryCampains;
         execute campains;
-        set @varCoutnColumns = (select Json_length(columnsNames));
+        set @varCoutnColumns = (select Json_length(columnName));
         set @var3 = 0;
         set @columsSelect = "";
         while @var3 < @varCoutnColumns do
-            set @columnName = (select json_extract(columnsNames, concat('$[',@var3,']')));
+            set @columnName = (select json_extract(columnName, concat('$[',@var3,']')));
             set @columnName = (select replace(@columnName, '"', ''));
             set @existe = (select exists (select * from nameColumns t where t.column_name = @columnName));
             if @existe = 1 then 
@@ -69,12 +69,12 @@ BEGIN
             select ',@columsSelect,' from ',nameDataBase,'.',@var2,' WHERE fecha_creacion BETWEEN  ',fechainicial,' AND ',fechafinal
         );
         if @var1 <> @countOne then
-            set @queryTotal = concat(@queryTotal,' union ');
+            set @queryTotal = concat(@queryTotal,' union all ');
         end if;
         set @var1 = @var1+1;
     end while;
     
- 	set @varCoutnColumns = (select Json_length(columnsNames));
+ 	set @varCoutnColumns = (select Json_length(columnName));
 	set @var4 = 0;
     set @dataColumn = "";
     drop table IF exists dataColumns;
@@ -85,23 +85,29 @@ BEGIN
 	);
 	
    while @var4 < @varCoutnColumns do
-        set @columnName = (select json_extract(columnsNames, concat('$[',@var4,']')));
+        set @columnName = (select json_extract(columnName, concat('$[',@var4,']')));
         set @columnName = (select replace(@columnName, '"', ''));
         if @columnName = 'id_pais' then
         		set @insertData = concat('
 	            insert into dataColumns (people, dataColumn, nameColumn) SELECT COUNT(t.',@columnName,') AS people, paises.nombre_esp as dataColumn, "',@columnName,'" as nameColumn FROM (',@queryTotal,') as t inner join ',nameDataBase,'.paises on t.id_pais = paises.id GROUP BY dataColumn HAVING COUNT(t.',@columnName,') <> 0 ORDER BY people DESC LIMIT 5
 	        ');
-		   else
-		   	if @columnName = 'fecha_creacion' then 
-		   		set @insertData = concat('
-	            	insert into dataColumns (people, dataColumn, nameColumn) SELECT COUNT(t.',@columnName,') AS people, date(t.',@columnName,') as dataColumn, "',@columnName,'" as nameColumn FROM (',@queryTotal,') as t GROUP BY dataColumn HAVING COUNT(t.',@columnName,') <> 0 ORDER BY people DESC LIMIT 5
-	        		');
-		   	else
-			   	set @insertData = concat('
-	            	insert into dataColumns (people, dataColumn, nameColumn) SELECT COUNT(t.',@columnName,') AS people, t.',@columnName,' as dataColumn, "',@columnName,'" as nameColumn FROM (',@queryTotal,') as t GROUP BY dataColumn HAVING COUNT(t.',@columnName,') <> 0 ORDER BY people DESC LIMIT 5
-	        		');
-	        	end if;
-		   end if;
+        else
+            if @columnName = 'fecha_creacion' then 
+                set @insertData = concat('
+                    insert into dataColumns (people, dataColumn, nameColumn) SELECT COUNT(t.',@columnName,') AS people, date(t.',@columnName,') as dataColumn, "',@columnName,'" as nameColumn FROM (',@queryTotal,') as t GROUP BY dataColumn HAVING COUNT(t.',@columnName,') <> 0 ORDER BY people DESC
+                ');
+            else
+                if @columnName = 'id_evento' then 
+                    set @insertData = concat('
+                        insert into dataColumns (people, dataColumn, nameColumn) SELECT COUNT(t.',@columnName,') AS people, zonas.nombre as dataColumn, "',@columnName,'" as nameColumn FROM (',@queryTotal,') as t inner join ',nameDataBase,'.campania on t.id_evento = campania.id inner join ',nameDataBase,'.zonas on campania.zona_ap = zonas.id GROUP BY dataColumn HAVING COUNT(t.',@columnName,') <> 0 ORDER BY people DESC LIMIT 5
+                    ');
+                else
+                    set @insertData = concat('
+                        insert into dataColumns (people, dataColumn, nameColumn) SELECT COUNT(t.',@columnName,') AS people, t.',@columnName,' as dataColumn, "',@columnName,'" as nameColumn FROM (',@queryTotal,') as t GROUP BY dataColumn HAVING COUNT(t.',@columnName,') <> 0 ORDER BY people DESC LIMIT 5
+                    ');
+                end if;
+            end if;
+        end if;
 		   
         prepare insertData from @insertData;
    	 	execute insertData;
