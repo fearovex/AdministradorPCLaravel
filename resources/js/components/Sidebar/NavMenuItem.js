@@ -159,7 +159,6 @@ class NavMenuItem extends Component {
                                  )
                               }
                            })}
-                           }
                         </List>
                      }
                   </Fragment>

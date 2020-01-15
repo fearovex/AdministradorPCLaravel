@@ -103,7 +103,13 @@ export default class VoucherInfo extends Component {
 			let data = await res.json();
 
 			if (data.errors) {
-				NotificationManager.error(data.errors.email[0], '', 4000);
+				if(data.errors.email[0]==="The email must be a valid email address."){
+					NotificationManager.error('El correo tiene que ser valido.', '', 4000);
+				}
+				if(data.errors.email[0]==="The email field is required."){
+					NotificationManager.error('El campo con el correo electrónico es requerido.', '', 4000);
+				}
+				
 			}
 			if (data.message && !data.errors) {
 				NotificationManager.success(data.message, '', 4000);
@@ -183,7 +189,7 @@ export default class VoucherInfo extends Component {
 							cancelBtnText="Cancelar"
 							cancelBtnBsStyle="danger"
 							confirmBtnBsStyle="primary"
-							title="Enviar Email CSV"
+							title="Enviar CSV a Correo Electrónico"
 							onConfirm={() => this.handleSubmit(event)}
 							onCancel={() => this.onCancel('modalEmailCsv')}
 						>
@@ -197,7 +203,7 @@ export default class VoucherInfo extends Component {
 											id="email"
 											value={this.state.form.email}
 											className="has-input input-lg"
-											placeholder="Email Csv"
+											placeholder="Correo"
 											onChange={() => this.handleChangeEmailCsv(event)}
 										/>
 									</div>

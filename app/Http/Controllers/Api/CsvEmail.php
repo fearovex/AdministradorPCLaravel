@@ -35,7 +35,7 @@ class CsvEmail extends Controller
 
     protected function sendResetLinkResponse(Request $request, $response)
     {
-        return response(['message'=> trans('We have e-mailed your CSV file!')]);
+        return response(['message'=> trans('Se ha enviado el archivo CSV al correo electrónico!')]);
 
     }
 
@@ -48,22 +48,16 @@ class CsvEmail extends Controller
 
     protected function sendResetLinkEmail(Request $request)
     {
-        // session(['validateSendEmails' => 'false']);
         $response = $this->validateEmail($request);
-       
-        // return $->name_campaing;
-        // if(session('emailValidate') == 'CSV'){
-// return $request->email;
-// return (string)($request->email);
+        date_default_timezone_set('America/Bogota');
+        $filename = 'Vouchers'.date("Y-m-d-His").'.csv';
             Notification::route('mail', "$request->email")
-                        ->notify(new CsvNotification($request->columns,$request->rows,$request->name_campaing));
-        // }
+                        ->notify(new CsvNotification($request->columns,$request->rows,$request->name_campaing, $filename));
+        unlink($filename);
 
         return $response == null
                     ? $this->sendResetLinkResponse($request, $response)
                     : $this->sendResetLinkFailedResponse($request, $response);
     }
-
-    
 
 }

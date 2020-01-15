@@ -15,40 +15,32 @@ import { RctCard, RctCardContent } from 'Components/RctCard';
 import RctCollapsibleCard from 'Components/RctCollapsibleCard/RctCollapsibleCard';
 
 // widgets
-import ChartGenero from "Components/new-Graficas/ChartGenero";
-import ChartAp from "Components/new-Graficas/ChartAp";
-import ChartPais from "Components/new-Graficas/ChartPais";
-import ChartEdad from "Components/new-Graficas/ChartEdad";
-import ChartOS from "Components/new-Graficas/ChartOS";
-import ChartFecha from "Components/new-Graficas/ChartFecha";
-import ChartAnchoBanda from "Components/new-Graficas/ChartAnchoBanda";
-import ChartConexionClientes from "Components/new-Graficas/ChartConexionClientes";
+
+// import ChartGenero from "Components/new-Graficas/ChartGenero";
+// import ChartAp from "Components/new-Graficas/ChartAp";
+// import ChartPais from "Components/new-Graficas/ChartPais";
+// import ChartEdad from "Components/new-Graficas/ChartEdad";
+// import ChartOS from "Components/new-Graficas/ChartOS";
+// import ChartFecha from "Components/new-Graficas/ChartFecha";
+
+// import ChartAnchoBanda from "Components/new-Graficas/ChartAnchoBanda";
+// import ChartConexionClientes from "Components/new-Graficas/ChartConexionClientes";
 
 import CardInfo from "Components/NewDashBoardInfo/CardInfo";
-import TopTables from "Components/NewDashBoardInfo/TopTables";
-import LastTenUsersList from "Components/NewDashBoardInfo/LastTenUsersList";
+// import TopTables from "Components/NewDashBoardInfo/TopTables";
+// import LastTenUsersList from "Components/NewDashBoardInfo/LastTenUsersList";
 
 
-import {
-    Card,
-    CardImg,
-    CardTitle,
-    CardText,
-    CardColumns,
-    CardSubtitle,
-    CardBody,
-    CardImgOverlay
- } from 'reactstrap';
+// import FilterDateForm from 'Components/FilterDateForm/FilterDateForm';
 
-
-import FilterDateForm from 'Components/FilterDateForm/FilterDateForm';
-
-export default class Analytical extends Component {
+export default class AnalyticalCampaing extends Component {
 
     constructor(props){
         super(props)
 
         const id_location = localStorage.user_location
+        const id_campaing = localStorage.user_campaing;
+        const vertical = localStorage.vertical;
 
         // let date = moment(new Date, 'YYYY/MM/DD hh:mm a');
         // let año = date.year();
@@ -71,15 +63,18 @@ export default class Analytical extends Component {
             //     finalDate: finalDate,
             //     id_event: 0,
             //     columns: ["genero","mac_ap","id_pais","os","fecha_creacion","edad"],
+                id_campaing: id_campaing,
                 id_location: id_location,
+                vertical: vertical,
             //     campania: 'Todas',
             },
             // events: [],
         }
-        this.TopCampanias = this.TopCampanias.bind(this);
-        this.UltimosDiez = this.UltimosDiez.bind(this);
-        this.TopZonas = this.TopZonas.bind(this);
-        this.TopVisitas = this.TopVisitas.bind(this);
+        // this.TopCampanias = this.TopCampanias.bind(this);
+        // this.UltimosDiez = this.UltimosDiez.bind(this);
+        // this.TopZonas = this.TopZonas.bind(this);
+        // this.TopVisitas = this.TopVisitas.bind(this);
+
     //     this.ConsultaGraficas = this.ConsultaGraficas.bind(this);
     //     this.ConsultaEventos = this.ConsultaEventos.bind(this);
     //     this.handleChange=this.handleChange.bind(this)
@@ -90,106 +85,108 @@ export default class Analytical extends Component {
     }
     
     componentDidMount(){
-        this.TopCampanias();
-        this.UltimosDiez();
-        this.TopZonas();
-        this.TopVisitas();
+        // this.TopCampanias();
+        // this.UltimosDiez();
+        // this.TopZonas();
+        // this.TopVisitas();
+
         // this.ConsultaEventos()
         // this.ConsultaGraficas()
     }
 
-    async TopCampanias(){
-        try {
-            let config = {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(this.state.form)
-            }
-            let res = await fetch(`${localStorage.urlDomain}api/topCampaings`, config)
-            let topCampaings = await res.json()
+    // async TopCampanias(){
+    //     try {
+    //         let config = {
+    //         method: 'POST',
+    //         headers: {
+    //             'Accept': 'application/json',
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify(this.state.form)
+    //         }
+    //         let res = await fetch(`${localStorage.urlDomain}api/topCampaings`, config)
+    //         let topCampaings = await res.json()
 
-            this.setState({
-                dataTop: topCampaings
-            })
+    //         this.setState({
+    //             dataTop: topCampaings
+    //         })
             
-        } catch (error) {
-            this.setState({
-                error:error
-            })
-        }
-    }
+    //     } catch (error) {
+    //         this.setState({
+    //             error:error
+    //         })
+    //     }
+    // }
 
-    async UltimosDiez(){
-        try {
-            let config = {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(this.state.form)
-            }
-            let res = await fetch(`${localStorage.urlDomain}api/lastTen`, config)
-            let lastTenUsers = await res.json()
-            this.setState({
-                lastTenUsers: lastTenUsers
-            })
+    // async UltimosDiez(){
+    //     try {
+    //         let config = {
+    //         method: 'POST',
+    //         headers: {
+    //             'Accept': 'application/json',
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify(this.state.form)
+    //         }
+    //         let res = await fetch(`${localStorage.urlDomain}api/lastTen`, config)
+    //         let lastTenUsers = await res.json()
+    //         this.setState({
+    //             lastTenUsers: lastTenUsers
+    //         })
             
-        } catch (error) {
-            this.setState({
-                error:error
-            })
-        }
-    }
+    //     } catch (error) {
+    //         this.setState({
+    //             error:error
+    //         })
+    //     }
+    // }
 
-    async TopZonas(){
-        try {
-            let config = {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(this.state.form)
-            }
-            let res = await fetch(`${localStorage.urlDomain}api/topZones`, config)
-            let topZones = await res.json()
-            this.setState({
-                topZones: topZones
-            })
+    // async TopZonas(){
+    //     try {
+    //         let config = {
+    //         method: 'POST',
+    //         headers: {
+    //             'Accept': 'application/json',
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify(this.state.form)
+    //         }
+    //         let res = await fetch(`${localStorage.urlDomain}api/topZones`, config)
+    //         let topZones = await res.json()
+    //         this.setState({
+    //             topZones: topZones
+    //         })
             
-        } catch (error) {
-            this.setState({
-                error:error
-            })
-        }
-    }
+    //     } catch (error) {
+    //         this.setState({
+    //             error:error
+    //         })
+    //     }
+    // }
 
-    async TopVisitas(){
-        try {
-            let config = {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(this.state.form)
-            }
-            let res = await fetch(`${localStorage.urlDomain}api/topVisits`, config)
-            let topVisits = await res.json()
-            this.setState({
-                topVisits: topVisits
-            })
+    // async TopVisitas(){
+    //     try {
+    //         let config = {
+    //         method: 'POST',
+    //         headers: {
+    //             'Accept': 'application/json',
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify(this.state.form)
+    //         }
+    //         let res = await fetch(`${localStorage.urlDomain}api/topVisits`, config)
+    //         let topVisits = await res.json()
+    //         console.log(topVisits)
+    //         this.setState({
+    //             topVisits: topVisits
+    //         })
             
-        } catch (error) {
-            this.setState({
-                error:error
-            })
-        }
-    }
+    //     } catch (error) {
+    //         this.setState({
+    //             error:error
+    //         })
+    //     }
+    // }
 
 
 
@@ -350,12 +347,13 @@ export default class Analytical extends Component {
 
     render() {
         // const { events,form } = this.state;
-        const { dataTop, lastTenUsers, topZones, topVisits } = this.state;
-        const { location } = this.props.match.params
+        // const { dataTop, lastTenUsers, topZones, topVisits } = this.state;
+        const { camp } = this.props.match.params
+        const { vertical } = this.state.form
         return (
             <div className="cardsmasonry-wrapper" >
                 <PageTitleBar 
-                    title={location} 
+                    title={camp} 
                     match={this.props.match} 
                     history={this.props.history}
                 />
@@ -375,10 +373,13 @@ export default class Analytical extends Component {
                 </div>
                 {/* <CardColumns> */}
                 <div className="row">
-                    <RctCollapsibleCard
+                    {vertical=='Hoteles' ?
+
+                   
+                     <RctCollapsibleCard
                         customClasses=""
                         colClasses="col-sm-12 col-md-12 col-lg-4 d-sm-full"
-                        heading={"Total Conectados"}
+                        heading={"Total Conectados Hoteles"}
                         collapsible
                         reloadable
                         closeable
@@ -386,17 +387,18 @@ export default class Analytical extends Component {
                     >
                         <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                             <CardInfo 
-                                titleName={"Total Conectados Por Locación"}
+                                titleName={"Total Conectados"}
                                 dataNum={546}
                                 backgroundColor=""
                                 classColor={"primary"}
                             />
                         </div>
                     </RctCollapsibleCard>
+                    :
                     <RctCollapsibleCard
                         customClasses=""
                         colClasses="col-sm-12 col-md-12 col-lg-4 d-sm-full"
-                        heading={"Tiempo de Conexión"}
+                        heading={"Tiempo de Conexión Centros Comerciales"}
                         collapsible
                         reloadable
                         closeable
@@ -412,7 +414,9 @@ export default class Analytical extends Component {
                             />
                         </div>
                     </RctCollapsibleCard>
-                    <RctCollapsibleCard
+                     }
+
+                   {/* <RctCollapsibleCard
                         customClasses=""
                         colClasses="col-sm-12 col-md-12 col-lg-4 d-sm-full"
                         heading={"Ancho de Banda"}
@@ -530,7 +534,7 @@ export default class Analytical extends Component {
                             />
                         </div>
                         
-                    </RctCollapsibleCard>
+                    </RctCollapsibleCard> */}
 				</div>
 
                     {/* <Card>

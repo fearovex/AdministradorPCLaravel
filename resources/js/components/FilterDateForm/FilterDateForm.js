@@ -13,10 +13,10 @@ const FilterDateForm = ({ form, onChange, onChangeFilter, onSubmit, onClick, onC
     >   
         <div className="form-inline col-md-3 col-sm-12 col-lg-3">
             <select name="filter" id="filter" className="form-control" onChange={onChangeFilter} value={form.filter}>
-                <option value="0">Today</option>
-                <option value="1">Last 3 days</option>
-                <option value="2">Last 15 days</option>
-                <option value="3">Last 1 month</option>
+                <option value="0">Hoy</option>
+                <option value="1">Últimos 3 días</option>
+                <option value="2">Últimos 15 días</option>
+                <option value="3">Último 1 mes</option>
                 <option value="4">Personalizado</option>
             </select>   
         </div>

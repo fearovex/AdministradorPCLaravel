@@ -15,17 +15,19 @@ class CsvNotification extends Notification
     public $columns;
     public $rows;
     public $name_campaing;
+    public $filename;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($columns, $rows, $name_campaing)
+    public function __construct($columns, $rows, $name_campaing, $filename)
     {
         $this->columns=$columns;
         $this->rows=$rows;
         $this->name_campaing=$name_campaing;
+        $this->filename=$filename;
     }
 
     /**
@@ -49,9 +51,7 @@ class CsvNotification extends Notification
     {
         $urlDefaultFromEnv = env('APP_URL');
         $aliasFrom = env('ALIAS_MAIL_FROM_VOUCHERS');
-        date_default_timezone_set('America/Bogota');
-        $filename = 'Vouchers'.date("Y-m-d-His").'.csv';
-        $fp = fopen($filename, 'w');
+        $fp = fopen($this->filename, 'w');
 
         fputcsv($fp, $this->columns);
 
@@ -68,13 +68,14 @@ class CsvNotification extends Notification
             }
         }
         fclose($fp);
+
         $aliasFrom = env('ALIAS_MAIL_FROM');
         $campaing = $this->name_campaing;
         return (new MailMessage)
             ->from($aliasFrom,'Vouchers IPfi')
             ->subject(Lang::get('Notificación de envío de CSV vouchers'))
             ->line(Lang::get("Se te ha enviado un listado de vouchers de la campaña: <strong>$campaing</strong>, el cual ha sido adjuntado en formato CSV!"))
-            ->attach($filename);
+            ->attach($this->filename);
     }
 
     /**
