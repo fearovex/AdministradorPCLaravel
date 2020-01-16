@@ -99,16 +99,16 @@ export default class Analytical extends Component {
         this.TopZonas();
         this.ConsultaEventos();
         this.TopVisitas();
-        let column = "fecha_creacion"; //"genero","mac_ap","os",
+        let column = "fecha_creacion";
         this.state.form.column = [column];
         this.ConsultaGraficas(column)
-        column = "mac_ap"; //"genero","mac_ap","os",
+        column = "mac_ap";
         this.state.form.column = [column];
         this.ConsultaGraficas(column)
-        column = "os"; //"genero","mac_ap","os",
+        column = "os";
         this.state.form.column = [column];
         this.ConsultaGraficas(column)
-        column = "id_evento"; //"genero","mac_ap","os",
+        column = "id_evento";
         this.state.form.column = [column];
         this.ConsultaGraficas(column)
     }
@@ -401,7 +401,6 @@ export default class Analytical extends Component {
                     heading={"Total Conectados"}
                     collapsible
                     //reloadable
-                    closeable
                     fullBlock
                 >
                     <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
@@ -419,7 +418,6 @@ export default class Analytical extends Component {
                     heading={"Tiempo de Conexión"}
                     collapsible
                     //reloadable
-                    closeable
                     fullBlock
                 >
                     <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
@@ -438,7 +436,6 @@ export default class Analytical extends Component {
                     heading={"Ancho de Banda"}
                     collapsible
                     //reloadable
-                    closeable
                     fullBlock
                 >
                     <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
@@ -501,7 +498,6 @@ export default class Analytical extends Component {
                     heading={"Ancho de Banda VS Fecha"}
                     collapsible
                     //reloadable
-                    closeable
                     fullBlock
                 >
                     <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
@@ -514,7 +510,6 @@ export default class Analytical extends Component {
                     heading={"Tiempo De Conexión VS Fecha"}
                     collapsible
                     //reloadable
-                    closeable
                     fullBlock
                 >
                     <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
@@ -527,7 +522,6 @@ export default class Analytical extends Component {
                     heading={"Top 5 Campañas Activas"}
                     collapsible
                     //reloadable
-                    closeable
                     fullBlock
                 >
                     <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
@@ -545,7 +539,6 @@ export default class Analytical extends Component {
                     heading={"Top 5 Zonas Activas"}
                     collapsible
                     //reloadable
-                    closeable
                     fullBlock
                 >
                     <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
@@ -563,7 +556,6 @@ export default class Analytical extends Component {
                     heading={"Top 5 Personas Por Visitas"}
                     collapsible
                     //reloadable
-                    closeable
                     fullBlock
                 >
                     <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
@@ -582,7 +574,6 @@ export default class Analytical extends Component {
                     heading={"Últimos 10 Clientes Conectados"}
                     collapsible
                     //reloadable
-                    closeable
                     fullBlock
                 >
                     <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">

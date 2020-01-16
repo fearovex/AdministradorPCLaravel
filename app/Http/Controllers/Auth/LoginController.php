@@ -55,11 +55,13 @@ class LoginController extends Controller
             session(['password' => $request->password]);
             session(['id_user' => $user->id]);
             session(['browser' => Browser::browserName()]);
-            session(['ip_conection' => $request->ip_public]);
+            session(['ip_conection' => /* $request->ip_public */'NA']);
             session(['active' => true ]);
             session(['rol' => $user->id_rol]);
             session(['location' => $user->location]);
             session(['campaing' => $user->campaing]);
+            session(['DB_USERNAME' => env('DB_USERNAME')]);
+            session(['DB_PASSWORD' => env('DB_PASSWORD')]);
 
 
             $log = new Log_Login();

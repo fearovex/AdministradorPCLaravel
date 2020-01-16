@@ -16,7 +16,7 @@ class GraficasController extends Controller
         $database = session('database');
         $columns = $request->column;
         $columnsQuery = '["'.implode('","',$columns).'"]';
-        
+
         $dataColumns = DB::select(
             "call dataColumnsCampaings('".$database."','".$locaccion."','".$campania."','".$columnsQuery."','".$fecha_inicial."','".$fecha_final."')"
         );
@@ -136,6 +136,19 @@ class GraficasController extends Controller
         return $dataVisits;
     }
 
+    public function TotalRecords(Request $request){
+        $database = session('database');
+        $tabla = DB::connection($database)->table('campania')->select('campania')->where('id', $request->id_campaing)->first();
+        $query = "select count(*) as TotalRecords from $database.$tabla->campania";
+        $TotalRecords = DB::select($query);
+        return $TotalRecords;
+    }
     
-    
+    public function UsersMoreVisit(Request $request){
+        $database = session('database');
+        $tabla = DB::connection($database)->table('campania')->select('campania')->where('id', $request->id_campaing)->first();
+        $query = "select nombre as 'Nombre', apellidos as 'Apellido', email as 'Email', telefono as 'Celular', genero as 'Sexo', os as 'Sistema_Operativo', count(mac_cliente) as 'N_Visitas' FROM $database.$tabla->campania GROUP BY mac_cliente, nombre, apellidos, email, telefono, genero, os ORDER BY N_Visitas desc limit 10";
+        $UsersMoreVisit = DB::select($query);
+        return $UsersMoreVisit;
+    }
 }

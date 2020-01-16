@@ -94,7 +94,7 @@ BEGIN
         else
             if @columnName = 'fecha_creacion' then 
                 set @insertData = concat('
-                    insert into dataColumns (people, dataColumn, nameColumn) SELECT COUNT(t.',@columnName,') AS people, date(t.',@columnName,') as dataColumn, "',@columnName,'" as nameColumn FROM (',@queryTotal,') as t GROUP BY dataColumn HAVING COUNT(t.',@columnName,') <> 0 ORDER BY people DESC
+                    insert into dataColumns (people, dataColumn, nameColumn) SELECT COUNT(t.',@columnName,') AS people, date(t.',@columnName,') as dataColumn, "',@columnName,'" as nameColumn FROM (',@queryTotal,') as t GROUP BY dataColumn HAVING COUNT(t.',@columnName,') <> 0 ORDER BY dataColumn ASC
                 ');
             else
                 if @columnName = 'id_evento' then 

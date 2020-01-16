@@ -68,5 +68,9 @@ Route::group(['middleware' => 'cors'], function() {
         Route::post('/topZones', 'GraficasController@TopZones');
         
         Route::post('/topVisits', 'GraficasController@TopVisits');
+
+        Route::post('/TotalRecords', 'GraficasController@TotalRecords');
+
+        Route::post('/UsersMoreVisit', 'GraficasController@UsersMoreVisit');
     });
  });
