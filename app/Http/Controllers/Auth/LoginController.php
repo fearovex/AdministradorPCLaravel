@@ -55,7 +55,7 @@ class LoginController extends Controller
             session(['password' => $request->password]);
             session(['id_user' => $user->id]);
             session(['browser' => Browser::browserName()]);
-            session(['ip_conection' => /* $request->ip_public */'NA']);
+            session(['ip_conection' => $request->ip_public]);
             session(['active' => true ]);
             session(['rol' => $user->id_rol]);
             session(['location' => $user->location]);
