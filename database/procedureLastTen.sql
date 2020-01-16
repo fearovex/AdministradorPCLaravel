@@ -32,7 +32,7 @@ BEGIN
    	set @queryNameTables = (select campania from nameCampaings where id=@countPrimary); 
    	
 		SET @queryTableLastTen = CONCAT('
-        insert into dataLastTen (nombre,apellidos,fecha_creacion,ip,nombreCampania) select nombre, apellidos, fecha_creacion, ip_cliente,','"',@queryNameTables,'"',' AS nombreCampania from ',nameDatabase,'.',@queryNameTables
+        insert into dataLastTen (nombre,apellidos,fechaCreacion,ip,nombreCampania) select nombre, apellidos, fecha_creacion, ip_cliente,','"',@queryNameTables,'"',' AS nombreCampania from ',nameDatabase,'.',@queryNameTables
         );
 		PREPARE campaings FROM @queryTableLastTen;
    	execute campaings;
@@ -40,6 +40,6 @@ BEGIN
    	Set @countPrimary = @countPrimary+1;
    end while;
 
-   SELECT * FROM dataLastTen order by fecha_creacion desc LIMIT 10;
+   SELECT nombre AS Nombres, apellidos AS Apellidos, fechaCreacion, ip AS IP, nombreCampania AS 'Campaña' FROM dataLastTen order BY fechaCreacion desc LIMIT 10;
 END//
 DELIMITER ;
