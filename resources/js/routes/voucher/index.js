@@ -36,6 +36,7 @@ export default class Voucher extends Component {
 				fecha_fin: moment(new Date, 'YYYY/MM/DD hh:mm a'),
 				numerovouchers: "",
 				numerousos: "",
+				etiqueta:"",
 				id_location: id_location,
 				campaña: id_campaing,
 			},
@@ -162,18 +163,28 @@ export default class Voucher extends Component {
 	}
 
 	handleChange(e, name = null) {
-		let date = moment(e._d, 'YYYY/MM/DD hh:mm a');
-		let año = date.year();
-		let mes = date.month() + 1;
-		let dia = date.date();
-		let hora = date.hour();
-		let minutos = date.minute();
-		this.setState({
-			form: {
-				...this.state.form,
-				[name]: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos)
-			}
-		})
+		if(e.target){
+            this.setState({
+                form:{
+                    ...this.state.form,
+                    [e.target.name]: e.target.value
+                }
+            })
+        }
+        else if(e._d){
+			let date = moment(e._d, 'YYYY/MM/DD hh:mm a');
+			let año = date.year();
+			let mes = date.month() + 1;
+			let dia = date.date();
+			let hora = date.hour();
+			let minutos = date.minute();
+			this.setState({
+				form: {
+					...this.state.form,
+					[name]: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos)
+				}
+			})
+		}
 	}
 
 	handleChangeNumber(e) {
@@ -322,6 +333,19 @@ export default class Voucher extends Component {
 											leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
 											rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
 											showTodayButton={true}
+										/>
+									</div>
+								</div>
+								<div className="row">
+									<div className="col-lg-5 mb-4 mt-4 ml-3">
+										<Input
+											type="text"
+											value={this.state.form.etiqueta}
+											className="has-input input-lg"
+											placeholder="Etiqueta"
+											name="etiqueta"
+											id="etiqueta"
+											onChange={() => this.handleChange(event)}
 										/>
 									</div>
 								</div>

@@ -37,7 +37,7 @@ export default class VoucherInfo extends Component {
 				id_campaing: id_campaing,
 				name_campaing: name_campaing,
 			},
-			nameColumns: ['Voucher','Fecha Inicio','Fecha Fin','Estado', 'N° de Usos por Voucher','N° Usos Total'],
+			nameColumns: ['Voucher','Fecha Inicio','Fecha Fin','Estado', 'N° de Usos por Voucher','N° Usos Total', 'Etiqueta'],
 			dataVouchers: [],
 			modalEmailCsv: false,
 		}
