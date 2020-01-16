@@ -159,4 +159,12 @@ class GraficasController extends Controller
         $LastTenUsersListCampaing = DB::select($query);
         return $LastTenUsersListCampaing;
     }
+
+    public function TopTenAgesList(Request $request){
+        $database = session('database');
+        $tabla = DB::connection($database)->table('campania')->select('campania')->where('id', $request->id_campaing)->first();
+        $query = "select edad as 'Edad', count(edad) as 'N_Registros' FROM $database.$tabla->campania GROUP BY Edad ORDER BY N_Registros desc limit 10";
+        $TopTenAgesList = DB::select($query);
+        return $TopTenAgesList;
+    }
 }

@@ -18,11 +18,10 @@ import RctCollapsibleCard from 'Components/RctCollapsibleCard/RctCollapsibleCard
 
 // import ChartGenero from "Components/new-Graficas/ChartGenero";
 // import ChartAp from "Components/new-Graficas/ChartAp";
-// import ChartPais from "Components/new-Graficas/ChartPais";
-
 import ChartFecha from "Components/new-Graficas/ChartFecha";
 import UsersMoreVisit from "Components/new-Graficas/UsersMoreVisit";
 import LastTenUsersListCampaing from "Components/new-Graficas/LastTenUsersListCampaing";
+import TopTenAgesList from "Components/new-Graficas/TopTenAgesList";
 // import ChartAnchoBanda from "Components/new-Graficas/ChartAnchoBanda";
 // import ChartConexionClientes from "Components/new-Graficas/ChartConexionClientes";
 
@@ -83,22 +82,17 @@ export default class AnalyticalCampaing extends Component {
         this.handleTotalRecords = this.handleTotalRecords.bind(this);
         this.UsersMoreVisit = this.UsersMoreVisit.bind(this)
         this.LastTenUsersListCampaing = this.LastTenUsersListCampaing.bind(this)
+        this.TopTenAgesList = this.TopTenAgesList.bind(this)
     }
 
     componentDidMount() {
         this.handleTotalRecords()
         this.UsersMoreVisit()
         this.LastTenUsersListCampaing()
+        this.TopTenAgesList()
         let column = "fecha_creacion";
         this.state.form.column = [column];
         this.ConsultaGraficas(column)
-        // this.TopCampanias();
-        // this.UltimosDiez();
-        // this.TopZonas();
-        // this.TopVisitas();
-
-        // this.ConsultaEventos()
-        // this.ConsultaGraficas()
     }
     async ConsultaGraficas(column = "fecha_creacion"){
         try {
@@ -336,257 +330,32 @@ export default class AnalyticalCampaing extends Component {
             })
         }
     }
-/*  */
-    // async TopCampanias(){
-    //     try {
-    //         let config = {
-    //         method: 'POST',
-    //         headers: {
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify(this.state.form)
-    //         }
-    //         let res = await fetch(`${localStorage.urlDomain}api/topCampaings`, config)
-    //         let topCampaings = await res.json()
 
-    //         this.setState({
-    //             dataTop: topCampaings
-    //         })
-
-    //     } catch (error) {
-    //         this.setState({
-    //             error:error
-    //         })
-    //     }
-    // }
-
-    // async UltimosDiez(){
-    //     try {
-    //         let config = {
-    //         method: 'POST',
-    //         headers: {
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify(this.state.form)
-    //         }
-    //         let res = await fetch(`${localStorage.urlDomain}api/lastTen`, config)
-    //         let lastTenUsers = await res.json()
-    //         this.setState({
-    //             lastTenUsers: lastTenUsers
-    //         })
-
-    //     } catch (error) {
-    //         this.setState({
-    //             error:error
-    //         })
-    //     }
-    // }
-
-    // async TopZonas(){
-    //     try {
-    //         let config = {
-    //         method: 'POST',
-    //         headers: {
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify(this.state.form)
-    //         }
-    //         let res = await fetch(`${localStorage.urlDomain}api/topZones`, config)
-    //         let topZones = await res.json()
-    //         this.setState({
-    //             topZones: topZones
-    //         })
-
-    //     } catch (error) {
-    //         this.setState({
-    //             error:error
-    //         })
-    //     }
-    // }
-
-    // async TopVisitas(){
-    //     try {
-    //         let config = {
-    //         method: 'POST',
-    //         headers: {
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify(this.state.form)
-    //         }
-    //         let res = await fetch(`${localStorage.urlDomain}api/topVisits`, config)
-    //         let topVisits = await res.json()
-    //         console.log(topVisits)
-    //         this.setState({
-    //             topVisits: topVisits
-    //         })
-
-    //     } catch (error) {
-    //         this.setState({
-    //             error:error
-    //         })
-    //     }
-    // }
-
-
-
-    // async ConsultaGraficas(){
-    //     try {
-    //         let config = {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Accept': 'application/json',
-    //                 'Content-Type': 'application/json'
-    //             },
-
-    //             body: JSON.stringify(this.state.form)
-    //         }
-
-    //         let res = await fetch(`${localStorage.urlDomain}api/graficas`, config);
-    //         let datagraph = await res.json()
-
-    //         this.setState({
-    //             data: datagraph
-    //         })
-
-    //      } catch (error) {
-    //            this.setState({ 
-    //               error
-    //            })
-    //      }
-    // }
-
-    // handleDateFilter(e = null){
-    //     if(e != null){
-    //         e.preventDefault()
-    //     }
-    //     this.setState({
-    //         form:{
-    //             ...this.state.form,
-    //             filterPersonalizado: false,
-    //         }
-    //     });
-    //     this.ConsultaGraficas()
-    // }
-
-    // async ConsultaEventos(){
-    //     try {
-    //         let res = await fetch(`${localStorage.urlDomain}api/events`)
-    //         let dataevents = await res.json()
-
-    //         this.setState({
-    //             events: dataevents
-    //         })
-
-    //     } catch (error) {
-    //         this.setState({ 
-    //             error
-    //         })
-    //     }
-    // }
-
-    // handleChangeFilter(e){
-    //     if(e.target.value != 4){
-    //         let dateAtras = moment(new Date, 'YYYY/MM/DD hh:mm a');
-    //         if(e.target.value == 1){
-    //             dateAtras = moment(new Date, 'YYYY/MM/DD hh:mm a').subtract(3, 'days');
-    //         }
-    //         if(e.target.value == 2){
-    //             dateAtras = moment(new Date, 'YYYY/MM/DD hh:mm a').subtract(15, 'days');
-    //         }
-    //         if(e.target.value == 3){
-    //             dateAtras = moment(new Date, 'YYYY/MM/DD hh:mm a').subtract(1, 'month');
-    //         }
-    //         let añoAtras = dateAtras.year();
-    //         let mesAtras = dateAtras.month()+1;
-    //         let diaAtras = dateAtras.date();
-    //         let minutosAtras = '00';
-    //         let horaAtras = '00';
-
-    //         if(e.target.value != 0){
-    //             horaAtras = dateAtras.hour();
-    //             minutosAtras = dateAtras.minute();
-    //         }
-
-    //         let dateActual = moment(new Date, 'YYYY/MM/DD hh:mm a');
-    //         let añoActual = dateActual.year();
-    //         let mesActual = dateActual.month()+1;
-    //         let diaActual = dateActual.date();
-    //         let horaActual = dateActual.hour();
-    //         let minutosActual = dateActual.minute();
-
-    //         this.state.form.initialDate = (añoAtras) + '-' + (mesAtras) + '-' + (diaAtras) + " " + (horaAtras) + ":" + (minutosAtras)
-    //         this.state.form.finalDate = (añoActual) + '-' + (mesActual) + '-' + (diaActual) + " " + (horaActual) + ":" + (minutosActual)
-
-    //         this.ConsultaGraficas()
-    //     }
-    //     else{
-    //         this.handleModal();
-    //     }
-    //     this.setState({
-    //         form:{
-    //             ...this.state.form,
-    //             [e.target.name]: e.target.value
-    //         }
-    //     })
-    // }
-
-    // handleChange(e, name=null){
-    //     if(e.target){
-    //         var nameCampain = e.target.options[e.target.selectedIndex].innerText;
-    //         this.setState({
-    //             form:{
-    //                 ...this.state.form,
-    //                 campania: nameCampain,
-    //                 [e.target.name]: e.target.value
-    //             }
-    //         })
-    //     }
-    //     else if(e._d){
-    //         let date = moment(e._d, 'YYYY/MM/DD hh:mm a');
-    //         let año = date.year();
-    //         let mes = date.month()+1;
-    //         let dia = date.date();
-    //         let hora = date.hour();
-    //         let minutos = date.minute();
-    //         this.setState({
-    //             form:{
-    //         		...this.state.form,
-    //                 [name]: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos)
-    //             }
-    //         })
-    //     }
-    // }
-
-    // handleModal(e = null){
-    //     if(e != null){
-    //         e.preventDefault()
-    //     }
-    //     this.state.form.filterPersonalizado = true;
-    //     this.setState({
-    //         form:{
-    //             ...this.state.form,
-    //             filterPersonalizado: true,
-    //         }
-    //     });
-    // }
-
-    // handleDateFilterCancel(e){
-    //     e.preventDefault()
-    //     this.setState({
-    //         form:{
-    //             ...this.state.form,
-    //             filterPersonalizado: false,
-    //         }
-    //     });
-    //     this.ConsultaGraficas()
-    // }
-
-
-
+    async TopTenAgesList(){
+        try {
+            let config = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.state.form)
+            }
+            let res = await fetch(`${localStorage.urlDomain}api/TopTenAgesList`, config)
+            let TopTenAgesList = await res.json()
+            this.setState({
+                data:{
+                    ...this.state.data,
+                    TopTenAgesList: TopTenAgesList
+                }
+            })
+            
+        } catch (error) {
+            this.setState({
+                error:error
+            })
+        }
+    }
 
     render() {
         const { events,form, data } = this.state;
@@ -726,6 +495,23 @@ export default class AnalyticalCampaing extends Component {
                             <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                                 <LastTenUsersListCampaing
                                     listData={data.LastTenUsersListCampaing}
+                                />
+                                <div className="blank-wrapper" style={{marginBottom: '20px'}}>
+
+                                </div>
+                            </div>
+                        </RctCollapsibleCard>
+                        <RctCollapsibleCard
+                            customClasses=""
+                            colClasses="col-sm-12 col-md-6 col-lg-6 d-sm-full"
+                            heading={"Top 10 de Edades más Recurrentes"}
+                            collapsible
+                            //reloadable
+                            fullBlock
+                        >
+                            <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
+                                <TopTenAgesList
+                                    listData={data.TopTenAgesList}
                                 />
                                 <div className="blank-wrapper" style={{marginBottom: '20px'}}>
 

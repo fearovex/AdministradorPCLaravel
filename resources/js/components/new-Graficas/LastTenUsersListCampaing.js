@@ -20,7 +20,7 @@ import { Badge } from 'reactstrap';
 import IntlMessages from 'Util/IntlMessages';
 
 
-const LastTenUsersCampaingColumns = ['Puesto','Nombre', 'Apellido', 'Email', 'Celular', 'Sexo', 'Sistema Operativo', 'Fecha Registro'];
+const LastTenUsersCampaingColumns = ['Posicion','Nombre', 'Apellido', 'Email', 'Celular', 'Sexo', 'Sistema Operativo', 'Fecha Registro'];
 
 class LastTenUsersListCampaing extends Component {
 
