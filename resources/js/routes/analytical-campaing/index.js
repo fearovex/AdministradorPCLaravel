@@ -83,6 +83,7 @@ export default class AnalyticalCampaing extends Component {
         this.UsersMoreVisit = this.UsersMoreVisit.bind(this)
         this.LastTenUsersListCampaing = this.LastTenUsersListCampaing.bind(this)
         this.TopTenAgesList = this.TopTenAgesList.bind(this)
+        this.PromedyAge = this.PromedyAge.bind(this)
     }
 
     componentDidMount() {
@@ -90,6 +91,7 @@ export default class AnalyticalCampaing extends Component {
         this.UsersMoreVisit()
         this.LastTenUsersListCampaing()
         this.TopTenAgesList()
+        this.PromedyAge()
         let column = "fecha_creacion";
         this.state.form.column = [column];
         this.ConsultaGraficas(column)
@@ -333,6 +335,31 @@ export default class AnalyticalCampaing extends Component {
             })
         }
     }
+    async PromedyAge(){
+        try {
+            let config = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.state.form)
+            }
+            let res = await fetch(`${localStorage.urlDomain}api/PromedyAge`, config)
+            let PromedyAge = await res.json()
+            this.setState({
+                data:{
+                    ...this.state.data,
+                    PromedyAge: PromedyAge[0].Promedio
+                }
+            })
+            
+        } catch (error) {
+            this.setState({
+                error:error
+            })
+        }
+    }
 
     async TopTenAgesList(){
         try {
@@ -532,6 +559,23 @@ export default class AnalyticalCampaing extends Component {
                             <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                                 <ChartGenero 
                                     data={data.genero}
+                                />
+                            </div>
+                        </RctCollapsibleCard>
+                        <RctCollapsibleCard
+                            customClasses=""
+                            colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
+                            heading={"Promedio de Edad"}
+                            collapsible
+                            // reloadable
+                            fullBlock
+                        >
+                            <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
+                                <CardInfo
+                                    titleName={"Promedio de Edad"}
+                                    dataNum={data.PromedyAge ? data.PromedyAge : 0}
+                                    backgroundColor=""
+                                    classColor={"primary"}
                                 />
                             </div>
                         </RctCollapsibleCard>
