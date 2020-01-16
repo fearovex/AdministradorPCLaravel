@@ -151,4 +151,12 @@ class GraficasController extends Controller
         $UsersMoreVisit = DB::select($query);
         return $UsersMoreVisit;
     }
+
+    public function LastTenUsersListCampaing(Request $request){
+        $database = session('database');
+        $tabla = DB::connection($database)->table('campania')->select('campania')->where('id', $request->id_campaing)->first();
+        $query = "select nombre as 'Nombre', apellidos as 'Apellido', email as 'Email', telefono as 'Celular', genero as 'Sexo', os as 'Sistema_Operativo', fecha_creacion as 'Fecha_Creacion' FROM $database.$tabla->campania ORDER BY fecha_creacion desc limit 10";
+        $LastTenUsersListCampaing = DB::select($query);
+        return $LastTenUsersListCampaing;
+    }
 }

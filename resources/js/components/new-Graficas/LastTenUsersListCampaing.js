@@ -20,9 +20,9 @@ import { Badge } from 'reactstrap';
 import IntlMessages from 'Util/IntlMessages';
 
 
-const UsersMoreVisitColumns = ['Puesto', 'Nombre', 'Apellido', 'Email', 'Celular', 'Sexo', 'Sistema Operativo', 'N° Visitas'] ;
+const LastTenUsersCampaingColumns = ['Puesto','Nombre', 'Apellido', 'Email', 'Celular', 'Sexo', 'Sistema Operativo', 'Fecha Registro'];
 
-class UsersMoreVisit extends Component {
+class LastTenUsersListCampaing extends Component {
 
 
    render() {
@@ -35,7 +35,7 @@ class UsersMoreVisit extends Component {
                         <Table className="table-wrap" >
                            <TableHead >
                               <TableRow>
-                                 {UsersMoreVisitColumns.map((th, index) => (
+                                 {LastTenUsersCampaingColumns.map((th, index) => (
                                     <TableCell key={index} className="fw-bold">{th}</TableCell>
                                  ))}
                               </TableRow>
@@ -43,14 +43,14 @@ class UsersMoreVisit extends Component {
                            <TableBody >
                               {listData && listData.map((list, index) => (
                                  <TableRow key={index}>
-                                    <TableCell>{index+1}</TableCell> 
+                                    <TableCell>{index+1}</TableCell>
                                     <TableCell>{list.Nombre}</TableCell>
                                     <TableCell>{list.Apellido}</TableCell>
                                     <TableCell>{list.Email}</TableCell>
                                     <TableCell>{list.Celular}</TableCell>
                                     <TableCell>{list.Sexo}</TableCell>
                                     <TableCell>{list.Sistema_Operativo}</TableCell>
-                                    <TableCell>{list.N_Visitas}</TableCell>
+                                    <TableCell>{list.Fecha_Creacion}</TableCell>
                                  </TableRow>
                               ))}
                            </TableBody>
@@ -62,4 +62,4 @@ class UsersMoreVisit extends Component {
    }
 }
 
-export default withStyles(null, { withTheme: true })(UsersMoreVisit);
+export default withStyles(null, { withTheme: true })(LastTenUsersListCampaing);

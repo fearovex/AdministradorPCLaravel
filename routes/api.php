@@ -72,5 +72,8 @@ Route::group(['middleware' => 'cors'], function() {
         Route::post('/TotalRecords', 'GraficasController@TotalRecords');
 
         Route::post('/UsersMoreVisit', 'GraficasController@UsersMoreVisit');
+
+        Route::post('/LastTenUsersListCampaing', 'GraficasController@LastTenUsersListCampaing');
+        
     });
  });

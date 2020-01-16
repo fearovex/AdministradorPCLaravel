@@ -19,10 +19,10 @@ import RctCollapsibleCard from 'Components/RctCollapsibleCard/RctCollapsibleCard
 // import ChartGenero from "Components/new-Graficas/ChartGenero";
 // import ChartAp from "Components/new-Graficas/ChartAp";
 // import ChartPais from "Components/new-Graficas/ChartPais";
-// import ChartEdad from "Components/new-Graficas/ChartEdad";
+
 import ChartFecha from "Components/new-Graficas/ChartFecha";
 import UsersMoreVisit from "Components/new-Graficas/UsersMoreVisit";
-
+import LastTenUsersListCampaing from "Components/new-Graficas/LastTenUsersListCampaing";
 // import ChartAnchoBanda from "Components/new-Graficas/ChartAnchoBanda";
 // import ChartConexionClientes from "Components/new-Graficas/ChartConexionClientes";
 
@@ -71,10 +71,6 @@ export default class AnalyticalCampaing extends Component {
             },
             events: [],
         }
-        // this.TopCampanias = this.TopCampanias.bind(this);
-        // this.UltimosDiez = this.UltimosDiez.bind(this);
-        // this.TopZonas = this.TopZonas.bind(this);
-        // this.TopVisitas = this.TopVisitas.bind(this);
 
         this.ConsultaGraficas = this.ConsultaGraficas.bind(this);
         this.ConsultaEventos = this.ConsultaEventos.bind(this);
@@ -86,11 +82,13 @@ export default class AnalyticalCampaing extends Component {
         this.handleReload = this.handleReload.bind(this)
         this.handleTotalRecords = this.handleTotalRecords.bind(this);
         this.UsersMoreVisit = this.UsersMoreVisit.bind(this)
+        this.LastTenUsersListCampaing = this.LastTenUsersListCampaing.bind(this)
     }
 
     componentDidMount() {
         this.handleTotalRecords()
-        this.UsersMoreVisit();
+        this.UsersMoreVisit()
+        this.LastTenUsersListCampaing()
         let column = "fecha_creacion";
         this.state.form.column = [column];
         this.ConsultaGraficas(column)
@@ -313,6 +311,32 @@ export default class AnalyticalCampaing extends Component {
         }
     }
 
+    async LastTenUsersListCampaing(){
+        try {
+            let config = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.state.form)
+            }
+            let res = await fetch(`${localStorage.urlDomain}api/LastTenUsersListCampaing`, config)
+            let LastTenUsersListCampaing = await res.json()
+            this.setState({
+                data:{
+                    ...this.state.data,
+                    LastTenUsersListCampaing: LastTenUsersListCampaing
+                }
+            })
+            
+        } catch (error) {
+            this.setState({
+                error:error
+            })
+        }
+    }
+/*  */
     // async TopCampanias(){
     //     try {
     //         let config = {
@@ -685,6 +709,23 @@ export default class AnalyticalCampaing extends Component {
                             <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                                 <UsersMoreVisit
                                     listData={data.UsersMoreVisit}
+                                />
+                                <div className="blank-wrapper" style={{marginBottom: '20px'}}>
+
+                                </div>
+                            </div>
+                        </RctCollapsibleCard>
+                        <RctCollapsibleCard
+                            customClasses=""
+                            colClasses="col-sm-12 col-md-12 col-lg-12 d-sm-full"
+                            heading={"Top 10 Ultimos Usuarios Conectados"}
+                            collapsible
+                            //reloadable
+                            fullBlock
+                        >
+                            <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
+                                <LastTenUsersListCampaing
+                                    listData={data.LastTenUsersListCampaing}
                                 />
                                 <div className="blank-wrapper" style={{marginBottom: '20px'}}>
 
