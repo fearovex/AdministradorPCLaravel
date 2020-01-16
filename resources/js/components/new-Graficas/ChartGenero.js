@@ -142,7 +142,7 @@ class ChartGenero extends Component {
 			responsive: 'scrollMaxHeight'
 		};
       return (
-         <div id="chartgenero" style={{ width: "100%", height: "250px" }}>
+         <div id="chartgenero" style={{ width: "100%", height: "300px" }}>
             <SweetAlert
                      btnSize="sm"
                      show={prompt}

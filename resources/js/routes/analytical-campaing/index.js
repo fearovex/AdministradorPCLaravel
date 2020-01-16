@@ -16,12 +16,12 @@ import RctCollapsibleCard from 'Components/RctCollapsibleCard/RctCollapsibleCard
 
 // widgets
 
-// import ChartGenero from "Components/new-Graficas/ChartGenero";
 // import ChartAp from "Components/new-Graficas/ChartAp";
 import ChartFecha from "Components/new-Graficas/ChartFecha";
 import UsersMoreVisit from "Components/new-Graficas/UsersMoreVisit";
 import LastTenUsersListCampaing from "Components/new-Graficas/LastTenUsersListCampaing";
 import TopTenAgesList from "Components/new-Graficas/TopTenAgesList";
+import ChartGenero from "Components/new-Graficas/ChartGenero";
 // import ChartAnchoBanda from "Components/new-Graficas/ChartAnchoBanda";
 // import ChartConexionClientes from "Components/new-Graficas/ChartConexionClientes";
 
@@ -91,6 +91,9 @@ export default class AnalyticalCampaing extends Component {
         this.LastTenUsersListCampaing()
         this.TopTenAgesList()
         let column = "fecha_creacion";
+        this.state.form.column = [column];
+        this.ConsultaGraficas(column)
+        column = "genero";
         this.state.form.column = [column];
         this.ConsultaGraficas(column)
     }
@@ -516,6 +519,20 @@ export default class AnalyticalCampaing extends Component {
                                 <div className="blank-wrapper" style={{marginBottom: '20px'}}>
 
                                 </div>
+                            </div>
+                        </RctCollapsibleCard>
+                        <RctCollapsibleCard
+                            customClasses=""
+                            colClasses="col-sm-12 col-md-6 col-lg-6 d-sm-full"
+                            heading={"Personas Por Genero"}
+                            collapsible
+                            //reloadable
+                            fullBlock
+                        >
+                            <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
+                                <ChartGenero 
+                                    data={data.genero}
+                                />
                             </div>
                         </RctCollapsibleCard>
                     </div>
