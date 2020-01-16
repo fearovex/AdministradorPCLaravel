@@ -22,6 +22,13 @@ import ChartEdad from "Components/new-Graficas/ChartEdad";
 import ChartOS from "Components/new-Graficas/ChartOS";
 import ChartFecha from "Components/new-Graficas/ChartFecha";
 import ChartZona from "Components/new-Graficas/ChartZona";
+import ChartAnchoBanda from "Components/new-Graficas/ChartAnchoBanda";
+import ChartConexionClientes from "Components/new-Graficas/ChartConexionClientes";
+
+import CardInfo from "Components/new-Graficas/CardInfo";
+import TopTables from "Components/new-Graficas/TopTables";
+import LastTenUsersList from "Components/new-Graficas/LastTenUsersList";
+
 
 import {
     Card,
@@ -33,6 +40,7 @@ import {
     CardBody,
     CardImgOverlay
  } from 'reactstrap';
+
 
 import FilterDateForm from 'Components/FilterDateForm/FilterDateForm';
 
@@ -53,7 +61,11 @@ export default class Analytical extends Component {
         let finalDate = (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos);
 
         this.state = {
-            data:[],
+            data: [],
+            dataTop:[],
+            lastTenUsers:[],
+            topZones:[],
+            topVisits:[],
 			error: null,
             form: {
                 filterPersonalizado: false,
@@ -66,7 +78,6 @@ export default class Analytical extends Component {
             },
             events: [],
         }
-        
         this.ConsultaGraficas = this.ConsultaGraficas.bind(this);
         this.ConsultaEventos = this.ConsultaEventos.bind(this);
         this.handleChange=this.handleChange.bind(this)
@@ -75,10 +86,19 @@ export default class Analytical extends Component {
         this.handleDateFilterCancel = this.handleDateFilterCancel.bind(this)
         this.handleChangeFilter = this.handleChangeFilter.bind(this)
         this.handleReload = this.handleReload.bind(this)
+        this.TopCampanias = this.TopCampanias.bind(this);
+        this.UltimosDiez = this.UltimosDiez.bind(this);
+        this.TopZonas = this.TopZonas.bind(this);
+        this.TopVisitas = this.TopVisitas.bind(this);
+        
     }
     
     componentDidMount(){
-        this.ConsultaEventos()
+        this.TopCampanias();
+        this.UltimosDiez();
+        this.TopZonas();
+        this.ConsultaEventos();
+        this.TopVisitas();
         let column = "fecha_creacion"; //"genero","mac_ap","os",
         this.state.form.column = [column];
         this.ConsultaGraficas(column)
@@ -92,6 +112,98 @@ export default class Analytical extends Component {
         this.state.form.column = [column];
         this.ConsultaGraficas(column)
     }
+    
+    async TopCampanias(){
+        try {
+            let config = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(this.state.form)
+            }
+            let res = await fetch(`${localStorage.urlDomain}api/topCampaings`, config);
+            let topCampaings = await res.json()
+            
+            this.setState({
+                dataTop: topCampaings
+            })
+        } catch (error) {
+            this.setState({
+                error:error
+            })
+        }
+    }
+
+    async UltimosDiez(){
+        try {
+            let config = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.state.form)
+            }
+            let res = await fetch(`${localStorage.urlDomain}api/lastTen`, config)
+            let lastTenUsers = await res.json()
+            this.setState({
+                lastTenUsers: lastTenUsers
+            })
+            
+        } catch (error) {
+            this.setState({
+                error:error
+            })
+        }
+    }
+
+    async TopZonas(){
+        try {
+            let config = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.state.form)
+            }
+            let res = await fetch(`${localStorage.urlDomain}api/topZones`, config)
+            let topZones = await res.json()
+            this.setState({
+                topZones: topZones
+            })
+            
+        } catch (error) {
+            this.setState({
+                error:error
+            })
+        }
+    }
+
+    async TopVisitas(){
+        try {
+            let config = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.state.form)
+            }
+            let res = await fetch(`${localStorage.urlDomain}api/topVisits`, config)
+            let topVisits = await res.json()
+            this.setState({
+                topVisits: topVisits
+            })
+            
+        } catch (error) {
+            this.setState({
+                error:error
+            })
+        }
+    }
 
     async ConsultaGraficas(column = "fecha_creacion"){
         try {
@@ -101,23 +213,26 @@ export default class Analytical extends Component {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                
                 body: JSON.stringify(this.state.form)
             }
-
             let res = await fetch(`${localStorage.urlDomain}api/graficas`, config);
             let datagraph = await res.json()
             this.state.data[column] = datagraph[column];
-            this.setState({
-                data: [ [column] = datagraph.column ]
-            })
-            console.log(this.state.data)
+            // this.setState({
+            //     data: [ [column] = datagraph.column ]
+            // })
             
-         } catch (error) {
-               this.setState({ 
-                  error
-               })
-         }
+            this.setState({
+                form:{
+                    ...this.state.form,
+                    filterPersonalizado: false,
+                }
+            });
+        } catch (error) {
+            this.setState({
+                error:error
+            })
+        }
     }
 
     handleDateFilter(e = null){
@@ -250,8 +365,12 @@ export default class Analytical extends Component {
         this.ConsultaGraficas(column)
     }
 
+
+
+
     render() {
         const { events,form } = this.state;
+        const { dataTop, lastTenUsers, topZones, topVisits } = this.state;
         const { location } = this.props.match.params
         return (
             <div className="cardsmasonry-wrapper" >
@@ -274,49 +393,207 @@ export default class Analytical extends Component {
                 <div className="blank-wrapper" style={{marginBottom: '20px'}}>
 
                 </div>
+                
                 <div className="row">
-                    <RctCollapsibleCard
-                        colClasses="col-sm-12 col-md-12 col-lg-12 w-xs-full"
-                        heading={<IntlMessages id="graphics.date" />}
-                        collapsible
-                        reloadable={this.handleReload('fecha_creacion')}
-                        fullBlock
-                        customClasses="overflow-hidden"
-                    >
-                        <ChartFecha data={this.state.data.fecha_creacion}/>
-                    </RctCollapsibleCard>
-                </div>
-                <div className="row">
-                    <RctCollapsibleCard
-                        colClasses="col-sm-12 col-md-4 col-lg-4 w-xs-full"
-                        heading={<IntlMessages id="graphics.ap" />}
-                        collapsible
-                        reloadable={this.handleReload('mac_ap')}
-                        fullBlock
-                        customClasses="overflow-hidden"
-                    >
-                        <ChartAp data={this.state.data.mac_ap} paddingRight={20}/>
-                    </RctCollapsibleCard>
-                    <RctCollapsibleCard
-                        colClasses="col-sm-12 col-md-4 col-lg-4 w-xs-full"
-                        heading={<IntlMessages id="graphics.os" />}
-                        collapsible
-                        reloadable={this.handleReload('os')}
-                        fullBlock
-                        customClasses="overflow-hidden"
-                    >
-                        <ChartOS data={this.state.data.os}/>
-                    </RctCollapsibleCard>
-                    <RctCollapsibleCard
-                        colClasses="col-sm-12 col-md-4 col-lg-4 w-xs-full"
-                        heading={<IntlMessages id="graphics.zone" />}
-                        collapsible
-                        reloadable={this.handleReload('id_evento')}
-                        fullBlock
-                        customClasses="overflow-hidden"
-                    >
-                        <ChartZona data={this.state.data.id_evento} paddingRight={20}/>
-                    </RctCollapsibleCard>
+                <RctCollapsibleCard
+                    customClasses=""
+                    colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
+                    heading={"Total Conectados"}
+                    collapsible
+                    //reloadable
+                    closeable
+                    fullBlock
+                >
+                    <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
+                        <CardInfo 
+                            titleName={"Total Conectados Por Locación"}
+                            dataNum={546}
+                            backgroundColor=""
+                            classColor={"primary"}
+                        />
+                    </div>
+                </RctCollapsibleCard>
+                <RctCollapsibleCard
+                    customClasses=""
+                    colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
+                    heading={"Tiempo de Conexión"}
+                    collapsible
+                    //reloadable
+                    closeable
+                    fullBlock
+                >
+                    <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
+                        <CardInfo 
+                            titleName={"Tiempo Promedio De Conexión Por Usuarios"}
+                            dataNum={2}
+                            backgroundColor=""
+                            time={" hrs"}
+                            classColor={"secondary"}
+                        />
+                    </div>
+                </RctCollapsibleCard>
+                <RctCollapsibleCard
+                    customClasses=""
+                    colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
+                    heading={"Ancho de Banda"}
+                    collapsible
+                    //reloadable
+                    closeable
+                    fullBlock
+                >
+                    <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
+                        <CardInfo 
+                            titleName={"Ancho de Banda Promedio Utilizado Por Usuarios"}
+                            dataNum={5120}
+                            backgroundColor=""
+                            time={"  Kbps"}
+                            classColor={"info"}
+                        />
+                    </div>
+                </RctCollapsibleCard>
+
+                <RctCollapsibleCard
+                    colClasses="col-sm-12 col-md-4 col-lg-12 w-xs-full"
+                    heading={<IntlMessages id="graphics.date" />}
+                    collapsible
+                    //reloadable={this.handleReload('fecha_creacion')}
+                    fullBlock
+                    customClasses="overflow-hidden"
+                >
+                    <ChartFecha data={this.state.data.fecha_creacion}/>
+                </RctCollapsibleCard>
+
+                <RctCollapsibleCard
+                    colClasses="col-sm-12 col-md-4 col-lg-4 w-xs-full"
+                    heading={<IntlMessages id="graphics.ap" />}
+                    collapsible
+                    //reloadable={this.handleReload('mac_ap')}
+                    fullBlock
+                    customClasses="overflow-hidden"
+                >
+                    <ChartAp data={this.state.data.mac_ap} paddingRight={20}/>
+                </RctCollapsibleCard>
+                <RctCollapsibleCard
+                    colClasses="col-sm-12 col-md-4 col-lg-4 w-xs-full"
+                    heading={<IntlMessages id="graphics.os" />}
+                    collapsible
+                    //reloadable={this.handleReload('os')}
+                    fullBlock
+                    customClasses="overflow-hidden"
+                >
+                    <ChartOS data={this.state.data.os}/>
+                </RctCollapsibleCard>
+                <RctCollapsibleCard
+                    colClasses="col-sm-12 col-md-4 col-lg-4 w-xs-full"
+                    heading={<IntlMessages id="graphics.zone" />}
+                    collapsible
+                    //reloadable={this.handleReload('id_evento')}
+                    fullBlock
+                    customClasses="overflow-hidden"
+                >
+                    <ChartZona data={this.state.data.id_evento} paddingRight={20}/>
+                </RctCollapsibleCard>
+
+
+                <RctCollapsibleCard
+                    customClasses=""
+                    colClasses="col-sm-12 col-md-12 col-lg-12 d-sm-full"
+                    heading={"Ancho de Banda VS Fecha"}
+                    collapsible
+                    //reloadable
+                    closeable
+                    fullBlock
+                >
+                    <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
+                        <ChartAnchoBanda />
+                    </div>
+                </RctCollapsibleCard>
+                <RctCollapsibleCard
+                    customClasses=""
+                    colClasses="col-sm-12 col-md-12 col-lg-12 d-sm-full"
+                    heading={"Tiempo De Conexión VS Fecha"}
+                    collapsible
+                    //reloadable
+                    closeable
+                    fullBlock
+                >
+                    <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
+                        <ChartConexionClientes />
+                    </div>
+                </RctCollapsibleCard>
+                <RctCollapsibleCard
+                    customClasses=""
+                    colClasses="col-sm-12 col-md-12 col-lg-6 d-sm-full"
+                    heading={"Top 5 Campañas Activas"}
+                    collapsible
+                    //reloadable
+                    closeable
+                    fullBlock
+                >
+                    <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
+                        <TopTables
+                            dataTopC={dataTop}
+                            dataTopZ={[]}
+                            name={"Campañas"}
+                        />
+                    </div>
+                    
+                </RctCollapsibleCard>
+                <RctCollapsibleCard
+                    customClasses=""
+                    colClasses="col-sm-12 col-md-12 col-lg-6 d-sm-full"
+                    heading={"Top 5 Zonas Activas"}
+                    collapsible
+                    //reloadable
+                    closeable
+                    fullBlock
+                >
+                    <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
+                        <TopTables
+                            dataTopC={[]}
+                            dataTopZ={topZones}
+                            name={"Zonas"}
+                        />
+                    </div>
+                    
+                </RctCollapsibleCard>
+                <RctCollapsibleCard
+                    customClasses=""
+                    colClasses="col-sm-12 col-md-12 col-lg-6 d-sm-full"
+                    heading={"Top 5 Personas Por Visitas"}
+                    collapsible
+                    //reloadable
+                    closeable
+                    fullBlock
+                >
+                    <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
+                        <TopTables
+                            dataTopC={[]}
+                            dataTopZ={[]}
+                            dataTopV={topVisits}
+                            name={"Visitas"}
+                        />
+                    </div>
+                    
+                </RctCollapsibleCard>
+                <RctCollapsibleCard
+                    customClasses=""
+                    colClasses="col-sm-12 col-md-12 col-lg-6 d-sm-full"
+                    heading={"Últimos 10 Clientes Conectados"}
+                    collapsible
+                    //reloadable
+                    closeable
+                    fullBlock
+                >
+                    <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
+                        <LastTenUsersList
+                            listData={lastTenUsers}
+                        />
+                        <div className="blank-wrapper" style={{marginBottom: '20px'}}>
+
+                        </div>
+                    </div>
+                </RctCollapsibleCard>
                 </div>
             </div>
         );

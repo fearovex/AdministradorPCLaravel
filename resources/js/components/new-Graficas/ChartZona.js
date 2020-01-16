@@ -9,9 +9,10 @@ import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import SweetAlert from 'react-bootstrap-sweetalert'
 import MUIDataTable from "mui-datatables";
+import am4themes_dark from "@amcharts/amcharts4/themes/dark";
 
+am4core.useTheme(am4themes_dark);
 am4core.useTheme(am4themes_animated);
-
 // rct card box
 import { RctCardContent } from 'Components/RctCard';
 

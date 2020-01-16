@@ -99,4 +99,43 @@ class GraficasController extends Controller
             
         return response()->json($DatosGraficas, 200);
     }
+
+    public function TopCampaings(Request $request){
+        $database = session('database');
+        $locacion = $request->id_location;
+        $dataTop = DB::select(
+            "call dataTopCampaings('".$database."','".$locacion."')"
+        );
+        return $dataTop;
+    }
+
+    public function LastTenUsersCampaing(Request $request){
+        $database = session('database');
+        $locacion = $request->id_location;
+        $dataUsers = DB::select(
+            "call dataLastTen('".$database."','".$locacion."')"
+        );
+        return $dataUsers;
+    }
+
+    public function TopZones(Request $request){
+        $database = session('database');
+        $locacion = $request->id_location;
+        $dataZones = DB::select(
+            "call dataTopZones('".$database."','".$locacion."')"
+        );
+        return $dataZones;
+    }
+
+    public function TopVisits(Request $request){
+        $database = session('database');
+        $locacion = $request->id_location;
+        $dataVisits = DB::select(
+            "call dataTopVisits('".$database."','".$locacion."')"
+        );
+        return $dataVisits;
+    }
+
+    
+    
 }
