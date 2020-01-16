@@ -294,6 +294,7 @@ export default class Analytical extends Component {
             let horaActual = dateActual.hour();
             let minutosActual = dateActual.minute();
 
+            this.state.form.id_event = 0
             this.state.form.initialDate = (añoAtras) + '-' + (mesAtras) + '-' + (diaAtras) + " " + (horaAtras) + ":" + (minutosAtras)
             this.state.form.finalDate = (añoActual) + '-' + (mesActual) + '-' + (diaActual) + " " + (horaActual) + ":" + (minutosActual)
             
