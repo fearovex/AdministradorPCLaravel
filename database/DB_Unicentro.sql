@@ -286,7 +286,7 @@ CREATE TABLE `zonas` (
 
 LOCK TABLES `zonas` WRITE;
 /*!40000 ALTER TABLE `zonas` DISABLE KEYS */;
-INSERT INTO `zonas` VALUES (1,'Zona General',1)(2,'Zona Coworking',1),(3,'Zona Gammer',1);
+INSERT INTO `zonas` VALUES (1,'Zona Principal',1)(2,'Zona Coworking',1),(3,'Zona Gammer',1);
 /*!40000 ALTER TABLE `zonas` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
