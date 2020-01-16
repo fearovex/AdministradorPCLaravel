@@ -432,6 +432,50 @@ export default class AnalyticalCampaing extends Component {
                                 />
                             </div>
                         </RctCollapsibleCard>
+                        <RctCollapsibleCard
+                            customClasses=""
+                            colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
+                            heading={"Total Conectados"}
+                            collapsible
+                            // reloadable
+                            fullBlock
+                        >
+                            <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
+                                <CardInfo
+                                    titleName={"Total Conectados"}
+                                    dataNum={546}
+                                    backgroundColor=""
+                                    classColor={"secondary"}
+                                />
+                            </div>
+                        </RctCollapsibleCard>
+                        <RctCollapsibleCard
+                            customClasses=""
+                            colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
+                            heading={"Vouchers Usados"}
+                            collapsible
+                            // reloadable
+                            fullBlock
+                        >
+                            <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
+                                <CardInfo
+                                    titleName={"Vouchers"}
+                                    dataNum={546}
+                                    backgroundColor=""
+                                    classColor={"info"}
+                                />
+                            </div>
+                        </RctCollapsibleCard>
+                        <RctCollapsibleCard
+                            colClasses="col-sm-12 col-md-4 col-lg-12 w-xs-full"
+                            heading={<IntlMessages id="graphics.date" />}
+                            collapsible
+                            //reloadable={this.handleReload('fecha_creacion')}
+                            fullBlock
+                            customClasses="overflow-hidden"
+                        >
+                            <ChartFecha data={this.state.data.fecha_creacion}/>
+                        </RctCollapsibleCard>
                     </div>
                     :
                     <div className="row">
@@ -465,7 +509,7 @@ export default class AnalyticalCampaing extends Component {
                                     titleName={"Total Conectados"}
                                     dataNum={546}
                                     backgroundColor=""
-                                    classColor={"info"}
+                                    classColor={"secondary"}
                                 />
                             </div>
                         </RctCollapsibleCard>
