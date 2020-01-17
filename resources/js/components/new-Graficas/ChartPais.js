@@ -114,7 +114,8 @@ class ChartPais extends Component {
       const columns = this.state.columns;
       const data = this.state.data;
       const options = {
-			filterType: 'dropdown',
+         filterType: 'dropdown',
+         selectableRows: false,
 			responsive: 'scrollMaxHeight'
 		};
       return (
@@ -129,7 +130,6 @@ class ChartPais extends Component {
                      onConfirm={() => this.onCancel('prompt')}
                >
                   <MUIDataTable
-                     title={"pais"}
                      data={data}
                      columns={columns}
                      options={options}

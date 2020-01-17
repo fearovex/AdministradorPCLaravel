@@ -137,11 +137,12 @@ class ChartGenero extends Component {
       const columns = this.state.columns;
       const data = this.state.data;
       const options = {
-			filterType: 'dropdown',
+         filterType: 'dropdown',
+         selectableRows: false,
 			responsive: 'scrollMaxHeight'
 		};
       return (
-         <div id="chartgenero" style={{ width: "100%", height: "250px" }}>
+         <div id="chartgenero" style={{ width: "100%", height: "300px" }}>
             <SweetAlert
                      btnSize="sm"
                      show={prompt}
@@ -151,7 +152,6 @@ class ChartGenero extends Component {
                      onConfirm={() => this.onCancel('prompt')}
                >
                   <MUIDataTable
-                     title={"genero"}
                      data={data}
                      columns={columns}
                      options={options}

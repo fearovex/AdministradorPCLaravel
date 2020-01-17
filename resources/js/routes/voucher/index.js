@@ -210,6 +210,7 @@ export default class Voucher extends Component {
 		const options = {
 			responsive: 'scrollMaxHeight',
 			print: false,
+			selectableRows: false,
 			downloadOptions: {
 				filename: 'Voucher.csv',
 				filterOptions: {
@@ -337,7 +338,7 @@ export default class Voucher extends Component {
 									<div className="col-lg-3 col-md-3 col-sm-12">
 										<Button
 											type="submit"
-											className="btn btn-success ml-1"
+											className="btn btn-primary ml-1"
 										>
 											Guardar
 										</Button>

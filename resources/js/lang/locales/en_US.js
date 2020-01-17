@@ -767,6 +767,7 @@ module.exports = {
    "graphics.edad": "N° People by Age",
    "graphics.os": "N° People by Operating system",
    "graphics.date": "N° People by Date",
+   "graphics.zone": "N° People by Zone",
    "sidebar.events" :"Events",   
    "sidebar.detailEvents" :"Detail Events",
    "alert.timeOutTitle": "Session Closed",

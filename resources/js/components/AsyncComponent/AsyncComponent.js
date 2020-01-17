@@ -581,6 +581,11 @@ const AsyncVoucherInfoComponent = Loadable({
    loader: () => import("Routes/voucher-info"),
    loading: () => <RctPageLoader />,
 });
+
+const AsyncAnalyticalCampaing = Loadable({
+   loader: () => import("Routes/analytical-campaing"),
+   loading: () => <RctPageLoader />,
+});
 export {
    AsyncUserWidgetComponent,
    AsyncUserChartsComponent,
@@ -682,6 +687,8 @@ export {
    AsyncvoucherComponent,
    AsyncvouchersComponent,
    AsyncVoucherInfoComponent,
+   //analytical campaing
+   AsyncAnalyticalCampaing,
    
    
 };

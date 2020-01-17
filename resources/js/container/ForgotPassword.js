@@ -35,10 +35,10 @@ export default class ForgotPassword extends Component {
          let res = await fetch(`${localStorage.urlDomain}api/password/email`, config);
          let data = await res.json();
          if(data.error){
-            NotificationManager.error(data.error,'',4000);
+            NotificationManager.error("No podemos encontrar un usuario con este correo electrónico.",'',4000);
          }
          if(data.message && !data.errors){
-            NotificationManager.success(data.message,'',4000);
+            NotificationManager.success("El campo con el correo electrónico es requerido.",'',4000);
          }
          if(data.errors.email){
             NotificationManager.error(data.errors.email,'',4000);
@@ -87,7 +87,7 @@ export default class ForgotPassword extends Component {
                      <div className="col-sm-8 col-lg-5 mx-auto">
                         <div className="session-body text-center login-body">
                            <div className="session-head mb-30">
-                              <h2 className="forgotPasswordTitle">Forgot The Password?</h2> 
+                              <h2 className="forgotPasswordTitle">Olvidó Su Contraseña?</h2> 
                            </div>
                            <Form>
                               <FormGroup className="has-wrapper">
@@ -97,15 +97,15 @@ export default class ForgotPassword extends Component {
                                  id="email" 
                                  required
                                  className="has-input input-lg" 
-                                 placeholder="Enter Email Address"
+                                 placeholder="Ingresa el Correo Electrónico"
                                  onChange={() => this.handleChange(event)}
                               />
                                  <span className="has-icon"><i className="ti-email"></i></span>
                               </FormGroup>
                               <FormGroup>
-                                 <Button onClick={()=>this.sendEmailLink(event)} variant="contained" className="btn-info text-white btn-block btn-large w-100">Send Password Password Reset Link</Button>
+                                 <Button onClick={()=>this.sendEmailLink(event)} variant="contained" className="btn-info text-white btn-block btn-large w-100">Enviar link de restablecimiento</Button>
                               </FormGroup>
-                              <Button component={Link} to="/signin" className="btn-dark btn-block btn-large text-white w-100">Already having account?  Login</Button>
+                              <Button component={Link} to="/signin" className="btn-dark btn-block btn-large text-white w-100">Ya tiene una cuenta?</Button>
                            </Form>
                         </div>
                      </div>

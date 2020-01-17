@@ -6,15 +6,16 @@ import React, { Component } from 'react';
 /* amChart Imports */
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
-import am4themes_animated from "@amcharts/amcharts4/themes/animated";
+import am4themes_animated /* am4themes_dataviz */ from "@amcharts/amcharts4/themes/animated";
 import SweetAlert from 'react-bootstrap-sweetalert'
 import MUIDataTable from "mui-datatables";
+// am4core.useTheme(am4themes_dataviz);
 am4core.useTheme(am4themes_animated);
 
 // rct card box
 import { RctCardContent } from 'Components/RctCard';
 
-class ChartFecha extends Component {
+class ChartConexionClientes extends Component {
    constructor(props){
       super(props)
 
@@ -35,8 +36,7 @@ class ChartFecha extends Component {
    }
 
    componentDidMount() {
-      const {data} = this.props;
-      this.handleChart(data)
+      this.handleChart()
    }
 
    componentDidUpdate() {
@@ -51,21 +51,20 @@ class ChartFecha extends Component {
       }
    }
 
-   async handleChart(data = []){
-      for (let i = 0; i < data.length; i++) {
-         var newDate = new Date(data[i].fecha_creacion);
-         newDate.setDate(newDate.getDate() + 1);
-         data[i].fecha_creacion = newDate;
-      }
-      
-      let chart = am4core.create("chartfecha", am4charts.XYChart);
+   async handleChart(data = []) {
+      let chart = am4core.create("chartTimeConnection", am4charts.XYChart);
       chart.paddingRight = 20;
 
-      // Add data
+      let hours = 0.5;
+      for (var i = 1; i < 15; i++) {
+         hours = Math.random()*(7-0+1)+0;
+         data.push({ date: new Date(2019, 0, i), value: hours });
+      }
+
       chart.data = data;
-      
+
       let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-      dateAxis.title.text = "Fecha Por Personas";
+      dateAxis.title.text = "Fecha Por Locación";
       dateAxis.title.fontWeight = "bold";
       dateAxis.renderer.labels.template.horizontalCenter = "right";
       dateAxis.renderer.labels.template.verticalCenter = "middle";
@@ -73,32 +72,40 @@ class ChartFecha extends Component {
       // dateAxis.renderer.labels.template.rotation = 270;
       dateAxis.minZoomCount = 5;
 
+
       // this makes the data to be grouped
       dateAxis.groupData = true;
       dateAxis.groupCount = 500;
 
-      // Create value axis
-      var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-      valueAxis.title.text = "Personas";
+      let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+      valueAxis.title.text = "Tiempo (hrs)";
       valueAxis.title.fontWeight = "bold";
 
-      // Create series
       let series = chart.series.push(new am4charts.LineSeries());
-      series.dataFields.valueY = "personas";
-      series.dataFields.dateX = "fecha_creacion";
+      series.dataFields.dateX = "date";
+      series.dataFields.valueY = "value";
+
       series.tooltipText = "{valueY}";
       series.tooltip.pointerOrientation = "vertical";
-      series.tooltip.background.fillOpacity = 0.1;
+      series.tooltip.background.fillOpacity = 0.5;
 
       chart.cursor = new am4charts.XYCursor();
       chart.cursor.xAxis = dateAxis;
 
-      // let scrollbarX = new am4core.Scrollbar();
-      // scrollbarX.marginBottom = 20;
-      // chart.scrollbarX = scrollbarX;
+      let scrollbarX = new am4core.Scrollbar();
+      scrollbarX.marginBottom = 20;
+      chart.scrollbarX = scrollbarX;
 
-      this.chart = chart;
+     
+   }
 
+   onCancel(key) {
+      this.setState({ [key]: false })
+
+   }
+
+   openAlert(key) {
+      this.setState({ [key]: true });
    }
 
    componentWillUnmount() {
@@ -106,16 +113,38 @@ class ChartFecha extends Component {
          this.chart.dispose();
       }
    }
-    
+
    render() {
-      
+      const { prompt } = this.state;
+      const columns = this.state.columns;
+      const data = this.state.data;
+      const options = {
+			filterType: 'dropdown',
+			responsive: 'scrollMaxHeight'
+		};
       return (
          <RctCardContent>
-            <div id="chartfecha" style={{ width: "100%", height: "300px" }}>
+            <div id="chartTimeConnection" style={{ height: "280px",width: '100%', maxWidth: '100%'}}>
+            {/* <SweetAlert
+                     btnSize="sm"
+                     show={prompt}
+                     confirmBtnText="Cancelar"
+                     confirmBtnBsStyle="danger"
+                     title="Detalle Pais"
+                     onConfirm={() => this.onCancel('prompt')}
+               > */}
+                  {/* <MUIDataTable
+                     title={"pais"}
+                     data={data}
+                     columns={columns}
+                     options={options}
+                  /> */}
+
+               {/* </SweetAlert> */}
                </div>
          </RctCardContent>
       );
    }
 }
 
-export default ChartFecha;
+export default ChartConexionClientes;
