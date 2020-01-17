@@ -301,6 +301,16 @@ export default class Voucher extends Component {
 											onChange={() => this.handleChangeNumber(event)}
 										/>
 									</div>
+									<div style={{marginLeft: "52px"}} className="col-lg-10 mb-4">
+										<Input
+											type="text"
+											value={this.state.form.etiqueta}
+											placeholder="Etiqueta"
+											name="etiqueta"
+											id="etiqueta"
+											onChange={() => this.handleChange(event)}
+										/>
+									</div>
 								</div>
 								<div className="row">
 									<div className="col-lg-5 mb-4 ml-3" >
@@ -333,19 +343,6 @@ export default class Voucher extends Component {
 											leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
 											rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
 											showTodayButton={true}
-										/>
-									</div>
-								</div>
-								<div className="row">
-									<div className="col-lg-5 mb-4 mt-4 ml-3">
-										<Input
-											type="text"
-											value={this.state.form.etiqueta}
-											className="has-input input-lg"
-											placeholder="Etiqueta"
-											name="etiqueta"
-											id="etiqueta"
-											onChange={() => this.handleChange(event)}
 										/>
 									</div>
 								</div>
