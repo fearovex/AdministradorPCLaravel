@@ -386,7 +386,7 @@ export default class Voucher extends Component {
 					confirmBtnText="Enviar"
 					cancelBtnText="Cancelar"
 					cancelBtnBsStyle="danger"
-					confirmBtnBsStyle="success"
+					confirmBtnBsStyle="primary"
 					title="Enviar Email CSV"
 					onConfirm={() => this.handleSubmit(event)}
 					onCancel={() => this.onCancel('modalEmailCsv')}
