@@ -43,9 +43,9 @@ class TopTenAgesList extends Component {
                            <TableBody >
                               {listData && listData.map((list, index) => (
                                  <TableRow key={index}>
-                                    <TableCell>{index+1}</TableCell>
-                                    <TableCell>{list.Edad}</TableCell>
-                                    <TableCell>{list.N_Registros}</TableCell>
+                                    <TableCell align='center'>#{index+1}</TableCell>
+                                    <TableCell align='center'>{list.Edad}</TableCell>
+                                    <TableCell align='center'>{list.N_Registros}</TableCell>
                                  </TableRow>
                               ))}
                            </TableBody>

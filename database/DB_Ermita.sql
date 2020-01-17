@@ -620,7 +620,7 @@ REPLACE INTO `vouchers` (`id_voucher`, `voucher`, `fecha_inicio`, `fecha_fin`, `
 	(48, 'qfypec', '2019-12-06 00:00:00', '2020-02-13 23:59:59', 'Sin Uso', 2, 100, 100, 1, 'Primeros Vouchers'),
 	(49, '4n7b8w', '2019-12-06 00:00:00', '2020-02-13 23:59:59', 'Sin Uso', 2, 100, 100, 1, 'Primeros Vouchers'),
 	(50, 'uo4dh9', '2019-12-06 00:00:00', '2020-02-13 23:59:59', 'Sin Uso', 2, 100, 100, 1, 'Primeros Vouchers'),
-	(51, 'oxohotel12', '2019-12-06 00:00:00', '2020-02-13 23:59:59', 'En Uso', 2, 98, 100, 1, 'Primeros Vouchers')
+	(51, 'oxohotel12', '2019-12-06 00:00:00', '2020-02-13 23:59:59', 'En Uso', 2, 98, 100, 1, 'Primeros Vouchers');
 /*!40000 ALTER TABLE `vouchers` ENABLE KEYS */;
 
 -- Volcando estructura para tabla portal_oxohotel.zonas

@@ -601,7 +601,7 @@ export default class AnalyticalCampaing extends Component {
                         <RctCollapsibleCard
                             customClasses=""
                             colClasses="col-sm-12 col-md-12 col-lg-12 d-sm-full"
-                            heading={"Top 5 Habitaciones Más Usadas"}
+                            heading={"Top 10 Ultimos Usuarios Conectados"}
                             collapsible
                             //reloadable
                             fullBlock
@@ -621,7 +621,7 @@ export default class AnalyticalCampaing extends Component {
                     <div className="row">
                         <RctCollapsibleCard
                             customClasses=""
-                            colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
+                            colClasses="col-sm-12 col-md-3 col-lg-3 d-sm-full"
                             heading={"Numero de registros"}
                             collapsible
                             // reloadable
@@ -638,7 +638,7 @@ export default class AnalyticalCampaing extends Component {
                         </RctCollapsibleCard>
                         <RctCollapsibleCard
                             customClasses=""
-                            colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
+                            colClasses="col-sm-12 col-md-3 col-lg-3 d-sm-full"
                             heading={"Total Conectados"}
                             collapsible
                             // reloadable
@@ -655,19 +655,36 @@ export default class AnalyticalCampaing extends Component {
                         </RctCollapsibleCard>
                         <RctCollapsibleCard
                             customClasses=""
-                            colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
-                            heading={"Promedio de Tiempo de Conexión"}
+                            colClasses="col-sm-12 col-md-3 col-lg-3 d-sm-full"
+                            heading={"Tiempo de Conexión"}
                             collapsible
                             // reloadable
                             fullBlock
                         >
                             <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                                 <CardInfo
-                                    titleName={"Promedio de Tiempo de Conexión"}
+                                    titleName={"Promedio"}
                                     dataNum={546}
                                     backgroundColor=""
                                     time={" hrs"}
                                     classColor={"info"}
+                                />
+                            </div>
+                        </RctCollapsibleCard>
+                        <RctCollapsibleCard
+                            customClasses=""
+                            colClasses="col-sm-12 col-md-3 col-lg-3 d-sm-full"
+                            heading={"Promedio de Edad"}
+                            collapsible
+                            // reloadable
+                            fullBlock
+                        >
+                            <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
+                                <CardInfo
+                                    titleName={"Promedio de Edad"}
+                                    dataNum={data.PromedyAge ? data.PromedyAge : 0}
+                                    backgroundColor=""
+                                    classColor={"primary"}
                                 />
                             </div>
                         </RctCollapsibleCard>
@@ -744,23 +761,6 @@ export default class AnalyticalCampaing extends Component {
                             <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                                 <ChartGenero 
                                     data={data.genero}
-                                />
-                            </div>
-                        </RctCollapsibleCard>
-                        <RctCollapsibleCard
-                            customClasses=""
-                            colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
-                            heading={"Promedio de Edad"}
-                            collapsible
-                            // reloadable
-                            fullBlock
-                        >
-                            <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
-                                <CardInfo
-                                    titleName={"Promedio de Edad"}
-                                    dataNum={data.PromedyAge ? data.PromedyAge : 0}
-                                    backgroundColor=""
-                                    classColor={"primary"}
                                 />
                             </div>
                         </RctCollapsibleCard>
