@@ -47,7 +47,7 @@ class RctCollapsibleCard extends Component {
 							{(collapsible || reloadable || closeable) &&
 								<div className="contextual-link">
 									{collapsible && <a href="#" onClick={(e) => this.onCollapse(e)}><i className="ti-minus"></i></a>}
-									{reloadable && <a href="#" onClick={(e) => this.onReload(e)}><i className="ti-reload"></i></a>}
+									{reloadable && <a href="#" onClick={reloadable}><i className="ti-reload"></i></a>}
 									{closeable && <a href="#" onClick={(e) => this.onCloseSection(e)}><i className="ti-close"></i></a>}
 								</div>
 							}

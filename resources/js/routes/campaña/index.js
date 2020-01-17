@@ -89,7 +89,7 @@ export default class campañas extends Component {
 					</ListItemIcon>
 				</Link>
 				datacampania[i]["Dashboard"] = 
-				<Link to={location.pathname + '/' + datacampania[i].Nombre+'/dashboard'} onClick={() => this.DashboardCampania(datacampania[i].id, datacampania[i].Vertical)}>
+				<Link to={location.pathname + '/' + datacampania[i].campania+'/dashboard'} onClick={() => this.DashboardCampania(datacampania[i].id, datacampania[i].Vertical)}>
 					<ListItemIcon className="menu-icon">
 						<i className='ti-pie-chart' style={{margin:"0 auto"}}></i>
 					</ListItemIcon>
@@ -254,6 +254,7 @@ export default class campañas extends Component {
 		const { prompt, modaledit } = this.state;
 		const options = {
 			filterType: 'dropdown',
+			selectableRows: false,
 			responsive: 'scrollMaxHeight',
 			print: false,
 			download: false

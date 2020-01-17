@@ -35,7 +35,8 @@ class ChartFecha extends Component {
    }
 
    componentDidMount() {
-      this.handleChart()
+      const {data} = this.props;
+      this.handleChart(data)
    }
 
    componentDidUpdate() {
@@ -52,43 +53,49 @@ class ChartFecha extends Component {
 
    async handleChart(data = []){
       for (let i = 0; i < data.length; i++) {
-         var newDate = new Date(data[i].fecha);
+         var newDate = new Date(data[i].fecha_creacion);
          newDate.setDate(newDate.getDate() + 1);
-         data[i].fecha = newDate;
+         data[i].fecha_creacion = newDate;
       }
       
       let chart = am4core.create("chartfecha", am4charts.XYChart);
-      // chart.scrollbarX = new am4core.Scrollbar();
+      chart.paddingRight = 20;
 
       // Add data
       chart.data = data;
       
-      // Create axes
-      var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-      dateAxis.renderer.minGridDistance = 50;
-      dateAxis.title.text = "Date";
+      let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+      dateAxis.title.text = "Fecha Por Personas";
       dateAxis.title.fontWeight = "bold";
+      dateAxis.renderer.labels.template.horizontalCenter = "right";
+      dateAxis.renderer.labels.template.verticalCenter = "middle";
+      dateAxis.renderer.grid.template.location = 0;
+      // dateAxis.renderer.labels.template.rotation = 270;
+      dateAxis.minZoomCount = 5;
+
+      // this makes the data to be grouped
+      dateAxis.groupData = true;
+      dateAxis.groupCount = 500;
 
       // Create value axis
       var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-      valueAxis.title.text = "People";
+      valueAxis.title.text = "Personas";
       valueAxis.title.fontWeight = "bold";
 
       // Create series
-      var series = chart.series.push(new am4charts.ColumnSeries());
+      let series = chart.series.push(new am4charts.LineSeries());
       series.dataFields.valueY = "personas";
       series.dataFields.dateX = "fecha_creacion";
       series.tooltipText = "{valueY}";
-
-      
-
-      var columnTemplate = series.columns.template;
-      columnTemplate.strokeWidth = 2;
-      columnTemplate.strokeOpacity = 1;
+      series.tooltip.pointerOrientation = "vertical";
+      series.tooltip.background.fillOpacity = 0.1;
 
       chart.cursor = new am4charts.XYCursor();
-      chart.cursor.lineX.strokeOpacity = 0;
-      chart.cursor.lineY.strokeOpacity = 0;
+      chart.cursor.xAxis = dateAxis;
+
+      // let scrollbarX = new am4core.Scrollbar();
+      // scrollbarX.marginBottom = 20;
+      // chart.scrollbarX = scrollbarX;
 
       this.chart = chart;
 
@@ -104,7 +111,7 @@ class ChartFecha extends Component {
       
       return (
          <RctCardContent>
-            <div id="chartfecha" style={{ width: "300px", height: "300px" }}>
+            <div id="chartfecha" style={{ width: "100%", height: "300px" }}>
                </div>
          </RctCardContent>
       );

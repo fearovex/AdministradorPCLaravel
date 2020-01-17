@@ -20,9 +20,9 @@ import { Badge } from 'reactstrap';
 import IntlMessages from 'Util/IntlMessages';
 
 
-const LastTenUsersCampaingColumns = ['Nombres', 'Apellidos', 'IP', 'Campaña'];
+const UsersMoreVisitColumns = ['Posicion', 'Nombre', 'Apellido', 'Email', 'Celular', 'Sexo', 'Sistema Operativo', 'N° Visitas'] ;
 
-class LastTenUsersList extends Component {
+class UsersMoreVisit extends Component {
 
 
    render() {
@@ -35,18 +35,22 @@ class LastTenUsersList extends Component {
                         <Table className="table-wrap" >
                            <TableHead >
                               <TableRow>
-                                 {LastTenUsersCampaingColumns.map((th, index) => (
+                                 {UsersMoreVisitColumns.map((th, index) => (
                                     <TableCell key={index} className="fw-bold">{th}</TableCell>
                                  ))}
                               </TableRow>
                            </TableHead>
                            <TableBody >
-                              {listData.map((list, index) => (
+                              {listData && listData.map((list, index) => (
                                  <TableRow key={index}>
-                                    <TableCell>{list.Nombres}</TableCell>
-                                    <TableCell>{list.Apellidos}</TableCell>
-                                    <TableCell>{list.IP}</TableCell>
-                                    <TableCell>{list.Campaña}</TableCell>
+                                    <TableCell>{index+1}</TableCell> 
+                                    <TableCell>{list.Nombre}</TableCell>
+                                    <TableCell>{list.Apellido}</TableCell>
+                                    <TableCell>{list.Email}</TableCell>
+                                    <TableCell>{list.Celular}</TableCell>
+                                    <TableCell>{list.Sexo}</TableCell>
+                                    <TableCell>{list.Sistema_Operativo}</TableCell>
+                                    <TableCell>{list.N_Visitas}</TableCell>
                                  </TableRow>
                               ))}
                            </TableBody>
@@ -58,4 +62,4 @@ class LastTenUsersList extends Component {
    }
 }
 
-export default withStyles(null, { withTheme: true })(LastTenUsersList);
+export default withStyles(null, { withTheme: true })(UsersMoreVisit);

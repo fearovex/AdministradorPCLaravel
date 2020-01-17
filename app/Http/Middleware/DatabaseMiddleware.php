@@ -19,8 +19,8 @@ class DatabaseMiddleware
     {
         $user = User::where('email', session('email'))->where('password', session('password'))->first();
 
-        $usuario = env('DB_USERNAME');
-        $password = env('DB_PASSWORD');
+        $usuario = session('DB_USERNAME');
+        $password = session('DB_PASSWORD');
 
         Config::set("database.connections.".$user->database, [
             'driver' => 'mysql',

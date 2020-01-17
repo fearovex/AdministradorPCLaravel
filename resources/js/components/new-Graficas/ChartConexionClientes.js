@@ -124,7 +124,7 @@ class ChartConexionClientes extends Component {
 		};
       return (
          <RctCardContent>
-            <div id="chartTimeConnection" style={{ height: "280px",width: '100%', maxWidth: '100%', backgroundColor: 'white' }}>
+            <div id="chartTimeConnection" style={{ height: "280px",width: '100%', maxWidth: '100%'}}>
             {/* <SweetAlert
                      btnSize="sm"
                      show={prompt}

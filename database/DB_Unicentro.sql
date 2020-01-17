@@ -121,7 +121,7 @@ CREATE TABLE `campania` (
 
 LOCK TABLES `campania` WRITE;
 /*!40000 ALTER TABLE `campania` DISABLE KEYS */;
-INSERT INTO `campania` VALUES (1,1,'Coworking','Portal cautivo que cuenta con un banner con publicidad','2019-11-21','2019-12-31',2019,'Coworking','1','Centros Comerciales'),(2,1,'Gammer','Portal cautivo que cuenta con un banner con publicidad y un formulario de registro','2019-11-21','2019-12-31',2019,'Gammer','1','Centros Comerciales');
+INSERT INTO `campania` VALUES (1,1,'Coworking','Portal cautivo que cuenta con un banner con publicidad','2019-11-21','2019-12-31',2019,'Coworking','2','Centros Comerciales'),(2,1,'Gammer','Portal cautivo que cuenta con un banner con publicidad y un formulario de registro','2019-11-21','2019-12-31',2019,'Gammer','3','Centros Comerciales');
 /*!40000 ALTER TABLE `campania` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -286,7 +286,7 @@ CREATE TABLE `zonas` (
 
 LOCK TABLES `zonas` WRITE;
 /*!40000 ALTER TABLE `zonas` DISABLE KEYS */;
-INSERT INTO `zonas` VALUES (1,'Zona Coworking',1),(2,'Zona Gammer',1);
+INSERT INTO `zonas` VALUES (1,'Zona Principal',1)(2,'Zona Coworking',1),(3,'Zona Gammer',1);
 /*!40000 ALTER TABLE `zonas` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

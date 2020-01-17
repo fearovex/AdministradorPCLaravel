@@ -68,5 +68,21 @@ Route::group(['middleware' => 'cors'], function() {
         Route::post('/topZones', 'GraficasController@TopZones');
         
         Route::post('/topVisits', 'GraficasController@TopVisits');
+
+        Route::post('/TotalRecords', 'GraficasController@TotalRecords');
+
+        Route::post('/UsersMoreVisit', 'GraficasController@UsersMoreVisit');
+
+        Route::post('/LastTenUsersListCampaing', 'GraficasController@LastTenUsersListCampaing');
+        
+        Route::post('/TopTenAgesList', 'GraficasController@TopTenAgesList');
+                
+        Route::post('/PromedyAge', 'GraficasController@PromedyAge');
+
+        Route::post('/TopFiveReasonVisits', 'GraficasController@TopFiveReasonVisits');
+
+        Route::post('/TopFiveRooms', 'GraficasController@TopFiveRooms');
+
+        Route::post('/TopTenUsersCampaing', 'GraficasController@TopTenUsersCampaing');
     });
  });

@@ -145,6 +145,7 @@ export default class VoucherInfo extends Component {
 		const options = {
 			responsive: 'scrollMaxHeight',
 			print: false,
+			selectableRows: false,
 			downloadOptions: {
 				filename: 'Vouchers.csv',
 				filterOptions: {
