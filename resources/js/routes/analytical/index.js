@@ -406,7 +406,7 @@ export default class Analytical extends Component {
                 >
                     <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                         <CardInfo 
-                            titleName={"Total Conectados Por Locación"}
+                            titleName={"Conectados"}
                             dataNum={546}
                             backgroundColor=""
                             classColor={"primary"}
@@ -416,14 +416,14 @@ export default class Analytical extends Component {
                 <RctCollapsibleCard
                     customClasses=""
                     colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
-                    heading={"Tiempo de Conexión"}
+                    heading={"Promedio Tiempo de Conexión"}
                     collapsible
                     //reloadable
                     fullBlock
                 >
                     <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                         <CardInfo 
-                            titleName={"Tiempo Promedio De Conexión Por Usuarios"}
+                            titleName={"Promedio"}
                             dataNum={2}
                             backgroundColor=""
                             time={" hrs"}
@@ -434,14 +434,14 @@ export default class Analytical extends Component {
                 <RctCollapsibleCard
                     customClasses=""
                     colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
-                    heading={"Ancho de Banda"}
+                    heading={"Promedio de Ancho de Banda"}
                     collapsible
                     //reloadable
                     fullBlock
                 >
                     <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                         <CardInfo 
-                            titleName={"Ancho de Banda Promedio Utilizado Por Usuarios"}
+                            titleName={"Promedio"}
                             dataNum={5120}
                             backgroundColor=""
                             time={"  Kbps"}
@@ -495,27 +495,25 @@ export default class Analytical extends Component {
 
                 <RctCollapsibleCard
                     customClasses=""
-                    colClasses="col-sm-12 col-md-12 col-lg-12 d-sm-full"
+                    colClasses="col-sm-12 col-md-4 col-lg-12 w-xs-full"
                     heading={"Ancho de Banda VS Fecha"}
                     collapsible
                     //reloadable
                     fullBlock
+                    customClasses="overflow-hidden"
                 >
-                    <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                         <ChartAnchoBanda />
-                    </div>
                 </RctCollapsibleCard>
                 <RctCollapsibleCard
                     customClasses=""
-                    colClasses="col-sm-12 col-md-12 col-lg-12 d-sm-full"
+                    colClasses="ccol-sm-12 col-md-4 col-lg-12 w-xs-full"
                     heading={"Tiempo De Conexión VS Fecha"}
                     collapsible
                     //reloadable
+                    customClasses="overflow-hidden"
                     fullBlock
                 >
-                    <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                         <ChartConexionClientes />
-                    </div>
                 </RctCollapsibleCard>
                 <RctCollapsibleCard
                     customClasses=""

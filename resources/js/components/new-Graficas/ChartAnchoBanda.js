@@ -9,6 +9,7 @@ import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated /* am4themes_dataviz */ from "@amcharts/amcharts4/themes/animated";
 import SweetAlert from 'react-bootstrap-sweetalert'
 import MUIDataTable from "mui-datatables";
+import am4lang_es_ES from "@amcharts/amcharts4/lang/es_ES";
 // am4core.useTheme(am4themes_dataviz);
 am4core.useTheme(am4themes_animated);
 
@@ -92,6 +93,7 @@ class ChartAnchoBanda extends Component {
       //  }, this);
       // chart.legend = new am4charts.Legend();
       let chart = am4core.create("chartBandWidth", am4charts.XYChart);
+      chart.language.locale = am4lang_es_ES;
       chart.paddingRight = 20;
 
       let bandWidth = 10;
@@ -103,6 +105,7 @@ class ChartAnchoBanda extends Component {
       chart.data = data;
 
       let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+      dateAxis.renderer.minGridDistance = 40;
       dateAxis.title.text = "Fecha Por Locación";
       dateAxis.title.fontWeight = "bold";
       dateAxis.renderer.labels.template.horizontalCenter = "right";
@@ -117,12 +120,14 @@ class ChartAnchoBanda extends Component {
       dateAxis.groupCount = 500;
 
       let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-      valueAxis.title.text = "Ancho De Banda";
+      valueAxis.title.text = "Ancho De Banda (kbps)";
       valueAxis.title.fontWeight = "bold";
 
       let series = chart.series.push(new am4charts.LineSeries());
       series.dataFields.dateX = "date";
       series.dataFields.valueY = "value";
+      // series.strokeWidth = 1;
+      // series.minBulletDistance = 5;
 
       series.tooltipText = "{valueY}";
       series.tooltip.pointerOrientation = "vertical";
@@ -135,7 +140,7 @@ class ChartAnchoBanda extends Component {
       scrollbarX.marginBottom = 20;
       chart.scrollbarX = scrollbarX;
 
-     
+      this.chart = chart;
    }
 
    onCancel(key) {
@@ -157,13 +162,10 @@ class ChartAnchoBanda extends Component {
       const { prompt } = this.state;
       const columns = this.state.columns;
       const data = this.state.data;
-      const options = {
-			filterType: 'dropdown',
-			responsive: 'scrollMaxHeight'
-		};
+    
       return (
          <RctCardContent>
-            <div id="chartBandWidth" style={{ height: "280px" }}>
+            <div id="chartBandWidth" style={{ width:'100%', height: "300px" }}>
             {/* <SweetAlert
                      btnSize="sm"
                      show={prompt}

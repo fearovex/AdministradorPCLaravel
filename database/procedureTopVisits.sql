@@ -39,7 +39,7 @@ BEGIN
 	   execute topVisits;
 	   SET @countPrimary = @countPrimary+1;
    end while;
-   SELECT * from tableTopVisits ORDER BY visitas desc LIMIT 5;
+   SELECT * from tableTopVisits ORDER BY visitas desc LIMIT 10;
   
 END//
 DELIMITER ;

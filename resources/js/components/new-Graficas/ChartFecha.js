@@ -72,6 +72,7 @@ class ChartFecha extends Component {
       dateAxis.renderer.grid.template.location = 0;
       // dateAxis.renderer.labels.template.rotation = 270;
       dateAxis.minZoomCount = 5;
+      // dateAxis.renderer.minGridDistance = 60;
 
       // this makes the data to be grouped
       dateAxis.groupData = true;
@@ -84,8 +85,8 @@ class ChartFecha extends Component {
 
       // Create series
       let series = chart.series.push(new am4charts.LineSeries());
-      series.dataFields.valueY = "personas";
       series.dataFields.dateX = "fecha_creacion";
+      series.dataFields.valueY = "personas";
       series.tooltipText = "{valueY}";
       series.tooltip.pointerOrientation = "vertical";
       series.tooltip.background.fillOpacity = 0.1;
@@ -93,9 +94,9 @@ class ChartFecha extends Component {
       chart.cursor = new am4charts.XYCursor();
       chart.cursor.xAxis = dateAxis;
 
-      // let scrollbarX = new am4core.Scrollbar();
-      // scrollbarX.marginBottom = 20;
-      // chart.scrollbarX = scrollbarX;
+      let scrollbarX = new am4core.Scrollbar();
+      scrollbarX.marginBottom = 20;
+      chart.scrollbarX = scrollbarX;
 
       this.chart = chart;
 

@@ -88,8 +88,8 @@ export class AutoLogout extends Component {
                 warning
                 btnSize="sm"
                 show={showAlert}
-                title={<IntlMessages id='alert.timeOutTitle' />}
-                confirmBtnText={<IntlMessages id='alert.timeOutButtom' />}
+                title={"Sesión Cerrada"}
+                confirmBtnText={"Aceptar"}
                 confirmBtnBsStyle="success"
                 onConfirm={() => this.logout()}
             >
