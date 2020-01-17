@@ -37,7 +37,7 @@ BEGIN
 	   execute topZones;
 	   SET @countPrimary = @countPrimary+1;
    end while;
-   SELECT zona, SUM(total) AS total FROM tableTopZones GROUP BY zona;
+   SELECT zona, SUM(total) AS total FROM tableTopZones GROUP BY zona ORDER BY total DESC;
   
 END//
 DELIMITER ;

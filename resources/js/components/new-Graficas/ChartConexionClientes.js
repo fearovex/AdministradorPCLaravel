@@ -7,6 +7,7 @@ import React, { Component } from 'react';
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated /* am4themes_dataviz */ from "@amcharts/amcharts4/themes/animated";
+import am4lang_es_ES from "@amcharts/amcharts4/lang/es_ES";
 import SweetAlert from 'react-bootstrap-sweetalert'
 import MUIDataTable from "mui-datatables";
 // am4core.useTheme(am4themes_dataviz);
@@ -62,6 +63,7 @@ class ChartConexionClientes extends Component {
       }
 
       chart.data = data;
+      chart.language.locale = am4lang_es_ES;
 
       let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
       dateAxis.title.text = "Fecha Por Locación";
@@ -69,8 +71,8 @@ class ChartConexionClientes extends Component {
       dateAxis.renderer.labels.template.horizontalCenter = "right";
       dateAxis.renderer.labels.template.verticalCenter = "middle";
       dateAxis.renderer.grid.template.location = 0;
-      // dateAxis.renderer.labels.template.rotation = 270;
-      dateAxis.minZoomCount = 5;
+      dateAxis.renderer.labels.template.rotation = 270;
+      dateAxis.renderer.minGridDistance = 0.5;
 
 
       // this makes the data to be grouped
@@ -96,7 +98,7 @@ class ChartConexionClientes extends Component {
       scrollbarX.marginBottom = 20;
       chart.scrollbarX = scrollbarX;
 
-     
+      this.chart = chart;
    }
 
    onCancel(key) {
@@ -115,33 +117,10 @@ class ChartConexionClientes extends Component {
    }
 
    render() {
-      const { prompt } = this.state;
-      const columns = this.state.columns;
-      const data = this.state.data;
-      const options = {
-			filterType: 'dropdown',
-			responsive: 'scrollMaxHeight'
-		};
       return (
          <RctCardContent>
-            <div id="chartTimeConnection" style={{ height: "280px",width: '100%', maxWidth: '100%'}}>
-            {/* <SweetAlert
-                     btnSize="sm"
-                     show={prompt}
-                     confirmBtnText="Cancelar"
-                     confirmBtnBsStyle="danger"
-                     title="Detalle Pais"
-                     onConfirm={() => this.onCancel('prompt')}
-               > */}
-                  {/* <MUIDataTable
-                     title={"pais"}
-                     data={data}
-                     columns={columns}
-                     options={options}
-                  /> */}
-
-               {/* </SweetAlert> */}
-               </div>
+            <div id="chartTimeConnection" style={{ width: "100%", height: "300px" }}>
+            </div>
          </RctCardContent>
       );
    }

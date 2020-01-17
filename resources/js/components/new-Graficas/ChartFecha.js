@@ -7,6 +7,7 @@ import React, { Component } from 'react';
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
+import am4lang_es_ES from "@amcharts/amcharts4/lang/es_ES";
 import SweetAlert from 'react-bootstrap-sweetalert'
 import MUIDataTable from "mui-datatables";
 am4core.useTheme(am4themes_animated);
@@ -59,10 +60,12 @@ class ChartFecha extends Component {
       }
       
       let chart = am4core.create("chartfecha", am4charts.XYChart);
-      chart.paddingRight = 20;
+      // chart.paddingRight = 20;
 
       // Add data
       chart.data = data;
+
+      chart.language.locale = am4lang_es_ES;
       
       let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
       dateAxis.title.text = "Fecha Por Personas";
@@ -70,8 +73,8 @@ class ChartFecha extends Component {
       dateAxis.renderer.labels.template.horizontalCenter = "right";
       dateAxis.renderer.labels.template.verticalCenter = "middle";
       dateAxis.renderer.grid.template.location = 0;
-      // dateAxis.renderer.labels.template.rotation = 270;
-      dateAxis.minZoomCount = 5;
+      dateAxis.renderer.labels.template.rotation = 270;
+      dateAxis.renderer.minGridDistance = 0.5;
 
       // this makes the data to be grouped
       dateAxis.groupData = true;
@@ -93,9 +96,9 @@ class ChartFecha extends Component {
       chart.cursor = new am4charts.XYCursor();
       chart.cursor.xAxis = dateAxis;
 
-      // let scrollbarX = new am4core.Scrollbar();
-      // scrollbarX.marginBottom = 20;
-      // chart.scrollbarX = scrollbarX;
+      let scrollbarX = new am4core.Scrollbar();
+      scrollbarX.marginBottom = 20;
+      chart.scrollbarX = scrollbarX;
 
       this.chart = chart;
 

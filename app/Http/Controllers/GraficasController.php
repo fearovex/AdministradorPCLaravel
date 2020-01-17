@@ -199,8 +199,8 @@ class GraficasController extends Controller
     public function VouchersUse(Request $request){
         $database = session('database');
         $VouchersUse = [];
-        $SinUso = DB::select("SELECT COUNT(estado) AS 'Sin_Uso' FROM $database.vouchers WHERE estado='Sin Uso'");
-        $EnUso = DB::select("SELECT COUNT(estado) AS 'En_Uso' FROM $database.vouchers WHERE estado='En Uso'");
+        $SinUso = DB::select("SELECT COUNT(estado) AS 'Sin_Uso' FROM $database.vouchers WHERE estado='Sin Uso' and id_campania=$request->id_campaing");
+        $EnUso = DB::select("SELECT COUNT(estado) AS 'En_Uso' FROM $database.vouchers WHERE estado='En Uso'  and id_campania=$request->id_campaing");
         $VouchersUse = [
             'Sin_Uso' => $SinUso[0]->Sin_Uso,
             'En_Uso' => $EnUso[0]->En_Uso
