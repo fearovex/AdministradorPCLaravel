@@ -82,12 +82,14 @@ export default class AnalyticalCampaing extends Component {
         this.LastTenUsersListCampaing = this.LastTenUsersListCampaing.bind(this)
         this.TopTenAgesList = this.TopTenAgesList.bind(this)
         this.PromedyAge = this.PromedyAge.bind(this)
+        this.VouchersUse = this.VouchersUse.bind(this)
         this.TopFiveReasonVisits = this.TopFiveReasonVisits.bind(this)
         this.TopFiveRooms = this.TopFiveRooms.bind(this)
     }
 
     componentDidMount() {
         this.handleTotalRecords()
+        this.VouchersUse()
         this.UsersMoreVisit()
         this.LastTenUsersListCampaing()
         this.TopTenAgesList()
@@ -388,7 +390,7 @@ export default class AnalyticalCampaing extends Component {
             })
         }
     }
-
+    
     async TopFiveReasonVisits(){
         try {
             let config = {
@@ -405,6 +407,32 @@ export default class AnalyticalCampaing extends Component {
                 data:{
                     ...this.state.data,
                     TopFiveReasonVisits: TopFiveReasonVisits
+                }
+            })
+        } catch (error) {
+            this.setState({
+                error:error
+            })
+        }
+    }
+    
+    async VouchersUse(){
+        try {
+            let config = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.state.form)
+            }
+            let res = await fetch(`${localStorage.urlDomain}api/VouchersUse`, config)
+            let VouchersUse = await res.json()
+            this.setState({
+                data:{
+                    ...this.state.data,
+                    V_SinUso: VouchersUse.Sin_Uso,
+                    V_EnUso: VouchersUse.En_Uso
                 }
             })
         } catch (error) {
@@ -438,7 +466,6 @@ export default class AnalyticalCampaing extends Component {
             })
         }
     }
-
 
     render() {
         const { events,form, data } = this.state;
@@ -504,18 +531,30 @@ export default class AnalyticalCampaing extends Component {
                         <RctCollapsibleCard
                             customClasses=""
                             colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
-                            heading={"Vouchers Usados"}
+                            heading={"Vouchers"}
                             collapsible
                             // reloadable
                             fullBlock
                         >
                             <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
+                                <div className="row">
                                 <CardInfo
-                                    titleName={"Vouchers"}
-                                    dataNum={546}
+                                    titleName={"Sin Usar"}
+                                    className="col-sm-12 col-md-5 col-lg-5 mr-10 ml-20"
+                                    dataNum={data.V_SinUso ? data.V_SinUso : 0}
+                                    icono={false}
                                     backgroundColor=""
                                     classColor={"info"}
                                 />
+                                <CardInfo
+                                    titleName={"En Uso"}
+                                    className="col-sm-12 col-md-5 col-lg-5 mr-20 ml-10"
+                                    dataNum={data.V_EnUso ? data.V_EnUso : 0}
+                                    icono={false}
+                                    backgroundColor=""
+                                    classColor={"secondary"}
+                                />
+                                </div>
                             </div>
                         </RctCollapsibleCard>
                         <RctCollapsibleCard
@@ -562,7 +601,7 @@ export default class AnalyticalCampaing extends Component {
                         <RctCollapsibleCard
                             customClasses=""
                             colClasses="col-sm-12 col-md-12 col-lg-12 d-sm-full"
-                            heading={"Top 5 Habitaciones Más Usadas"}
+                            heading={"Top 10 Ultimos Usuarios Conectados"}
                             collapsible
                             //reloadable
                             fullBlock
@@ -582,7 +621,7 @@ export default class AnalyticalCampaing extends Component {
                     <div className="row">
                         <RctCollapsibleCard
                             customClasses=""
-                            colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
+                            colClasses="col-sm-12 col-md-3 col-lg-3 d-sm-full"
                             heading={"Numero de registros"}
                             collapsible
                             // reloadable
@@ -599,7 +638,7 @@ export default class AnalyticalCampaing extends Component {
                         </RctCollapsibleCard>
                         <RctCollapsibleCard
                             customClasses=""
-                            colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
+                            colClasses="col-sm-12 col-md-3 col-lg-3 d-sm-full"
                             heading={"Total Conectados"}
                             collapsible
                             // reloadable
@@ -616,19 +655,36 @@ export default class AnalyticalCampaing extends Component {
                         </RctCollapsibleCard>
                         <RctCollapsibleCard
                             customClasses=""
-                            colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
-                            heading={"Promedio de Tiempo de Conexión"}
+                            colClasses="col-sm-12 col-md-3 col-lg-3 d-sm-full"
+                            heading={"Tiempo de Conexión"}
                             collapsible
                             // reloadable
                             fullBlock
                         >
                             <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                                 <CardInfo
-                                    titleName={"Promedio de Tiempo de Conexión"}
+                                    titleName={"Promedio"}
                                     dataNum={546}
                                     backgroundColor=""
                                     time={" hrs"}
                                     classColor={"info"}
+                                />
+                            </div>
+                        </RctCollapsibleCard>
+                        <RctCollapsibleCard
+                            customClasses=""
+                            colClasses="col-sm-12 col-md-3 col-lg-3 d-sm-full"
+                            heading={"Promedio de Edad"}
+                            collapsible
+                            // reloadable
+                            fullBlock
+                        >
+                            <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
+                                <CardInfo
+                                    titleName={"Promedio de Edad"}
+                                    dataNum={data.PromedyAge ? data.PromedyAge : 0}
+                                    backgroundColor=""
+                                    classColor={"primary"}
                                 />
                             </div>
                         </RctCollapsibleCard>
@@ -705,23 +761,6 @@ export default class AnalyticalCampaing extends Component {
                             <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                                 <ChartGenero 
                                     data={data.genero}
-                                />
-                            </div>
-                        </RctCollapsibleCard>
-                        <RctCollapsibleCard
-                            customClasses=""
-                            colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
-                            heading={"Promedio de Edad"}
-                            collapsible
-                            // reloadable
-                            fullBlock
-                        >
-                            <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
-                                <CardInfo
-                                    titleName={"Promedio de Edad"}
-                                    dataNum={data.PromedyAge ? data.PromedyAge : 0}
-                                    backgroundColor=""
-                                    classColor={"primary"}
                                 />
                             </div>
                         </RctCollapsibleCard>

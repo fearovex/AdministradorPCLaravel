@@ -43,7 +43,7 @@ class UsersMoreVisit extends Component {
                            <TableBody >
                               {listData && listData.map((list, index) => (
                                  <TableRow key={index}>
-                                    <TableCell>{index+1}</TableCell> 
+                                    <TableCell align='center'>#{index+1}</TableCell> 
                                     <TableCell>{list.Nombre}</TableCell>
                                     <TableCell>{list.Apellido}</TableCell>
                                     <TableCell>{list.Email}</TableCell>

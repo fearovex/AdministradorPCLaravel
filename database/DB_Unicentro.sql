@@ -252,6 +252,7 @@ CREATE TABLE `vouchers` (
   `num_usos` int(11) NOT NULL,
   `total_num_usos` int(11) NOT NULL,
   `id_locacion` int(11) NOT NULL,
+  `etiqueta` varchar(250) COLLATE latin1_spanish_ci NOT NULL,
   PRIMARY KEY (`id_voucher`)
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

@@ -196,6 +196,18 @@ class GraficasController extends Controller
         return $PromedyAge;
     }
 
+    public function VouchersUse(Request $request){
+        $database = session('database');
+        $VouchersUse = [];
+        $SinUso = DB::select("SELECT COUNT(estado) AS 'Sin_Uso' FROM $database.vouchers WHERE estado='Sin Uso'");
+        $EnUso = DB::select("SELECT COUNT(estado) AS 'En_Uso' FROM $database.vouchers WHERE estado='En Uso'");
+        $VouchersUse = [
+            'Sin_Uso' => $SinUso[0]->Sin_Uso,
+            'En_Uso' => $EnUso[0]->En_Uso
+        ];
+        return $VouchersUse;
+    }
+    
     public function TopFiveReasonVisits(Request $request){
         $database = session('database');
         $tabla = DB::connection($database)->table('campania')->select('campania')->where('id', $request->id_campaing)->first();

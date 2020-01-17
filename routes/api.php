@@ -78,6 +78,8 @@ Route::group(['middleware' => 'cors'], function() {
         Route::post('/TopTenAgesList', 'GraficasController@TopTenAgesList');
                 
         Route::post('/PromedyAge', 'GraficasController@PromedyAge');
+        
+        Route::post('/VouchersUse', 'GraficasController@VouchersUse');
 
         Route::post('/TopFiveReasonVisits', 'GraficasController@TopFiveReasonVisits');
 
