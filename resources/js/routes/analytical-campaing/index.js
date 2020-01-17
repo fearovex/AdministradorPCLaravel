@@ -84,10 +84,12 @@ export default class AnalyticalCampaing extends Component {
         this.LastTenUsersListCampaing = this.LastTenUsersListCampaing.bind(this)
         this.TopTenAgesList = this.TopTenAgesList.bind(this)
         this.PromedyAge = this.PromedyAge.bind(this)
+        this.VouchersUse = this.VouchersUse.bind(this)
     }
 
     componentDidMount() {
         this.handleTotalRecords()
+        this.VouchersUse()
         this.UsersMoreVisit()
         this.LastTenUsersListCampaing()
         this.TopTenAgesList()
@@ -387,6 +389,33 @@ export default class AnalyticalCampaing extends Component {
         }
     }
 
+    async VouchersUse(){
+        try {
+            let config = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.state.form)
+            }
+            let res = await fetch(`${localStorage.urlDomain}api/VouchersUse`, config)
+            let VouchersUse = await res.json()
+            this.setState({
+                data:{
+                    ...this.state.data,
+                    V_SinUso: VouchersUse.Sin_Uso,
+                    V_EnUso: VouchersUse.En_Uso
+                }
+            })
+            
+        } catch (error) {
+            this.setState({
+                error:error
+            })
+        }
+    }
+
     render() {
         const { events,form, data } = this.state;
         // const { dataTop, lastTenUsers, topZones, topVisits } = this.state;
@@ -452,18 +481,30 @@ export default class AnalyticalCampaing extends Component {
                         <RctCollapsibleCard
                             customClasses=""
                             colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
-                            heading={"Vouchers Usados"}
+                            heading={"Vouchers"}
                             collapsible
                             // reloadable
                             fullBlock
                         >
                             <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
+                                <div className="row">
                                 <CardInfo
-                                    titleName={"Vouchers"}
-                                    dataNum={546}
+                                    titleName={"Sin Usar"}
+                                    className="col-sm-12 col-md-5 col-lg-5 mr-10 ml-20"
+                                    dataNum={data.V_SinUso ? data.V_SinUso : 0}
+                                    icono={false}
                                     backgroundColor=""
                                     classColor={"info"}
                                 />
+                                <CardInfo
+                                    titleName={"En Uso"}
+                                    className="col-sm-12 col-md-5 col-lg-5 mr-20 ml-10"
+                                    dataNum={data.V_EnUso ? data.V_EnUso : 0}
+                                    icono={false}
+                                    backgroundColor=""
+                                    classColor={"secondary"}
+                                />
+                                </div>
                             </div>
                         </RctCollapsibleCard>
                         <RctCollapsibleCard
