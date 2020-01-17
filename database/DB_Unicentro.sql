@@ -173,7 +173,7 @@ CREATE TABLE `dispositivos` (
 
 LOCK TABLES `dispositivos` WRITE;
 /*!40000 ALTER TABLE `dispositivos` DISABLE KEYS */;
-INSERT INTO `dispositivos` VALUES (1,'Coworking-1','60d02c2d04f0',1,'Ruckus'),(2,'Coworking-2','b479c805e0d0',1,'Ruckus'),(3,'Gammer-1','60d02c2d054f3',2,'Ruckus'),(4,'Gammer-2','b479c805e130',2,'Ruckus');
+INSERT INTO `dispositivos` VALUES (1,'Coworking-1','60d02c2d04f0',2,'Ruckus'),(2,'Coworking-2','b479c805e0d0',2,'Ruckus'),(3,'Gammer-1','60d02c2d054f3',3,'Ruckus'),(4,'Gammer-2','b479c805e130',3,'Ruckus');
 /*!40000 ALTER TABLE `dispositivos` ENABLE KEYS */;
 UNLOCK TABLES;
 
