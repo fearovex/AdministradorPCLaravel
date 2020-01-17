@@ -25,6 +25,7 @@ export default class Voucher extends Component {
 
 		const id_location = localStorage.user_location
 		const id_campaing = localStorage.user_campaing
+		const name_campaing = localStorage.user_name_campaing;
 
 		this.state = {
 			error: null,
@@ -36,13 +37,18 @@ export default class Voucher extends Component {
 				fecha_fin: moment(new Date, 'YYYY/MM/DD hh:mm a'),
 				numerovouchers: "",
 				numerousos: "",
+				etiqueta:"",
 				id_location: id_location,
-				campaña: id_campaing,
+				id_campaing: id_campaing,
+				name_campaing: name_campaing, 
 			},
 			form2: {
 				email: '',
 				columns: [],
 				rows: [],
+				id_location: id_location,
+				id_campaing: id_campaing,
+				name_campaing: name_campaing, 
 			},
 			nameColumns: ['Voucher', 'Fecha Inicio', 'Fecha Fin', 'Estado', 'N° de Usos por Voucher', 'N° Usos Total'],
 			dataVoucher: [],
@@ -143,6 +149,7 @@ export default class Voucher extends Component {
 	openAlert(key) {
 		const id_location = localStorage.user_location
 		const id_campaing = localStorage.user_campaing
+		const name_campaing = localStorage.user_name_campaing;
 
 		this.setState({
 			[key]: true,
@@ -152,7 +159,8 @@ export default class Voucher extends Component {
 				numerovouchers: "",
 				numerousos: "",
 				id_location: id_location,
-				campaña: id_campaing,
+				id_campaing: id_campaing,
+				name_campaing: name_campaing, 
 			}
 		});
 	}
@@ -162,18 +170,28 @@ export default class Voucher extends Component {
 	}
 
 	handleChange(e, name = null) {
-		let date = moment(e._d, 'YYYY/MM/DD hh:mm a');
-		let año = date.year();
-		let mes = date.month() + 1;
-		let dia = date.date();
-		let hora = date.hour();
-		let minutos = date.minute();
-		this.setState({
-			form: {
-				...this.state.form,
-				[name]: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos)
-			}
-		})
+		if(e.target){
+            this.setState({
+                form:{
+                    ...this.state.form,
+                    [e.target.name]: e.target.value
+                }
+            })
+        }
+        else if(e._d){
+			let date = moment(e._d, 'YYYY/MM/DD hh:mm a');
+			let año = date.year();
+			let mes = date.month() + 1;
+			let dia = date.date();
+			let hora = date.hour();
+			let minutos = date.minute();
+			this.setState({
+				form: {
+					...this.state.form,
+					[name]: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos)
+				}
+			})
+		}
 	}
 
 	handleChangeNumber(e) {
@@ -210,6 +228,7 @@ export default class Voucher extends Component {
 		const options = {
 			responsive: 'scrollMaxHeight',
 			print: false,
+			selectableRows: false,
 			downloadOptions: {
 				filename: 'Voucher.csv',
 				filterOptions: {
@@ -289,6 +308,16 @@ export default class Voucher extends Component {
 											onChange={() => this.handleChangeNumber(event)}
 										/>
 									</div>
+									<div style={{marginLeft: "52px"}} className="col-lg-10 mb-4">
+										<Input
+											type="text"
+											value={this.state.form.etiqueta}
+											placeholder="Etiqueta"
+											name="etiqueta"
+											id="etiqueta"
+											onChange={() => this.handleChange(event)}
+										/>
+									</div>
 								</div>
 								<div className="row">
 									<div className="col-lg-5 mb-4 ml-3" >
@@ -337,7 +366,7 @@ export default class Voucher extends Component {
 									<div className="col-lg-3 col-md-3 col-sm-12">
 										<Button
 											type="submit"
-											className="btn btn-success ml-1"
+											className="btn btn-primary ml-1"
 										>
 											Guardar
 										</Button>
@@ -364,7 +393,7 @@ export default class Voucher extends Component {
 					confirmBtnText="Enviar"
 					cancelBtnText="Cancelar"
 					cancelBtnBsStyle="danger"
-					confirmBtnBsStyle="success"
+					confirmBtnBsStyle="primary"
 					title="Enviar Email CSV"
 					onConfirm={() => this.handleSubmit(event)}
 					onCancel={() => this.onCancel('modalEmailCsv')}

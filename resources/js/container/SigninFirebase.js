@@ -92,10 +92,10 @@ class Signin extends Component {
                })
                this.props.signinUserInFirebase(this.state, this.props.history);
               
-               NotificationManager.success('User Logged In Succesfully','',4000);
+               NotificationManager.success('Ha ingresado satisfactoriamente al sistema!','',4000);
             }
             else{
-               NotificationManager.error("The password is invalid or the user doesn't have a password.",'',4000);
+               NotificationManager.error("La contraseña o el usuario es invalido!.",'',4000);
             }
             
          } catch (error) {
@@ -176,7 +176,7 @@ class Signin extends Component {
                                        name="email"
                                        id="user-mail"
                                        className="has-input input-lg"
-                                       placeholder="Enter Email Address"
+                                       placeholder="Ingresa Correo Electrónico"
                                        onChange={() => this.handleChange(event)}
                                     />
                                     <span className="has-icon"><i className="ti-email"></i></span>
@@ -189,7 +189,7 @@ class Signin extends Component {
                                           name="password"
                                           id="pwd"
                                           className="has-input input-lg"
-                                          placeholder="Password"
+                                          placeholder="Ingresa Contraseña"
                                           onChange={() => this.handleChange(event)}
                                        />
                                     : <Input
@@ -198,7 +198,7 @@ class Signin extends Component {
                                           name="password"
                                           id="pwd"
                                           className="has-input input-lg"
-                                          placeholder="Password"
+                                          placeholder="Ingresa Contraseña"
                                           onChange={() => this.handleChange(event)}
                                        />
                                        }
@@ -219,10 +219,10 @@ class Signin extends Component {
                                        size="large"
                                        onClick={() => this.handleSubmit(event)}
                                     >
-                                       Sign In
+                                       Ingresar
                             			</Button>
                                  </FormGroup>
-                                 <a onClick={()=> this.forgotPassword()} className="forgotPassword" >Forgot the password?</a><br></br>
+                                 <a onClick={()=> this.forgotPassword()} className="forgotPassword" >Olvidó Su Contraseña?</a><br></br>
                                  <div className="reCaptcha">
                                     <Recaptcha
                                        sitekey="6Ldb58YUAAAAAHAumCMJxAyQLQvZ5O57tUepigG3"

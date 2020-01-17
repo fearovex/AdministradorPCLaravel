@@ -69,6 +69,7 @@ export default class Vouchers extends Component {
 		const options = {
 			responsive: 'scrollMaxHeight',
 			print: false,
+			selectableRows: false,
 			download: false,
 			elevation: 0
 		};

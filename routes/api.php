@@ -30,6 +30,8 @@ Route::group(['middleware' => 'cors'], function() {
         Route::get('/events','EventsController@index');
 
         Route::post('/graficas', 'GraficasController@Consulta');
+
+        
         
         Route::post('/detailEvents','DetailEventsController@index');
         
@@ -58,5 +60,31 @@ Route::group(['middleware' => 'cors'], function() {
         Route::post("/vouchers/voucherInfo","VouchersController@voucherInfo");
 
         Route::post('/csvEmail', 'Api\CsvEmail@sendResetLinkEmail');
+
+        Route::post('/topCampaings', 'GraficasController@TopCampaings');
+        
+        Route::post('/lastTen', 'GraficasController@LastTenUsersCampaing');
+
+        Route::post('/topZones', 'GraficasController@TopZones');
+        
+        Route::post('/topVisits', 'GraficasController@TopVisits');
+
+        Route::post('/TotalRecords', 'GraficasController@TotalRecords');
+
+        Route::post('/UsersMoreVisit', 'GraficasController@UsersMoreVisit');
+
+        Route::post('/LastTenUsersListCampaing', 'GraficasController@LastTenUsersListCampaing');
+        
+        Route::post('/TopTenAgesList', 'GraficasController@TopTenAgesList');
+                
+        Route::post('/PromedyAge', 'GraficasController@PromedyAge');
+        
+        Route::post('/VouchersUse', 'GraficasController@VouchersUse');
+
+        Route::post('/TopFiveReasonVisits', 'GraficasController@TopFiveReasonVisits');
+
+        Route::post('/TopFiveRooms', 'GraficasController@TopFiveRooms');
+
+        Route::post('/TopTenUsersCampaing', 'GraficasController@TopTenUsersCampaing');
     });
  });

@@ -60,6 +60,8 @@ class LoginController extends Controller
             session(['rol' => $user->id_rol]);
             session(['location' => $user->location]);
             session(['campaing' => $user->campaing]);
+            session(['DB_USERNAME' => env('DB_USERNAME')]);
+            session(['DB_PASSWORD' => env('DB_PASSWORD')]);
 
 
             $log = new Log_Login();

@@ -50,6 +50,7 @@ export default class campañas extends Component {
 		this.handleEdit = this.handleEdit.bind(this);
 		this.openAlertTest = this.openAlertTest.bind(this);
 		this.DataCampania = this.DataCampania.bind(this);
+		this.DashboardCampania = this.DashboardCampania.bind(this);
 
 	}
 	async componentDidMount() {
@@ -85,6 +86,12 @@ export default class campañas extends Component {
 				<Link to={location.pathname + '/' + datacampania[i].Nombre} onClick={() => this.DataCampania(datacampania[i].id)}>
 					<ListItemIcon className="menu-icon">
 						<i className='ti-eye' style={{margin:"0 auto"}}></i>
+					</ListItemIcon>
+				</Link>
+				datacampania[i]["Dashboard"] = 
+				<Link to={location.pathname + '/' + datacampania[i].Nombre+'/dashboard'} onClick={() => this.DashboardCampania(datacampania[i].id, datacampania[i].Vertical)}>
+					<ListItemIcon className="menu-icon">
+						<i className='ti-pie-chart' style={{margin:"0 auto"}}></i>
 					</ListItemIcon>
 				</Link>
 			}
@@ -166,8 +173,13 @@ export default class campañas extends Component {
 	}
 
 
-	DataCampania(id_campain) {
-		localStorage.setItem('user_campaing', id_campain);
+	DataCampania(id_campaing) {
+		localStorage.setItem('user_campaing', id_campaing);
+	}
+
+	DashboardCampania(id_campaing, vertical){
+		localStorage.setItem('user_campaing', id_campaing);
+		localStorage.setItem('vertical', vertical);
 	}
 
 
@@ -238,10 +250,11 @@ export default class campañas extends Component {
 	}
 	render() {
 		const { data, form } = this.state;
-		const columns = ['Nombre', 'Descripcion', 'Fecha Inicio', 'Fecha Fin', 'Editar', 'Datos'];
+		const columns = ['Nombre', 'Descripcion', 'Fecha Inicio', 'Fecha Fin', 'Editar', 'Datos','Dashboard'];
 		const { prompt, modaledit } = this.state;
 		const options = {
 			filterType: 'dropdown',
+			selectableRows: false,
 			responsive: 'scrollMaxHeight',
 			print: false,
 			download: false

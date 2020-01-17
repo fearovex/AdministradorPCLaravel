@@ -38,7 +38,7 @@ export class UserBlockClass extends Component {
 		try {
 			let res = await fetch(`${localStorage.urlDomain}api/logout`);
 			this.props.logoutUserFromFirebase();
-			NotificationManager.success('User Loggout Successfully','', 4000);
+			NotificationManager.success('Se ha cerrado sesión correctamente','', 4000);
 		} catch (error) {
 			console.log(error)
 		}

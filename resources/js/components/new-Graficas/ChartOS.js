@@ -51,35 +51,72 @@ class ChartOS extends Component {
    }
 
    async handleChart(data = []) {
-      let chart = am4core.create("chartos", am4charts.XYChart);
-      // chart.scrollbarX = new am4core.Scrollbar();
 
-      // Add data
+      let chart = am4core.create("chartos", am4charts.PieChart3D);
+      chart.hiddenState.properties.opacity = 0;
+      chart.marginRight= 20;
+      chart.marginLeft= 10;
+
       chart.data = data;
 
-      // Create axes
-      var categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
-      categoryAxis.dataFields.category = "os";
-      categoryAxis.numberFormatter.numberFormat = "#";
-      categoryAxis.renderer.inversed = true;
-      categoryAxis.title.text = "Operating system";
-      categoryAxis.title.fontWeight = "bold";
 
-      var valueAxis = chart.xAxes.push(new am4charts.ValueAxis());
-      valueAxis.title.text = "People";
-      valueAxis.title.fontWeight = "bold";
+      // Add and configure Series
+      let pieSeries = chart.series.push(new am4charts.PieSeries3D());
+      pieSeries.dataFields.category = "os";
+      pieSeries.dataFields.value = "personas";
 
-      // Create series
-      var series = chart.series.push(new am4charts.ColumnSeries3D());
-      series.dataFields.valueX = "personas";
-      series.dataFields.categoryY = "os";
-      series.name = "Personas";
-      series.columns.template.propertyFields.fill = "color";
-      series.columns.template.tooltipText = "{valueX}";
-      series.columns.template.column3D.stroke = am4core.color("#fff");
-      series.columns.template.column3D.strokeOpacity = 0.2;
+      // Put a thick white border around each Slice
+      pieSeries.slices.template.stroke = am4core.color("#fff");
+      pieSeries.slices.template.strokeWidth = 2;
+      pieSeries.slices.template.strokeOpacity = 1;
+      // change the cursor on hover to make it apparent the object can be interacted with
+      pieSeries.slices.template
+      .cursorOverStyle = [
+         {
+               "property": "cursor",
+               "value": "pointer"
+            }
+         ];
+
+      pieSeries.labels.template.disabled = true;
+      pieSeries.ticks.template.disabled = true;
+
+      // Create hover state
+      let hoverState = pieSeries.slices.template.states.getKey("hover"); // normally we have to create the hover state, in this case it already exists
+
+      // Slightly shift the shadow and make it more prominent on hover
+      let hoverShadow = hoverState.filters.push(new am4core.DropShadowFilter);
+      hoverShadow.opacity = 0.7;
+      hoverShadow.blur = 5;
+
+      // Add a legend
+      chart.legend = new am4charts.Legend();
+      chart.legend.position = "left";
+      chart.legend.width = 100;
+      chart.legend.labels.template.maxWidth = 150;
+      chart.legend.labels.template.truncate = true;
+      chart.legend.markers.template;
+      var markerTemplate = chart.legend.markers.template;
+      markerTemplate.width = 10;
+      markerTemplate.height = 10;
 
       this.chart = chart;
+      
+      pieSeries.slices.template.events.on("hit", function(ev) {
+         this.openAlert('prompt');
+         this.setState({
+            columns: [ev.target._dataItem.category],
+            data: [[ev.target._dataItem.value]]
+         })
+       }, this);
+
+   }
+   onCancel(key) {
+      this.setState({ [key]: false })
+   }
+
+   openAlert(key) {
+      this.setState({ [key]: true });
    }
 
    componentWillUnmount() {
@@ -89,12 +126,32 @@ class ChartOS extends Component {
    }
 
    render() {
-      
+      const { prompt } = this.state;
+      const columns = this.state.columns;
+      const data = this.state.data;
+      const options = {
+         filterType: 'dropdown',
+         selectableRows: false,
+			responsive: 'scrollMaxHeight'
+		};
       return (
-         <RctCardContent>
-            <div id="chartos" style={{ width: "100%", height: "300px" }}>
-            </div>
-         </RctCardContent>
+         <div id="chartos" style={{ width: "100%", height: "300px" }}>
+            <SweetAlert
+               btnSize="sm"
+               show={prompt}
+               confirmBtnText="Cancelar"
+               confirmBtnBsStyle="danger"
+               title="Detalle Genero"
+               onConfirm={() => this.onCancel('prompt')}
+            >
+            <MUIDataTable
+               data={data}
+               columns={columns}
+               options={options}
+            />
+
+            </SweetAlert>
+         </div>
       );
    }
 }
