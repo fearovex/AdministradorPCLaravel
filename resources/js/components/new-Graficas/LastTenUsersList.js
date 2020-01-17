@@ -20,7 +20,7 @@ import { Badge } from 'reactstrap';
 import IntlMessages from 'Util/IntlMessages';
 
 
-const LastTenUsersCampaingColumns = ['Nombres', 'Apellidos', 'IP', 'Campaña'];
+const LastTenUsersCampaingColumns = ['Posicion','Nombres', 'Apellidos', 'IP', 'Campaña'];
 
 class LastTenUsersList extends Component {
 
@@ -43,6 +43,7 @@ class LastTenUsersList extends Component {
                            <TableBody >
                               {listData.map((list, index) => (
                                  <TableRow key={index}>
+                                    <TableCell align='center'>{index+1}</TableCell>
                                     <TableCell>{list.Nombres}</TableCell>
                                     <TableCell>{list.Apellidos}</TableCell>
                                     <TableCell>{list.IP}</TableCell>

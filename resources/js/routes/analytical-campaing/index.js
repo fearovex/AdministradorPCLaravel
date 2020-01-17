@@ -21,6 +21,8 @@ import ChartFecha from "Components/new-Graficas/ChartFecha";
 import UsersMoreVisit from "Components/new-Graficas/UsersMoreVisit";
 import LastTenUsersListCampaing from "Components/new-Graficas/LastTenUsersListCampaing";
 import TopTenAgesList from "Components/new-Graficas/TopTenAgesList";
+import TopFiveReasonVisits from "Components/new-Graficas/TopFiveReasonVisits";
+import TopFiveRooms from "Components/new-Graficas/TopFiveRooms";
 import ChartGenero from "Components/new-Graficas/ChartGenero";
 // import ChartAnchoBanda from "Components/new-Graficas/ChartAnchoBanda";
 // import ChartConexionClientes from "Components/new-Graficas/ChartConexionClientes";
@@ -52,10 +54,6 @@ export default class AnalyticalCampaing extends Component {
 
         this.state = {
             data: {},
-            dataTop: [],
-            lastTenUsers: [],
-            topZones: [],
-            topVisits: [],
             error: null,
             form: {
                 filterPersonalizado: false,
@@ -85,6 +83,8 @@ export default class AnalyticalCampaing extends Component {
         this.TopTenAgesList = this.TopTenAgesList.bind(this)
         this.PromedyAge = this.PromedyAge.bind(this)
         this.VouchersUse = this.VouchersUse.bind(this)
+        this.TopFiveReasonVisits = this.TopFiveReasonVisits.bind(this)
+        this.TopFiveRooms = this.TopFiveRooms.bind(this)
     }
 
     componentDidMount() {
@@ -94,6 +94,8 @@ export default class AnalyticalCampaing extends Component {
         this.LastTenUsersListCampaing()
         this.TopTenAgesList()
         this.PromedyAge()
+        this.TopFiveReasonVisits()
+        this.TopFiveRooms()
         let column = "fecha_creacion";
         this.state.form.column = [column];
         this.ConsultaGraficas(column)
@@ -388,7 +390,32 @@ export default class AnalyticalCampaing extends Component {
             })
         }
     }
-
+    
+    async TopFiveReasonVisits(){
+        try {
+            let config = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.state.form)
+            }
+            let res = await fetch(`${localStorage.urlDomain}api/TopFiveReasonVisits`, config)
+            let TopFiveReasonVisits = await res.json()
+            this.setState({
+                data:{
+                    ...this.state.data,
+                    TopFiveReasonVisits: TopFiveReasonVisits
+                }
+            })
+        } catch (error) {
+            this.setState({
+                error:error
+            })
+        }
+    }
+    
     async VouchersUse(){
         try {
             let config = {
@@ -408,7 +435,31 @@ export default class AnalyticalCampaing extends Component {
                     V_EnUso: VouchersUse.En_Uso
                 }
             })
-            
+        } catch (error) {
+            this.setState({
+                error:error
+            })
+        }
+    }
+
+    async TopFiveRooms(){
+        try {
+            let config = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.state.form)
+            }
+            let res = await fetch(`${localStorage.urlDomain}api/TopFiveRooms`, config)
+            let TopFiveRooms = await res.json()
+            this.setState({
+                data:{
+                    ...this.state.data,
+                    TopFiveRooms: TopFiveRooms
+                }
+            })
         } catch (error) {
             this.setState({
                 error:error
@@ -418,7 +469,6 @@ export default class AnalyticalCampaing extends Component {
 
     render() {
         const { events,form, data } = this.state;
-        // const { dataTop, lastTenUsers, topZones, topVisits } = this.state;
         const { camp } = this.props.match.params
         const { vertical } = this.state.form
         return (
@@ -517,6 +567,55 @@ export default class AnalyticalCampaing extends Component {
                         >
                             <ChartFecha data={this.state.data.fecha_creacion}/>
                         </RctCollapsibleCard>
+                        <RctCollapsibleCard
+                            customClasses=""
+                            colClasses="col-sm-12 col-md-6 col-lg-6 d-sm-full"
+                            heading={"Top 5 Razones por Visita"}
+                            collapsible
+                            //reloadable
+                            fullBlock
+                        >
+                            <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
+                                <TopFiveReasonVisits
+                                    listData={data.TopFiveReasonVisits}
+                                    name={"Razon"}
+                                />
+                            </div>
+                        </RctCollapsibleCard>
+                        <RctCollapsibleCard
+                            customClasses=""
+                            colClasses="col-sm-12 col-md-6 col-lg-6 d-sm-full"
+                            heading={"Top 5 Habitaciones Más Usadas"}
+                            collapsible
+                            //reloadable
+                            fullBlock
+                        >
+                            <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
+                                <TopFiveRooms
+                                    listData={data.TopFiveRooms}
+                                    name={"Habitación"}
+                                />
+                            </div>
+                            
+                        </RctCollapsibleCard>
+                        <RctCollapsibleCard
+                            customClasses=""
+                            colClasses="col-sm-12 col-md-12 col-lg-12 d-sm-full"
+                            heading={"Top 5 Habitaciones Más Usadas"}
+                            collapsible
+                            //reloadable
+                            fullBlock
+                        >
+                            <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
+                                <LastTenUsersListCampaing
+                                    listData={data.LastTenUsersListCampaing}
+                                    vertical={vertical}
+                                />
+                                <div className="blank-wrapper" style={{marginBottom: '20px'}}>
+                                </div>
+                            </div>
+                            
+                        </RctCollapsibleCard>
                     </div>
                     :
                     <div className="row">
@@ -610,6 +709,7 @@ export default class AnalyticalCampaing extends Component {
                             <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                                 <LastTenUsersListCampaing
                                     listData={data.LastTenUsersListCampaing}
+                                    vertical={vertical}
                                 />
                                 <div className="blank-wrapper" style={{marginBottom: '20px'}}>
 

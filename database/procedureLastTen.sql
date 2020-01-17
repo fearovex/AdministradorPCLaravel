@@ -40,6 +40,6 @@ BEGIN
    	Set @countPrimary = @countPrimary+1;
    end while;
 
-   SELECT nombre AS Nombres, apellidos AS Apellidos, fecha_creacion, ip AS IP, nombreCampania AS 'Campaña' FROM dataLastTen order by fecha_creacion desc LIMIT 10;
+   SELECT @i := @i + 1 as posTop, nombre AS Nombres, apellidos AS Apellidos, fecha_creacion, ip AS IP, nombreCampania AS 'Campaña' FROM dataLastTen cross join (select @i := 0) d order by fecha_creacion desc LIMIT 10;
 END//
 DELIMITER ;

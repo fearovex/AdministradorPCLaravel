@@ -80,5 +80,11 @@ Route::group(['middleware' => 'cors'], function() {
         Route::post('/PromedyAge', 'GraficasController@PromedyAge');
         
         Route::post('/VouchersUse', 'GraficasController@VouchersUse');
+
+        Route::post('/TopFiveReasonVisits', 'GraficasController@TopFiveReasonVisits');
+
+        Route::post('/TopFiveRooms', 'GraficasController@TopFiveRooms');
+
+        Route::post('/TopTenUsersCampaing', 'GraficasController@TopTenUsersCampaing');
     });
  });
