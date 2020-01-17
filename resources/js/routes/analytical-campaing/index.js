@@ -504,7 +504,7 @@ export default class AnalyticalCampaing extends Component {
                         >
                             <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                                 <CardInfo
-                                    titleName={"Numero de registros"}
+                                    titleName={"Registros"}
                                     dataNum={data.TotalRecords ? data.TotalRecords : 0}
                                     backgroundColor=""
                                     classColor={"primary"}
@@ -521,7 +521,7 @@ export default class AnalyticalCampaing extends Component {
                         >
                             <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                                 <CardInfo
-                                    titleName={"Total Conectados"}
+                                    titleName={"Conectados"}
                                     dataNum={546}
                                     backgroundColor=""
                                     classColor={"secondary"}
@@ -629,7 +629,7 @@ export default class AnalyticalCampaing extends Component {
                         >
                             <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                                 <CardInfo
-                                    titleName={"Numero de registros"}
+                                    titleName={"Registros"}
                                     dataNum={data.TotalRecords ? data.TotalRecords : 0}
                                     backgroundColor=""
                                     classColor={"primary"}
@@ -646,7 +646,7 @@ export default class AnalyticalCampaing extends Component {
                         >
                             <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                                 <CardInfo
-                                    titleName={"Total Conectados"}
+                                    titleName={"Conectados"}
                                     dataNum={546}
                                     backgroundColor=""
                                     classColor={"secondary"}
@@ -681,7 +681,7 @@ export default class AnalyticalCampaing extends Component {
                         >
                             <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                                 <CardInfo
-                                    titleName={"Promedio de Edad"}
+                                    titleName={"Promedio"}
                                     dataNum={data.PromedyAge ? data.PromedyAge : 0}
                                     backgroundColor=""
                                     classColor={"primary"}

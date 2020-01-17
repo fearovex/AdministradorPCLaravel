@@ -31,8 +31,8 @@ export default class TopTables extends Component {
             </CardBody>
             :
              <CardBody className="pb-0 d-flex justify-content-between" style={{backgroundColor: '#31405699'}}>
-               <p className="fs-14 mb-0" >Personas <i className="ti-user text-success ml-1"></i></p>
                <h4 className="mb-5" >{name}</h4>
+               <p className="fs-14 mb-0" >Personas <i className="ti-user text-success ml-1"></i></p>
             </CardBody>
             }
             
@@ -65,8 +65,8 @@ export default class TopTables extends Component {
                {dataTopV && dataTopV.map((data, key) => {
                   return(
                   <ListItem key={key} className="d-flex justify-content-between border-bottom py-5 fs-14 px-20" style={{backgroundColor: '#3e558412'}}>
-                        <span style={{width: '74px', textAlign: 'center'}} key={data.registros}>{data.registros}</span>
                         <span style={{width: '42px', textAlign: 'center'}} key={data.visitas}>{data.visitas}</span>
+                        <span style={{width: '74px', textAlign: 'center'}} key={data.registros}>{data.registros}</span>
                   </ListItem>
                   )
                })}

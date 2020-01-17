@@ -53,8 +53,7 @@ class ChartConexionClientes extends Component {
    }
 
    async handleChart(data = []) {
-      let chart = am4core.create("chartTimeConnection", am4charts.XYChart);
-      chart.paddingRight = 20;
+    
 
       let hours = 0.5;
       for (var i = 1; i < 15; i++) {
@@ -62,10 +61,16 @@ class ChartConexionClientes extends Component {
          data.push({ date: new Date(2019, 0, i), value: hours });
       }
 
+      let chart = am4core.create("chartTimeConnection", am4charts.XYChart);
+      chart.paddingRight = 20;
+
+
+
       chart.data = data;
       chart.language.locale = am4lang_es_ES;
 
       let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+      dateAxis.renderer.minGridDistance = 40;
       dateAxis.title.text = "Fecha Por Locación";
       dateAxis.title.fontWeight = "bold";
       dateAxis.renderer.labels.template.horizontalCenter = "right";
@@ -86,10 +91,9 @@ class ChartConexionClientes extends Component {
       let series = chart.series.push(new am4charts.LineSeries());
       series.dataFields.dateX = "date";
       series.dataFields.valueY = "value";
-
       series.tooltipText = "{valueY}";
       series.tooltip.pointerOrientation = "vertical";
-      series.tooltip.background.fillOpacity = 0.5;
+      series.tooltip.background.fillOpacity = 0.1;
 
       chart.cursor = new am4charts.XYCursor();
       chart.cursor.xAxis = dateAxis;
