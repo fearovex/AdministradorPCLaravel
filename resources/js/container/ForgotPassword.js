@@ -38,10 +38,10 @@ export default class ForgotPassword extends Component {
             NotificationManager.error("No podemos encontrar un usuario con este correo electrónico.",'',4000);
          }
          if(data.message && !data.errors){
-            NotificationManager.success("El campo con el correo electrónico es requerido.",'',4000);
+            NotificationManager.success("Se te ha envíado un link de restablecimiento de contraseña",'',4000);
          }
          if(data.errors.email){
-            NotificationManager.error(data.errors.email,'',4000);
+            NotificationManager.error('El campo con el correo electrónico es requerido','',4000);
          }
        
       } catch (error) {
