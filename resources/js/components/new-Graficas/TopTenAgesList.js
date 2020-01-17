@@ -36,7 +36,7 @@ class TopTenAgesList extends Component {
                            <TableHead >
                               <TableRow>
                                  {LastTenUsersCampaingColumns.map((th, index) => (
-                                    <TableCell key={index} className="fw-bold">{th}</TableCell>
+                                    <TableCell align='center' key={index} className="fw-bold">{th}</TableCell>
                                  ))}
                               </TableRow>
                            </TableHead>
