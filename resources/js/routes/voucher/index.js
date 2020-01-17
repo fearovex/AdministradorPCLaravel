@@ -25,6 +25,7 @@ export default class Voucher extends Component {
 
 		const id_location = localStorage.user_location
 		const id_campaing = localStorage.user_campaing
+		const name_campaing = localStorage.user_name_campaing;
 
 		this.state = {
 			error: null,
@@ -38,12 +39,16 @@ export default class Voucher extends Component {
 				numerousos: "",
 				etiqueta:"",
 				id_location: id_location,
-				campaña: id_campaing,
+				id_campaing: id_campaing,
+				name_campaing: name_campaing, 
 			},
 			form2: {
 				email: '',
 				columns: [],
 				rows: [],
+				id_location: id_location,
+				id_campaing: id_campaing,
+				name_campaing: name_campaing, 
 			},
 			nameColumns: ['Voucher', 'Fecha Inicio', 'Fecha Fin', 'Estado', 'N° de Usos por Voucher', 'N° Usos Total'],
 			dataVoucher: [],
@@ -144,6 +149,7 @@ export default class Voucher extends Component {
 	openAlert(key) {
 		const id_location = localStorage.user_location
 		const id_campaing = localStorage.user_campaing
+		const name_campaing = localStorage.user_name_campaing;
 
 		this.setState({
 			[key]: true,
@@ -153,7 +159,8 @@ export default class Voucher extends Component {
 				numerovouchers: "",
 				numerousos: "",
 				id_location: id_location,
-				campaña: id_campaing,
+				id_campaing: id_campaing,
+				name_campaing: name_campaing, 
 			}
 		});
 	}
@@ -386,7 +393,7 @@ export default class Voucher extends Component {
 					confirmBtnText="Enviar"
 					cancelBtnText="Cancelar"
 					cancelBtnBsStyle="danger"
-					confirmBtnBsStyle="success"
+					confirmBtnBsStyle="primary"
 					title="Enviar Email CSV"
 					onConfirm={() => this.handleSubmit(event)}
 					onCancel={() => this.onCancel('modalEmailCsv')}
