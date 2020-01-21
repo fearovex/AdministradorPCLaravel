@@ -83,7 +83,7 @@ class VouchersController extends Controller
         }
 
         $vouchersRecienCreados = DB::connection(session('database'))
-        ->select("select v.voucher as Voucher, v.fecha_inicio as 'Fecha Inicio', v.fecha_fin as 'Fecha Fin', v.estado as Estado, num_usos as 'N° de Usos por Voucher', total_num_usos as 'N° Usos Total' from vouchers as v where v.id_locacion = $request->id_location and v.id_campania=$request->id_campaing order by v.id_voucher desc limit $creados");
+        ->select("select v.voucher as Voucher, v.fecha_inicio as 'Fecha Inicio', v.fecha_fin as 'Fecha Fin', total_num_usos as 'N° Usos Total', etiqueta as 'Etiqueta' from vouchers as v where v.id_locacion = $request->id_location and v.id_campania=$request->id_campaing order by v.id_voucher desc limit $creados");
         
         return response()->json($vouchersRecienCreados);
     }
