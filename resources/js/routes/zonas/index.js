@@ -143,10 +143,7 @@ export default class zona extends Component {
 	 */
 
 	openAlert(key) {
-
 		this.setState({ [key]: true });
-		// console.log(this.state.id_locacion);	
-
 	}
 
 	async openAlertTest(key, id) {

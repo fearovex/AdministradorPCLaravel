@@ -62,7 +62,6 @@ export default class locacion extends Component {
 			let res = await fetch(`${localStorage.urlDomain}api/locations`, config);
 			let data = await res.json()
 			this.props.history.push('/app/campaña')
-			// console.log(this.state.form);
 			//   if(data.email && data.email != null){
 			// 		this.setState({
 			// 		   data:data

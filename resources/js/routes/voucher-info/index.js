@@ -6,6 +6,15 @@ import MUIDataTable from "mui-datatables";
 import RctCollapsibleCard from 'Components/RctCollapsibleCard/RctCollapsibleCard';
 import SweetAlert from 'react-bootstrap-sweetalert'
 import CustomToolbar from "../../util/CustomToolbar";
+import Tooltip from "@material-ui/core/Tooltip";
+import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// icons 
+import CheckCircle from "@material-ui/icons/CheckCircle";
+import Error from "@material-ui/icons/Error";
+import Block from "@material-ui/icons/Block";
+import Warning from "@material-ui/icons/Warning";
+
 import { Input, Select, Button } from '@material-ui/core';
 import { Route, Link } from 'react-router-dom'
 import queryString from 'query-string'
@@ -37,7 +46,37 @@ export default class VoucherInfo extends Component {
 				id_campaing: id_campaing,
 				name_campaing: name_campaing,
 			},
-			nameColumns: ['Voucher','Fecha Inicio','Fecha Fin','Estado', 'N° de Usos por Voucher','N° Usos Total', 'Etiqueta'],
+			nameColumns: ['Voucher','Etiqueta','Fecha Inicio','Fecha Fin',{
+				name:"Estado",
+				options: {
+					customBodyRender: (value, tableMeta, updateValue) => {
+					if (value === "En Uso")
+						return (
+						  <Tooltip title="En Uso">
+							  <Warning style={{fill:"yellow"}} />
+						  </Tooltip>
+						);
+					else if(value === "Sin Uso")
+						return (
+						  <Tooltip title="Sin Uso" style={{margin:"0uto"}}>
+									<CheckCircle style={{fill:"#57d43b"}} />
+						  </Tooltip>
+						);
+					else if(value === "Sin Usos Disponibles")
+						return (
+							<Tooltip title="Sin Usos Disponibles">
+							<Error style={{fill:"#ff8600"}} />
+							</Tooltip>
+						);
+					else
+					return(
+						<Tooltip title="Caducado">
+						<Block style={{fill:"red"}}  />
+						</Tooltip>
+					);
+					}
+				  }	
+			}, 'N° de Usos por Voucher','N° Usos Total'],
 			dataVouchers: [],
 			modalEmailCsv: false,
 		}
@@ -47,6 +86,22 @@ export default class VoucherInfo extends Component {
 
 	}
 
+	// getMuiTheme = () =>
+    // createMuiTheme({
+    //   palette: {
+    //     primary: {
+    //       main: "#4db0cd"
+    //     }
+    //   },
+    //   overrides: {
+    //     MUIDataTableHeadCell: {
+    //       root: {
+    //         width: 150,
+    //         color: "#31646d"
+    //       }
+    //     }
+    //   }
+    // });
 
 
 	async componentDidMount(){
@@ -217,15 +272,16 @@ export default class VoucherInfo extends Component {
 				</div>
 
 				<RctCollapsibleCard fullBlock>
-					<MUIDataTable
-						className="mui-tableRes"
-						title={"Lista de Vouchers"}
-						data={this.state.dataVouchers}
-						columns={columns}
-						options={options}
-					/>
+					{/* <MuiThemeProvider theme={this.getMuiTheme()}> */}
+						<MUIDataTable
+							className="mui-tableRes"
+							title={"Lista de Vouchers"}
+							data={this.state.dataVouchers}
+							columns={columns}
+							options={options}
+						/>
+					{/* </MuiThemeProvider> */}
 				</RctCollapsibleCard>
-
 			</div>
 
 		);

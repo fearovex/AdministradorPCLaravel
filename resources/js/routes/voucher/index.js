@@ -11,7 +11,7 @@ import { Route, Link } from 'react-router-dom'
 import SweetAlert from 'react-bootstrap-sweetalert'
 import Button from '@material-ui/core/Button';
 import CustomToolbar from "../../util/CustomToolbar";
-import { Input, TextField, Select, InputLabel, MenuItem } from '@material-ui/core';
+import { Input,TextField, Select, InputLabel, FormControlLabel, MenuItem, Checkbox} from '@material-ui/core';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 
 import './styles.css'
@@ -26,7 +26,8 @@ export default class Voucher extends Component {
 		const id_location = localStorage.user_location
 		const id_campaing = localStorage.user_campaing
 		const name_campaing = localStorage.user_name_campaing;
-
+		
+		
 		this.state = {
 			error: null,
 			prompt: false,
@@ -40,7 +41,13 @@ export default class Voucher extends Component {
 				etiqueta:"",
 				id_location: id_location,
 				id_campaing: id_campaing,
-				name_campaing: name_campaing, 
+				name_campaing: name_campaing,
+				nuncaExpira: true,
+				expira: false,
+				activarUso: false,
+				diasDisponibles: "",
+				horasDisponibles: "",
+				minutosDisponibles: "",
 			},
 			form2: {
 				email: '',
@@ -50,7 +57,7 @@ export default class Voucher extends Component {
 				id_campaing: id_campaing,
 				name_campaing: name_campaing, 
 			},
-			nameColumns: ['Voucher', 'Fecha Inicio', 'Fecha Fin', 'Estado', 'N° de Usos por Voucher', 'N° Usos Total'],
+			nameColumns: ['Voucher', 'Etiqueta','Fecha Inicio', 'Fecha Fin', 'N° Usos Total'],
 			dataVoucher: [],
 			modalEmailCsv: false,
 		}
@@ -73,26 +80,26 @@ export default class Voucher extends Component {
 
 	async handleSubmitVouchers(e) {
 		e.preventDefault()
-		try {
-			let config = {
-				method: 'POST',
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(this.state.form)
-			};
-			let res = await fetch(`${localStorage.urlDomain}api/vouchers/store`, config);
-			let datavouchers = await res.json()
+			try {
+				let config = {
+					method: 'POST',
+					headers: {
+						'Accept': 'application/json',
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(this.state.form)
+				};
+				let res = await fetch(`${localStorage.urlDomain}api/vouchers/store`, config);
+				let datavouchers = await res.json()
 
-			this.setState({
-				dataVoucher: datavouchers,
-				prompt: false
-			});
+				this.setState({
+					dataVoucher: datavouchers,
+					prompt: false
+				});
 
-		} catch (error) {
-			console.log(error)
-		}
+			} catch (error) {
+				console.log(error)
+			}
 	}
 
 	onConfirm(key) {
@@ -167,6 +174,7 @@ export default class Voucher extends Component {
 
 	onCancel(key) {
 		this.setState({ [key]: false })
+		this.props.history.goBack()
 	}
 
 	handleChange(e, name = null) {
@@ -211,6 +219,30 @@ export default class Voucher extends Component {
 				}
 			})
 		}
+		else if (e.target.name === 'diasDisponibles' && e.target.value > 265) {
+			this.setState({
+				form: {
+					...this.state.form,
+					[e.target.name]: "265",
+				}
+			})
+		}
+		else if (e.target.name === 'horasDisponibles' && e.target.value > 24) {
+			this.setState({
+				form: {
+					...this.state.form,
+					[e.target.name]: "24",
+				}
+			})
+		}
+		else if (e.target.name === 'minutosDisponibles' && e.target.value > 60) {
+			this.setState({
+				form: {
+					...this.state.form,
+					[e.target.name]: "60",
+				}
+			})
+		}
 		else {
 			this.setState({
 				form: {
@@ -220,10 +252,46 @@ export default class Voucher extends Component {
 			})
 		}
 	}
+	handleChangeCheckBox = name => event =>{
+		if(name == "nuncaExpira"){
+			this.setState({ 
+				form:{
+					...this.state.form, 
+					nuncaExpira: true, 
+					expira: false,
+					activarUso: false,
+				}
+			});
+		}
+		if(name == "expira"){
+			this.setState({ 
+				form:{
+					...this.state.form, 
+					nuncaExpira: false, 
+					expira: true, 
+					activarUso: false,
+				}
+			});
+		}
+		if(name == "activarUso"){
+			this.setState({ 
+				form:{
+					...this.state.form, 
+					nuncaExpira: false, 
+					expira: false, 
+					activarUso: true,
+				}
+			});
+		}
+	};
 
 	render() {
 		const columns = this.state.nameColumns;
 		const { dataVoucher, prompt, modalEmailCsv, form } = this.state;
+		const initialDate = moment(new Date, 'YYYY/MM/DD hh:mm a');
+		const finalDate = moment(new Date, 'YYYY/MM/DD hh:mm a').add(1,'Days');
+		const initialDateCampaing = localStorage.user_initialDate_campaing;
+		const finalDateCampaing = localStorage.user_finalDate_campaing;
 
 		const options = {
 			responsive: 'scrollMaxHeight',
@@ -266,8 +334,9 @@ export default class Voucher extends Component {
 						>
 							Crear
 						</Button>
+					
 						<SweetAlert
-							// btnSize="sm"
+							btnSize="sm"
 							show={prompt}
 							showConfirm={false}
 							// showCancel
@@ -279,100 +348,171 @@ export default class Voucher extends Component {
 							onConfirm={() => this.handleSubmitVouchers(event)}
 						// onCancel={() => this.onCancel('prompt')}
 						>
-							<form onSubmit={this.handleSubmitVouchers}>
-								<div className="row">
-
-									<div className="col-lg-5 mb-4 mt-4 ml-3">
-										<Input
-											type="number"
-											min={1}
-											max={100}
-											placeholder="Número de Vouchers"
-											name="numerovouchers"
-											id="numerovouchers"
-											value={this.state.form.numerovouchers}
-											className="has-input input-lg"
-											onChange={() => this.handleChangeNumber(event)}
-										/>
-									</div>
-									<div className="col-lg-5 mb-4 mt-4 ml-3">
-										<Input
-											min={1}
-											max={5}
-											type="number"
-											value={this.state.form.numerousos}
-											className="has-input input-lg"
-											placeholder="Cantidad de usos"
-											name="numerousos"
-											id="numerousos"
-											onChange={() => this.handleChangeNumber(event)}
-										/>
-									</div>
-									<div style={{marginLeft: "52px"}} className="col-lg-10 mb-4">
+								<form onSubmit={this.handleSubmitVouchers} className="col-lg-12" >
+									<div className="col-lg-12 mt-4 mb-4" >
 										<Input
 											type="text"
 											value={this.state.form.etiqueta}
 											placeholder="Etiqueta"
 											name="etiqueta"
+											autoComplete="off"
 											id="etiqueta"
 											onChange={() => this.handleChange(event)}
 										/>
 									</div>
-								</div>
-								<div className="row">
-									<div className="col-lg-5 mb-4 ml-3" >
-										<DateTimePicker
-											className="has-input input-lg"
-											key="fecha_inicio"
-											label="Fecha Inicio"
-											required
-											value={form.fecha_inicio}
-											minDate={moment(new Date, 'YYYY/MM/DD hh:mm a')}
-											format="YYYY/MM/DD hh:mm a"
-											onChange={(event) => this.handleChange(event, 'fecha_inicio')}
-											animateYearScrolling={false}
-											leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
-											rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
-											showTodayButton={true}
+									<div className="row marginForm">
+										<div className="col-lg-6 mb-4">
+											<Input
+												type="number"
+												min={1}
+												max={100}
+												autoComplete="off"
+												placeholder="Número de Vouchers"
+												name="numerovouchers"
+												id="numerovouchers"
+												value={this.state.form.numerovouchers}
+												onChange={() => this.handleChangeNumber(event)}
+											/>
+										</div>
+										<div className="col-lg-6 mb-4">
+											<Input
+												min={1}
+												max={5}
+												autoComplete="off"
+												type="number"
+												value={this.state.form.numerousos}
+												placeholder="Cantidad de usos"
+												name="numerousos"
+												id="numerousos"
+												onChange={() => this.handleChangeNumber(event)}
+											/>
+										</div>
+									</div>
+									<div className="row marginForm">
+										<div className="col-lg-4 mb-3">
+										<FormControlLabel
+											control={<Checkbox checked={form.nuncaExpira} onChange={this.handleChangeCheckBox('nuncaExpira')} value="nuncaExpira "/>}
+											label="Nunca Expira"
 										/>
+											{/* <Checkbox checked={true} onChange={handleChange('gilad')} value="gilad"/> */}
+										</div>
+										<div className="col-lg-4 mb-3">
+											<FormControlLabel
+												control={<Checkbox checked={form.expira} onChange={this.handleChangeCheckBox('expira')} value="expira"/>}
+												label="Expira"
+											/>
+										</div>
+										<div className="col-lg-4 mb-3">
+											<FormControlLabel
+												control={<Checkbox checked={form.activarUso} onChange={this.handleChangeCheckBox('activarUso')} value="activarUso"/>}
+												label="Activar Una Vez Se Use"
+											/>
+										</div>
+										
 									</div>
-									<div className="col-lg-5 mb-4 ml-3">
-										<DateTimePicker
-											className="has-input input-lg"
-											key="fecha_fin"
-											label="Fecha Fin"
-											required
-											value={form.fecha_fin}
-											minDate={moment(form.fecha_inicio, 'YYYY/MM/DD hh:mm a')}
-											format="YYYY/MM/DD hh:mm a"
-											onChange={(event) => this.handleChange(event, 'fecha_fin')}
-											animateYearScrolling={false}
-											leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
-											rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
-											showTodayButton={true}
-										/>
+									{form.expira && form.expira == true?
+										<div className="row marginForm">
+											<div className="col-lg-6 mb-4" >
+												<DateTimePicker
+													key="fecha_inicio"
+													label="Fecha Inicio"
+													required
+													value={form.fecha_inicio}
+													minDate={moment(initialDate, 'YYYY/MM/DD hh:mm a')}
+													maxDate={moment(form.fecha_fin, 'YYYY/MM/DD hh:mm a').subtract(1,'Days')}
+													format="YYYY/MM/DD hh:mm a"
+													onChange={(event) => this.handleChange(event, 'fecha_inicio')}
+													animateYearScrolling={false}
+													leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
+													rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
+													showTodayButton={true}
+												/>
+											</div>
+											<div className="col-lg-6 mb-4">
+												<DateTimePicker
+													key="fecha_fin"
+													label="Fecha Fin"
+													required
+													value={form.fecha_fin}
+													minDate={moment(form.fecha_inicio, 'YYYY/MM/DD hh:mm a').add(1,'Days')}
+													maxDate={moment(finalDateCampaing, 'YYYY/MM/DD hh:mm a')}
+													format="YYYY/MM/DD hh:mm a"
+													onChange={(event) => this.handleChange(event, 'fecha_fin')}
+													animateYearScrolling={false}
+													leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
+													rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
+													showTodayButton={true}
+												/>
+											</div>
+										</div> 
+										:form.nuncaExpira?
+										<div className="row marginForm">
+										
+										</div>
+										:
+										<div className="row marginForm">
+											<div className="col-lg-4 mb-4">
+												<Input
+													type="number"
+													min={1}
+													max={264}
+													autoComplete="off"
+													placeholder="Días disponibles"
+													name="diasDisponibles"
+													id="diasDisponibles"
+													value={this.state.form.diasDisponibles}
+													onChange={() => this.handleChangeNumber(event)}
+												/>
+											</div>
+											<div className="col-lg-4 mb-4">
+												<Input
+													min={1}
+													max={24}
+													autoComplete="off"
+													type="number"
+													value={this.state.form.horasDisponibles}
+													placeholder="Horas disponibles"
+													name="horasDisponibles"
+													id="horasDisponibles"
+													onChange={() => this.handleChangeNumber(event)}
+												/>
+											</div>
+											<div className="col-lg-4 mb-4">
+												<Input
+													min={1}
+													max={60}
+													autoComplete="off"
+													type="number"
+													value={this.state.form.minutosDisponibles}
+													placeholder="Minutos disponibles"
+													name="minutosDisponibles"
+													id="minutosDisponibles"
+													onChange={() => this.handleChangeNumber(event)}
+												/>
+											</div>
+										</div>
+									}
+									
+									<div className="row">
+										<div className="col-lg-3 col-md-3 col-sm-12 offset-lg-3 offset-md-3 mb-3">
+											<Button
+												type="submit"
+												className="btn btn-danger"
+												onClick={() => this.onCancel('prompt')}
+											>
+												Cancelar
+											</Button>
+										</div>
+										<div className="col-lg-3 col-md-3 col-sm-12 mb-3">
+											<Button
+												type="submit"
+												className="btn btn-primary ml-1"
+											>
+												Guardar
+											</Button>
+										</div>
 									</div>
-								</div>
-								<div className="row">
-									<div className="col-lg-3 col-md-3 col-sm-12 offset-lg-3 offset-md-3">
-										<Button
-											type="submit"
-											className="btn btn-danger mr-1"
-											onClick={() => this.onCancel('prompt')}
-										>
-											Cancelar
-										</Button>
-									</div>
-									<div className="col-lg-3 col-md-3 col-sm-12">
-										<Button
-											type="submit"
-											className="btn btn-primary ml-1"
-										>
-											Guardar
-										</Button>
-									</div>
-								</div>
-							</form>
+								</form>
 						</SweetAlert>
 					</div >
 				</div >
@@ -406,6 +546,7 @@ export default class Voucher extends Component {
 									type="email"
 									name="email"
 									id="email"
+									autoComplete="off"
 									value={this.state.form2.email}
 									className="has-input input-lg"
 									placeholder="Email Csv"
