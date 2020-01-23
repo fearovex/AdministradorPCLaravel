@@ -6,6 +6,15 @@ import MUIDataTable from "mui-datatables";
 import RctCollapsibleCard from 'Components/RctCollapsibleCard/RctCollapsibleCard';
 import SweetAlert from 'react-bootstrap-sweetalert'
 import CustomToolbar from "../../util/CustomToolbar";
+import Tooltip from "@material-ui/core/Tooltip";
+import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// icons 
+import CheckCircle from "@material-ui/icons/CheckCircle";
+import Error from "@material-ui/icons/Error";
+import Block from "@material-ui/icons/Block";
+import Warning from "@material-ui/icons/Warning";
+
 import { Input, Select, Button } from '@material-ui/core';
 import { Route, Link } from 'react-router-dom'
 import queryString from 'query-string'
@@ -37,7 +46,37 @@ export default class VoucherInfo extends Component {
 				id_campaing: id_campaing,
 				name_campaing: name_campaing,
 			},
-			nameColumns: ['Etiqueta','Voucher','Fecha Inicio','Fecha Fin', 'N° de Usos por Voucher','N° Usos Total','Estado'],
+			nameColumns: ['Etiqueta','Voucher','Fecha Inicio','Fecha Fin', 'N° de Usos por Voucher','N° Usos Total',{
+				name:"Estado",
+				options: {
+					customBodyRender: (value, tableMeta, updateValue) => {
+					if (value === "En Uso")
+						return (
+						  <Tooltip title="En Uso">
+							  <Warning style={{fill:"yellow"}} />
+						  </Tooltip>
+						);
+					else if(value === "Sin Uso")
+						return (
+						  <Tooltip title="Sin Uso" style={{margin:"0uto"}}>
+									<CheckCircle style={{fill:"#57d43b"}} />
+						  </Tooltip>
+						);
+					else if(value === "Sin Usos Disponibles")
+						return (
+							<Tooltip title="Sin Usos Disponibles">
+							<Error style={{fill:"#ff8600"}} />
+							</Tooltip>
+						);
+					else
+					return(
+						<Tooltip title="Caducado">
+						<Block style={{fill:"red"}}  />
+						</Tooltip>
+					);
+					}
+				  }	
+			}],
 			dataVouchers: [],
 			modalEmailCsv: false,
 		}
@@ -46,8 +85,6 @@ export default class VoucherInfo extends Component {
 		this.handleSubmit = this.handleSubmit.bind(this)
 		this.changeTable = this.changeTable.bind(this)
 	}
-
-
 
 	async componentDidMount(){
 		try {
@@ -159,7 +196,12 @@ export default class VoucherInfo extends Component {
 			let arrayDataDetail = [];
 			let dataDetail = data[j].data;
 			for (let i = 0; i < arrayNumberColumns.length; i++) {
-				arrayDataDetail.push(dataDetail[arrayNumberColumns[i]]);
+				if(dataDetail[arrayNumberColumns[i]].props){
+					arrayDataDetail.push(dataDetail[arrayNumberColumns[i]].props.title);
+				}
+				else{
+					arrayDataDetail.push(dataDetail[arrayNumberColumns[i]]);
+				}
 			}
 			arrayData.push(arrayDataDetail);
 		}
@@ -169,11 +211,17 @@ export default class VoucherInfo extends Component {
 				let arrayDataDetail = [];
 				let dataDetail = data[dataSelect[j].dataIndex].data;
 				for (let i = 0; i < arrayNumberColumns.length; i++) {
-					arrayDataDetail.push(dataDetail[arrayNumberColumns[i]]);
+					if(dataDetail[arrayNumberColumns[i]].props){
+						arrayDataDetail.push(dataDetail[arrayNumberColumns[i]].props.title);
+					}
+					else{
+						arrayDataDetail.push(dataDetail[arrayNumberColumns[i]]);
+					}
 				}
 				arrayData.push(arrayDataDetail);
 			}
 		}
+		console.log(arrayData)
 		this.setState({
 			form:{
 				...this.state.form,
@@ -278,7 +326,6 @@ export default class VoucherInfo extends Component {
 						options={options}
 					/>
 				</RctCollapsibleCard>
-
 			</div>
 
 		);

@@ -579,7 +579,7 @@ export default class Analytical extends Component {
                         <LastTenUsersList
                             listData={lastTenUsers}
                         />
-                        <div className="blank-wrapper" style={{marginBottom: '20px'}}>
+                        <div className="blank-wrapper" style={{marginBottom: '10px'}}>
 
                         </div>
                     </div>

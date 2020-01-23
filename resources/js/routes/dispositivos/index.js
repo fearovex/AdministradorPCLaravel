@@ -162,7 +162,6 @@ export default class dispositivos extends Component {
 	}
 	async openAlertTest(key, id) {
 		this.setState({ [key]: true });
-		console.log(id)
 		let res = await fetch(`${localStorage.urlDomain}api/dispositivos/${id}/edit`);
 		let dispositivo = await res.json();
 
