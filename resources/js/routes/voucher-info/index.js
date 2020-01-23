@@ -221,7 +221,6 @@ export default class VoucherInfo extends Component {
 				arrayData.push(arrayDataDetail);
 			}
 		}
-		console.log(arrayData)
 		this.setState({
 			form:{
 				...this.state.form,

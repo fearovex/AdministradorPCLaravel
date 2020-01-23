@@ -7,6 +7,9 @@ import RctCollapsibleCard from 'Components/RctCollapsibleCard/RctCollapsibleCard
 import IconButton from "@material-ui/core/IconButton";
 import { DateTimePicker } from '@material-ui/pickers';
 import moment from "moment";
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/List';
+import { RctCard, RctCardContent } from 'Components/RctCard';
 import { Route, Link } from 'react-router-dom'
 import SweetAlert from 'react-bootstrap-sweetalert'
 import Button from '@material-ui/core/Button';
@@ -27,6 +30,12 @@ export default class Voucher extends Component {
 		const id_campaing = localStorage.user_campaing
 		const name_campaing = localStorage.user_name_campaing;
 		
+		let date = moment(new Date, 'YYYY/MM/DD hh:mm a');
+		let año = date.year();
+		let mes = date.month() + 1;
+		let dia = date.dates();
+		let hora = date.hours();
+		let minutos = date.minute();
 		
 		this.state = {
 			error: null,
@@ -34,8 +43,8 @@ export default class Voucher extends Component {
 			envio: false,
 			modaledit: false,
 			form: {
-				fecha_inicio: moment(new Date, 'YYYY/MM/DD hh:mm a'),
-				fecha_fin: moment(new Date, 'YYYY/MM/DD hh:mm a').add(1,'Days'),
+				fecha_inicio: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos) + ":00",
+				fecha_fin: (año) + '-' + (mes) + '-' + (dia+1) + " " + (hora) + ":" + (minutos) + ":00",
 				numerovouchers: "",
 				numerousos: "",
 				etiqueta:"",
@@ -158,23 +167,23 @@ export default class Voucher extends Component {
 		const id_campaing = localStorage.user_campaing
 		const name_campaing = localStorage.user_name_campaing;
 
+		let date = moment(new Date, 'YYYY/MM/DD hh:mm a');
+		let año = date.year();
+		let mes = date.month() + 1;
+		let dia = date.dates();
+		let hora = date.hours();
+		let minutos = date.minute();
+
 		this.setState({
 			[key]: true,
-			form: {
-				fecha_inicio: moment(new Date, 'YYYY/MM/DD hh:mm a'),
-				fecha_fin: moment(new Date, 'YYYY/MM/DD hh:mm a'),
-				numerovouchers: "",
-				numerousos: "",
-				id_location: id_location,
-				id_campaing: id_campaing,
-				name_campaing: name_campaing, 
-			}
 		});
 	}
 
 	onCancel(key) {
 		this.setState({ [key]: false })
-		this.props.history.goBack()
+		if(key != 'modalEmailCsv'){
+			this.props.history.goBack()
+		}
 	}
 
 	handleChange(e, name = null) {
@@ -196,7 +205,7 @@ export default class Voucher extends Component {
 			this.setState({
 				form: {
 					...this.state.form,
-					[name]: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos)
+					[name]: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos) + ":00"
 				}
 			})
 		}
@@ -372,11 +381,6 @@ export default class Voucher extends Component {
 		};
 		return (
 			<div className="blank-wrapper">
-				<Helmet>
-					<meta name="description" content="Reactify Blank Page" />
-				</Helmet>
-
-
 				<PageTitleBar
 					title="crear voucher"
 					match={this.props.match}
@@ -385,15 +389,6 @@ export default class Voucher extends Component {
 				
 				<div className="blank-wrapper">
 					<div className="sweet-alert-wrapper">
-						<Button
-							variant="contained"
-							color="primary"
-							className="botonDisZon1"
-							onClick={() => this.openAlert('prompt')}
-						>
-							Crear
-						</Button>
-					
 						<SweetAlert
 							btnSize="sm"
 							show={prompt}
@@ -576,9 +571,71 @@ export default class Voucher extends Component {
 					</div >
 				</div >
 
+				<RctCollapsibleCard fullBlock >
+					<RctCardContent>
+						<List className="row list-unstyled p-0 ">
+							<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
+								<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
+									Etiqueta de los Vouchers : {form.etiqueta}
+								</p>
+							</ListItem>
+							<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
+								<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
+									Cantidad de Vouchers Generados : {form.numerovouchers}
+								</p>
+							</ListItem>
+							<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
+								<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
+									Cantidad de Usos por Vouchers : {form.numerousos}
+								</p>
+							</ListItem>
+							<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
+								<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
+									Opción de Caducidad : {form.nuncaExpira ? 'Nunca Expira' : (form.expira ? 'Expira' : 'Activar Una Vez Se Use')}
+								</p>
+							</ListItem>
+							{form.expira &&
+								<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
+									<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
+										Fecha de Inicio : {form.fecha_inicio}
+									</p>
+								</ListItem>
+							}
+							{form.expira &&
+								<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
+									<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
+										Fecha de Final : {form.fecha_fin}
+									</p>
+								</ListItem>
+							}
+							{!form.expira && !form.nuncaExpira &&
+								<ListItem className="p-0 col-lg-4 col-md-4 col-sm-12 mb-10 align-content-left">
+									<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
+										Dias Disponibles : {form.diasDisponibles}
+									</p>
+								</ListItem>
+							}
+							{!form.expira && !form.nuncaExpira &&
+								<ListItem className="p-0 col-lg-4 col-md-4 col-sm-12 mb-10 align-content-left">
+									<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
+										Horas Disponibles : {form.horasDisponibles}
+									</p>
+								</ListItem>
+							}
+							{!form.expira && !form.nuncaExpira &&
+								<ListItem className="p-0 col-lg-4 col-md-4 col-sm-12 mb-10 align-content-left">
+									<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
+										Minutos Disponibles : {form.minutosDisponibles}
+									</p>
+								</ListItem>
+							}
+						</List>
+					</RctCardContent>
+				</RctCollapsibleCard>
+
 				<RctCollapsibleCard fullBlock>
 					<MUIDataTable
-						className="mui-tableRes"
+						className="mui-tableRes mt-2"
 						data={this.state.dataVouchers}
 						columns={columns}
 						options={options}
