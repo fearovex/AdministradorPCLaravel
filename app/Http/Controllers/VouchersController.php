@@ -127,7 +127,7 @@ class VouchersController extends Controller
                             $voucher->voucher = $vouchersDiferentes[$key];
                             $voucher->estado = "Sin Uso";
                             $voucher->fecha_inicio = date('Y-m-d H:i:00', strtotime($request->fecha_inicio));
-                            $voucher->fecha_fin = date('Y-m-d H:i:00', strtotime("3000-02-01"));
+                            $voucher->fecha_fin = date('Y-m-d 00:00:00', strtotime($request->finalDateCampaing));
                             $voucher->id_campania = $request->id_campaing;
                             $voucher->num_usos = 0;
                             $voucher->total_num_usos = $request->numerousos;

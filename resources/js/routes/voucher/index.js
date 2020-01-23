@@ -46,8 +46,6 @@ export default class Voucher extends Component {
 			prompt: false,
 			envio: false,
 			modaledit: false,
-			initialDateCampaing: initialDateCampaing,
-			finalDateCampaing: finalDateCampaing,
 			form: {
 				fecha_inicio: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos) + ":00",
 				fecha_fin: (año) + '-' + (mes) + '-' + (dia+1) + " " + (hora) + ":" + (minutos) + ":00",
@@ -57,6 +55,8 @@ export default class Voucher extends Component {
 				id_location: id_location,
 				id_campaing: id_campaing,
 				name_campaing: name_campaing,
+				initialDateCampaing: initialDateCampaing,
+				finalDateCampaing: finalDateCampaing,
 				nuncaExpira: true,
 				expira: false,
 				activarUso: false,
@@ -97,27 +97,115 @@ export default class Voucher extends Component {
 
 	async handleSubmitVouchers(e) {
 		e.preventDefault()
-	
-			try {
-				let config = {
-					method: 'POST',
-					headers: {
-						'Accept': 'application/json',
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify(this.state.form)
-				};
-				let res = await fetch(`${localStorage.urlDomain}api/vouchers/store`, config);
-				let datavouchers = await res.json()
-
-				this.setState({
-					dataVouchers: datavouchers,
-					prompt: false
-				});
-
-			} catch (error) {
-				console.log(error)
+		const {numerovouchers, numerousos, etiqueta, nuncaExpira, expira, activarUso, diasDisponibles,horasDisponibles,minutosDisponibles} = this.state.form
+		if(nuncaExpira){
+			if(etiqueta == ''){
+				NotificationManager.error('El campo etiqueta es obligatorio!','',5000);
 			}
+			if(numerovouchers == ''){
+				NotificationManager.error('El campo de número de vouchers es obligatorio (Min: 1 Voucher)!','',5000);
+			}
+			if(numerousos == ''){
+				NotificationManager.error('El campo cantidad de usos es obligatorio (Min: 1 Uso)!','',5000);
+			}
+			if(((numerovouchers!= '' && numerovouchers > 0) && (numerousos !='' && numerousos > 0)) && etiqueta !=''){
+				try {
+					let config = {
+						method: 'POST',
+						headers: {
+							'Accept': 'application/json',
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify(this.state.form)
+					};
+					let res = await fetch(`${localStorage.urlDomain}api/vouchers/store`, config);
+					let datavouchers = await res.json()
+	
+					this.setState({
+						dataVouchers: datavouchers,
+						prompt: false
+					});
+	
+				} catch (error) {
+					console.log(error)
+				}
+			}
+		}
+		if(expira){
+			if(etiqueta == ''){
+				NotificationManager.error('El campo etiqueta es obligatorio!','',5000);
+			}
+			if(numerovouchers == ''){
+				NotificationManager.error('El campo de número de vouchers es obligatorio (Min: 1 Voucher)!','',5000);
+			}
+			if(numerousos == ''){
+				NotificationManager.error('El campo cantidad de usos es obligatorio (Min: 1 Uso)!','',5000);
+			}
+			if(((numerovouchers!= '' && numerovouchers > 0) && (numerousos !='' && numerousos > 0)) && etiqueta !=''){
+				try {
+					let config = {
+						method: 'POST',
+						headers: {
+							'Accept': 'application/json',
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify(this.state.form)
+					};
+					let res = await fetch(`${localStorage.urlDomain}api/vouchers/store`, config);
+					let datavouchers = await res.json()
+	
+					this.setState({
+						dataVouchers: datavouchers,
+						prompt: false
+					});
+	
+				} catch (error) {
+					console.log(error)
+				}
+			}
+		}
+		if(activarUso){
+			if(etiqueta == ''){
+				NotificationManager.error('El campo etiqueta es obligatorio!','',5000);
+			}
+			if(numerovouchers == ''){
+				NotificationManager.error('El campo de número de vouchers es obligatorio (Min: 1 Voucher)!','',5000);
+			}
+			if(numerousos == ''){
+				NotificationManager.error('El campo cantidad de usos es obligatorio (Min: 1 Uso)!','',5000);
+			}
+			if(diasDisponibles == ''){
+				NotificationManager.error('El campo días es obligatorio (Min: 1 Día)!','',5000);
+			}
+			if(horasDisponibles == ''){
+				NotificationManager.error('El campo cantidad de usos es obligatorio (Min: 1 Hora)!','',5000);
+			}
+			if(minutosDisponibles == ''){
+				NotificationManager.error('El campo cantidad de usos es obligatorio (Min: 1 Uso)!','',5000);
+			}
+			if(((diasDisponibles != '' && horasDisponibles !='') && (minutosDisponibles != '')) && ((etiqueta !='' && numerovouchers!= '') && (numerousos !=''))){
+				try {
+					let config = {
+						method: 'POST',
+						headers: {
+							'Accept': 'application/json',
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify(this.state.form)
+					};
+					let res = await fetch(`${localStorage.urlDomain}api/vouchers/store`, config);
+					let datavouchers = await res.json()
+	
+					this.setState({
+						dataVouchers: datavouchers,
+						prompt: false
+					});
+	
+				} catch (error) {
+					console.log(error)
+				}
+			}
+		}
 	}
 
 	onConfirm(key) {
@@ -227,19 +315,43 @@ export default class Voucher extends Component {
 				}
 			})
 		}
-		else if (e.target.name === 'numerousos' && e.target.value > 5) {
+		else if (e.target.name === 'numerovouchers' && e.target.value <= 0) {
 			this.setState({
 				form: {
 					...this.state.form,
-					[e.target.name]: "5",
+					[e.target.name]: "",
 				}
 			})
 		}
-		else if (e.target.name === 'diasDisponibles' && e.target.value > 265) {
+		else if (e.target.name === 'numerousos' && e.target.value > 5) {
+				this.setState({
+					form: {
+						...this.state.form,
+						[e.target.name]: "5",
+					}
+				})
+		}
+		else if (e.target.name === 'numerousos' && e.target.value <= 0) {
 			this.setState({
 				form: {
 					...this.state.form,
-					[e.target.name]: "265",
+					[e.target.name]: "",
+				}
+			})
+		}
+		else if (e.target.name === 'diasDisponibles' && e.target.value > 355) {
+			this.setState({
+				form: {
+					...this.state.form,
+					[e.target.name]: "355",
+				}
+			})
+		}
+		else if (e.target.name === 'diasDisponibles' && e.target.value <= 0) {
+			this.setState({
+				form: {
+					...this.state.form,
+					[e.target.name]: "",
 				}
 			})
 		}
@@ -251,11 +363,27 @@ export default class Voucher extends Component {
 				}
 			})
 		}
+		else if (e.target.name === 'horasDisponibles' && e.target.value <= 0) {
+			this.setState({
+				form: {
+					...this.state.form,
+					[e.target.name]: "",
+				}
+			})
+		}
 		else if (e.target.name === 'minutosDisponibles' && e.target.value > 60) {
 			this.setState({
 				form: {
 					...this.state.form,
 					[e.target.name]: "60",
+				}
+			})
+		}
+		else if (e.target.name === 'minutosDisponibles' && e.target.value <= 0) {
+			this.setState({
+				form: {
+					...this.state.form,
+					[e.target.name]: "",
 				}
 			})
 		}
@@ -354,7 +482,7 @@ export default class Voucher extends Component {
 
 	render() {
 		const columns = this.state.nameColumns;
-		const { dataVouchers, prompt, modalEmailCsv, form ,initialDateCampaing, finalDateCampaing} = this.state;
+		const { dataVouchers, prompt, modalEmailCsv, form } = this.state;
 		const initialDate = moment(new Date, 'YYYY/MM/DD hh:mm a');
 		const finalDate = moment(new Date, 'YYYY/MM/DD hh:mm a').add(1,'Days');
 		
@@ -472,6 +600,9 @@ export default class Voucher extends Component {
 									</div>
 									{form.expira && form.expira == true?
 										<div className="row marginForm">
+											<div className="col-lg-12 mb-4">
+												La fecha fin de la campaña es: {form.finalDateCampaing}
+											</div>
 											<div className="col-lg-6 mb-4" >
 												<DateTimePicker
 													key="fecha_inicio"
@@ -495,7 +626,7 @@ export default class Voucher extends Component {
 													required
 													value={form.fecha_fin}
 													minDate={moment(form.fecha_inicio, 'YYYY/MM/DD hh:mm a').add(1,'Days')}
-													maxDate={moment(finalDateCampaing, 'YYYY/MM/DD hh:mm a')}
+													maxDate={moment(form.finalDateCampaing, 'YYYY/MM/DD hh:mm a')}
 													format="YYYY/MM/DD hh:mm a"
 													onChange={(event) => this.handleChange(event, 'fecha_fin')}
 													animateYearScrolling={false}
@@ -512,13 +643,17 @@ export default class Voucher extends Component {
 										:
 										<div className="row marginForm">
 											<div className="col-lg-12 mb-4">
-												La fecha fin de la campaña es: {finalDateCampaing}
+												<span style={{fontSize: '13px'}}>
+													Los siguientes campos serán agregados a la fecha en la cual se active el voucher,
+													recuerde que si la fecha fin del voucher excede la fecha final de la campaña, la siguiente fecha
+													será registrada en su lugar: <b>{form.finalDateCampaing}</b> 
+												</span>
 											</div>
 											<div className="col-lg-4 mb-4">
 												<Input
 													type="number"
 													min={1}
-													max={264}
+													max={355}
 													autoComplete="off"
 													placeholder="Días disponibles"
 													name="diasDisponibles"
@@ -530,7 +665,7 @@ export default class Voucher extends Component {
 											<div className="col-lg-4 mb-4">
 												<Input
 													min={1}
-													max={24}
+													max={23}
 													autoComplete="off"
 													type="number"
 													value={this.state.form.horasDisponibles}
@@ -543,7 +678,7 @@ export default class Voucher extends Component {
 											<div className="col-lg-4 mb-4">
 												<Input
 													min={1}
-													max={60}
+													max={59}
 													autoComplete="off"
 													type="number"
 													value={this.state.form.minutosDisponibles}
