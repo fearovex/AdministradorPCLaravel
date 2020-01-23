@@ -48,6 +48,7 @@ class LoginController extends Controller
     }
 
     public function login (Request $request){
+        session()->flush();
 
         $user = User::where('email', $request->email)->where('password', $request->password)->first();
         if($user){
@@ -108,7 +109,7 @@ class LoginController extends Controller
         $user->where('id', session('id_user'))
             ->update(["conexion" => 0]);
         
-        session()->forget(['emailValidate','database', 'email', 'password', 'id_user', 'browser', 'ip_conection','active', 'rol','location','campaing']);
+        session()->flush();
         
         return redirect()->route('home', ['/']);
     }
