@@ -134,7 +134,7 @@ class MainApp extends Component {
 						docked={windowWidth > 1199 ? !navCollapsed : false}
 						pullRight={rtlLayout}
 						onSetOpen={() => this.props.collapsedSidebarAction(false)}
-						styles={{ content: { overflowY: '' } }}
+						styles={{ content: { overflowY: '' }, zIndex: 99 }}
 						contentClassName={classnames({ 'app-conrainer-wrapper': miniSidebar })}
 					>
 						<div className="app-container">
