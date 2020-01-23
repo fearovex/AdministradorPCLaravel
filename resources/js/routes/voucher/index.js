@@ -5,6 +5,8 @@ import IntlMessages from "Util/IntlMessages";
 import MUIDataTable from "mui-datatables";
 import RctCollapsibleCard from 'Components/RctCollapsibleCard/RctCollapsibleCard';
 import IconButton from "@material-ui/core/IconButton";
+import HelpOutline from "@material-ui/icons/HelpOutline";
+import Tooltip from "@material-ui/core/Tooltip";
 import { DateTimePicker } from '@material-ui/pickers';
 import moment from "moment";
 import { Route, Link } from 'react-router-dom'
@@ -26,13 +28,16 @@ export default class Voucher extends Component {
 		const id_location = localStorage.user_location
 		const id_campaing = localStorage.user_campaing
 		const name_campaing = localStorage.user_name_campaing;
-		
+		const initialDateCampaing = localStorage.user_initialDate_campaing;
+		const finalDateCampaing = localStorage.user_finalDate_campaing;
 		
 		this.state = {
 			error: null,
 			prompt: false,
 			envio: false,
 			modaledit: false,
+			initialDateCampaing: initialDateCampaing,
+			finalDateCampaing: finalDateCampaing,
 			form: {
 				fecha_inicio: moment(new Date, 'YYYY/MM/DD hh:mm a'),
 				fecha_fin: moment(new Date, 'YYYY/MM/DD hh:mm a'),
@@ -80,6 +85,7 @@ export default class Voucher extends Component {
 
 	async handleSubmitVouchers(e) {
 		e.preventDefault()
+	
 			try {
 				let config = {
 					method: 'POST',
@@ -287,11 +293,10 @@ export default class Voucher extends Component {
 
 	render() {
 		const columns = this.state.nameColumns;
-		const { dataVoucher, prompt, modalEmailCsv, form } = this.state;
+		const { dataVoucher, prompt, modalEmailCsv,initialDateCampaing,finalDateCampaing, form } = this.state;
 		const initialDate = moment(new Date, 'YYYY/MM/DD hh:mm a');
 		const finalDate = moment(new Date, 'YYYY/MM/DD hh:mm a').add(1,'Days');
-		const initialDateCampaing = localStorage.user_initialDate_campaing;
-		const finalDateCampaing = localStorage.user_finalDate_campaing;
+		
 
 		const options = {
 			responsive: 'scrollMaxHeight',
@@ -451,6 +456,9 @@ export default class Voucher extends Component {
 										</div>
 										:
 										<div className="row marginForm">
+											<div className="col-lg-12 mb-4">
+												La fecha fin de la campaña es: {finalDateCampaing}
+											</div>
 											<div className="col-lg-4 mb-4">
 												<Input
 													type="number"

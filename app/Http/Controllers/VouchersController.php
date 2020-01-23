@@ -24,10 +24,7 @@ class VouchersController extends Controller
 
         $fecha_inicialC = '"'.date('Y-m-d 00:00:00', strtotime($campania->fecha_inicio)).'"';
         $fecha_finC = '"'.date('Y-m-d 00:00:00', strtotime($campania->fecha_fin)).'"';
-        $fecha_actual =  '"'.date('Y-m-d h:m:s').'"';
-
-        dd($fechaFinValidacion);
-        
+        $fecha_actual =  '"'.date('Y-m-d H:i:s').'"';
         
         DB::connection(session('database'))->select("update vouchers set estado = 'En Uso' where num_usos > 0");
 
@@ -135,7 +132,7 @@ class VouchersController extends Controller
                             $voucher->voucher = $vouchersDiferentes[$key];
                             $voucher->estado = "Sin Uso";
                             $voucher->fecha_inicio = date('Y-m-d H:i:00', strtotime($request->fecha_inicio));
-                            $voucher->fecha_fin = date('Y-m-d H:i:00', strtotime($request->fecha_inicio));
+                            $voucher->fecha_fin = date('Y-m-d H:i:00', strtotime("3000-02-01"));
                             $voucher->id_campania = $request->id_campaing;
                             $voucher->num_usos = 0;
                             $voucher->total_num_usos = $request->numerousos;
@@ -160,4 +157,16 @@ class VouchersController extends Controller
         ->select("select v.voucher as Voucher, v.etiqueta as Etiqueta, v.fecha_inicio as 'Fecha Inicio', v.fecha_fin as 'Fecha Fin', total_num_usos as 'N° Usos Total' from vouchers as v where v.id_locacion = $request->id_location and v.id_campania=$request->id_campaing order by v.id_voucher desc limit $creados");
         return response()->json($vouchersRecienCreados);
     }
+
+    // function voucherValidateCampaing(){
+    //     $campania = DB::connection(session('database'))
+    //         ->table('campania')
+    //         ->where('id_locacion',$request->id_location)
+    //         ->where('id',$request->id_campaing)
+    //         ->first();
+
+    //     $fecha_inicialC = '"'.date('Y-m-d 00:00:00', strtotime($campania->fecha_inicio)).'"';
+    //     $fecha_finC = '"'.date('Y-m-d 00:00:00', strtotime($campania->fecha_fin)).'"';
+    //     $fecha_actual =  '"'.date('Y-m-d h:m:s').'"';
+    // }
 }
