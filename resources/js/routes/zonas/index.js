@@ -19,7 +19,7 @@ import './styles.css'
 export default class zona extends Component {
 	constructor(props) {
 		super(props)
-
+		
 		this.state = {
 			data: [],
 			error: null,
@@ -28,6 +28,7 @@ export default class zona extends Component {
 			prompt: false,
 			modaledit: false,
 			zona: [],
+			
 			form: {
 				nombre: "",
 			},
@@ -55,7 +56,7 @@ export default class zona extends Component {
 						</ListItemIcon>
 					</Link>
 				data[i]["Dispositivos"] =
-					<Link to={location.pathname + '/dispositivos'} onClick={() => this.dispositivos(data[i].id)}>
+					<Link to={location.pathname + '/dispositivos'} onClick={() => this.dispositivos(data[i].id, data[i].Nombre)}>
 						<ListItemIcon className="menu-icon">
 							<i className='material-icons' style={{ margin: "0 auto" }}>router</i>
 						</ListItemIcon>
@@ -75,8 +76,9 @@ export default class zona extends Component {
 		}
 	}
 
-	dispositivos(id_zona) {
+	dispositivos(id_zona, name_zone) {
 		localStorage.setItem('user_zona', id_zona);
+		localStorage.setItem('user_name_zona', name_zone);
 	}
 
 	async handleSubmit(e) {

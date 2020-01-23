@@ -9,6 +9,9 @@ import HelpOutline from "@material-ui/icons/HelpOutline";
 import Tooltip from "@material-ui/core/Tooltip";
 import { DateTimePicker } from '@material-ui/pickers';
 import moment from "moment";
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/List';
+import { RctCard, RctCardContent } from 'Components/RctCard';
 import { Route, Link } from 'react-router-dom'
 import SweetAlert from 'react-bootstrap-sweetalert'
 import Button from '@material-ui/core/Button';
@@ -28,8 +31,15 @@ export default class Voucher extends Component {
 		const id_location = localStorage.user_location
 		const id_campaing = localStorage.user_campaing
 		const name_campaing = localStorage.user_name_campaing;
-		const initialDateCampaing = localStorage.user_initialDate_campaing;
-		const finalDateCampaing = localStorage.user_finalDate_campaing;
+		const initialDateCampaing =  localStorage.user_initialDate_campaing;
+		const finalDateCampaing =  localStorage.user_finalDate_campaing;
+		
+		let date = moment(new Date, 'YYYY/MM/DD hh:mm a');
+		let año = date.year();
+		let mes = date.month() + 1;
+		let dia = date.dates();
+		let hora = date.hours();
+		let minutos = date.minute();
 		
 		this.state = {
 			error: null,
@@ -39,8 +49,8 @@ export default class Voucher extends Component {
 			initialDateCampaing: initialDateCampaing,
 			finalDateCampaing: finalDateCampaing,
 			form: {
-				fecha_inicio: moment(new Date, 'YYYY/MM/DD hh:mm a'),
-				fecha_fin: moment(new Date, 'YYYY/MM/DD hh:mm a'),
+				fecha_inicio: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos) + ":00",
+				fecha_fin: (año) + '-' + (mes) + '-' + (dia+1) + " " + (hora) + ":" + (minutos) + ":00",
 				numerovouchers: "",
 				numerousos: "",
 				etiqueta:"",
@@ -62,19 +72,21 @@ export default class Voucher extends Component {
 				id_campaing: id_campaing,
 				name_campaing: name_campaing, 
 			},
-			nameColumns: ['Voucher', 'Etiqueta','Fecha Inicio', 'Fecha Fin', 'N° Usos Total'],
-			dataVoucher: [],
+			nameColumns: ['Etiqueta','Voucher', 'Fecha Inicio', 'Fecha Fin','N° Usos Total'],
+			dataVouchers: [],
 			modalEmailCsv: false,
 		}
 
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleSubmitVouchers = this.handleSubmitVouchers.bind(this);
+		this.changeTable = this.changeTable.bind(this);
+
 	}
 
 	async componentDidMount() {
 		try {
-			if (this.state.dataVoucher.length == 0) {
+			if (this.state.dataVouchers.length == 0) {
 				this.setState({ prompt: true });
 			}
 
@@ -99,7 +111,7 @@ export default class Voucher extends Component {
 				let datavouchers = await res.json()
 
 				this.setState({
-					dataVoucher: datavouchers,
+					dataVouchers: datavouchers,
 					prompt: false
 				});
 
@@ -118,8 +130,6 @@ export default class Voucher extends Component {
 			form2: {
 				...this.state.form2,
 				[e.target.name]: e.target.value,
-				columns: this.state.nameColumns,
-				rows: this.state.dataVoucher
 			}
 		})
 	}
@@ -164,23 +174,23 @@ export default class Voucher extends Component {
 		const id_campaing = localStorage.user_campaing
 		const name_campaing = localStorage.user_name_campaing;
 
+		let date = moment(new Date, 'YYYY/MM/DD hh:mm a');
+		let año = date.year();
+		let mes = date.month() + 1;
+		let dia = date.dates();
+		let hora = date.hours();
+		let minutos = date.minute();
+
 		this.setState({
 			[key]: true,
-			form: {
-				fecha_inicio: moment(new Date, 'YYYY/MM/DD hh:mm a'),
-				fecha_fin: moment(new Date, 'YYYY/MM/DD hh:mm a'),
-				numerovouchers: "",
-				numerousos: "",
-				id_location: id_location,
-				id_campaing: id_campaing,
-				name_campaing: name_campaing, 
-			}
 		});
 	}
 
 	onCancel(key) {
 		this.setState({ [key]: false })
-		this.props.history.goBack()
+		if(key != 'modalEmailCsv'){
+			this.props.history.goBack()
+		}
 	}
 
 	handleChange(e, name = null) {
@@ -202,7 +212,7 @@ export default class Voucher extends Component {
 			this.setState({
 				form: {
 					...this.state.form,
-					[name]: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos)
+					[name]: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos) + ":00"
 				}
 			})
 		}
@@ -291,9 +301,60 @@ export default class Voucher extends Component {
 		}
 	};
 
+	changeTable(table){
+		let columns = table.columns;
+		let data = table.displayData;
+		let dataSelect = table.selectedRows.data;
+		let arrayColumns = [];
+		let arrayData = [];
+		let arrayNumberColumns = [];
+		for (let i = 0; i < columns.length; i++) {
+			if(columns[i].display != "false"){
+				arrayColumns.push(columns[i].name);
+				arrayNumberColumns.push(i);
+			}
+		}
+		for (let j = 0; j < data.length; j++) {
+			let arrayDataDetail = [];
+			let dataDetail = data[j].data;
+			for (let i = 0; i < arrayNumberColumns.length; i++) {
+				if(dataDetail[arrayNumberColumns[i]].props){
+					arrayDataDetail.push(dataDetail[arrayNumberColumns[i]].props.title);
+				}
+				else{
+					arrayDataDetail.push(dataDetail[arrayNumberColumns[i]]);
+				}
+			}
+			arrayData.push(arrayDataDetail);
+		}
+		if(dataSelect.length != 0){
+			arrayData = [];
+			for (let j = 0; j < dataSelect.length; j++) {
+				let arrayDataDetail = [];
+				let dataDetail = data[dataSelect[j].dataIndex].data;
+				for (let i = 0; i < arrayNumberColumns.length; i++) {
+					if(dataDetail[arrayNumberColumns[i]].props){
+						arrayDataDetail.push(dataDetail[arrayNumberColumns[i]].props.title);
+					}
+					else{
+						arrayDataDetail.push(dataDetail[arrayNumberColumns[i]]);
+					}
+				}
+				arrayData.push(arrayDataDetail);
+			}
+		}
+		this.setState({
+			form2:{
+				...this.state.form,
+				columns: arrayColumns,
+				rows: arrayData,
+			}
+		});
+	}
+
 	render() {
 		const columns = this.state.nameColumns;
-		const { dataVoucher, prompt, modalEmailCsv,initialDateCampaing,finalDateCampaing, form } = this.state;
+		const { dataVouchers, prompt, modalEmailCsv, form ,initialDateCampaing, finalDateCampaing} = this.state;
 		const initialDate = moment(new Date, 'YYYY/MM/DD hh:mm a');
 		const finalDate = moment(new Date, 'YYYY/MM/DD hh:mm a').add(1,'Days');
 		
@@ -301,7 +362,7 @@ export default class Voucher extends Component {
 		const options = {
 			responsive: 'scrollMaxHeight',
 			print: false,
-			selectableRows: false,
+			selectableRows: 'multiple',
 			downloadOptions: {
 				filename: 'Voucher.csv',
 				filterOptions: {
@@ -309,20 +370,23 @@ export default class Voucher extends Component {
 					useDisplayedColumnsOnly: true
 				}
 			},
-			customToolbar: () => {
+			onTableChange: (action,tableState) => {
+				this.changeTable(tableState)
+			},
+			// customToolbar: () => {
+			// 	return (
+			// 		<CustomToolbar columns={columns} data={dataVouchers} alertOpen={() => this.openAlert('modalEmailCsv')} />
+			// 	);
+			// },
+			customToolbarSelect: () => {
 				return (
-					<CustomToolbar columns={columns} data={this.state.dataVoucher} alertOpen={() => this.openAlert('modalEmailCsv')} />
+					<CustomToolbar columns={columns} data={dataVouchers} alertOpen={() => this.openAlert('modalEmailCsv')} />
 				);
 			},
 			elevation: 0
 		};
 		return (
 			<div className="blank-wrapper">
-				<Helmet>
-					<meta name="description" content="Reactify Blank Page" />
-				</Helmet>
-
-
 				<PageTitleBar
 					title="crear voucher"
 					match={this.props.match}
@@ -331,15 +395,6 @@ export default class Voucher extends Component {
 				
 				<div className="blank-wrapper">
 					<div className="sweet-alert-wrapper">
-						<Button
-							variant="contained"
-							color="primary"
-							className="botonDisZon1"
-							onClick={() => this.openAlert('prompt')}
-						>
-							Crear
-						</Button>
-					
 						<SweetAlert
 							btnSize="sm"
 							show={prompt}
@@ -424,7 +479,7 @@ export default class Voucher extends Component {
 													required
 													value={form.fecha_inicio}
 													minDate={moment(initialDate, 'YYYY/MM/DD hh:mm a')}
-													maxDate={moment(form.fecha_fin, 'YYYY/MM/DD hh:mm a').subtract(1,'Days')}
+													// maxDate={moment(form.fecha_fin, 'YYYY/MM/DD hh:mm a').subtract(1,'Days')}
 													format="YYYY/MM/DD hh:mm a"
 													onChange={(event) => this.handleChange(event, 'fecha_inicio')}
 													animateYearScrolling={false}
@@ -525,10 +580,72 @@ export default class Voucher extends Component {
 					</div >
 				</div >
 
+				<RctCollapsibleCard fullBlock >
+					<RctCardContent>
+						<List className="row list-unstyled p-0 ">
+							<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
+								<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
+									Etiqueta de los Vouchers : {form.etiqueta}
+								</p>
+							</ListItem>
+							<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
+								<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
+									Cantidad de Vouchers Generados : {form.numerovouchers}
+								</p>
+							</ListItem>
+							<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
+								<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
+									Cantidad de Usos por Vouchers : {form.numerousos}
+								</p>
+							</ListItem>
+							<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
+								<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
+									Opción de Caducidad : {form.nuncaExpira ? 'Nunca Expira' : (form.expira ? 'Expira' : 'Activar Una Vez Se Use')}
+								</p>
+							</ListItem>
+							{form.expira &&
+								<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
+									<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
+										Fecha de Inicio : {form.fecha_inicio}
+									</p>
+								</ListItem>
+							}
+							{form.expira &&
+								<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
+									<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
+										Fecha de Final : {form.fecha_fin}
+									</p>
+								</ListItem>
+							}
+							{!form.expira && !form.nuncaExpira &&
+								<ListItem className="p-0 col-lg-4 col-md-4 col-sm-12 mb-10 align-content-left">
+									<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
+										Dias Disponibles : {form.diasDisponibles}
+									</p>
+								</ListItem>
+							}
+							{!form.expira && !form.nuncaExpira &&
+								<ListItem className="p-0 col-lg-4 col-md-4 col-sm-12 mb-10 align-content-left">
+									<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
+										Horas Disponibles : {form.horasDisponibles}
+									</p>
+								</ListItem>
+							}
+							{!form.expira && !form.nuncaExpira &&
+								<ListItem className="p-0 col-lg-4 col-md-4 col-sm-12 mb-10 align-content-left">
+									<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
+										Minutos Disponibles : {form.minutosDisponibles}
+									</p>
+								</ListItem>
+							}
+						</List>
+					</RctCardContent>
+				</RctCollapsibleCard>
+
 				<RctCollapsibleCard fullBlock>
 					<MUIDataTable
-						className="mui-tableRes"
-						data={this.state.dataVoucher}
+						className="mui-tableRes mt-2"
+						data={this.state.dataVouchers}
 						columns={columns}
 						options={options}
 					/>

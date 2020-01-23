@@ -46,7 +46,7 @@ export default class VoucherInfo extends Component {
 				id_campaing: id_campaing,
 				name_campaing: name_campaing,
 			},
-			nameColumns: ['Voucher','Etiqueta','Fecha Inicio','Fecha Fin',{
+			nameColumns: ['Etiqueta','Voucher','Fecha Inicio','Fecha Fin', 'N° de Usos por Voucher','N° Usos Total',{
 				name:"Estado",
 				options: {
 					customBodyRender: (value, tableMeta, updateValue) => {
@@ -76,33 +76,15 @@ export default class VoucherInfo extends Component {
 					);
 					}
 				  }	
-			}, 'N° de Usos por Voucher','N° Usos Total'],
+			}],
 			dataVouchers: [],
 			modalEmailCsv: false,
 		}
 
 		this.createVoucher = this.createVoucher.bind(this)
 		this.handleSubmit = this.handleSubmit.bind(this)
-
+		this.changeTable = this.changeTable.bind(this)
 	}
-
-	// getMuiTheme = () =>
-    // createMuiTheme({
-    //   palette: {
-    //     primary: {
-    //       main: "#4db0cd"
-    //     }
-    //   },
-    //   overrides: {
-    //     MUIDataTableHeadCell: {
-    //       root: {
-    //         width: 150,
-    //         color: "#31646d"
-    //       }
-    //     }
-    //   }
-    // });
-
 
 	async componentDidMount(){
 		try {
@@ -133,9 +115,7 @@ export default class VoucherInfo extends Component {
 		this.setState({
 			form: {
 				...this.state.form,
-				[e.target.name]: e.target.value,
-				columns: this.state.nameColumns,
-				rows: this.state.dataVouchers
+				[e.target.name]: e.target.value
 			}
 
 		})
@@ -181,7 +161,13 @@ export default class VoucherInfo extends Component {
 	}
 
 	openAlert(key) {
-		this.setState({ [key]: true });
+		this.setState({ 
+			[key]: true,
+			form: {
+				...this.state.form,
+				email: '', 
+			}
+		});
 	}
 
 	createVoucher() {
@@ -193,14 +179,65 @@ export default class VoucherInfo extends Component {
 		this.setState({ [key]: false })
 	}
 
+	changeTable(table){
+		let columns = table.columns;
+		let data = table.displayData;
+		let dataSelect = table.selectedRows.data;
+		let arrayColumns = [];
+		let arrayData = [];
+		let arrayNumberColumns = [];
+		for (let i = 0; i < columns.length; i++) {
+			if(columns[i].display != "false"){
+				arrayColumns.push(columns[i].name);
+				arrayNumberColumns.push(i);
+			}
+		}
+		for (let j = 0; j < data.length; j++) {
+			let arrayDataDetail = [];
+			let dataDetail = data[j].data;
+			for (let i = 0; i < arrayNumberColumns.length; i++) {
+				if(dataDetail[arrayNumberColumns[i]].props){
+					arrayDataDetail.push(dataDetail[arrayNumberColumns[i]].props.title);
+				}
+				else{
+					arrayDataDetail.push(dataDetail[arrayNumberColumns[i]]);
+				}
+			}
+			arrayData.push(arrayDataDetail);
+		}
+		if(dataSelect.length != 0){
+			arrayData = [];
+			for (let j = 0; j < dataSelect.length; j++) {
+				let arrayDataDetail = [];
+				let dataDetail = data[dataSelect[j].dataIndex].data;
+				for (let i = 0; i < arrayNumberColumns.length; i++) {
+					if(dataDetail[arrayNumberColumns[i]].props){
+						arrayDataDetail.push(dataDetail[arrayNumberColumns[i]].props.title);
+					}
+					else{
+						arrayDataDetail.push(dataDetail[arrayNumberColumns[i]]);
+					}
+				}
+				arrayData.push(arrayDataDetail);
+			}
+		}
+		this.setState({
+			form:{
+				...this.state.form,
+				columns: arrayColumns,
+				rows: arrayData,
+			}
+		});
+	}
+
 
 	render() {
-		const { dataVouchers, modalEmailCsv } = this.state;
+		const { dataVouchers, modalEmailCsv, form } = this.state;
 		const columns = this.state.nameColumns;
 		const options = {
 			responsive: 'scrollMaxHeight',
 			print: false,
-			selectableRows: false,
+			selectableRows: 'multiple',
 			downloadOptions: {
 				filename: 'Vouchers.csv',
 				filterOptions: {
@@ -208,7 +245,15 @@ export default class VoucherInfo extends Component {
 					useDisplayedColumnsOnly: true
 				}
 			},
-			customToolbar: () => {
+			onTableChange: (action,tableState) => {
+				this.changeTable(tableState)
+			},
+			// customToolbar: () => {
+			// 	return (
+			// 		<CustomToolbar columns={columns} data={dataVouchers} alertOpen={() => this.openAlert('modalEmailCsv')} />
+			// 	);
+			// },
+			customToolbarSelect: () => {
 				return (
 					<CustomToolbar columns={columns} data={dataVouchers} alertOpen={() => this.openAlert('modalEmailCsv')} />
 				);
@@ -223,7 +268,7 @@ export default class VoucherInfo extends Component {
 
 
 				<PageTitleBar
-					title="Información de Vouchers"
+					title={"Información de Vouchers - "+form.name_campaing}
 					match={this.props.match}
 					history={this.props.history}
 				/>
@@ -272,15 +317,13 @@ export default class VoucherInfo extends Component {
 				</div>
 
 				<RctCollapsibleCard fullBlock>
-					{/* <MuiThemeProvider theme={this.getMuiTheme()}> */}
-						<MUIDataTable
-							className="mui-tableRes"
-							title={"Lista de Vouchers"}
-							data={this.state.dataVouchers}
-							columns={columns}
-							options={options}
-						/>
-					{/* </MuiThemeProvider> */}
+					<MUIDataTable
+						className="mui-tableRes"
+						title={"Lista de Vouchers"}
+						data={this.state.dataVouchers}
+						columns={columns}
+						options={options}
+					/>
 				</RctCollapsibleCard>
 			</div>
 

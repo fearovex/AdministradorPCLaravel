@@ -83,7 +83,7 @@ export default class campañas extends Component {
 					</ListItemIcon>
 				</Link>
 				datacampania[i]["Datos"] = 
-				<Link to={location.pathname + '/' + datacampania[i].Nombre} onClick={() => this.DataCampania(datacampania[i].id)}>
+				<Link to={location.pathname + '/' + datacampania[i].Nombre} onClick={() => this.DataCampania(datacampania[i].id, datacampania[i].Nombre)}>
 					<ListItemIcon className="menu-icon">
 						<i className='ti-eye' style={{margin:"0 auto"}}></i>
 					</ListItemIcon>
@@ -173,8 +173,9 @@ export default class campañas extends Component {
 	}
 
 
-	DataCampania(id_campaing) {
+	DataCampania(id_campaing, name_campaing) {
 		localStorage.setItem('user_campaing', id_campaing);
+		localStorage.setItem('user_name_campaing', name_campaing);
 	}
 
 	DashboardCampania(id_campaing, vertical){
