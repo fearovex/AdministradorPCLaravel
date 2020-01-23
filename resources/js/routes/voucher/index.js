@@ -33,6 +33,9 @@ export default class Voucher extends Component {
 		const name_campaing = localStorage.user_name_campaing;
 		const initialDateCampaing =  localStorage.user_initialDate_campaing;
 		const finalDateCampaing =  localStorage.user_finalDate_campaing;
+
+		const initialDate = moment(new Date, 'YYYY/MM/DD hh:mm a');
+		const finalDate = moment(new Date, 'YYYY/MM/DD hh:mm a').add(30,'Minutes');
 		
 		let date = moment(new Date, 'YYYY/MM/DD hh:mm a');
 		let año = date.year();
@@ -48,7 +51,7 @@ export default class Voucher extends Component {
 			modaledit: false,
 			form: {
 				fecha_inicio: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos) + ":00",
-				fecha_fin: (año) + '-' + (mes) + '-' + (dia+1) + " " + (hora) + ":" + (minutos) + ":00",
+				fecha_fin: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos) + ":00",
 				numerovouchers: "",
 				numerousos: "",
 				etiqueta:"",
@@ -57,6 +60,8 @@ export default class Voucher extends Component {
 				name_campaing: name_campaing,
 				initialDateCampaing: initialDateCampaing,
 				finalDateCampaing: finalDateCampaing,
+				initialDate:initialDate,
+				finalDate:finalDate,
 				nuncaExpira: true,
 				expira: false,
 				activarUso: false,
@@ -97,7 +102,32 @@ export default class Voucher extends Component {
 
 	async handleSubmitVouchers(e) {
 		e.preventDefault()
-		const {numerovouchers, numerousos, etiqueta, nuncaExpira, expira, activarUso, diasDisponibles,horasDisponibles,minutosDisponibles} = this.state.form
+
+		
+		const {
+			numerovouchers,
+			numerousos, 
+			etiqueta, 
+			nuncaExpira, 
+			expira, 
+			activarUso, 
+			diasDisponibles,
+			horasDisponibles,
+			minutosDisponibles, 
+			finalDate,
+			fecha_fin
+		} = this.state.form
+
+
+		let año = finalDate.year()
+		let mes = finalDate.month() + 1;
+		let dia = finalDate.dates();
+		let hora = finalDate.hours();
+		let minutos = finalDate.minute();
+		
+		let finalDateValidation = (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos) + ":00"
+
+		
 		if(nuncaExpira){
 			if(etiqueta == ''){
 				NotificationManager.error('El campo etiqueta es obligatorio!','',5000);
@@ -141,7 +171,10 @@ export default class Voucher extends Component {
 			if(numerousos == ''){
 				NotificationManager.error('El campo cantidad de usos es obligatorio (Min: 1 Uso)!','',5000);
 			}
-			if(((numerovouchers!= '' && numerovouchers > 0) && (numerousos !='' && numerousos > 0)) && etiqueta !=''){
+			if(new Date(fecha_fin) < new Date(finalDateValidation)){
+				NotificationManager.error('El la fecha fin del voucher debe tener como máximo 30 mins!','',5000);
+			}
+			if((((numerovouchers!= '' && numerovouchers > 0) && (new Date(fecha_fin) >= new Date(finalDateValidation)) ) && (numerousos !='' && numerousos > 0)) && etiqueta !=''){
 				try {
 					let config = {
 						method: 'POST',
@@ -483,8 +516,6 @@ export default class Voucher extends Component {
 	render() {
 		const columns = this.state.nameColumns;
 		const { dataVouchers, prompt, modalEmailCsv, form } = this.state;
-		const initialDate = moment(new Date, 'YYYY/MM/DD hh:mm a');
-		const finalDate = moment(new Date, 'YYYY/MM/DD hh:mm a').add(1,'Days');
 		
 
 		const options = {
@@ -609,7 +640,7 @@ export default class Voucher extends Component {
 													label="Fecha Inicio"
 													required
 													value={form.fecha_inicio}
-													minDate={moment(initialDate, 'YYYY/MM/DD hh:mm a')}
+													minDate={moment(form.initialDate, 'YYYY/MM/DD hh:mm a')}
 													// maxDate={moment(form.fecha_fin, 'YYYY/MM/DD hh:mm a').subtract(1,'Days')}
 													format="YYYY/MM/DD hh:mm a"
 													onChange={(event) => this.handleChange(event, 'fecha_inicio')}
@@ -625,7 +656,7 @@ export default class Voucher extends Component {
 													label="Fecha Fin"
 													required
 													value={form.fecha_fin}
-													minDate={moment(form.fecha_inicio, 'YYYY/MM/DD hh:mm a').add(1,'Days')}
+													minDate={moment(form.fecha_inicio, 'YYYY/MM/DD hh:mm a').add(30,'Minutes')}
 													maxDate={moment(form.finalDateCampaing, 'YYYY/MM/DD hh:mm a')}
 													format="YYYY/MM/DD hh:mm a"
 													onChange={(event) => this.handleChange(event, 'fecha_fin')}
