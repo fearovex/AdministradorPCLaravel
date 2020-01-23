@@ -163,18 +163,18 @@ export default class Voucher extends Component {
 		}
 		if(expira){
 			if(etiqueta == ''){
-				NotificationManager.error('El campo etiqueta es obligatorio!','',5000);
+				NotificationManager.error('El campo etiqueta es obligatorio','',5000);
 			}
 			if(numerovouchers == ''){
-				NotificationManager.error('El campo de número de vouchers es obligatorio (Min: 1 Voucher)!','',5000);
+				NotificationManager.error('El campo de número de vouchers es obligatorio (Min: 1 Voucher)','',5000);
 			}
 			if(numerousos == ''){
-				NotificationManager.error('El campo cantidad de usos es obligatorio (Min: 1 Uso)!','',5000);
+				NotificationManager.error('El campo cantidad de usos es obligatorio (Min: 1 Uso)','',5000);
 			}
 			if(new Date(fecha_fin) < new Date(finalDateValidation)){
-				NotificationManager.error('El la fecha fin del voucher debe tener como máximo 30 mins!','',5000);
+				NotificationManager.error('La Fecha Fin del voucher debe ser mayor de 30 minutos con respecto a la Fecha Inicio','',5000);
 			}
-			if((((numerovouchers!= '' && numerovouchers > 0) && (new Date(fecha_fin) >= new Date(finalDateValidation)) ) && (numerousos !='' && numerousos > 0)) && etiqueta !=''){
+			if((((numerovouchers!= '' && numerovouchers > 0) && (new Date(fecha_fin) >= new Date(finalDateValidation))) && (numerousos !='' && numerousos > 0)) && etiqueta !=''){
 				try {
 					let config = {
 						method: 'POST',
