@@ -6,10 +6,11 @@ BEGIN
  	drop table IF exists nameCampaings;
 	create temporary table nameCampaings(
         id int auto_increment primary key,
-        campania varchar(100)
+        campania varchar(100),
+		nombre varchar(100)
     ); 
 	 SET @querytop = CONCAT('
-	        insert into nameCampaings (campania) select campania from ',nameDatabase,'.campania as e where e.id_locacion =',idLocation
+	        insert into nameCampaings (campania, nombre) select campania, nombre from ',nameDatabase,'.campania as e where e.id_locacion =',idLocation
 	    ); 
 	PREPARE campaingsTable FROM @querytop;
    execute campaingsTable;
@@ -29,10 +30,11 @@ BEGIN
 		);
 		
 	while @countPrimary <= @countCampaings do
-   	set @queryNameTables = (select nombre from nameCampaings where id=@countPrimary); 
+   	set @queryNameTables = (select campania from nameCampaings where id=@countPrimary);
+	set @queryNameCampaing = (select nombre from nameCampaings where id=@countPrimary);  
    	
 		SET @queryTableLastTen = CONCAT('
-        insert into dataLastTen (nombre,apellidos,fecha_creacion,ip,nombreCampania) select nombre, apellidos, fecha_creacion, ip_cliente,','"',@queryNameTables,'"',' AS nombreCampania from ',nameDatabase,'.',@queryNameTables
+        insert into dataLastTen (nombre,apellidos,fecha_creacion,ip,nombreCampania) select nombre, apellidos, fecha_creacion, ip_cliente,','"',@queryNameCampaing,'"',' AS nombreCampania from ',nameDatabase,'.',@queryNameTables
         );
 		PREPARE campaings FROM @queryTableLastTen;
    	execute campaings;
