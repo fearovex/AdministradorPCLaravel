@@ -139,7 +139,7 @@ class GraficasController extends Controller
     public function TotalRecords(Request $request){
         $database = session('database');
         $tabla = DB::connection($database)->table('campania')->select('campania')->where('id', $request->id_campaing)->first();
-        $query = "select count(*) as TotalRecords from $database.$tabla->campania";
+        $query = "select count(*) as TotalRecords from $database.$tabla->campania where fecha_creacion BETWEEN '$request->initialDate' and '$request->finalDate'";
         $TotalRecords = DB::select($query);
         return $TotalRecords;
     }
