@@ -795,21 +795,21 @@ export default class Voucher extends Component {
 							{!form.expira && !form.nuncaExpira &&
 								<ListItem className="p-0 col-lg-4 col-md-4 col-sm-12 mb-10 align-content-left">
 									<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
-										<span>Dias Disponibles : <span className="font-weight-bold">{form.diasDisponibles}</span></span>
+										<span>Dias Disponibles : <span className="font-weight-bold">{form.diasDisponibles == "" ? 0 : form.diasDisponibles }</span></span>
 									</p>
 								</ListItem>
 							}
 							{!form.expira && !form.nuncaExpira &&
 								<ListItem className="p-0 col-lg-4 col-md-4 col-sm-12 mb-10 align-content-left">
 									<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
-										<span>Horas Disponibles : <span className="font-weight-bold">{form.horasDisponibles}</span></span>
+										<span>Horas Disponibles : <span className="font-weight-bold">{form.horasDisponibles == "" ? 0 : form.horasDisponibles }</span></span>
 									</p>
 								</ListItem>
 							}
 							{!form.expira && !form.nuncaExpira &&
 								<ListItem className="p-0 col-lg-4 col-md-4 col-sm-12 mb-10 align-content-left">
 									<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
-										<span>Minutos Disponibles : <span className="font-weight-bold">{form.minutosDisponibles}</span></span>
+										<span>Minutos Disponibles : <span className="font-weight-bold">{form.minutosDisponibles == "" ? 0 : form.minutosDisponibles }</span></span>
 									</p>
 								</ListItem>
 							}
