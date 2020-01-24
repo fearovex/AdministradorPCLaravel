@@ -1,16 +1,20 @@
 USE ipfiadmin;
 DROP PROCEDURE IF EXISTS dataTopZones;
 DELIMITER //
-CREATE PROCEDURE dataTopZones (IN nameDatabase VARCHAR(30), idLocation INT)
+CREATE PROCEDURE dataTopZones (IN nameDatabase VARCHAR(30), idLocation INT, idCampania INT, fechaInicial VARCHAR(100), fechaFinal VARCHAR(100))
 BEGIN
 	drop table IF exists nameCampaings;
 	create temporary table nameCampaings(
 	     id int auto_increment primary key,
 	     campania varchar(100)
 	 ); 
-	 SET @querytop = CONCAT('
-	        insert into nameCampaings (campania) select campania from ',nameDatabase,'.campania as e where e.id_locacion =',idLocation
-	    ); 
+	if idCampania = 0 then
+	    SET @querytop = CONCAT('
+	        insert into nameCampaings (campania) select campania from ',nameDatabase,'.campania as e where e.id_locacion =',idLocation);
+    else
+	 	SET @querytop = CONCAT('
+	      	insert into nameCampaings (campania) select campania from ',nameDatabase,'.campania as e where e.id =',idCampania);
+    end if;
 	PREPARE campaingsTable FROM @querytop;
 	execute campaingsTable;
 
@@ -29,9 +33,7 @@ BEGIN
 	   set @queryNameCampaing = (select campania from nameCampaings where id=@countPrimary);
 		   SET @queryTableTopZones = CONCAT('
 		   insert into tableTopZones (zona,total) SELECT z.nombre AS zona,COUNT(z.id) AS total FROM ',nameDatabase,'.zonas AS z 
-			INNER JOIN ',nameDatabase,'.dispositivos AS d ON z.id=d.id_zona
-			INNER JOIN ',nameDatabase,'.',@queryNameCampaing,' AS p ON d.mac_dispositivo = p.mac_ap 
-			GROUP BY z.nombre'
+			INNER JOIN ',nameDatabase,'.dispositivos AS d ON z.id=d.id_zona INNER JOIN ',nameDatabase,'.',@queryNameCampaing,' AS p ON d.mac_dispositivo = p.mac_ap WHERE p.fecha_creacion BETWEEN ',fechaInicial,' AND ',fechaFinal,' GROUP BY z.nombre'
 		);
 		PREPARE topZones FROM @queryTableTopZones;
 	   execute topZones;

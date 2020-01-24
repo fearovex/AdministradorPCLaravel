@@ -120,6 +120,15 @@ class VouchersController extends Controller
                         }
                     }
                     if($request->activarUso){
+                        if(is_null($request->diasDisponibles)){
+                            $request->diasDisponibles = 0; 
+                        }
+                        if(is_null($request->horasDisponibles)){
+                            $request->horasDisponibles = 0;
+                        }
+                        if(is_null($request->minutosDisponibles)){
+                            $request->minutosDisponibles = 0;
+                        }
                         foreach ($vouchersDiferentes as $key => $voucher){
                             $voucher = new Voucher();
                             $voucher->setConnection(session('database'));
@@ -132,9 +141,10 @@ class VouchersController extends Controller
                             $voucher->num_usos = 0;
                             $voucher->total_num_usos = $request->numerousos;
                             $voucher->etiqueta = $request->etiqueta;
-                            $voucher->dias_disponibles = $request->diasDisponibles; 
-                            $voucher->horas_disponibles = $request->horasDisponibles; 
-                            $voucher->minutos_disponibles = $request->minutosDisponibles;
+                            
+                                $voucher->dias_disponibles = $request->diasDisponibles; 
+                                $voucher->horas_disponibles = $request->horasDisponibles; 
+                                $voucher->minutos_disponibles = $request->minutosDisponibles;
                             $voucher->id_caducidad = 3;
                             $voucher->save();
                             $creados++;

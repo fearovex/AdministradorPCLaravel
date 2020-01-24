@@ -45,3 +45,6 @@ left: 10%!important;
 .marginForm{
     padding: 0 12px;
 }
+.withoutBold{
+    font-weight: normal !important
+}
