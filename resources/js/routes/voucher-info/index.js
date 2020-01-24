@@ -29,9 +29,11 @@ export default class VoucherInfo extends Component {
 		const id_location = localStorage.user_location
 		const id_campaing = localStorage.user_campaing;
 		const name_campaing = localStorage.user_name_campaing;
+		const finalDateCampaing =  localStorage.user_finalDate_campaing;
 
 		this.state = {
 			data: [],
+			createVoucher: new Date() < new Date(finalDateCampaing) ? true : false,
 			error: null,
 			activeStep: 0,
 			prompt: false,
@@ -274,14 +276,16 @@ export default class VoucherInfo extends Component {
 				/>
 				<div className="blank-wrapper">
 					<div className="sweet-alert-wrapper">
-						<Button
-							variant="contained"
-							color="primary"
-							className="botonVoucher"
-							onClick={() => this.createVoucher()}
-						>
-							Crear Vouchers
-						</Button>
+						{this.state.createVoucher &&
+							<Button
+								variant="contained"
+								color="primary"
+								className="botonVoucher"
+								onClick={() => this.createVoucher()}
+							>
+								Crear Vouchers
+							</Button>
+						}
 						<SweetAlert
 							btnSize="sm"
 							show={modalEmailCsv}
