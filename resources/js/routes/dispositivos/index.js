@@ -300,7 +300,7 @@ export default class dispositivos extends Component {
 											<option value="">Seleccione una zona</option>
 											{data && data.map((data) => (
 
-												<option key={data.id} value={data.id}>{data.nombre}</option>
+												<option key={data.id} value={data.id}>{data.Nombre}</option>
 											))}
 
 										</Select>

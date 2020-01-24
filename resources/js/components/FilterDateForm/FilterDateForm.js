@@ -37,8 +37,8 @@ const FilterDateForm = ({ form, onChange, onChangeFilter, onSubmit, onClick, onC
                             {String(form.campania)}
                         </Badge>
                     }
-                    <div className="mt-5 col-lg-1 col-md-2 col-sm-12">
-                        <button className="btn btn-info" onClick={onClick}>
+                    <div className="mt-5 col-lg-1 col-md-1 col-sm-1 col-xl-1 col-1">
+                        <button className="btn btn-info " onClick={onClick}>
                             <ListItemIcon className="menu-icon">
                                 <i className='ti-pencil-alt'></i>
                             </ListItemIcon>

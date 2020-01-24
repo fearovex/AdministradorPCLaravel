@@ -9,6 +9,7 @@ import HelpOutline from "@material-ui/icons/HelpOutline";
 import Tooltip from "@material-ui/core/Tooltip";
 import { DateTimePicker } from '@material-ui/pickers';
 import moment from "moment";
+import 'moment/locale/es'
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/List';
 import { RctCard, RctCardContent } from 'Components/RctCard';
@@ -43,6 +44,12 @@ export default class Voucher extends Component {
 		let dia = date.dates();
 		let hora = date.hours();
 		let minutos = date.minute();
+
+		let formatoMes;
+		let formatodia;
+		let formatohora;
+		let formatominutos;
+		
 		
 		this.state = {
 			error: null,
@@ -59,7 +66,7 @@ export default class Voucher extends Component {
 				id_campaing: id_campaing,
 				name_campaing: name_campaing,
 				initialDateCampaing: initialDateCampaing,
-				finalDateCampaing: finalDateCampaing,
+				finalDateCampaing: finalDateCampaing+' '+'00'+':'+'00'+':'+'00',
 				initialDate:initialDate,
 				finalDate:finalDate,
 				nuncaExpira: true,
@@ -115,7 +122,8 @@ export default class Voucher extends Component {
 			horasDisponibles,
 			minutosDisponibles, 
 			finalDate,
-			fecha_fin
+			fecha_fin,
+			finalDateCampaing
 		} = this.state.form
 
 
@@ -126,7 +134,6 @@ export default class Voucher extends Component {
 		let minutos = finalDate.minute();
 		
 		let finalDateValidation = (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos) + ":00"
-
 		
 		if(nuncaExpira){
 			if(etiqueta == ''){
@@ -174,7 +181,10 @@ export default class Voucher extends Component {
 			if(new Date(fecha_fin) < new Date(finalDateValidation)){
 				NotificationManager.error('La Fecha Fin del voucher debe ser mayor de 30 minutos con respecto a la Fecha Inicio','',5000);
 			}
-			if((((numerovouchers!= '' && numerovouchers > 0) && (new Date(fecha_fin) >= new Date(finalDateValidation))) && (numerousos !='' && numerousos > 0)) && etiqueta !=''){
+			if(new Date(fecha_fin) > new Date(finalDateCampaing)){
+				NotificationManager.error('La Fecha Fin del voucher debe ser menor o igual a la fecha fin de la campaña','',5000);
+			}
+			if(((((numerovouchers!= '' && numerovouchers > 0) && (new Date(fecha_fin) >= new Date(finalDateValidation))) && (new Date(fecha_fin) <= new Date(finalDateCampaing))) && (numerousos !='' && numerousos > 0)) && etiqueta !=''){
 				try {
 					let config = {
 						method: 'POST',
@@ -199,24 +209,21 @@ export default class Voucher extends Component {
 		}
 		if(activarUso){
 			if(etiqueta == ''){
-				NotificationManager.error('El campo etiqueta es obligatorio!','',5000);
+				NotificationManager.error('El campo etiqueta es obligatorio','',5000);
 			}
 			if(numerovouchers == ''){
-				NotificationManager.error('El campo de número de vouchers es obligatorio (Min: 1 Voucher)!','',5000);
+				NotificationManager.error('El campo de número de vouchers es obligatorio (Min: 1 Voucher)','',5000);
 			}
 			if(numerousos == ''){
-				NotificationManager.error('El campo cantidad de usos es obligatorio (Min: 1 Uso)!','',5000);
+				NotificationManager.error('El campo cantidad de usos es obligatorio (Min: 1 Uso)','',5000);
 			}
-			if(diasDisponibles == ''){
-				NotificationManager.error('El campo días es obligatorio (Min: 1 Día)!','',5000);
+			if((diasDisponibles == '' && horasDisponibles == '') && (minutosDisponibles <= 29)){
+				NotificationManager.error('El campo Minutos disponibles debe tener como minimo 30 mins','',5000);
 			}
-			if(horasDisponibles == ''){
-				NotificationManager.error('El campo cantidad de usos es obligatorio (Min: 1 Hora)!','',5000);
+			if((diasDisponibles == '') && (horasDisponibles == '' && minutosDisponibles == '')){
+				NotificationManager.error('Los campos, días, horas y minutos disponibles, por lo menos uno, es obligatorio','',5000);
 			}
-			if(minutosDisponibles == ''){
-				NotificationManager.error('El campo cantidad de usos es obligatorio (Min: 1 Uso)!','',5000);
-			}
-			if(((diasDisponibles != '' && horasDisponibles !='') && (minutosDisponibles != '')) && ((etiqueta !='' && numerovouchers!= '') && (numerousos !=''))){
+			if((((diasDisponibles == '' && horasDisponibles == '') && (minutosDisponibles >= 30)) || (((((((diasDisponibles == '' && minutosDisponibles == '') && (horasDisponibles != '')) || ((horasDisponibles == '' && minutosDisponibles == '') && (diasDisponibles != ''))) || ((horasDisponibles != '' && minutosDisponibles != '') && (diasDisponibles == ''))) || ((horasDisponibles != '' && diasDisponibles != '') && (minutosDisponibles == ''))) || ((minutosDisponibles != '' && diasDisponibles != '') && (horasDisponibles == ''))) || ((minutosDisponibles != '' && diasDisponibles != '') && (horasDisponibles != '')))) && ((etiqueta !='' && numerovouchers!= '') && (numerousos !=''))){
 				try {
 					let config = {
 						method: 'POST',
@@ -372,11 +379,11 @@ export default class Voucher extends Component {
 				}
 			})
 		}
-		else if (e.target.name === 'diasDisponibles' && e.target.value > 355) {
+		else if (e.target.name === 'diasDisponibles' && e.target.value > 359) {
 			this.setState({
 				form: {
 					...this.state.form,
-					[e.target.name]: "355",
+					[e.target.name]: "359",
 				}
 			})
 		}
@@ -392,7 +399,7 @@ export default class Voucher extends Component {
 			this.setState({
 				form: {
 					...this.state.form,
-					[e.target.name]: "24",
+					[e.target.name]: "23",
 				}
 			})
 		}
@@ -404,11 +411,11 @@ export default class Voucher extends Component {
 				}
 			})
 		}
-		else if (e.target.name === 'minutosDisponibles' && e.target.value > 60) {
+		else if (e.target.name === 'minutosDisponibles' && e.target.value > 59) {
 			this.setState({
 				form: {
 					...this.state.form,
-					[e.target.name]: "60",
+					[e.target.name]: "59",
 				}
 			})
 		}
@@ -638,6 +645,7 @@ export default class Voucher extends Component {
 												<DateTimePicker
 													key="fecha_inicio"
 													label="Fecha Inicio"
+													locale='es'
 													required
 													value={form.fecha_inicio}
 													minDate={moment(form.initialDate, 'YYYY/MM/DD hh:mm a')}
@@ -654,6 +662,7 @@ export default class Voucher extends Component {
 												<DateTimePicker
 													key="fecha_fin"
 													label="Fecha Fin"
+													locale='es'
 													required
 													value={form.fecha_fin}
 													minDate={moment(form.fecha_inicio, 'YYYY/MM/DD hh:mm a').add(30,'Minutes')}
@@ -684,7 +693,7 @@ export default class Voucher extends Component {
 												<Input
 													type="number"
 													min={1}
-													max={355}
+													max={359}
 													autoComplete="off"
 													placeholder="Días disponibles"
 													name="diasDisponibles"
@@ -708,7 +717,7 @@ export default class Voucher extends Component {
 											</div>
 											<div className="col-lg-4 mb-4">
 												<Input
-													min={1}
+													min={30}
 													max={59}
 													autoComplete="off"
 													type="number"
@@ -750,57 +759,57 @@ export default class Voucher extends Component {
 					<RctCardContent>
 						<List className="row list-unstyled p-0 ">
 							<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
-								<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
-									Etiqueta de los Vouchers : {form.etiqueta}
+								<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
+									<span>Etiqueta de los Vouchers : <span className="font-weight-bold">{form.etiqueta}</span></span>
 								</p>
 							</ListItem>
 							<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
-								<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
-									Cantidad de Vouchers Generados : {form.numerovouchers}
+								<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
+									<span>Cantidad de Vouchers Generados : <span className="font-weight-bold">{form.numerovouchers}</span></span>
 								</p>
 							</ListItem>
 							<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
-								<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
-									Cantidad de Usos por Vouchers : {form.numerousos}
+								<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
+									<span>Cantidad de Usos por Vouchers : <span className="font-weight-bold">{form.numerousos}</span></span>
 								</p>
 							</ListItem>
 							<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
-								<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
-									Opción de Caducidad : {form.nuncaExpira ? 'Nunca Expira' : (form.expira ? 'Expira' : 'Activar Una Vez Se Use')}
+								<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
+									<span>Opción de Caducidad : <span className="font-weight-bold">{form.nuncaExpira ? 'Nunca Expira' : (form.expira ? 'Expira' : 'Activar Una Vez Se Use')}</span></span>
 								</p>
 							</ListItem>
 							{form.expira &&
 								<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
-									<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
-										Fecha de Inicio : {form.fecha_inicio}
+									<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
+										<span>Fecha de Inicio : <span className="font-weight-bold">{form.fecha_inicio}</span></span>
 									</p>
 								</ListItem>
 							}
 							{form.expira &&
 								<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
-									<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
-										Fecha de Final : {form.fecha_fin}
+									<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
+										<span>Fecha de Final : <span className="font-weight-bold">{form.fecha_fin}</span></span>
 									</p>
 								</ListItem>
 							}
 							{!form.expira && !form.nuncaExpira &&
 								<ListItem className="p-0 col-lg-4 col-md-4 col-sm-12 mb-10 align-content-left">
-									<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
-										Dias Disponibles : {form.diasDisponibles}
+									<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
+										<span>Dias Disponibles : <span className="font-weight-bold">{form.diasDisponibles == "" ? 0 : form.diasDisponibles }</span></span>
 									</p>
 								</ListItem>
 							}
 							{!form.expira && !form.nuncaExpira &&
 								<ListItem className="p-0 col-lg-4 col-md-4 col-sm-12 mb-10 align-content-left">
-									<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
-										Horas Disponibles : {form.horasDisponibles}
+									<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
+										<span>Horas Disponibles : <span className="font-weight-bold">{form.horasDisponibles == "" ? 0 : form.horasDisponibles }</span></span>
 									</p>
 								</ListItem>
 							}
 							{!form.expira && !form.nuncaExpira &&
 								<ListItem className="p-0 col-lg-4 col-md-4 col-sm-12 mb-10 align-content-left">
-									<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
-										Minutos Disponibles : {form.minutosDisponibles}
+									<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
+										<span>Minutos Disponibles : <span className="font-weight-bold">{form.minutosDisponibles == "" ? 0 : form.minutosDisponibles }</span></span>
 									</p>
 								</ListItem>
 							}

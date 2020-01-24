@@ -102,9 +102,13 @@ class GraficasController extends Controller
 
     public function TopCampaings(Request $request){
         $database = session('database');
+        $fecha_inicial = '"'.date('Y-m-d H:i:00', strtotime($request->initialDate)).'"';
+        $fecha_final = '"'.date('Y-m-d H:i:00', strtotime($request->finalDate)).'"';
+        $campania =$request->id_event;
         $locacion = $request->id_location;
+        
         $dataTop = DB::select(
-            "call dataTopCampaings('".$database."','".$locacion."')"
+            "call dataTopCampaings('".$database."','".$locacion."','".$campania."','".$fecha_inicial."','".$fecha_final."')"
         );
         return $dataTop;
     }
@@ -120,9 +124,14 @@ class GraficasController extends Controller
 
     public function TopZones(Request $request){
         $database = session('database');
+        $fecha_inicial = '"'.date('Y-m-d H:i:00', strtotime($request->initialDate)).'"';
+        $fecha_final = '"'.date('Y-m-d H:i:00', strtotime($request->finalDate)).'"';
+        $campania =$request->id_event;
+
         $locacion = $request->id_location;
+
         $dataZones = DB::select(
-            "call dataTopZones('".$database."','".$locacion."')"
+            "call dataTopZones('".$database."','".$locacion."','".$campania."','".$fecha_inicial."','".$fecha_final."')"
         );
         return $dataZones;
     }
@@ -139,7 +148,7 @@ class GraficasController extends Controller
     public function TotalRecords(Request $request){
         $database = session('database');
         $tabla = DB::connection($database)->table('campania')->select('campania')->where('id', $request->id_campaing)->first();
-        $query = "select count(*) as TotalRecords from $database.$tabla->campania";
+        $query = "select count(*) as TotalRecords from $database.$tabla->campania where fecha_creacion BETWEEN '$request->initialDate' and '$request->finalDate'";
         $TotalRecords = DB::select($query);
         return $TotalRecords;
     }
@@ -183,7 +192,7 @@ class GraficasController extends Controller
     public function TopTenAgesList(Request $request){
         $database = session('database');
         $tabla = DB::connection($database)->table('campania')->select('campania')->where('id', $request->id_campaing)->first();
-        $query = "select edad as 'Edad', count(edad) as 'N_Registros' FROM $database.$tabla->campania GROUP BY Edad ORDER BY N_Registros desc limit 10";
+        $query = "select edad as 'Edad', count(edad) as 'N_Registros' FROM $database.$tabla->campania where fecha_creacion BETWEEN '$request->initialDate' and '$request->finalDate' GROUP BY Edad ORDER BY N_Registros desc limit 10";
         $TopTenAgesList = DB::select($query);
         return $TopTenAgesList;
     }

@@ -31,12 +31,11 @@ export default class TopTables extends Component {
             </CardBody>
             :
              <CardBody className="pb-0 d-flex justify-content-between" style={{backgroundColor: '#31405699'}}>
-               <h4 className="mb-5" >{name}</h4>
                <p className="fs-14 mb-0" >Personas <i className="ti-user text-success ml-1"></i></p>
+               <h4 className="mb-5" >{name}</h4>
             </CardBody>
             }
-            
-            {name == "Campañas" ?
+            {name == "Campañas" && dataTopC != ''?
             <List className="p-0">
                {dataTopC && dataTopC.map((data, key) => {
                   return(
@@ -48,7 +47,14 @@ export default class TopTables extends Component {
                })}
             
             </List>
-            :name == "Zonas" ?
+            :name == "Campañas" && dataTopC == ''?
+            <List className="p-0">
+                  <ListItem className="d-flex justify-content-between border-bottom py-5 fs-14 px-20" style={{backgroundColor: '#3e558412'}}>
+                        <span>No hay campañas activas</span>
+                        <span style={{width: '120px', textAlign: 'center'}} ></span>
+                  </ListItem>
+            </List>
+            :name == "Zonas" && dataTopZ != ''?
             <List className="p-0">
                {dataTopZ && dataTopZ.map((data, key) => {
                   return(
@@ -58,15 +64,21 @@ export default class TopTables extends Component {
                   </ListItem>
                   )
                })}
-            
+            </List>
+            :name == "Zonas" && dataTopZ == ''?
+            <List className="p-0">
+                  <ListItem className="d-flex justify-content-between border-bottom py-5 fs-14 px-20" style={{backgroundColor: '#3e558412'}}>
+                        <span>No hay zonas activas</span>
+                        <span style={{width: '120px', textAlign: 'center'}} ></span>
+                  </ListItem>
             </List>
             :
             <List className="p-0">
                {dataTopV && dataTopV.map((data, key) => {
                   return(
                   <ListItem key={key} className="d-flex justify-content-between border-bottom py-5 fs-14 px-20" style={{backgroundColor: '#3e558412'}}>
-                        <span style={{width: '42px', textAlign: 'center'}} key={data.visitas}>{data.visitas}</span>
                         <span style={{width: '74px', textAlign: 'center'}} key={data.registros}>{data.registros}</span>
+                        <span style={{width: '42px', textAlign: 'center'}} key={data.visitas}>{data.visitas}</span>
                   </ListItem>
                   )
                })}

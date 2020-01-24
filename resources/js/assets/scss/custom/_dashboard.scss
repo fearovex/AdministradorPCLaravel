@@ -466,6 +466,8 @@
 .MuiTableCell-head{
   font-weight: bold !important;
   background-color: #313131 !important;
+  position: sticky;
+  top: 0;
 }
 .MuiTableCell-body {
   background-color: #424242 !important;
