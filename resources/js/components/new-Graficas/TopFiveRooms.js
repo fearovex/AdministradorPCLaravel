@@ -27,7 +27,7 @@ export default class TopFiveRooms extends Component {
                      return(
                         <ListItem key={key} className="d-flex justify-content-between border-bottom py-5 fs-14 px-20" style={{backgroundColor: '#3e558412'}}>
                               <span key={data.habitacion}>{data.habitacion}</span>
-                              <span style={{width: '120px', textAlign: 'center'}} key={data.usos}>{data.usos}</span>
+                              <span style={{width: '120px', textAlign: 'center'}} key={data.usos}></span>
                         </ListItem>
                         )
                

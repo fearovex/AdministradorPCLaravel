@@ -25,10 +25,12 @@ export default class Vouchers extends Component {
 		this.clickNavLink= this.clickNavLink.bind(this)
 	}
 
-	clickNavLink(id_location, id_campaing, name_campaing){
+	clickNavLink(id_location, id_campaing, name_campaing,fecha_inicio,fecha_fin){
 		localStorage.setItem('user_location', id_location);
 		localStorage.setItem('user_campaing', id_campaing);
 		localStorage.setItem('user_name_campaing', name_campaing);
+		localStorage.setItem('user_initialDate_campaing', fecha_inicio);
+		localStorage.setItem('user_finalDate_campaing', fecha_fin);
 	 }
 	async componentDidMount(){
 		try {
@@ -42,11 +44,19 @@ export default class Vouchers extends Component {
 			};
 			let res = await fetch(`${localStorage.urlDomain}api/vouchers`, config);
 			let datavouchers = await res.json()
-
 		
 			for (let i = 0; i < datavouchers.length; i++) {
                 datavouchers[i]["Ver Vouchers"]=
-				<Link to={this.props.history.location.pathname+"/voucher-info"} onClick = {() => this.clickNavLink(this.state.form.id_locacion, datavouchers[i].id, datavouchers[i]['Campaña'])} >
+				<Link 
+					to={this.props.history.location.pathname+"/voucher-info"} 
+					onClick = {() => this.clickNavLink(
+						this.state.form.id_locacion, 
+						datavouchers[i].id, 
+						datavouchers[i]['Campaña'],
+						datavouchers[i]['Fecha Inicio'], 
+						datavouchers[i]['Fecha Fin']
+					)} 
+				>
 					<ListItemIcon className="menu-icon">
 						<i className='ti-eye' style={{margin:"0 auto"}}></i>
 					</ListItemIcon>

@@ -25,6 +25,7 @@ export default class DetailEvents extends Component {
 		
 		const id_location = localStorage.user_location;
 		const id_campain = localStorage.user_campaing;
+		const name_campaing = localStorage.user_name_campaing;
 		
         let date = moment(new Date, 'YYYY/MM/DD hh:mm a');
         let año = date.year();
@@ -42,6 +43,7 @@ export default class DetailEvents extends Component {
                 initialDate: initialDate,
                 finalDate: finalDate,
                 id_event: id_campain,
+                name_campaing: name_campaing,
 				id_location: id_location,
 				nameColumns: [],
 			},
@@ -225,7 +227,7 @@ export default class DetailEvents extends Component {
 		const { form } = this.state;
 
 		const options = {
-			responsive: 'stacked',
+			responsive: 'scrollMaxHeight',
 			print: false,
 			selectableRows: false,
 			downloadOptions: { 
@@ -242,7 +244,7 @@ export default class DetailEvents extends Component {
 			<div className="data-table-wrapper">
 				
 				<PageTitleBar 
-					title={<IntlMessages id="sidebar.detailEvents" />} 
+					title={"Detalle de la Campaña - "+form.name_campaing } 
 					match={this.props.match} 
 					history={this.props.history}
 				/>

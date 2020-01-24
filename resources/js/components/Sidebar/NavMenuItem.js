@@ -48,7 +48,6 @@ class NavMenuItem extends Component {
    }
 
    ClickNavLink(id_location, id_campain){
-      console.log(id_location)
       localStorage.setItem('user_location', id_location);
       localStorage.setItem('user_campaing', id_campain);
    }

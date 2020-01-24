@@ -62,9 +62,7 @@ export default class Analytical extends Component {
 
         this.state = {
             data: [],
-            dataTop:[],
             lastTenUsers:[],
-            topZones:[],
             topVisits:[],
 			error: null,
             form: {
@@ -125,10 +123,13 @@ export default class Analytical extends Component {
             }
             let res = await fetch(`${localStorage.urlDomain}api/topCampaings`, config);
             let topCampaings = await res.json()
-            
+            this.state.data.dataTop=topCampaings;
             this.setState({
-                dataTop: topCampaings
-            })
+                form:{
+                    ...this.state.form,
+                    filterPersonalizado: false,
+                }
+            });
         } catch (error) {
             this.setState({
                 error:error
@@ -171,9 +172,14 @@ export default class Analytical extends Component {
             }
             let res = await fetch(`${localStorage.urlDomain}api/topZones`, config)
             let topZones = await res.json()
+            this.state.data.topZones=topZones;
+           
             this.setState({
-                topZones: topZones
-            })
+                form:{
+                    ...this.state.form,
+                    filterPersonalizado: false,
+                }
+            });
             
         } catch (error) {
             this.setState({
@@ -525,7 +531,7 @@ export default class Analytical extends Component {
                 >
                     <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                         <TopTables
-                            dataTopC={dataTop}
+                            dataTopC={this.state.data.dataTop}
                             dataTopZ={[]}
                             name={"Campañas"}
                         />
@@ -543,7 +549,7 @@ export default class Analytical extends Component {
                     <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                         <TopTables
                             dataTopC={[]}
-                            dataTopZ={topZones}
+                            dataTopZ={this.state.data.topZones}
                             name={"Zonas"}
                         />
                     </div>
@@ -552,7 +558,7 @@ export default class Analytical extends Component {
                 <RctCollapsibleCard
                     customClasses=""
                     colClasses="col-sm-12 col-md-12 col-lg-6 d-sm-full"
-                    heading={"Top 10 Personas Por Visitas"}
+                    heading={"Concentración De Visitas Total"}
                     collapsible
                     //reloadable
                     fullBlock

@@ -36,8 +36,15 @@
     margin-top: 76px;
 }
 .has-input{
+left: 10%!important;
+} 
 
-    left: 10%!important;} 
-    .input-lg{
-        left: 10%!important;
-    }
+.input-lg{
+    left: 10%!important;
+}
+.marginForm{
+    padding: 0 12px;
+}
+.withoutBold{
+    font-weight: normal !important
+}

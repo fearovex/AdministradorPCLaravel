@@ -20,6 +20,7 @@ export default class dispositivos extends Component {
 	constructor(props) {
 		super(props)
 		const id_zona = localStorage.user_zona
+		const name_zone = localStorage.user_name_zona
 
 		this.state = {
 			data: [],
@@ -29,6 +30,7 @@ export default class dispositivos extends Component {
 			id: 0,
 			dispositivo: [],
 			modaledit: false,
+			name_zone: name_zone,
 			form: {
 				nombre_dispositivo: "",
 				mac_dispositivo: "",
@@ -162,7 +164,6 @@ export default class dispositivos extends Component {
 	}
 	async openAlertTest(key, id) {
 		this.setState({ [key]: true });
-		console.log(id)
 		let res = await fetch(`${localStorage.urlDomain}api/dispositivos/${id}/edit`);
 		let dispositivo = await res.json();
 
@@ -197,10 +198,9 @@ export default class dispositivos extends Component {
 		})
 	}
 	render() {
-		const { data } = this.state;
+		const { data, prompt, modaledit, name_zone} = this.state;
 		const columns = ['Nombre Dispositivo', 'Mac Dispositivo', 'Tecnologia'
 			, 'Editar'];
-		const { prompt,modaledit } = this.state;
 		const options = {
 			filterType: 'dropdown',
 			selectableRows: false,
@@ -216,7 +216,7 @@ export default class dispositivos extends Component {
 
 
 				<PageTitleBar
-					title={<IntlMessages id="sidebar.dispositivos" />}
+					title={"Dispositivos de "+ name_zone}
 					match={this.props.match}
 					history={this.props.history}
 				/>
@@ -300,7 +300,7 @@ export default class dispositivos extends Component {
 											<option value="">Seleccione una zona</option>
 											{data && data.map((data) => (
 
-												<option key={data.id} value={data.id}>{data.nombre}</option>
+												<option key={data.id} value={data.id}>{data.Nombre}</option>
 											))}
 
 										</Select>
