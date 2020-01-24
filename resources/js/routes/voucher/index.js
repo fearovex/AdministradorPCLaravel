@@ -9,6 +9,7 @@ import HelpOutline from "@material-ui/icons/HelpOutline";
 import Tooltip from "@material-ui/core/Tooltip";
 import { DateTimePicker } from '@material-ui/pickers';
 import moment from "moment";
+import 'moment/locale/es'
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/List';
 import { RctCard, RctCardContent } from 'Components/RctCard';
@@ -43,6 +44,12 @@ export default class Voucher extends Component {
 		let dia = date.dates();
 		let hora = date.hours();
 		let minutos = date.minute();
+
+		let formatoMes;
+		let formatodia;
+		let formatohora;
+		let formatominutos;
+		
 		
 		this.state = {
 			error: null,
@@ -59,7 +66,7 @@ export default class Voucher extends Component {
 				id_campaing: id_campaing,
 				name_campaing: name_campaing,
 				initialDateCampaing: initialDateCampaing,
-				finalDateCampaing: finalDateCampaing,
+				finalDateCampaing: finalDateCampaing+' '+'00'+':'+'00'+':'+'00',
 				initialDate:initialDate,
 				finalDate:finalDate,
 				nuncaExpira: true,
@@ -115,7 +122,8 @@ export default class Voucher extends Component {
 			horasDisponibles,
 			minutosDisponibles, 
 			finalDate,
-			fecha_fin
+			fecha_fin,
+			finalDateCampaing
 		} = this.state.form
 
 
@@ -126,7 +134,6 @@ export default class Voucher extends Component {
 		let minutos = finalDate.minute();
 		
 		let finalDateValidation = (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos) + ":00"
-
 		
 		if(nuncaExpira){
 			if(etiqueta == ''){
@@ -174,7 +181,10 @@ export default class Voucher extends Component {
 			if(new Date(fecha_fin) < new Date(finalDateValidation)){
 				NotificationManager.error('La Fecha Fin del voucher debe ser mayor de 30 minutos con respecto a la Fecha Inicio','',5000);
 			}
-			if((((numerovouchers!= '' && numerovouchers > 0) && (new Date(fecha_fin) >= new Date(finalDateValidation))) && (numerousos !='' && numerousos > 0)) && etiqueta !=''){
+			if(new Date(fecha_fin) > new Date(finalDateCampaing)){
+				NotificationManager.error('La Fecha Fin del voucher debe ser menor o igual a la fecha fin de la campaña','',5000);
+			}
+			if(((((numerovouchers!= '' && numerovouchers > 0) && (new Date(fecha_fin) >= new Date(finalDateValidation))) && (new Date(fecha_fin) <= new Date(finalDateCampaing))) && (numerousos !='' && numerousos > 0)) && etiqueta !=''){
 				try {
 					let config = {
 						method: 'POST',
@@ -635,6 +645,7 @@ export default class Voucher extends Component {
 												<DateTimePicker
 													key="fecha_inicio"
 													label="Fecha Inicio"
+													locale='es'
 													required
 													value={form.fecha_inicio}
 													minDate={moment(form.initialDate, 'YYYY/MM/DD hh:mm a')}
@@ -651,6 +662,7 @@ export default class Voucher extends Component {
 												<DateTimePicker
 													key="fecha_fin"
 													label="Fecha Fin"
+													locale='es'
 													required
 													value={form.fecha_fin}
 													minDate={moment(form.fecha_inicio, 'YYYY/MM/DD hh:mm a').add(30,'Minutes')}
