@@ -736,7 +736,7 @@ export default class AnalyticalCampaing extends Component {
                         <RctCollapsibleCard
                             customClasses=""
                             colClasses="col-sm-12 col-md-6 col-lg-6 d-sm-full"
-                            heading={"Top 10 de Edades más Recurrentes"}
+                            heading={"Concentracion de Registros por Edad"}
                             collapsible
                             //reloadable
                             fullBlock

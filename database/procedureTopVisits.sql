@@ -39,7 +39,7 @@ BEGIN
 	   execute topVisits;
 	   SET @countPrimary = @countPrimary+1;
    end while;
-   SELECT SUM(registros) as registros, visitas from tableTopVisits GROUP BY visitas ORDER BY visitas desc LIMIT 10;
+   SELECT SUM(registros) as registros, visitas from tableTopVisits GROUP BY visitas ORDER BY visitas asc LIMIT 10;
   
 END//
 DELIMITER ;

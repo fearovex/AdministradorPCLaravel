@@ -102,9 +102,13 @@ class GraficasController extends Controller
 
     public function TopCampaings(Request $request){
         $database = session('database');
+        $fecha_inicial = '"'.date('Y-m-d H:i:00', strtotime($request->initialDate)).'"';
+        $fecha_final = '"'.date('Y-m-d H:i:00', strtotime($request->finalDate)).'"';
+        $campania =$request->id_event;
         $locacion = $request->id_location;
+        
         $dataTop = DB::select(
-            "call dataTopCampaings('".$database."','".$locacion."')"
+            "call dataTopCampaings('".$database."','".$locacion."','".$campania."','".$fecha_inicial."','".$fecha_final."')"
         );
         return $dataTop;
     }
@@ -120,9 +124,14 @@ class GraficasController extends Controller
 
     public function TopZones(Request $request){
         $database = session('database');
+        $fecha_inicial = '"'.date('Y-m-d H:i:00', strtotime($request->initialDate)).'"';
+        $fecha_final = '"'.date('Y-m-d H:i:00', strtotime($request->finalDate)).'"';
+        $campania =$request->id_event;
+
         $locacion = $request->id_location;
+
         $dataZones = DB::select(
-            "call dataTopZones('".$database."','".$locacion."')"
+            "call dataTopZones('".$database."','".$locacion."','".$campania."','".$fecha_inicial."','".$fecha_final."')"
         );
         return $dataZones;
     }

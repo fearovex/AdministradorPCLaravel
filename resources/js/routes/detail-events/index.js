@@ -227,7 +227,7 @@ export default class DetailEvents extends Component {
 		const { form } = this.state;
 
 		const options = {
-			responsive: 'stacked',
+			responsive: 'scrollMaxHeight',
 			print: false,
 			selectableRows: false,
 			downloadOptions: { 

@@ -199,24 +199,21 @@ export default class Voucher extends Component {
 		}
 		if(activarUso){
 			if(etiqueta == ''){
-				NotificationManager.error('El campo etiqueta es obligatorio!','',5000);
+				NotificationManager.error('El campo etiqueta es obligatorio','',5000);
 			}
 			if(numerovouchers == ''){
-				NotificationManager.error('El campo de número de vouchers es obligatorio (Min: 1 Voucher)!','',5000);
+				NotificationManager.error('El campo de número de vouchers es obligatorio (Min: 1 Voucher)','',5000);
 			}
 			if(numerousos == ''){
-				NotificationManager.error('El campo cantidad de usos es obligatorio (Min: 1 Uso)!','',5000);
+				NotificationManager.error('El campo cantidad de usos es obligatorio (Min: 1 Uso)','',5000);
 			}
-			if(diasDisponibles == ''){
-				NotificationManager.error('El campo días es obligatorio (Min: 1 Día)!','',5000);
+			if((diasDisponibles == '' && horasDisponibles == '') && (minutosDisponibles <= 29)){
+				NotificationManager.error('El campo Minutos disponibles debe tener como minimo 30 mins','',5000);
 			}
-			if(horasDisponibles == ''){
-				NotificationManager.error('El campo cantidad de usos es obligatorio (Min: 1 Hora)!','',5000);
+			if((diasDisponibles == '') && (horasDisponibles == '' && minutosDisponibles == '')){
+				NotificationManager.error('Los campos, días, horas y minutos disponibles, por lo menos uno, es obligatorio','',5000);
 			}
-			if(minutosDisponibles == ''){
-				NotificationManager.error('El campo cantidad de usos es obligatorio (Min: 1 Uso)!','',5000);
-			}
-			if(((diasDisponibles != '' && horasDisponibles !='') && (minutosDisponibles != '')) && ((etiqueta !='' && numerovouchers!= '') && (numerousos !=''))){
+			if((((diasDisponibles == '' && horasDisponibles == '') && (minutosDisponibles >= 30)) || (((((((diasDisponibles == '' && minutosDisponibles == '') && (horasDisponibles != '')) || ((horasDisponibles == '' && minutosDisponibles == '') && (diasDisponibles != ''))) || ((horasDisponibles != '' && minutosDisponibles != '') && (diasDisponibles == ''))) || ((horasDisponibles != '' && diasDisponibles != '') && (minutosDisponibles == ''))) || ((minutosDisponibles != '' && diasDisponibles != '') && (horasDisponibles == ''))) || ((minutosDisponibles != '' && diasDisponibles != '') && (horasDisponibles != '')))) && ((etiqueta !='' && numerovouchers!= '') && (numerousos !=''))){
 				try {
 					let config = {
 						method: 'POST',
@@ -372,11 +369,11 @@ export default class Voucher extends Component {
 				}
 			})
 		}
-		else if (e.target.name === 'diasDisponibles' && e.target.value > 355) {
+		else if (e.target.name === 'diasDisponibles' && e.target.value > 359) {
 			this.setState({
 				form: {
 					...this.state.form,
-					[e.target.name]: "355",
+					[e.target.name]: "359",
 				}
 			})
 		}
@@ -392,7 +389,7 @@ export default class Voucher extends Component {
 			this.setState({
 				form: {
 					...this.state.form,
-					[e.target.name]: "24",
+					[e.target.name]: "23",
 				}
 			})
 		}
@@ -404,11 +401,11 @@ export default class Voucher extends Component {
 				}
 			})
 		}
-		else if (e.target.name === 'minutosDisponibles' && e.target.value > 60) {
+		else if (e.target.name === 'minutosDisponibles' && e.target.value > 59) {
 			this.setState({
 				form: {
 					...this.state.form,
-					[e.target.name]: "60",
+					[e.target.name]: "59",
 				}
 			})
 		}
@@ -684,7 +681,7 @@ export default class Voucher extends Component {
 												<Input
 													type="number"
 													min={1}
-													max={355}
+													max={359}
 													autoComplete="off"
 													placeholder="Días disponibles"
 													name="diasDisponibles"
@@ -708,7 +705,7 @@ export default class Voucher extends Component {
 											</div>
 											<div className="col-lg-4 mb-4">
 												<Input
-													min={1}
+													min={30}
 													max={59}
 													autoComplete="off"
 													type="number"
@@ -750,57 +747,57 @@ export default class Voucher extends Component {
 					<RctCardContent>
 						<List className="row list-unstyled p-0 ">
 							<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
-								<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
-									Etiqueta de los Vouchers : {form.etiqueta}
+								<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
+									<span>Etiqueta de los Vouchers : <span className="font-weight-bold">{form.etiqueta}</span></span>
 								</p>
 							</ListItem>
 							<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
-								<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
-									Cantidad de Vouchers Generados : {form.numerovouchers}
+								<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
+									<span>Cantidad de Vouchers Generados : <span className="font-weight-bold">{form.numerovouchers}</span></span>
 								</p>
 							</ListItem>
 							<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
-								<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
-									Cantidad de Usos por Vouchers : {form.numerousos}
+								<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
+									<span>Cantidad de Usos por Vouchers : <span className="font-weight-bold">{form.numerousos}</span></span>
 								</p>
 							</ListItem>
 							<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
-								<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
-									Opción de Caducidad : {form.nuncaExpira ? 'Nunca Expira' : (form.expira ? 'Expira' : 'Activar Una Vez Se Use')}
+								<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
+									<span>Opción de Caducidad : <span className="font-weight-bold">{form.nuncaExpira ? 'Nunca Expira' : (form.expira ? 'Expira' : 'Activar Una Vez Se Use')}</span></span>
 								</p>
 							</ListItem>
 							{form.expira &&
 								<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
-									<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
-										Fecha de Inicio : {form.fecha_inicio}
+									<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
+										<span>Fecha de Inicio : <span className="font-weight-bold">{form.fecha_inicio}</span></span>
 									</p>
 								</ListItem>
 							}
 							{form.expira &&
 								<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
-									<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
-										Fecha de Final : {form.fecha_fin}
+									<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
+										<span>Fecha de Final : <span className="font-weight-bold">{form.fecha_fin}</span></span>
 									</p>
 								</ListItem>
 							}
 							{!form.expira && !form.nuncaExpira &&
 								<ListItem className="p-0 col-lg-4 col-md-4 col-sm-12 mb-10 align-content-left">
-									<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
-										Dias Disponibles : {form.diasDisponibles}
+									<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
+										<span>Dias Disponibles : <span className="font-weight-bold">{form.diasDisponibles}</span></span>
 									</p>
 								</ListItem>
 							}
 							{!form.expira && !form.nuncaExpira &&
 								<ListItem className="p-0 col-lg-4 col-md-4 col-sm-12 mb-10 align-content-left">
-									<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
-										Horas Disponibles : {form.horasDisponibles}
+									<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
+										<span>Horas Disponibles : <span className="font-weight-bold">{form.horasDisponibles}</span></span>
 									</p>
 								</ListItem>
 							}
 							{!form.expira && !form.nuncaExpira &&
 								<ListItem className="p-0 col-lg-4 col-md-4 col-sm-12 mb-10 align-content-left">
-									<p className="col-lg-12 col-md-12 col-sm-12 mr-10 font-weight-bold">
-										Minutos Disponibles : {form.minutosDisponibles}
+									<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
+										<span>Minutos Disponibles : <span className="font-weight-bold">{form.minutosDisponibles}</span></span>
 									</p>
 								</ListItem>
 							}
