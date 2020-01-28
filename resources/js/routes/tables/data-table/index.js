@@ -50,7 +50,7 @@ class DataTable extends React.Component {
 		];
 		const options = {
 			filterType: 'dropdown',
-			responsive: 'stacked'
+			responsive: 'scrollMaxheight'
 		};
 		return (
 			<div className="data-table-wrapper">

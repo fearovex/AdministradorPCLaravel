@@ -26,7 +26,9 @@ BEGIN
 		  apellidos varchar(100),
 		  fecha_creacion VARCHAR(100),
 		  ip varchar(100),
-		  nombreCampania VARCHAR(100)
+		  nombreCampania VARCHAR(100),
+		  tablaCampania VARCHAR(100),
+		  idUsuario int
 		);
 		
 	while @countPrimary <= @countCampaings do
@@ -34,7 +36,7 @@ BEGIN
 	set @queryNameCampaing = (select nombre from nameCampaings where id=@countPrimary);  
    	
 		SET @queryTableLastTen = CONCAT('
-        insert into dataLastTen (nombre,apellidos,fecha_creacion,ip,nombreCampania) select nombre, apellidos, fecha_creacion, ip_cliente,','"',@queryNameCampaing,'"',' AS nombreCampania from ',nameDatabase,'.',@queryNameTables
+        insert into dataLastTen (nombre,apellidos,fecha_creacion,ip,nombreCampania,tablaCampania,idUsuario) select nombre, apellidos, fecha_creacion, ip_cliente,','"',@queryNameCampaing,'"',' AS nombreCampania,','"',@queryNameTables,'"',' as tablaCampania, id as idUsuario  from ',nameDatabase,'.',@queryNameTables
         );
 		PREPARE campaings FROM @queryTableLastTen;
    	execute campaings;
@@ -42,6 +44,6 @@ BEGIN
    	Set @countPrimary = @countPrimary+1;
    end while;
 
-   SELECT @i := @i + 1 as posTop, nombre AS Nombres, apellidos AS Apellidos, fecha_creacion AS 'Fecha_Registro', ip AS IP, nombreCampania AS 'Campaña' FROM dataLastTen cross join (select @i := 0) d order by fecha_creacion desc LIMIT 10;
+   SELECT @i := @i + 1 as posTop, nombre AS Nombres, apellidos AS Apellidos, fecha_creacion AS 'Fecha_Registro', ip AS IP, nombreCampania AS 'Campaña', tablaCampania, idUsuario FROM dataLastTen cross join (select @i := 0) d order by fecha_creacion desc LIMIT 10;
 END//
 DELIMITER ;
