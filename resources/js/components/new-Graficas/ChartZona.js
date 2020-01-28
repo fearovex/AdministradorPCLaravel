@@ -7,8 +7,6 @@ import React, { Component } from 'react';
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
-import SweetAlert from 'react-bootstrap-sweetalert'
-import MUIDataTable from "mui-datatables";
 import am4themes_dark from "@amcharts/amcharts4/themes/dark";
 
 am4core.useTheme(am4themes_dark);
@@ -22,17 +20,6 @@ class ChartZona extends Component {
 
       this.state={
          props: '',
-         columns: [],
-         data: [],
-         error: null,
-         id:0,
-         prompt: false,
-         modaledit:false,
-         zona:[],
-                  		
-         form: {
-            nombre: ""
-            }
       }
    }
 
@@ -109,15 +96,6 @@ class ChartZona extends Component {
     
     }
 
-   onCancel(key) {
-      this.setState({ [key]: false })
-
-      }
-
-      openAlert(key) {
-         this.setState({ [key]: true });
-      }
-
    componentWillUnmount() {
       if (this.chart) {
          this.chart.dispose();
@@ -125,33 +103,8 @@ class ChartZona extends Component {
    }
 
    render() {
-
-      const { prompt } = this.state;
-      const columns = this.state.columns;
-      const data = this.state.data;
-      const options = {
-         filterType: 'dropdown',
-         selectableRows: false,
-			responsive: 'scrollMaxHeight'
-		};
       return (
-         <div id="chartzona" style={{ width: "100%", height: "300px" }}>
-            <SweetAlert
-                     btnSize="sm"
-                     show={prompt}
-                     confirmBtnText="Cancelar"
-                     confirmBtnBsStyle="danger"
-                     title="Detalle Genero"
-                     onConfirm={() => this.onCancel('prompt')}
-               >
-                  <MUIDataTable
-                     data={data}
-                     columns={columns}
-                     options={options}
-                  />
-
-               </SweetAlert>
-         </div>
+         <div id="chartzona" style={{ width: "100%", height: "300px" }}></div>
       );
    }
 }

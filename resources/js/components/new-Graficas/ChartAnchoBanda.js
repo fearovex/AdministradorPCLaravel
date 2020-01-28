@@ -8,13 +8,9 @@ import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated /* am4themes_dataviz */ from "@amcharts/amcharts4/themes/animated";
 import am4lang_es_ES from "@amcharts/amcharts4/lang/es_ES";
-import SweetAlert from 'react-bootstrap-sweetalert'
-import MUIDataTable from "mui-datatables";
-// am4core.useTheme(am4themes_dataviz);
 am4core.useTheme(am4themes_animated);
 
 // rct card box
-import { RctCardContent } from 'Components/RctCard';
 
 class ChartAnchoBanda extends Component {
    constructor(props){
@@ -22,17 +18,6 @@ class ChartAnchoBanda extends Component {
 
       this.state={
          props: '',
-         columns: [],
-         data: [],
-         error: null,
-         id:0,
-         prompt: false,
-         modaledit:false,
-         zona:[],
-                  		
-         form: {
-            nombre: ""
-            }
       }
    }
 
@@ -53,45 +38,6 @@ class ChartAnchoBanda extends Component {
    }
 
    async handleChart(data = []) {
-      // let chart = am4core.create("chartpais", am4charts.PieChart);
-      // chart.hiddenState.properties.opacity = 0;
-
-      // // Add data
-      // chart.data = data;
-
-      // var series = chart.series.push(new am4charts.PieSeries());
-      // series.dataFields.value = "personas";
-      // series.dataFields.radiusValue = "personas";
-      // series.dataFields.category = "id_pais";
-      // series.slices.template.cornerRadius = 6;
-      // series.colors.step = 3;
-
-      // series.labels.template.disabled = true;
-      // series.ticks.template.disabled = true;
-
-      // series.hiddenState.properties.endAngle = -90;
-
-      // // Add a legend
-      // chart.legend = new am4charts.Legend();
-      // chart.legend.position = "left";
-      // chart.legend.width = 100;
-      // chart.legend.labels.template.maxWidth = 150;
-      // chart.legend.labels.template.truncate = true;
-      // chart.legend.markers.template;
-      // var markerTemplate = chart.legend.markers.template;
-      // markerTemplate.width = 10;
-      // markerTemplate.height = 10;
-
-      // this.chart = chart;
-
-      // series.slices.template.events.on("hit", function(ev) {
-      //    this.openAlert('prompt');
-      //    this.setState({
-      //       columns: [ev.target._dataItem.category],
-      //       data: [[ev.target._dataItem.value]]
-      //    })
-      //  }, this);
-      // chart.legend = new am4charts.Legend();
       let chart = am4core.create("chartBandWidth", am4charts.XYChart);
       chart.language.locale = am4lang_es_ES;
       chart.paddingRight = 20;
@@ -144,15 +90,6 @@ class ChartAnchoBanda extends Component {
       this.chart = chart;
    }
 
-   onCancel(key) {
-      this.setState({ [key]: false })
-
-   }
-
-   openAlert(key) {
-      this.setState({ [key]: true });
-   }
-
    componentWillUnmount() {
       if (this.chart) {
          this.chart.dispose();
@@ -161,10 +98,7 @@ class ChartAnchoBanda extends Component {
 
    render() {
       return (
-         <RctCardContent>
-            <div id="chartBandWidth" style={{ width: "100%", height: "300px" }}>
-            </div>
-         </RctCardContent>
+         <div id="chartBandWidth" style={{ width: "100%", height: "300px" }}></div>
       );
    }
 }
