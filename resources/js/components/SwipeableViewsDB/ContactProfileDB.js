@@ -7,15 +7,8 @@ import ListItem from '@material-ui/core/ListItem';
 import { RctCardContent } from 'Components/RctCard';
 
 class ContactProfileDB extends Component {
-
-
    render() {
-   //  const { rowData, columns } = this.props
-   //  let objectDataUser = {}
-
-   //  columns.forEach((column, i) => objectDataUser[column] = rowData[i]);
-
-   //  console.log(objectDataUser)
+    const { rowData } = this.props
       return (
          <RctCardContent>
             <div className="ongoing-projects-wrap paddingInfo">
@@ -26,7 +19,7 @@ class ContactProfileDB extends Component {
                         Nombre :
                      </span>
                      <span className=" text-truncate">
-                        {/* {objectDataUser.Nombre} */}
+                        {rowData[0] && rowData[0].nombre}
                      </span>
                   </ListItem>
                   <ListItem className="p-0 d-flex justify-content-start align-content-center">
@@ -35,10 +28,10 @@ class ContactProfileDB extends Component {
                         Apellidos :
                      </span>
                      <span className=" text-truncate">
-                        {/* {objectDataUser.Apellidos} */}
+                        {rowData[0] && rowData[0].apellidos}
                      </span>
                   </ListItem>
-                  {/* {objectDataUser.Edad && objectDataUser.Telefono ? */}
+                  {rowData[0] && (rowData[0].edad && rowData[0].telefono) ?
                     <div>
                         <ListItem className="p-0 d-flex justify-content-start align-content-center">
                             <span className="mr-3 d-flex fw-semi-bold ">
@@ -46,7 +39,7 @@ class ContactProfileDB extends Component {
                             Edad :
                             </span>
                             <span className=" text-truncate">
-                            {/* {objectDataUser.Edad} */}
+                            {rowData[0] && rowData[0].edad}
                             </span>
                         </ListItem>
                         <ListItem className="p-0 d-flex justify-content-start align-content-center">
@@ -55,22 +48,22 @@ class ContactProfileDB extends Component {
                             Telefono :
                             </span>
                             <span className=" text-truncate">
-                            {/* {objectDataUser.Telefono} */}
+                            {rowData[0] && rowData[0].telefono}
                             </span>
                         </ListItem>
-                    </div>
-                    {/* : */}
-                    <ListItem className="p-0 d-flex justify-content-start align-content-center">
+                     </div>
+                     :
+                     <ListItem className="p-0 d-flex justify-content-start align-content-center">
                         <span className="mr-3 d-flex fw-semi-bold ">
                            <i className="material-icons mr-10 "> loyalty</i>
                            Número del Voucher
                         </span>
                         <span className=" text-truncate">
-                           {/* {objectDataUser["Numero de Vouchers"]} */}
+                           {rowData[0] && rowData[0].num_voucher}
                         </span>
                      </ListItem>
-                  {/* } */}
-                 {/* {objectDataUser.Email? */}
+                  }
+                 {rowData[0] && rowData[0].email?
                     <ListItem className="p-0 d-flex justify-content-start align-content-center">
                         <span className="mr-3 d-flex fw-semi-bold ">
                             
@@ -78,20 +71,20 @@ class ContactProfileDB extends Component {
                             Correo Electrónico :
                         </span>
                         <span className=" text-truncate">
-                            {/* {objectDataUser.Email} */}
+                            {rowData[0].email}
                         </span>
                     </ListItem>
-                    {/* : */}
+                    :
                     <ListItem className="p-0 d-flex justify-content-start align-content-center">
                         <span className="mr-3 d-flex fw-semi-bold ">
                             <i className="material-icons mr-10 ">local_hotel</i>
                             Número Habitación :
                         </span>
                         <span className=" text-truncate">
-                            {/* {objectDataUser["N° Habitacion"]} */}
+                            {rowData[0] && rowData[0].num_habitacion}
                         </span>
                     </ListItem>
-                 {/* } */}
+                  }
                </List>
                <ListItem className="p-0 d-flex justify-content-start align-content-center">
                      <span className="mr-3 d-flex fw-semi-bold ">
@@ -99,7 +92,7 @@ class ContactProfileDB extends Component {
                         Sistema Operativo:
                      </span>
                      <span className=" text-truncate">
-                        {/* {objectDataUser["Sistema Operativo"]} */}
+                        {rowData[0] && rowData[0].os}
                      </span>
                   </ListItem>
 

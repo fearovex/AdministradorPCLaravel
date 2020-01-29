@@ -26,15 +26,68 @@ const LastTenUsersCampaingColumns = ['Posicion','Nombres', 'Apellidos', 'Fecha R
 
 class LastTenUsersList extends Component {
    
-
-   state={
-      modalInfo: false
+   constructor(props){
+      super(props)
+      this.state ={
+         modalInfo: false,
+         form:{
+            rowData:[],
+            idUsuario: "",
+            nombreCampania: ""
+         },
+         prefferDayOfWeekDB:[]
+      }
+      this.openModalInfo = this.openModalInfo.bind(this)
    }
 
-   openModalInfo(){
-		this.setState({ 
-			modalInfo: true 
-		});
+   async openModalInfo(idUsuario,nombreCampania){
+      this.setState({
+         modalInfo: true,
+      
+      })
+      
+      try {
+         let config = {
+            method: 'POST',
+            headers: {
+               'Accept': 'application/json',
+               'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({idUsuario:idUsuario, nombreCampania:nombreCampania })
+         }
+         let res = await fetch(`${localStorage.urlDomain}api/userInfoDB`, config);
+         let rowData = await res.json()
+
+         this.setState({
+            form:{
+                  ...this.state.form,
+               rowData:rowData,
+               idUsuario:idUsuario,
+               nombreCampania:nombreCampania,
+            },
+         })
+
+         let config1 = {
+            method: 'POST',
+            headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.state.form)
+         }
+         console.log(config1)
+         let res1 = await fetch(`${localStorage.urlDomain}api/prefferWeekDayDB`, config1);
+         let prefferDayOfWeekDB = await res1.json()
+
+         this.setState({
+            prefferDayOfWeekDB:prefferDayOfWeekDB
+         })
+        
+      } catch (error) {
+         this.setState({
+            error:error
+         })
+      }
 	}
 
 	handleCloseModal(e){
@@ -46,8 +99,7 @@ class LastTenUsersList extends Component {
 
    render() {
       const { listData } = this.props;
-      const { modalInfo } = this.state;
-      console.log(listData)
+      const { modalInfo, form, prefferDayOfWeekDB} = this.state;
       return (
          <div className="Transaction-table-wrap Tab-wrap" style={{marginTop: "4px"}}>
             
@@ -63,7 +115,7 @@ class LastTenUsersList extends Component {
                            </TableHead>
                            <TableBody >
                               {listData.map((list, index) => (
-                                 <TableRow key={index} onClick={() => this.openModalInfo()}>
+                                 <TableRow key={index} onClick={(e) => this.openModalInfo(list.idUsuario,list.tablaCampania)}>
                                     <TableCell align='center'>#{index+1}</TableCell>
                                     <TableCell>{list.Nombres}</TableCell>
                                     <TableCell>{list.Apellidos}</TableCell>
@@ -73,24 +125,29 @@ class LastTenUsersList extends Component {
                               ))}
                            </TableBody>
                         </Table>
+                       
                   </div>
             </Scrollbars>
             <SweetAlert
-						btnSize="sm"
-						show={modalInfo}
-						// showCancel
-						confirmBtnText="Cerrar"
-						// cancelBtnText="Cancelar"
-						// cancelBtnBsStyle="danger"
-						// confirmBtnBsStyle="primary"
-						onConfirm={() => this.handleCloseModal(event)}
-						// onCancel={() => this.onCancel('modalEmailCsv')}
-					>
-						<SwipeableViewInfoDB 
-							// rowData={rowData}
-							// columns={columns}
-						/>
-				</SweetAlert>
+               btnSize="sm"
+               show={modalInfo}
+               // showCancel
+               confirmBtnText="Cerrar"
+               // cancelBtnText="Cancelar"
+               // cancelBtnBsStyle="danger"
+               // confirmBtnBsStyle="primary"
+               onConfirm={() => this.handleCloseModal(event)}
+               // onCancel={() => this.onCancel('modalEmailCsv')}
+            >
+               <SwipeableViewInfoDB 
+                  rowData={form.rowData}
+                  idCampaing={form.idUsuario}
+                  nameCampaing={form.nombreCampania}
+                  prefferDayOfWeekDB= {prefferDayOfWeekDB}
+
+                  
+               />
+            </SweetAlert>
          </div>
       );
    }

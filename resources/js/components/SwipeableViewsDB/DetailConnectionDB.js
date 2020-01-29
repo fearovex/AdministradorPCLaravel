@@ -7,12 +7,7 @@ import { RctCardContent } from 'Components/RctCard';
 
 class DetailConnectionDB extends Component {
    render() {
-    const { rowData, columns } = this.props
-    let objectDataUser = {}
-
-    columns.forEach((column, i) => objectDataUser[column] = rowData[i]);
-
-    console.log(objectDataUser)
+    const { rowData } = this.props
       return (
          <RctCardContent>
             <div className="ongoing-projects-wrap paddingInfo">
@@ -23,7 +18,7 @@ class DetailConnectionDB extends Component {
                         Ip Cliente :
                      </span>
                      <span className=" text-truncate">
-                        {/* {objectDataUser["Ip Cliente"]} */}
+                        {rowData[0] && rowData[0].ip_cliente}
                      </span>
                   </ListItem>
                   <ListItem className="p-0 d-flex justify-content-start align-content-center">
@@ -32,7 +27,7 @@ class DetailConnectionDB extends Component {
                         Ip Dispositivo :
                      </span>
                      <span className=" text-truncate">
-                        {/* {objectDataUser["Ip Dispositivo"]} */}
+                        {rowData[0] && rowData[0].ip_ap}
                      </span>
                   </ListItem>
                   <ListItem className="p-0 d-flex justify-content-start align-content-center">
@@ -41,7 +36,7 @@ class DetailConnectionDB extends Component {
                         Mac Cliente :
                      </span>
                      <span className=" text-truncate">
-                        {/* {objectDataUser["Mac Cliente"]} */}
+                        {rowData[0] && rowData[0].mac_cliente}
                      </span>
                   </ListItem>
                   <ListItem className="p-0 d-flex justify-content-start align-content-center">
@@ -50,7 +45,7 @@ class DetailConnectionDB extends Component {
                         Mac Dispositivo :
                      </span>
                      <span className=" text-truncate">
-                        {/* {objectDataUser["Mac Dispositivo"]} */}
+                        {rowData[0] && rowData[0].mac_ap}
                      </span>
                   </ListItem>
                   <ListItem className="p-0 d-flex justify-content-start align-content-center">
@@ -59,7 +54,7 @@ class DetailConnectionDB extends Component {
                         SSID :
                      </span>
                      <span className=" text-truncate">
-                           {/* {objectDataUser.Ssid} */}
+                           {rowData[0] && rowData[0].ssid}
                      </span>
                   </ListItem>
                </List>
