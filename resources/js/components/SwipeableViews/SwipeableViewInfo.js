@@ -10,7 +10,8 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import ContactProfile from 'Components/SwipeableViews/ContactProfile';
 import DetailConnection from 'Components/SwipeableViews/DetailConnection';
-import './styles.css';
+import 'Components/SwipeableViews/styles.css';
+import CardInfo from "Components/new-Graficas/CardInfo";
 
 function TabContainer({ children, dir }) {
 	return (
@@ -22,9 +23,43 @@ function TabContainer({ children, dir }) {
 
 class SwipeableViewInfo extends Component {
 
-   state = {
-      value: 0,
-   };
+   constructor(props){
+      super(props)
+      const { rowData, columns} = this.props;
+      const id_campaing = localStorage.user_campaing;
+      let objectDataUser = {}
+      columns.forEach((column, i) => objectDataUser[column] = rowData[i]);
+      this.state = {
+         value: 0,
+         rowData: rowData,
+         columns: columns,
+         prefferDayOfWeek:[],
+         form: {
+            objectDataUser: objectDataUser,
+            id_campaing: id_campaing
+         }
+      }
+   }
+
+   async componentDidMount(){
+      try {
+         let config = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.state.form)
+        }
+        let res = await fetch(`${localStorage.urlDomain}api/prefferWeekDay`, config);
+        let prefferDayOfWeek = await res.json()
+        this.setState({
+         prefferDayOfWeek:prefferDayOfWeek
+        })
+      } catch (error) {
+         
+      }
+   }
    
 	handleChangeTabs = (event, value) => {
 		this.setState({ value });
@@ -35,10 +70,11 @@ class SwipeableViewInfo extends Component {
     };
     
    render() {
-      const { rowData, columns } = this.props;
+      const { rowData, columns, prefferDayOfWeek} = this.state;
+     
       const theme  = {
 			direction: 'rlt'
-		}
+      }
       return (
          <div className="Tab-wrap">
          <AppBar position="static" color="default">
@@ -68,10 +104,38 @@ class SwipeableViewInfo extends Component {
                </div>
                <div className="card mb-0 transaction-box">
                   <TabContainer dir={theme.direction}>
-                     <DetailConnection 
-                        rowData={rowData}
-                        columns={columns}
-                     />
+                     <div className="row">
+                        <div className="col-lg-6 col-sm-6 col-xl-6 col-6 col-md-6">
+                           <DetailConnection 
+                              rowData={rowData}
+                              columns={columns}
+                           />
+                        </div>
+                        <div className="col-lg-6 col-sm-6 col-xl-6 col-6 col-md-6">
+                           <CardInfo 
+                              titleName={"Tiempo de conexión(hrs)"}
+                              dataNum={250}
+                              backgroundColor=""
+                              classColor="primary"
+                              className="styleCard1"
+                              customIcon="timer"
+                           />
+                           {prefferDayOfWeek[0] ?
+                           <CardInfo 
+                              titleName={`Día más visitado:  ${(prefferDayOfWeek[0].dia_preferido).charAt(0).toUpperCase()+(prefferDayOfWeek[0].dia_preferido).slice(1)}`}
+                              dataNum={prefferDayOfWeek[0].cantidad}
+                              backgroundColor=""
+                              classColor="secondary"
+                              className="styleCard1"
+                              customIcon="calendar-alt"
+                           />
+                              :
+                              <div>
+
+                              </div>
+                           }
+                        </div>
+                     </div>
                   </TabContainer>
                </div>
                <div className="card mb-0 transaction-box">

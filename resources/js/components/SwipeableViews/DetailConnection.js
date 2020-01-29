@@ -13,7 +13,6 @@ class DetailConnection extends Component {
 
     columns.forEach((column, i) => objectDataUser[column] = rowData[i]);
 
-    console.log(objectDataUser)
       return (
          <RctCardContent>
             <div className="ongoing-projects-wrap paddingInfo">

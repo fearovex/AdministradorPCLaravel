@@ -31,11 +31,12 @@ Route::group(['middleware' => 'cors'], function() {
 
         Route::post('/graficas', 'GraficasController@Consulta');
 
-        
-        
-        Route::post('/detailEvents','DetailEventsController@index');
-        
+        //apis para detalle de campañas
+        Route::post('/detailEvents','DetailEventsController@index');   
+
         Route::post('/nameColumnNames','DetailEventsController@getColumnNames');
+
+        Route::post('/prefferWeekDay','DetailEventsController@prefferWeekDayUser');
         
         Route::resource('/locations','LocationsController');    
         
@@ -86,5 +87,10 @@ Route::group(['middleware' => 'cors'], function() {
         Route::post('/TopFiveRooms', 'GraficasController@TopFiveRooms');
 
         Route::post('/TopTenUsersCampaing', 'GraficasController@TopTenUsersCampaing');
+
+        Route::post('/userInfoDB', 'GraficasController@UserInfoDB');
+
+        Route::post('/prefferWeekDayDB', 'GraficasController@PrefferWeekDayDB');
+        
     });
  });

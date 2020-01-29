@@ -12,10 +12,7 @@ class ContactProfile extends Component {
    render() {
     const { rowData, columns } = this.props
     let objectDataUser = {}
-
     columns.forEach((column, i) => objectDataUser[column] = rowData[i]);
-
-    console.log(objectDataUser)
       return (
          <RctCardContent>
             <div className="ongoing-projects-wrap paddingInfo">
