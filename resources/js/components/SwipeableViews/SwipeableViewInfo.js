@@ -10,6 +10,7 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import ContactProfile from 'Components/SwipeableViews/ContactProfile';
 import DetailConnection from 'Components/SwipeableViews/DetailConnection';
+import VisitHistory from 'Components/SwipeableViews/VisitHistory';
 import './styles.css';
 
 function TabContainer({ children, dir }) {
@@ -76,7 +77,10 @@ class SwipeableViewInfo extends Component {
                </div>
                <div className="card mb-0 transaction-box">
                   <TabContainer dir={theme.direction}>
-                     hola3
+                     <VisitHistory 
+                        rowData={rowData}
+                        columns={columns}
+                     />
                   </TabContainer>
                </div>
             </SwipeableViews>
