@@ -1,21 +1,18 @@
 import React, { Component } from 'react';
 import MUIDataTable from "mui-datatables";
-import {createMuiTheme, MuiThemeProvider, withStyles} from '@material-ui/core/styles';
 import moment from "moment";
-
-// page title bar
 import PageTitleBar from 'Components/PageTitleBar/PageTitleBar';
-
-// rct card box
 import RctCollapsibleCard from 'Components/RctCollapsibleCard/RctCollapsibleCard';
-
-// intl messages
-import IntlMessages from 'Util/IntlMessages';
 import FilterDateForm from 'Components/FilterDateForm/FilterDateForm';
-import queryString from 'query-string'
 import '../events/styles.css';
 
-
+import SweetAlert from 'react-bootstrap-sweetalert'
+import { withStyles } from '@material-ui/core/styles';
+import SwipeableViews from 'react-swipeable-views';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import SwipeableViewInfo from 'Components/SwipeableViews/SwipeableViewInfo';
 
 
 export default class DetailEvents extends Component {
@@ -38,6 +35,9 @@ export default class DetailEvents extends Component {
 		
         this.state = {
 			error: null,
+			modalInfo: false,
+			value:0,
+			rowData:[],
             form: {
 				filterPersonalizado: false,
                 initialDate: initialDate,
@@ -57,6 +57,7 @@ export default class DetailEvents extends Component {
 		this.handleDateFilterCancel = this.handleDateFilterCancel.bind(this)
 		this.handleChangeFilter = this.handleChangeFilter.bind(this)
 	}
+
 
 	async componentDidMount(){	
 		try {
@@ -221,17 +222,32 @@ export default class DetailEvents extends Component {
 		});
 		this.handleDateFilter()
 	}
-	
+
+	openModalInfo(rowData){
+		this.setState({ 
+			rowData: rowData,
+			modalInfo: true 
+		});
+	}
+
+	handleCloseModal(e){
+		e.preventDefault();
+		this.setState({ 
+			modalInfo: false 
+		});
+	}
+
+
 	render() {
 		const columns = this.state.nameColumns;
-		const { form } = this.state;
-
+		const { form, modalInfo, rowData } = this.state;
 		const options = {
 			responsive: 'scrollMaxHeight',
 			print: false,
 			selectableRows: false,
+			onRowClick: rowData => this.openModalInfo(rowData),
 			downloadOptions: { 
-				filename: 'DetalleCampañasTabla.csv',
+				filename: 'DetalleCampaña.csv',
 				filterOptions: {
 					useDisplayedRowsOnly: true,
 					useDisplayedColumnsOnly: true
@@ -263,10 +279,27 @@ export default class DetailEvents extends Component {
 				</div>
 				<RctCollapsibleCard fullBlock>
 					<MUIDataTable
+						className="classRoot"
 						data={this.state.dataDetails}
 						columns={columns}
 						options={options}
 					/>
+					<SweetAlert
+						btnSize="sm"
+						show={modalInfo}
+						// showCancel
+						confirmBtnText="Cerrar"
+						// cancelBtnText="Cancelar"
+						// cancelBtnBsStyle="danger"
+						// confirmBtnBsStyle="primary"
+						onConfirm={() => this.handleCloseModal(event)}
+						// onCancel={() => this.onCancel('modalEmailCsv')}
+					>
+						<SwipeableViewInfo 
+							rowData={rowData}
+							columns={columns}
+						/>
+					</SweetAlert>
 				</RctCollapsibleCard>
 			</div>
 		)

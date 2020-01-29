@@ -27,11 +27,15 @@ table {
   }
   tbody {
     tr {
+     
       td {
+        
         font-size: $table-tbody-font-size;
         font-weight: $table-tbody-font-weight;
       }
+      
     }
+   
   }
   thead, tbody, tfoot {
     tr {
@@ -169,6 +173,7 @@ table {
 .ReactTable{
    border: 0;
    .rt-thead,.rt-tbody{
+     z-index: 0;
       .rt-tr {
          text-align:left;
       }
@@ -195,7 +200,7 @@ table {
          &:hover{
             background-color: rgba(0, 0, 0, 0.06)
          }
-      }  
+      }
    }
    .rt-thead.-header {
       box-shadow:none;
@@ -216,3 +221,4 @@ table {
      }
    }
 }
+

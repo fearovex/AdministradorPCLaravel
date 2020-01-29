@@ -15,7 +15,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { Badge } from 'reactstrap';
-
+import SwipeableViewInfoDB from 'Components/SwipeableViewsDB/SwipeableViewInfoDB';
+import SweetAlert from 'react-bootstrap-sweetalert'
 // intl messages
 import IntlMessages from 'Util/IntlMessages';
 
@@ -25,10 +26,26 @@ const LastTenUsersCampaingColumns2 = ['Posicion','Nombre', 'Apellido', 'MAC', 'H
 const LastTenUsersCampaingColumns3 = ['Posicion','Nombre', 'Apellido', 'MAC', 'Fecha Registro'];
 
 class LastTenUsersListCampaing extends Component {
+   state={
+      modalInfo: false
+   }
 
+   openModalInfo(){
+		this.setState({ 
+			modalInfo: true 
+		});
+	}
+
+	handleCloseModal(e){
+		e.preventDefault();
+		this.setState({ 
+			modalInfo: false 
+		});
+	}
 
    render() {
       const { listData, vertical } = this.props;
+      const { modalInfo } = this.state;
       return (
          <div className="Transaction-table-wrap Tab-wrap" style={{marginTop: "4px"}}>
             
@@ -45,7 +62,7 @@ class LastTenUsersListCampaing extends Component {
                            </TableHead>
                            <TableBody >
                               {listData && listData.map((list, index) => (
-                                 <TableRow key={index}>
+                                 <TableRow key={index} onClick={() => this.openModalInfo()}>
                                     <TableCell align='center'>#{index+1}</TableCell>
                                     <TableCell>{list.Nombre}</TableCell>
                                     <TableCell>{list.Apellido}</TableCell>
@@ -69,7 +86,7 @@ class LastTenUsersListCampaing extends Component {
                            </TableHead>
                            <TableBody >
                               {listData && listData.map((list, index) => (
-                                 <TableRow key={index}>
+                                 <TableRow key={index} onClick={() => this.openModalInfo()}>
                                     <TableCell align='center'>#{index+1}</TableCell>
                                     <TableCell>{list.Nombre}</TableCell>
                                     <TableCell>{list.Apellido}</TableCell>
@@ -92,7 +109,7 @@ class LastTenUsersListCampaing extends Component {
                            </TableHead>
                            <TableBody >
                               {listData && listData.map((list, index) => (
-                                 <TableRow key={index}>
+                                 <TableRow key={index} onClick={() => this.openModalInfo()}>
                                     <TableCell align='center'>#{index+1}</TableCell>
                                     <TableCell>{list.Nombre}</TableCell>
                                     <TableCell>{list.Apellido}</TableCell>
@@ -105,6 +122,22 @@ class LastTenUsersListCampaing extends Component {
                      }
                   </div>
             </Scrollbars>
+            <SweetAlert
+						btnSize="sm"
+						show={modalInfo}
+						// showCancel
+						confirmBtnText="Cerrar"
+						// cancelBtnText="Cancelar"
+						// cancelBtnBsStyle="danger"
+						// confirmBtnBsStyle="primary"
+						onConfirm={() => this.handleCloseModal(event)}
+						// onCancel={() => this.onCancel('modalEmailCsv')}
+					>
+						<SwipeableViewInfoDB 
+							// rowData={rowData}
+							// columns={columns}
+						/>
+				</SweetAlert>
          </div>
       );
    }
