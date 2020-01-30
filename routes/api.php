@@ -38,6 +38,8 @@ Route::group(['middleware' => 'cors'], function() {
 
         Route::post('/prefferWeekDay','DetailEventsController@prefferWeekDayUser');
         
+        Route::post('/visitHistory','DetailEventsController@visitHistoryUser');
+        
         Route::resource('/locations','LocationsController');    
         
         Route::get('/logout', 'Auth\LoginController@logout');
@@ -92,5 +94,6 @@ Route::group(['middleware' => 'cors'], function() {
 
         Route::post('/prefferWeekDayDB', 'GraficasController@PrefferWeekDayDB');
         
+        Route::post('/visitHistoryDB','GraficasController@visitHistoryUserDB');
     });
  });

@@ -244,7 +244,7 @@ export default class DetailEvents extends Component {
 		const options = {
 			responsive: 'scrollMaxHeight',
 			print: false,
-			selectableRows: false,
+			selectableRows: 'none',
 			onRowClick: rowData => this.openModalInfo(rowData),
 			downloadOptions: { 
 				filename: 'DetalleCampaña.csv',

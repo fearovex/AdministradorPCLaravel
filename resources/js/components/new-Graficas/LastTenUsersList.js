@@ -57,16 +57,17 @@ class LastTenUsersList extends Component {
          }
          let res = await fetch(`${localStorage.urlDomain}api/userInfoDB`, config);
          let rowData = await res.json()
-
+         
+         this.state.form.rowData = rowData;
+         this.state.form.idUsuario = idUsuario;
+         this.state.form.nombreCampania = nombreCampania;
+      } catch (error) {
          this.setState({
-            form:{
-                  ...this.state.form,
-               rowData:rowData,
-               idUsuario:idUsuario,
-               nombreCampania:nombreCampania,
-            },
+            error:error
          })
+      }
 
+      try {
          let config1 = {
             method: 'POST',
             headers: {
@@ -75,14 +76,12 @@ class LastTenUsersList extends Component {
             },
             body: JSON.stringify(this.state.form)
          }
-         console.log(config1)
          let res1 = await fetch(`${localStorage.urlDomain}api/prefferWeekDayDB`, config1);
          let prefferDayOfWeekDB = await res1.json()
 
          this.setState({
             prefferDayOfWeekDB:prefferDayOfWeekDB
          })
-        
       } catch (error) {
          this.setState({
             error:error
@@ -116,6 +115,7 @@ class LastTenUsersList extends Component {
                            <TableBody >
                               {listData.map((list, index) => (
                                  <TableRow key={index} onClick={(e) => this.openModalInfo(list.idUsuario,list.tablaCampania)}>
+                                 {console.log(list)}
                                     <TableCell align='center'>#{index+1}</TableCell>
                                     <TableCell>{list.Nombres}</TableCell>
                                     <TableCell>{list.Apellidos}</TableCell>

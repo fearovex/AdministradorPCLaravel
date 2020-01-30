@@ -6,37 +6,27 @@ import ListItem from '@material-ui/core/ListItem';
 // rct card box
 import { RctCardContent } from 'Components/RctCard';
 
-export default class VisitHistory extends Component {
-    constructor(props){
-        super(props)
-
-        this.state = {
-            history: [],
-            key: '',
-            value: '',
-        }
-    }
-
-    componentDidMount(){
-        const { rowData , columns } = this.props;
-        let objectDataUser = {}
-        columns.forEach((column, i) => objectDataUser[column] = rowData[i]);
-    }
-
+export default class VisitHistory extends Component {    
     render() {
+        const { visitHistory } = this.props;
+
         return (
             <RctCardContent>
-                <div className="ongoing-projects-wrap paddingInfo">
+                <div className="ongoing-projects-wrap paddingInfo" style={{maxHeight: '306.5px', overflow: 'auto'}}>
                     <List className="project-list list-unstyled p-0 ">
-                        <ListItem className="p-0 d-flex justify-content-start align-content-center">
-                            <span className="mr-3 d-flex fw-semi-bold ">
-                                <i className="material-icons mr-10 ">signal_cellular_4_bar</i>
-                                Ip Cliente :
-                            </span>
-                            <span className=" text-truncate">
-                                {}
-                            </span>
-                        </ListItem>
+                        {visitHistory &&
+                            visitHistory.map((visit, index) => (
+                            <ListItem className="p-0 d-flex justify-content-start align-content-center" key={index}>
+                                <span className="mr-3 d-flex fw-semi-bold ">
+                                    <i className="material-icons mr-10 ">today</i>
+                                    {visit.Fecha_Registro}
+                                </span>
+                                <span className=" text-truncate">
+                                    {}
+                                </span>
+                            </ListItem>
+                            ))
+                        }
                     </List>
                 </div>
             </RctCardContent>

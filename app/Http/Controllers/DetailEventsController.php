@@ -74,4 +74,31 @@ class DetailEventsController extends Controller
             return  response()->json($prefferWeekDayUser);
         }
     }
+
+    public function visitHistoryUser(Request $request){
+        $database = session('database');
+        $tabla = DB::connection($database)->table('campania')->select('campania')->where('id', $request->id_campaing)->first();
+
+        // return response()->json($request->objectDataUser["Email"]);
+        if(isset($request->objectDataUser["Numero de Vouchers"])){
+            $queryChangeEs = "SET @@lc_time_names = 'es_CO'";
+            $query = "select fecha_creacion as 'Fecha_Registro' FROM $database.$tabla->campania WHERE num_voucher = '".$request->objectDataUser["Numero de Vouchers"]."' ORDER BY Fecha_Registro desc";
+            
+            DB::select($queryChangeEs);
+            $visitHistory = DB::select($query);
+            $queryChangeEn= "SET @@lc_time_names = 'en_US'";
+            DB::select($queryChangeEn);
+            return  response()->json($visitHistory);
+        }
+        if(isset($request->objectDataUser["Email"])){
+            $queryChangeEs= "SET @@lc_time_names = 'es_CO'";
+            $query = "select fecha_creacion as 'Fecha_Registro' FROM $database.$tabla->campania WHERE email = '".$request->objectDataUser["Email"]."' ORDER BY Fecha_Registro desc";
+            
+            DB::select($queryChangeEs);
+            $visitHistory = DB::select($query);
+            $queryChangeEn= "SET @@lc_time_names = 'en_US'";
+            DB::select($queryChangeEn);
+            return  response()->json($visitHistory);
+        }
+    }
 }

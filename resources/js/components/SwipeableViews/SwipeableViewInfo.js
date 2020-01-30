@@ -15,18 +15,18 @@ import CardInfo from "Components/new-Graficas/CardInfo";
 import 'Components/SwipeableViews/styles.css';
 
 function TabContainer({ children, dir }) {
-	return (
-	<Typography component="div" dir={dir} style={{ padding: 8 * 3,overflowX: 'hidden'}}>
-		{children}
-	</Typography>
-	);
+   return (
+      <Typography component="div" dir={dir} style={{ padding: 8 * 3, overflowX: 'hidden' }}>
+         {children}
+      </Typography>
+   );
 }
 
 class SwipeableViewInfo extends Component {
 
-   constructor(props){
+   constructor(props) {
       super(props)
-      const { rowData, columns} = this.props;
+      const { rowData, columns } = this.props;
       const id_campaing = localStorage.user_campaing;
       let objectDataUser = {}
       columns.forEach((column, i) => objectDataUser[column] = rowData[i]);
@@ -34,7 +34,8 @@ class SwipeableViewInfo extends Component {
          value: 0,
          rowData: rowData,
          columns: columns,
-         prefferDayOfWeek:[],
+         prefferDayOfWeek: [],
+         visitHistory: [],
          form: {
             objectDataUser: objectDataUser,
             id_campaing: id_campaing
@@ -42,62 +43,87 @@ class SwipeableViewInfo extends Component {
       }
    }
 
-   async componentDidMount(){
+   componentDidMount() {
+      this.handlePrefferDayOfWeek();
+      this.handleVisitHistory();
+   }
+
+   async handlePrefferDayOfWeek(){
       try {
          let config = {
             method: 'POST',
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
+               'Accept': 'application/json',
+               'Content-Type': 'application/json'
             },
             body: JSON.stringify(this.state.form)
-        }
-        let res = await fetch(`${localStorage.urlDomain}api/prefferWeekDay`, config);
-        let prefferDayOfWeek = await res.json()
-        this.setState({
-         prefferDayOfWeek:prefferDayOfWeek
-        })
+         }
+         let res = await fetch(`${localStorage.urlDomain}api/prefferWeekDay`, config);
+         let prefferDayOfWeek = await res.json()
+         this.setState({
+            prefferDayOfWeek: prefferDayOfWeek
+         })
       } catch (error) {
-         
+
       }
    }
-   
-	handleChangeTabs = (event, value) => {
-		this.setState({ value });
-	 };
-  
-	 handleChangeTabsIndex = index => {
-		this.setState({ value: index });
-    };
-    
+
+   async handleVisitHistory(){
+      try {
+         let config = {
+            method: 'POST',
+            headers: {
+               'Accept': 'application/json',
+               'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.state.form)
+         }
+         let res = await fetch(`${localStorage.urlDomain}api/visitHistory`, config);
+         let visitHistory = await res.json()
+         this.setState({
+            visitHistory: visitHistory
+         })
+      } catch (error) {
+
+      }
+   }
+
+   handleChangeTabs = (event, value) => {
+      this.setState({ value });
+   };
+
+   handleChangeTabsIndex = index => {
+      this.setState({ value: index });
+   };
+
    render() {
-      const { rowData, columns, prefferDayOfWeek} = this.state;
-     
-      const theme  = {
-			direction: 'rlt'
+      const { rowData, columns, prefferDayOfWeek, visitHistory } = this.state;
+
+      const theme = {
+         direction: 'rlt'
       }
       return (
          <div className="Tab-wrap">
-         <AppBar position="static" color="default">
-         <Tabs
-            value={this.state.value}
-            onChange={this.handleChangeTabs}
-            indicatorColor="primary"
-            textColor="primary"
-            variant="standard"
-         >
-            <Tab label={'Perfil de Contacto'} />
-            <Tab label={'Detalle de Conexión'} />
-            <Tab label={'Historial de Visitas'} />
-         </Tabs>
-         </AppBar>
+            <AppBar position="static" color="default">
+               <Tabs
+                  value={this.state.value}
+                  onChange={this.handleChangeTabs}
+                  indicatorColor="primary"
+                  textColor="primary"
+                  variant="standard"
+               >
+                  <Tab label={'Perfil de Contacto'} />
+                  <Tab label={'Detalle de Conexión'} />
+                  <Tab label={'Historial de Visitas'} />
+               </Tabs>
+            </AppBar>
             <SwipeableViews
                axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                index={this.state.value}
                onChangeIndex={this.handleChangeTabsIndex}>
                <div className="card mb-0 transaction-box">
                   <TabContainer dir={theme.direction}>
-                     <ContactProfile 
+                     <ContactProfile
                         rowData={rowData}
                         columns={columns}
                      />
@@ -107,13 +133,13 @@ class SwipeableViewInfo extends Component {
                   <TabContainer dir={theme.direction}>
                      <div className="row">
                         <div className="col-lg-6 col-sm-6 col-xl-6 col-6 col-md-6">
-                           <DetailConnection 
+                           <DetailConnection
                               rowData={rowData}
                               columns={columns}
                            />
                         </div>
                         <div className="col-lg-6 col-sm-6 col-xl-6 col-6 col-md-6">
-                           <CardInfo 
+                           <CardInfo
                               titleName={"Tiempo de conexión(hrs)"}
                               dataNum={250}
                               backgroundColor=""
@@ -122,14 +148,14 @@ class SwipeableViewInfo extends Component {
                               customIcon="timer"
                            />
                            {prefferDayOfWeek[0] ?
-                           <CardInfo 
-                              titleName={`Día más visitado:  ${(prefferDayOfWeek[0].dia_preferido).charAt(0).toUpperCase()+(prefferDayOfWeek[0].dia_preferido).slice(1)}`}
-                              dataNum={prefferDayOfWeek[0].cantidad}
-                              backgroundColor=""
-                              classColor="secondary"
-                              className="styleCard1"
-                              customIcon="calendar-alt"
-                           />
+                              <CardInfo
+                                 titleName={`Día más visitado:  ${(prefferDayOfWeek[0].dia_preferido).charAt(0).toUpperCase() + (prefferDayOfWeek[0].dia_preferido).slice(1)}`}
+                                 dataNum={prefferDayOfWeek[0].cantidad}
+                                 backgroundColor=""
+                                 classColor="secondary"
+                                 className="styleCard1"
+                                 customIcon="calendar-alt"
+                              />
                               :
                               <div>
 
@@ -141,14 +167,13 @@ class SwipeableViewInfo extends Component {
                </div>
                <div className="card mb-0 transaction-box">
                   <TabContainer dir={theme.direction}>
-                     <VisitHistory 
-                        rowData={rowData}
-                        columns={columns}
+                     <VisitHistory
+                        visitHistory={visitHistory}
                      />
                   </TabContainer>
                </div>
             </SwipeableViews>
-      </div>	
+         </div>
       );
    }
 }
