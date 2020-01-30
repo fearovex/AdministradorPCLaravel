@@ -46,16 +46,26 @@ class SwipeableViewInfo extends Component {
          let config = {
             method: 'POST',
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
             },
             body: JSON.stringify(this.state.form)
-        }
-        let res = await fetch(`${localStorage.urlDomain}api/prefferWeekDay`, config);
-        let prefferDayOfWeek = await res.json()
-        this.setState({
+         }
+         let res = await fetch(`${localStorage.urlDomain}api/prefferWeekDay`, config);
+         let prefferDayOfWeek = await res.json()
+         this.setState({
          prefferDayOfWeek:prefferDayOfWeek
-        })
+         })
+
+
+        
+         let responseRadius = await fetch(`${localStorage.urlDomain}api/radiusApi`);
+         let radius = await responseRadius.json()
+
+         console.log(radius)
+
+
+
       } catch (error) {
          
       }
