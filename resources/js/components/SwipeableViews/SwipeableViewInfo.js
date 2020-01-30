@@ -66,6 +66,15 @@ class SwipeableViewInfo extends Component {
       } catch (error) {
 
       }
+
+      try {
+         let responseRadius = await fetch(`${localStorage.urlDomain}api/radiusApi`);
+         let radius = await responseRadius.json()
+
+         console.log(radius)
+      } catch (error) {
+         console.log(error)
+      }
    }
 
    async handleVisitHistory(){
