@@ -32,6 +32,7 @@ class SwipeableViewInfo extends Component {
       columns.forEach((column, i) => objectDataUser[column] = rowData[i]);
       this.state = {
          value: 0,
+         error:false,
          rowData: rowData,
          columns: columns,
          prefferDayOfWeek: [],
@@ -64,17 +65,11 @@ class SwipeableViewInfo extends Component {
             prefferDayOfWeek: prefferDayOfWeek
          })
       } catch (error) {
-
+         this.setState({
+            error:error
+         })
       }
 
-      try {
-         let responseRadius = await fetch(`${localStorage.urlDomain}api/radiusApi`);
-         let radius = await responseRadius.json()
-
-         console.log(radius)
-      } catch (error) {
-         console.log(error)
-      }
    }
 
    async handleVisitHistory(){

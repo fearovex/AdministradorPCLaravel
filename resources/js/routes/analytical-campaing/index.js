@@ -67,6 +67,7 @@ export default class AnalyticalCampaing extends Component {
                 campania: 'Todas',
             },
             events: [],
+            timeConnectionRadius:0,
         }
 
         this.ConsultaGraficas = this.ConsultaGraficas.bind(this);
@@ -85,6 +86,7 @@ export default class AnalyticalCampaing extends Component {
         this.VouchersUse = this.VouchersUse.bind(this)
         this.TopFiveReasonVisits = this.TopFiveReasonVisits.bind(this)
         this.TopFiveRooms = this.TopFiveRooms.bind(this)
+        this.AverageTimeConnectionRadius = this.AverageTimeConnectionRadius.bind(this)
     }
 
     componentDidMount() {
@@ -96,6 +98,7 @@ export default class AnalyticalCampaing extends Component {
         this.PromedyAge()
         this.TopFiveReasonVisits()
         this.TopFiveRooms()
+        this.AverageTimeConnectionRadius()
         let column = "fecha_creacion";
         this.state.form.column = [column];
         this.ConsultaGraficas(column)
@@ -467,6 +470,30 @@ export default class AnalyticalCampaing extends Component {
         }
     }
 
+    async AverageTimeConnectionRadius(){
+        let vertical = this.state.form.vertical
+        if(vertical == 'Centros Comerciales'){
+            try {
+                let config = {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(this.state.form)
+                }
+                let responseRadius = await fetch(`${localStorage.urlDomain}api/radiusApi`,config);
+                let radiusTimeUser = await responseRadius.json()
+
+                this.setState({
+                    timeConnectionRadius:radiusTimeUser
+                })
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    }
+
     render() {
         const { events,form, data } = this.state;
         const { camp } = this.props.match.params
@@ -664,9 +691,11 @@ export default class AnalyticalCampaing extends Component {
                             <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                                 <CardInfo
                                     titleName={"Promedio"}
-                                    dataNum={546}
+                                    dataNum={this.state.timeConnectionRadius > 60 ? this.state.timeConnectionRadius/60
+                                    :this.state.timeConnectionRadius
+                                    }
                                     backgroundColor=""
-                                    time={" hrs"}
+                                    time={this.state.timeConnectionRadius > 60 ?" min": "s"}
                                     classColor={"info"}
                                 />
                             </div>

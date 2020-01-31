@@ -3,7 +3,7 @@
     padding-top: 20px !important;
     padding-right: 20px !important;
     padding-left: 20px !important;
-    padding-bottom: 99px !important;
+    padding-bottom: 50px !important;
     border-radius: 12px;
     font-size: 14px !important;
 }
@@ -19,4 +19,7 @@
 }
 .alignCenterData{
     padding-left: 93px !important;
+}
+.marginAvatar{
+    margin-top: 7px;
 }

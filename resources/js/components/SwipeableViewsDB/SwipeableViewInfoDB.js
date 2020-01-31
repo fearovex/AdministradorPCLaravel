@@ -12,8 +12,7 @@ import ContactProfileDB from 'Components/SwipeableViewsDB/ContactProfileDB';
 import DetailConnectionDB from 'Components/SwipeableViewsDB/DetailConnectionDB';
 import VisitHistory from 'Components/SwipeableViews/VisitHistory';
 import CardInfo from "Components/new-Graficas/CardInfo";
-
-import './styles.css';
+import 'Components/SwipeableViewsDB/styles.css';
 
 function TabContainer({ children, dir }) {
    return (
@@ -104,9 +103,9 @@ class SwipeableViewInfoDB extends Component {
                onChangeIndex={this.handleChangeTabsIndex}>
                <div className="card mb-0 transaction-box">
                   <TabContainer dir={theme.direction}>
-                     <ContactProfileDB
-                        rowData={rowData}
-                     />
+                           <ContactProfileDB
+                              rowData={rowData}
+                           />
                   </TabContainer>
                </div>
                <div className="card mb-0 transaction-box">
