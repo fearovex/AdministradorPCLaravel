@@ -101,5 +101,9 @@ Route::group(['middleware' => 'cors'], function() {
         Route::post('/promedyBandwidth', 'RadiusController@getPromedyBandwidth');
 
         Route::post('/promedyTimeSession', 'RadiusController@getPromedyTimeSession');
+
+        Route::post('/timeConect', 'RadiusController@getTimeConect');
+        
+        Route::post('/timeConectDB', 'RadiusController@getTimeConectDB');
     });
  });

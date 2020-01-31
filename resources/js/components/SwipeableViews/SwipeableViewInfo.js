@@ -36,6 +36,7 @@ class SwipeableViewInfo extends Component {
          columns: columns,
          prefferDayOfWeek: [],
          visitHistory: [],
+         timeConect: [],
          form: {
             objectDataUser: objectDataUser,
             id_campaing: id_campaing
@@ -46,9 +47,10 @@ class SwipeableViewInfo extends Component {
    componentDidMount() {
       this.handlePrefferDayOfWeek();
       this.handleVisitHistory();
+      this.handleTimeConect();
    }
 
-   async handlePrefferDayOfWeek(){
+   async handlePrefferDayOfWeek() {
       try {
          let config = {
             method: 'POST',
@@ -67,17 +69,17 @@ class SwipeableViewInfo extends Component {
 
       }
 
-      try {
-         let responseRadius = await fetch(`${localStorage.urlDomain}api/radiusApi`);
-         let radius = await responseRadius.json()
+      // try {
+      //    let responseRadius = await fetch(`${localStorage.urlDomain}api/radiusApi`);
+      //    let radius = await responseRadius.json()
 
-         console.log(radius)
-      } catch (error) {
-         console.log(error)
-      }
+      //    console.log(radius)
+      // } catch (error) {
+      //    console.log(error)
+      // }
    }
 
-   async handleVisitHistory(){
+   async handleVisitHistory() {
       try {
          let config = {
             method: 'POST',
@@ -97,6 +99,40 @@ class SwipeableViewInfo extends Component {
       }
    }
 
+   async handleTimeConect() {
+      try {
+         let config = {
+            method: 'POST',
+            headers: {
+               'Accept': 'application/json',
+               'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.state.form)
+         }
+         let res = await fetch(`${localStorage.urlDomain}api/timeConect`, config);
+         let timeConect = await res.json()
+         let type = "Seg";
+         let time = Math.round(timeConect.Time);
+         if (time > 60) {
+            time = Math.round((time / 60));
+            type = "Min";
+         }
+         if (time > 60) {
+            time = Math.round((time / 60));
+            type = "Hrs";
+         }
+
+         this.setState({
+            timeConect: {
+               time: time,
+               type: type,
+            }
+         });
+      } catch (error) {
+         console.log(error);
+      }
+   }
+
    handleChangeTabs = (event, value) => {
       this.setState({ value });
    };
@@ -106,7 +142,7 @@ class SwipeableViewInfo extends Component {
    };
 
    render() {
-      const { rowData, columns, prefferDayOfWeek, visitHistory } = this.state;
+      const { rowData, columns, prefferDayOfWeek, visitHistory, timeConect } = this.state;
 
       const theme = {
          direction: 'rlt'
@@ -149,8 +185,9 @@ class SwipeableViewInfo extends Component {
                         </div>
                         <div className="col-lg-6 col-sm-6 col-xl-6 col-6 col-md-6">
                            <CardInfo
-                              titleName={"Tiempo de conexión(hrs)"}
-                              dataNum={250}
+                              titleName={"Tiempo de conexión"}
+                              dataNum={timeConect.time ? timeConect.time : 0}
+                              time={` ${timeConect.type ? timeConect.type : 'Seg'}`}
                               backgroundColor=""
                               classColor="primary"
                               className="styleCard1"

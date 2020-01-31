@@ -37,6 +37,7 @@ class SwipeableViewInfoDB extends Component {
          },
          props: '',
          visitHistory: [],
+         timeConect: [],
       }
    }
 
@@ -44,12 +45,13 @@ class SwipeableViewInfoDB extends Component {
       this.setState({ value });
    };
 
-   componentDidUpdate(){
+   componentDidUpdate() {
       const { rowData } = this.props;
-      if(this.state.props != rowData){
+      if (this.state.props != rowData) {
          this.state.form.rowData = rowData;
          this.state.props = rowData;
          this.handleVisitHistory();
+         this.handleTimeConect();
       }
    }
 
@@ -57,7 +59,7 @@ class SwipeableViewInfoDB extends Component {
       this.setState({ value: index });
    };
 
-   async handleVisitHistory(){
+   async handleVisitHistory() {
       try {
          let config = {
             method: 'POST',
@@ -77,8 +79,42 @@ class SwipeableViewInfoDB extends Component {
       }
    }
 
+   async handleTimeConect() {
+      try {
+         let config = {
+            method: 'POST',
+            headers: {
+               'Accept': 'application/json',
+               'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.state.form)
+         }
+         let res = await fetch(`${localStorage.urlDomain}api/timeConectDB`, config);
+         let timeConect = await res.json()
+         let type = "Seg";
+         let time = Math.round(timeConect.Time);
+         if (time > 60) {
+            time = Math.round((time / 60));
+            type = "Min";
+         }
+         if (time > 60) {
+            time = Math.round((time / 60));
+            type = "Hrs";
+         }
+
+         this.setState({
+            timeConect: {
+               time: time,
+               type: type,
+            }
+         });
+      } catch (error) {
+         console.log(error);
+      }
+   }
+
    render() {
-      const { visitHistory } = this.state;
+      const { visitHistory, timeConect } = this.state;
       const { rowData, prefferDayOfWeekDB } = this.props;
       const theme = {
          direction: 'rlt'
@@ -119,8 +155,9 @@ class SwipeableViewInfoDB extends Component {
                         </div>
                         <div className="col-lg-6 col-sm-6 col-xl-6 col-6 col-md-6">
                            <CardInfo
-                              titleName={"Tiempo de conexión(hrs)"}
-                              dataNum={250}
+                              titleName={"Tiempo de conexión"}
+                              dataNum={timeConect.time ? timeConect.time : 0}
+                              time={` ${timeConect.type ? timeConect.type : 'Seg'}`}
                               backgroundColor=""
                               classColor="primary"
                               className="styleCard1"
