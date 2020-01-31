@@ -94,8 +94,11 @@ Route::group(['middleware' => 'cors'], function() {
 
         Route::post('/prefferWeekDayDB', 'GraficasController@PrefferWeekDayDB');
 
-        Route::post('/radiusApi', 'RadiusController@getDataRadiusTimeAverage');
+        Route::post('/radiusApiTimeAverage', 'RadiusController@getDataRadiusTimeAverage');
+        
+        Route::post('/radiusApiConnected', 'RadiusController@getDataRadiusConnected');
         
         Route::post('/visitHistoryDB','GraficasController@visitHistoryUserDB');
+        
     });
  });
