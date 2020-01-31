@@ -97,5 +97,9 @@ Route::group(['middleware' => 'cors'], function() {
         Route::get('/radiusApi', 'RadiusController@getDataRadiusInfo');
         
         Route::post('/visitHistoryDB','GraficasController@visitHistoryUserDB');
+
+        Route::post('/promedyBandwidth', 'RadiusController@getPromedyBandwidth');
+
+        Route::post('/promedyTimeSession', 'RadiusController@getPromedyTimeSession');
     });
  });
