@@ -3,7 +3,7 @@
     padding-top: 20px !important;
     padding-right: 20px !important;
     padding-left: 20px !important;
-    padding-bottom: 50px !important;
+    padding-bottom: 70px !important;
     border-radius: 12px;
     font-size: 14px !important;
 }
@@ -22,4 +22,13 @@
 }
 .marginAvatar{
     margin-top: 7px;
+}
+.paddingDetail{
+    background: #313d4e;
+    padding-top: 20px !important;
+    padding-right: 20px !important;
+    padding-left: 20px !important;
+    border-radius: 12px;
+    font-size: 14px !important;
+    padding-bottom: 82px!important;
 }
