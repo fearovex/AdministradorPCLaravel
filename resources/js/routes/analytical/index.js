@@ -92,6 +92,7 @@ export default class Analytical extends Component {
         this.TopVisitas = this.TopVisitas.bind(this);
         this.handlePromedyBandwidth = this.handlePromedyBandwidth.bind(this);
         this.handlePromedyTimeSession = this.handlePromedyTimeSession.bind(this);
+        this.ConsultaGraficaAnchoBanda = this.ConsultaGraficaAnchoBanda.bind(this);
     }
     
     componentDidMount(){
@@ -102,6 +103,7 @@ export default class Analytical extends Component {
         this.TopVisitas();
         this.handlePromedyBandwidth();
         this.handlePromedyTimeSession();
+        this.ConsultaGraficaAnchoBanda();
         let column = "fecha_creacion";
         this.state.form.column = [column];
         this.ConsultaGraficas(column)
@@ -453,6 +455,24 @@ export default class Analytical extends Component {
         }
     }
 
+    async ConsultaGraficaAnchoBanda(){
+        try {
+            let config = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(this.state.form)
+            }
+            let res = await fetch(`${localStorage.urlDomain}api/ChartBandwidth`, config);
+            let ChartBandwidth = await res.json();
+            this.state.data.ChartBandwidth = ChartBandwidth;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     render() {
         const { events,form } = this.state;
         const { promedyTimeSession, lastTenUsers, promedyBandwidth, topVisits } = this.state;
@@ -586,7 +606,8 @@ export default class Analytical extends Component {
                     fullBlock
                     customClasses="overflow-hidden"
                 >
-                        <ChartAnchoBanda />
+                    
+                    <ChartAnchoBanda data={this.state.data.ChartBandwidth} paddingRight={20}/>
                 </RctCollapsibleCard>
                 <RctCollapsibleCard
                     customClasses=""

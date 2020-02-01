@@ -40,8 +40,7 @@ class RadiusController extends Controller
         return response()->json(array_filter($queryRadius));
     }
 
-    public function getPromedyBandwidth(Request $request)
-    {
+    public function getPromedyBandwidth(Request $request){
         $database = session('database');
         $users_radius = DB::connection($database)
             ->table('users_radius as ur')
@@ -60,7 +59,13 @@ class RadiusController extends Controller
                     $whereUsersQuery .= " OR ";
                 }
             }
-            $promedy = DB::connection('radius')->select("select round(avg(r.acctoutputoctets+r.acctinputoctets)) Promedio from radacct r WHERE acctstarttime >= '$request->initialDate' AND acctstoptime <= '$request->finalDate' AND ($whereUsersQuery)");
+            $promedy = DB::connection('radius')->select("select round(avg(r.acctoutputoctets+r.acctinputoctets)) Promedio from radacct r WHERE r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate' AND ($whereUsersQuery)");
+            if(!$promedy){
+                $promedy[0] = [
+                    'Quantity' => 0,
+                    'DateRegister' => now(),
+                ];
+            }
         } else {
             $promedy[0] = [
                 'Promedio' => 0
@@ -70,8 +75,7 @@ class RadiusController extends Controller
         return response()->json($promedy[0], 200);
     }
 
-    public function getPromedyTimeSession(Request $request)
-    {
+    public function getPromedyTimeSession(Request $request){
         $database = session('database');
         $users_radius = DB::connection($database)
             ->table('users_radius as ur')
@@ -90,7 +94,13 @@ class RadiusController extends Controller
                     $whereUsersQuery .= " OR ";
                 }
             }
-            $promedy = DB::connection('radius')->select("select round(avg(r.acctsessiontime)) Promedio from radacct r WHERE acctstarttime >= '$request->initialDate' AND acctstoptime <= '$request->finalDate' AND ($whereUsersQuery)");
+            $promedy = DB::connection('radius')->select("select round(avg(r.acctsessiontime)) Promedio from radacct r WHERE r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate' AND ($whereUsersQuery)");
+            if(!$promedy){
+                $promedy[0] = [
+                    'Quantity' => 0,
+                    'DateRegister' => now(),
+                ];
+            }
         } else {
             $promedy[0] = [
                 'Promedio' => 0
@@ -124,6 +134,12 @@ class RadiusController extends Controller
 
         if ($users_radius) {
             $Time = DB::connection('radius')->select("select round(sum(r.acctsessiontime)) Time from radacct r WHERE r.username='" . $users_radius->username . "'");
+            if(!$Time){
+                $Time[0] = [
+                    'Quantity' => 0,
+                    'DateRegister' => now(),
+                ];
+            }
         } else {
             $Time[0] = [
                 'Time' => 0
@@ -157,6 +173,12 @@ class RadiusController extends Controller
 
         if ($users_radius) {
             $Time = DB::connection('radius')->select("select round(sum(r.acctsessiontime)) Time from radacct r WHERE r.username='" . $users_radius->username . "'");
+            if(!$Time){
+                $Time[0] = [
+                    'Quantity' => 0,
+                    'DateRegister' => now(),
+                ];
+            }
         } else {
             $Time[0] = [
                 'Time' => 0
@@ -164,5 +186,32 @@ class RadiusController extends Controller
         }
 
         return response()->json($Time[0], 200);
+    }
+
+    public function getChartBandwidth(Request $request){
+        $database = session('database');
+        $users_radius = DB::connection($database)
+            ->table('users_radius as ur')
+            ->join('campania as c', 'ur.id_campania', '=', 'c.id')
+            ->join('locaciones as l', 'c.id_locacion', '=', 'l.id')
+            ->select('ur.username')
+            ->where('l.id', $request->id_location)
+            ->get();
+
+        $whereUsersQuery = "";
+        $count = count($users_radius);
+        if ($count > 0) {
+            foreach ($users_radius as $key => $user) {
+                $whereUsersQuery .= "r.username='" . $user->username . "'";
+                if (($count - 1) > $key) {
+                    $whereUsersQuery .= " OR ";
+                }
+            }
+            $bandWidth = DB::connection('radius')->select("select round(sum(r.acctoutputoctets+r.acctinputoctets)) Quantity, date(r.acctstarttime) as DateRegister from radacct r WHERE r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate' AND ($whereUsersQuery) GROUP BY DateRegister");
+        } else {
+            $bandWidth = [];
+        }
+
+        return response()->json($bandWidth, 200);
     }
 }
