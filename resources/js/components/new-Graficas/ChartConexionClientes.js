@@ -70,6 +70,7 @@ class ChartConexionClientes extends Component {
       let valueAxis = chart.yAxes.push(new am4charts.DurationAxis());
       valueAxis.title.text = "Tiempo (hrs)";
       valueAxis.title.fontWeight = "bold";
+      valueAxis.min = 0;
       valueAxis.baseUnit = "second";
       chart.durationFormatter.durationFormat = "hh 'Hr' mm 'Min' ss 'Seg'";
 

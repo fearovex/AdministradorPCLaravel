@@ -70,6 +70,7 @@ class ChartFecha extends Component {
       var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
       valueAxis.title.text = "Personas";
       valueAxis.title.fontWeight = "bold";
+      valueAxis.min = 0;
 
       // Create series
       let series = chart.series.push(new am4charts.LineSeries());
