@@ -62,8 +62,7 @@ class RadiusController extends Controller
             $promedy = DB::connection('radius')->select("select round(avg(r.acctoutputoctets+r.acctinputoctets)) Promedio from radacct r WHERE r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate' AND ($whereUsersQuery)");
             if(!$promedy){
                 $promedy[0] = [
-                    'Quantity' => 0,
-                    'DateRegister' => now(),
+                    'Promedio' => 0
                 ];
             }
         } else {
@@ -97,8 +96,7 @@ class RadiusController extends Controller
             $promedy = DB::connection('radius')->select("select round(avg(r.acctsessiontime)) Promedio from radacct r WHERE r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate' AND ($whereUsersQuery)");
             if(!$promedy){
                 $promedy[0] = [
-                    'Quantity' => 0,
-                    'DateRegister' => now(),
+                    'Promedio' => 0
                 ];
             }
         } else {
@@ -110,7 +108,7 @@ class RadiusController extends Controller
         return response()->json($promedy[0], 200);
     }
 
-    public function getTimeConect(Request $request){
+    public function getTimeConnect(Request $request){
 
         $database = session('database');
         $tabla = DB::connection($database)->table('campania')->select('campania')->where('id', $request->id_campaing)->first();
@@ -136,8 +134,7 @@ class RadiusController extends Controller
             $Time = DB::connection('radius')->select("select round(sum(r.acctsessiontime)) Time from radacct r WHERE r.username='" . $users_radius->username . "'");
             if(!$Time){
                 $Time[0] = [
-                    'Quantity' => 0,
-                    'DateRegister' => now(),
+                    'Time' => 0
                 ];
             }
         } else {
@@ -149,7 +146,7 @@ class RadiusController extends Controller
         return response()->json($Time[0], 200);
     }
 
-    public function getTimeConectDB(Request $request){
+    public function getTimeConnectDB(Request $request){
 
         $database = session('database');
         $tabla = DB::connection($database)->table('campania')->select('campania')->where('id', $request->rowData[0]["id_evento"])->first();
@@ -175,8 +172,7 @@ class RadiusController extends Controller
             $Time = DB::connection('radius')->select("select round(sum(r.acctsessiontime)) Time from radacct r WHERE r.username='" . $users_radius->username . "'");
             if(!$Time){
                 $Time[0] = [
-                    'Quantity' => 0,
-                    'DateRegister' => now(),
+                    'Time' => 0
                 ];
             }
         } else {
@@ -215,7 +211,7 @@ class RadiusController extends Controller
         return response()->json($bandWidth, 200);
     }
     
-    public function getConnectedPeople(Request $request){
+    public function getConnectedPeopleLocation(Request $request){
         $database = session('database');
         $users_radius = DB::connection($database)
             ->table('users_radius as ur')
@@ -234,13 +230,45 @@ class RadiusController extends Controller
                     $whereUsersQuery .= " OR ";
                 }
             }
-            $connectedPeople = DB::connection('radius')->select("select count(*) People from radacct r WHERE r.acctstoptime IS NULL AND ($whereUsersQuery)");
+            $connectedPeopleLocation = DB::connection('radius')->select("select count(*) People from radacct r WHERE r.acctstoptime IS NULL AND ($whereUsersQuery)");
+            if(!$connectedPeopleLocation){
+                $connectedPeopleLocation[0] = [
+                    'People' => 0
+                ];
+            }
         } else {
-            $connectedPeople[0] = [
+            $connectedPeopleLocation[0] = [
                 'People' => 0
             ];
         }
 
-        return response()->json($connectedPeople[0], 200);
+        return response()->json($connectedPeopleLocation[0], 200);
+    }
+    
+    public function getChartTimeConnect(Request $request){
+        $database = session('database');
+        $users_radius = DB::connection($database)
+            ->table('users_radius as ur')
+            ->join('campania as c', 'ur.id_campania', '=', 'c.id')
+            ->join('locaciones as l', 'c.id_locacion', '=', 'l.id')
+            ->select('ur.username')
+            ->where('l.id', $request->id_location)
+            ->get();
+
+        $whereUsersQuery = "";
+        $count = count($users_radius);
+        if ($count > 0) {
+            foreach ($users_radius as $key => $user) {
+                $whereUsersQuery .= "r.username='" . $user->username . "'";
+                if (($count - 1) > $key) {
+                    $whereUsersQuery .= " OR ";
+                }
+            }
+            $timeConnect = DB::connection('radius')->select("select round(sum(r.acctsessiontime)) Quantity, date(r.acctstarttime) as DateRegister from radacct r WHERE r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate' AND ($whereUsersQuery) GROUP BY DateRegister");
+        } else {
+            $timeConnect = [];
+        }
+
+        return response()->json($timeConnect, 200);
     }
 }

@@ -104,12 +104,14 @@ Route::group(['middleware' => 'cors'], function() {
 
         Route::post('/promedyTimeSession', 'RadiusController@getPromedyTimeSession');
 
-        Route::post('/timeConect', 'RadiusController@getTimeConect');
+        Route::post('/timeConnect', 'RadiusController@getTimeConnect');
         
-        Route::post('/timeConectDB', 'RadiusController@getTimeConectDB');
+        Route::post('/timeConnectDB', 'RadiusController@getTimeConnectDB');
         
-        Route::post('/ConnectedPeople', 'RadiusController@getConnectedPeople');
+        Route::post('/ConnectedPeopleLocation', 'RadiusController@getConnectedPeopleLocation');
         
         Route::post('/ChartBandwidth', 'RadiusController@getChartBandwidth');
+        
+        Route::post('/ChartTimeConnect', 'RadiusController@getChartTimeConnect');
     });
  });

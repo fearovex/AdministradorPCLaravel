@@ -36,7 +36,7 @@ class SwipeableViewInfoDB extends Component {
          },
          props: '',
          visitHistory: [],
-         timeConect: [],
+         timeConnect: [],
       }
    }
 
@@ -50,7 +50,7 @@ class SwipeableViewInfoDB extends Component {
          this.state.form.rowData = rowData;
          this.state.props = rowData;
          this.handleVisitHistory();
-         this.handleTimeConect();
+         this.handleTimeConnect();
       }
    }
 
@@ -78,7 +78,7 @@ class SwipeableViewInfoDB extends Component {
       }
    }
 
-   async handleTimeConect() {
+   async handleTimeConnect() {
       try {
          let config = {
             method: 'POST',
@@ -88,10 +88,10 @@ class SwipeableViewInfoDB extends Component {
             },
             body: JSON.stringify(this.state.form)
          }
-         let res = await fetch(`${localStorage.urlDomain}api/timeConectDB`, config);
-         let timeConect = await res.json()
+         let res = await fetch(`${localStorage.urlDomain}api/timeConnectDB`, config);
+         let timeConnect = await res.json()
          let type = "Seg";
-         let time = Math.round(timeConect.Time);
+         let time = Math.round(timeConnect.Time);
          if (time > 60) {
             time = Math.round((time / 60));
             type = "Min";
@@ -102,7 +102,7 @@ class SwipeableViewInfoDB extends Component {
          }
 
          this.setState({
-            timeConect: {
+            timeConnect: {
                time: time,
                type: type,
             }
@@ -113,7 +113,7 @@ class SwipeableViewInfoDB extends Component {
    }
 
    render() {
-      const { visitHistory, timeConect } = this.state;
+      const { visitHistory, timeConnect } = this.state;
       const { rowData, prefferDayOfWeekDB } = this.props;
       const theme = {
          direction: 'rlt'
@@ -155,8 +155,8 @@ class SwipeableViewInfoDB extends Component {
                         <div className="col-lg-6 col-sm-6 col-xl-6 col-6 col-md-6">
                            <CardInfo
                               titleName={"Tiempo de conexión"}
-                              dataNum={timeConect.time ? timeConect.time : 0}
-                              time={` ${timeConect.type ? timeConect.type : 'Seg'}`}
+                              dataNum={timeConnect.time ? timeConnect.time : 0}
+                              time={` ${timeConnect.type ? timeConnect.type : 'Seg'}`}
                               backgroundColor=""
                               classColor="primary"
                               className="styleCard1"

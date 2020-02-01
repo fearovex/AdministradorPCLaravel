@@ -77,7 +77,7 @@ class ChartFecha extends Component {
       series.dataFields.valueY = "personas";
       series.tooltipText = "{valueY}";
       // series.tooltip.pointerOrientation = "vertical";
-      series.tooltip.background.fillOpacity = 0.1;
+      series.tooltip.background.fillOpacity = 1;
 
       chart.cursor = new am4charts.XYCursor();
       chart.cursor.xAxis = dateAxis;

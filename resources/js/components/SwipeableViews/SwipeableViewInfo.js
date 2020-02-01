@@ -37,7 +37,7 @@ class SwipeableViewInfo extends Component {
          columns: columns,
          prefferDayOfWeek: [],
          visitHistory: [],
-         timeConect: [],
+         timeConnect: [],
          form: {
             objectDataUser: objectDataUser,
             id_campaing: id_campaing
@@ -48,7 +48,7 @@ class SwipeableViewInfo extends Component {
    componentDidMount() {
       this.handlePrefferDayOfWeek();
       this.handleVisitHistory();
-      this.handleTimeConect();
+      this.handleTimeConnect();
    }
 
    async handlePrefferDayOfWeek() {
@@ -94,7 +94,7 @@ class SwipeableViewInfo extends Component {
       }
    }
 
-   async handleTimeConect() {
+   async handleTimeConnect() {
       try {
          let config = {
             method: 'POST',
@@ -104,10 +104,10 @@ class SwipeableViewInfo extends Component {
             },
             body: JSON.stringify(this.state.form)
          }
-         let res = await fetch(`${localStorage.urlDomain}api/timeConect`, config);
-         let timeConect = await res.json()
+         let res = await fetch(`${localStorage.urlDomain}api/timeConnect`, config);
+         let timeConnect = await res.json()
          let type = "Seg";
-         let time = Math.round(timeConect.Time);
+         let time = Math.round(timeConnect.Time);
          if (time > 60) {
             time = Math.round((time / 60));
             type = "Min";
@@ -118,7 +118,7 @@ class SwipeableViewInfo extends Component {
          }
 
          this.setState({
-            timeConect: {
+            timeConnect: {
                time: time,
                type: type,
             }
@@ -137,7 +137,7 @@ class SwipeableViewInfo extends Component {
    };
 
    render() {
-      const { rowData, columns, prefferDayOfWeek, visitHistory, timeConect } = this.state;
+      const { rowData, columns, prefferDayOfWeek, visitHistory, timeConnect } = this.state;
 
       const theme = {
          direction: 'rlt'
@@ -181,8 +181,8 @@ class SwipeableViewInfo extends Component {
                         <div className="col-lg-6 col-sm-6 col-xl-6 col-6 col-md-6">
                            <CardInfo
                               titleName={"Tiempo de conexión"}
-                              dataNum={timeConect.time ? timeConect.time : 0}
-                              time={` ${timeConect.type ? timeConect.type : 'Seg'}`}
+                              dataNum={timeConnect.time ? timeConnect.time : 0}
+                              time={` ${timeConnect.type ? timeConnect.type : 'Seg'}`}
                               backgroundColor=""
                               classColor="primary"
                               className="styleCard1"

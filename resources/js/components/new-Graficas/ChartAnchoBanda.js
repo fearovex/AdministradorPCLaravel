@@ -82,7 +82,7 @@ class ChartAnchoBanda extends Component {
 
       series.tooltipText = "{valueY.formatNumber('#.0 b')}";
       // series.tooltip.pointerOrientation = "vertical";
-      series.tooltip.background.fillOpacity = 0.5;
+      series.tooltip.background.fillOpacity = 1;
 
       chart.cursor = new am4charts.XYCursor();
       chart.cursor.xAxis = dateAxis;

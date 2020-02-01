@@ -77,7 +77,7 @@ export default class Analytical extends Component {
             events: [],
             promedyBandwidth: [],
             promedyTimeSession: [],
-            ConnectedPeople: [],
+            ConnectedPeopleLocation: [],
         }
         this.ConsultaGraficas = this.ConsultaGraficas.bind(this);
         this.ConsultaEventos = this.ConsultaEventos.bind(this);
@@ -94,7 +94,8 @@ export default class Analytical extends Component {
         this.handlePromedyBandwidth = this.handlePromedyBandwidth.bind(this);
         this.handlePromedyTimeSession = this.handlePromedyTimeSession.bind(this);
         this.ConsultaGraficaAnchoBanda = this.ConsultaGraficaAnchoBanda.bind(this);
-        this.handleConnectedPeople = this.handleConnectedPeople.bind(this);
+        this.handleConnectedPeopleLocation = this.handleConnectedPeopleLocation.bind(this);
+        this.ConsultaGraficaTiempoConexion = this.ConsultaGraficaTiempoConexion.bind(this);
     }
     
     componentDidMount(){
@@ -105,8 +106,9 @@ export default class Analytical extends Component {
         this.TopVisitas();
         this.handlePromedyBandwidth();
         this.handlePromedyTimeSession();
-        this.handleConnectedPeople();
+        this.handleConnectedPeopleLocation();
         this.ConsultaGraficaAnchoBanda();
+        this.ConsultaGraficaTiempoConexion();
         let column = "fecha_creacion";
         this.state.form.column = [column];
         this.ConsultaGraficas(column)
@@ -476,7 +478,7 @@ export default class Analytical extends Component {
         }
     }
 
-    async handleConnectedPeople(){
+    async handleConnectedPeopleLocation(){
         try {
             let config = {
                 method: 'POST',
@@ -486,9 +488,33 @@ export default class Analytical extends Component {
                 },
                 body: JSON.stringify(this.state.form)
             }
-            let res = await fetch(`${localStorage.urlDomain}api/ConnectedPeople`, config);
-            let ConnectedPeople = await res.json();
-            this.state.ConnectedPeople = ConnectedPeople.People;
+            let res = await fetch(`${localStorage.urlDomain}api/ConnectedPeopleLocation`, config);
+            let ConnectedPeopleLocation = await res.json();
+            this.state.ConnectedPeopleLocation = ConnectedPeopleLocation.People;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async ConsultaGraficaTiempoConexion(){
+        try {
+            let config = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(this.state.form)
+            }
+            let res = await fetch(`${localStorage.urlDomain}api/ChartTimeConnect`, config);
+            let ChartTimeConnect = await res.json();
+            this.state.data.ChartTimeConnect = ChartTimeConnect;
+            this.setState({
+                form:{
+                    ...this.state.form,
+                    filterPersonalizado: false,
+                }
+            });
         } catch (error) {
             console.log(error);
         }
@@ -496,7 +522,7 @@ export default class Analytical extends Component {
 
     render() {
         const { events,form } = this.state;
-        const { promedyTimeSession, lastTenUsers, promedyBandwidth, topVisits, ConnectedPeople } = this.state;
+        const { promedyTimeSession, lastTenUsers, promedyBandwidth, topVisits, ConnectedPeopleLocation } = this.state;
         const { location } = this.props.match.params
         return (
             <div className="cardsmasonry-wrapper" >
@@ -532,7 +558,7 @@ export default class Analytical extends Component {
                     <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                         <CardInfo 
                             titleName={"Conectados"}
-                            dataNum={ConnectedPeople ? ConnectedPeople : 0}
+                            dataNum={ConnectedPeopleLocation ? ConnectedPeopleLocation : 0}
                             backgroundColor=""
                             classColor={"primary"}
                         />
@@ -639,7 +665,7 @@ export default class Analytical extends Component {
                     customClasses="overflow-hidden"
                     fullBlock
                 >
-                        <ChartConexionClientes />
+                        <ChartConexionClientes data={this.state.data.ChartTimeConnect} paddingRight={20}/>
                 </RctCollapsibleCard>
                 <RctCollapsibleCard
                     customClasses=""
