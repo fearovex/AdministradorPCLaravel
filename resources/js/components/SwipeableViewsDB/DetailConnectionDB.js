@@ -10,7 +10,7 @@ class DetailConnectionDB extends Component {
     const { rowData } = this.props
       return (
          <RctCardContent>
-            <div className="ongoing-projects-wrap paddingInfo">
+            <div className="ongoing-projects-wrap paddingDetail">
                <List className="project-list list-unstyled p-0 ">
                   <ListItem className="p-0 d-flex justify-content-start align-content-center">
                      <span className="mr-3 d-flex fw-semi-bold ">

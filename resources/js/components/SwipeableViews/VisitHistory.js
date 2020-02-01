@@ -12,7 +12,7 @@ export default class VisitHistory extends Component {
 
         return (
             <RctCardContent>
-                <div className="ongoing-projects-wrap paddingInfo" style={{maxHeight: '306.5px', overflow: 'auto'}}>
+                <div className="ongoing-projects-wrap" style={{maxHeight: '250.5px', overflow: 'auto'}}>
                     <List className="project-list list-unstyled p-0 ">
                         {visitHistory &&
                             visitHistory.map((visit, index) => (
