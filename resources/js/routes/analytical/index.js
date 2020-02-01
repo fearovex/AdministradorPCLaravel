@@ -77,6 +77,7 @@ export default class Analytical extends Component {
             events: [],
             promedyBandwidth: [],
             promedyTimeSession: [],
+            ConnectedPeople: [],
         }
         this.ConsultaGraficas = this.ConsultaGraficas.bind(this);
         this.ConsultaEventos = this.ConsultaEventos.bind(this);
@@ -93,6 +94,7 @@ export default class Analytical extends Component {
         this.handlePromedyBandwidth = this.handlePromedyBandwidth.bind(this);
         this.handlePromedyTimeSession = this.handlePromedyTimeSession.bind(this);
         this.ConsultaGraficaAnchoBanda = this.ConsultaGraficaAnchoBanda.bind(this);
+        this.handleConnectedPeople = this.handleConnectedPeople.bind(this);
     }
     
     componentDidMount(){
@@ -103,6 +105,7 @@ export default class Analytical extends Component {
         this.TopVisitas();
         this.handlePromedyBandwidth();
         this.handlePromedyTimeSession();
+        this.handleConnectedPeople();
         this.ConsultaGraficaAnchoBanda();
         let column = "fecha_creacion";
         this.state.form.column = [column];
@@ -473,9 +476,27 @@ export default class Analytical extends Component {
         }
     }
 
+    async handleConnectedPeople(){
+        try {
+            let config = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(this.state.form)
+            }
+            let res = await fetch(`${localStorage.urlDomain}api/ConnectedPeople`, config);
+            let ConnectedPeople = await res.json();
+            this.state.ConnectedPeople = ConnectedPeople.People;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     render() {
         const { events,form } = this.state;
-        const { promedyTimeSession, lastTenUsers, promedyBandwidth, topVisits } = this.state;
+        const { promedyTimeSession, lastTenUsers, promedyBandwidth, topVisits, ConnectedPeople } = this.state;
         const { location } = this.props.match.params
         return (
             <div className="cardsmasonry-wrapper" >
@@ -511,7 +532,7 @@ export default class Analytical extends Component {
                     <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                         <CardInfo 
                             titleName={"Conectados"}
-                            dataNum={546}
+                            dataNum={ConnectedPeople ? ConnectedPeople : 0}
                             backgroundColor=""
                             classColor={"primary"}
                         />

@@ -214,4 +214,33 @@ class RadiusController extends Controller
 
         return response()->json($bandWidth, 200);
     }
+    
+    public function getConnectedPeople(Request $request){
+        $database = session('database');
+        $users_radius = DB::connection($database)
+            ->table('users_radius as ur')
+            ->join('campania as c', 'ur.id_campania', '=', 'c.id')
+            ->join('locaciones as l', 'c.id_locacion', '=', 'l.id')
+            ->select('ur.username')
+            ->where('l.id', $request->id_location)
+            ->get();
+
+        $whereUsersQuery = "";
+        $count = count($users_radius);
+        if ($count > 0) {
+            foreach ($users_radius as $key => $user) {
+                $whereUsersQuery .= "r.username='" . $user->username . "'";
+                if (($count - 1) > $key) {
+                    $whereUsersQuery .= " OR ";
+                }
+            }
+            $connectedPeople = DB::connection('radius')->select("select count(*) People from radacct r WHERE r.acctstoptime IS NULL AND ($whereUsersQuery)");
+        } else {
+            $connectedPeople[0] = [
+                'People' => 0
+            ];
+        }
+
+        return response()->json($connectedPeople[0], 200);
+    }
 }

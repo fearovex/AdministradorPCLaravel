@@ -108,6 +108,8 @@ Route::group(['middleware' => 'cors'], function() {
         
         Route::post('/timeConectDB', 'RadiusController@getTimeConectDB');
         
+        Route::post('/ConnectedPeople', 'RadiusController@getConnectedPeople');
+        
         Route::post('/ChartBandwidth', 'RadiusController@getChartBandwidth');
     });
  });
