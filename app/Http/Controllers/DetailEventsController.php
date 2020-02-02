@@ -41,7 +41,7 @@ class DetailEventsController extends Controller
         
         $table_name= DB::connection(session('database'))->table('campania')->select('campania')->where('id',$request->id_event)->first()->campania;
         
-        $selectCompleto = "select ".$select." from ".$table_name." where fecha_creacion Between '".$totalInitialDate."' and '".$totalFinalDate."'";
+        $selectCompleto = "select ".$select." from ".$table_name." where fecha_creacion Between '".$totalInitialDate."' and '".$totalFinalDate."' order by fecha_creacion desc";
         
         $detailEvents = DB::connection(session('database'))->select($selectCompleto);
         

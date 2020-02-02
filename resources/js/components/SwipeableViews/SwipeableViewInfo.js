@@ -37,6 +37,7 @@ class SwipeableViewInfo extends Component {
          columns: columns,
          prefferDayOfWeek: [],
          visitHistory: [],
+         timeConnect: [],
          form: {
             objectDataUser: objectDataUser,
             id_campaing: id_campaing
@@ -47,9 +48,10 @@ class SwipeableViewInfo extends Component {
    componentDidMount() {
       this.handlePrefferDayOfWeek();
       this.handleVisitHistory();
+      this.handleTimeConnect();
    }
 
-   async handlePrefferDayOfWeek(){
+   async handlePrefferDayOfWeek() {
       try {
          let config = {
             method: 'POST',
@@ -72,7 +74,7 @@ class SwipeableViewInfo extends Component {
 
    }
 
-   async handleVisitHistory(){
+   async handleVisitHistory() {
       try {
          let config = {
             method: 'POST',
@@ -92,6 +94,40 @@ class SwipeableViewInfo extends Component {
       }
    }
 
+   async handleTimeConnect() {
+      try {
+         let config = {
+            method: 'POST',
+            headers: {
+               'Accept': 'application/json',
+               'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.state.form)
+         }
+         let res = await fetch(`${localStorage.urlDomain}api/timeConnect`, config);
+         let timeConnect = await res.json()
+         let type = "Seg";
+         let time = Math.round(timeConnect.Time);
+         if (time > 60) {
+            time = Math.round((time / 60));
+            type = "Min";
+         }
+         if (time > 60) {
+            time = Math.round((time / 60));
+            type = "Hrs";
+         }
+
+         this.setState({
+            timeConnect: {
+               time: time,
+               type: type,
+            }
+         });
+      } catch (error) {
+         console.log(error);
+      }
+   }
+
    handleChangeTabs = (event, value) => {
       this.setState({ value });
    };
@@ -101,7 +137,7 @@ class SwipeableViewInfo extends Component {
    };
 
    render() {
-      const { rowData, columns, prefferDayOfWeek, visitHistory } = this.state;
+      const { rowData, columns, prefferDayOfWeek, visitHistory, timeConnect } = this.state;
 
       const theme = {
          direction: 'rlt'
@@ -144,8 +180,9 @@ class SwipeableViewInfo extends Component {
                         </div>
                         <div className="col-lg-6 col-sm-6 col-xl-6 col-6 col-md-6">
                            <CardInfo
-                              titleName={"Tiempo de conexión(hrs)"}
-                              dataNum={250}
+                              titleName={"Tiempo de conexión"}
+                              dataNum={timeConnect.time ? timeConnect.time : 0}
+                              time={` ${timeConnect.type ? timeConnect.type : 'Seg'}`}
                               backgroundColor=""
                               classColor="primary"
                               className="styleCard1"

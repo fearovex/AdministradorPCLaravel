@@ -19,12 +19,13 @@ class ChartConexionClientes extends Component {
       super(props)
 
       this.state={
-         props: '',
+         props: ''
       }
    }
 
    componentDidMount() {
-      this.handleChart()
+      const {data} = this.props;
+      this.handleChart(data)
    }
 
    componentDidUpdate() {
@@ -40,18 +41,13 @@ class ChartConexionClientes extends Component {
    }
 
    async handleChart(data = []) {
-    
-
-      let hours = 0.5;
-      for (var i = 1; i < 15; i++) {
-         hours = Math.random()*(7-0+1)+0;
-         data.push({ date: new Date(2019, 0, i), value: hours });
+      for (let i = 0; i < data.length; i++) {
+         var newDate = new Date(data[i].DateRegister);
+         newDate.setDate(newDate.getDate() + 1);
+         data[i].DateRegister = newDate;
       }
 
       let chart = am4core.create("chartTimeConnection", am4charts.XYChart);
-      chart.paddingRight = 20;
-
-
 
       chart.data = data;
       chart.language.locale = am4lang_es_ES;
@@ -71,16 +67,20 @@ class ChartConexionClientes extends Component {
       dateAxis.groupData = true;
       dateAxis.groupCount = 500;
 
-      let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+      let valueAxis = chart.yAxes.push(new am4charts.DurationAxis());
       valueAxis.title.text = "Tiempo (hrs)";
       valueAxis.title.fontWeight = "bold";
+      valueAxis.min = 0;
+      valueAxis.baseUnit = "second";
+      chart.durationFormatter.durationFormat = "hh 'Hr' mm 'Min' ss 'Seg'";
 
       let series = chart.series.push(new am4charts.LineSeries());
-      series.dataFields.dateX = "date";
-      series.dataFields.valueY = "value";
-      series.tooltipText = "{valueY}";
+      series.dataFields.dateX = "DateRegister";
+      series.dataFields.valueY = "Quantity";
+      series.dataFields.valueY = "Quantity";
+      series.tooltipText = "{valueY.formatDuration()}";
       series.tooltip.pointerOrientation = "vertical";
-      series.tooltip.background.fillOpacity = 0.1;
+      series.tooltip.background.fillOpacity = 1;
 
       chart.cursor = new am4charts.XYCursor();
       chart.cursor.xAxis = dateAxis;

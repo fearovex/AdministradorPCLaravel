@@ -115,7 +115,6 @@ class LastTenUsersList extends Component {
                            <TableBody >
                               {listData.map((list, index) => (
                                  <TableRow key={index} onClick={(e) => this.openModalInfo(list.idUsuario,list.tablaCampania)}>
-                                 {console.log(list)}
                                     <TableCell align='center'>#{index+1}</TableCell>
                                     <TableCell>{list.Nombres}</TableCell>
                                     <TableCell>{list.Apellidos}</TableCell>

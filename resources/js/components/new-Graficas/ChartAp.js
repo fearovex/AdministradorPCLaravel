@@ -61,6 +61,7 @@ class ChartAp extends Component {
       valueAxis.title.text = "Personas";
       valueAxis.title.fontWeight = "bold";
       valueAxis.renderer.minWidth = 50;
+      valueAxis.min = 0;
 
       // Create series
       let series = chart.series.push(new am4charts.ColumnSeries());

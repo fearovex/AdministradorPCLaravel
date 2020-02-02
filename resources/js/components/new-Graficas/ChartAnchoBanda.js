@@ -42,10 +42,10 @@ class ChartAnchoBanda extends Component {
       chart.language.locale = am4lang_es_ES;
       chart.paddingRight = 20;
 
-      let bandWidth = 10;
-      for (var i = 1; i < 15; i++) {
-         bandWidth = Math.floor(Math.random()*(3896-90+1)+120);
-         data.push({ date: new Date(2019, 0, i), value: bandWidth });
+      for (let i = 0; i < data.length; i++) {
+         var newDate = new Date(data[i].DateRegister);
+         newDate.setDate(newDate.getDate() + 1);
+         data[i].DateRegister = newDate;
       }
 
       chart.data = data;
@@ -63,22 +63,26 @@ class ChartAnchoBanda extends Component {
 
 
       // this makes the data to be grouped
-      dateAxis.groupData = true;
+      // dateAxis.groupData = true;
       dateAxis.groupCount = 500;
 
       let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-      valueAxis.title.text = "Ancho De Banda (kbps)";
+      valueAxis.title.text = "Ancho De Banda";
       valueAxis.title.fontWeight = "bold";
+      valueAxis.min = 0;
+
+      valueAxis.numberFormatter = new am4core.NumberFormatter();
+      valueAxis.numberFormatter.numberFormat = "#.0 b";
 
       let series = chart.series.push(new am4charts.LineSeries());
-      series.dataFields.dateX = "date";
-      series.dataFields.valueY = "value";
+      series.dataFields.dateX = "DateRegister";
+      series.dataFields.valueY = "Quantity";
       // series.strokeWidth = 1;
       // series.minBulletDistance = 5;
 
-      series.tooltipText = "{valueY}";
-      series.tooltip.pointerOrientation = "vertical";
-      series.tooltip.background.fillOpacity = 0.5;
+      series.tooltipText = "{valueY.formatNumber('#.0 b')}";
+      // series.tooltip.pointerOrientation = "vertical";
+      series.tooltip.background.fillOpacity = 1;
 
       chart.cursor = new am4charts.XYCursor();
       chart.cursor.xAxis = dateAxis;
