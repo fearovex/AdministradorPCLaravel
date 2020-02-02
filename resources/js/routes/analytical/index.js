@@ -75,6 +75,9 @@ export default class Analytical extends Component {
                 campania: 'Todas',
             },
             events: [],
+            promedyBandwidth: [],
+            promedyTimeSession: [],
+            ConnectedPeopleLocation: [],
         }
         this.ConsultaGraficas = this.ConsultaGraficas.bind(this);
         this.ConsultaEventos = this.ConsultaEventos.bind(this);
@@ -88,7 +91,11 @@ export default class Analytical extends Component {
         this.UltimosDiez = this.UltimosDiez.bind(this);
         this.TopZonas = this.TopZonas.bind(this);
         this.TopVisitas = this.TopVisitas.bind(this);
-        
+        this.handlePromedyBandwidth = this.handlePromedyBandwidth.bind(this);
+        this.handlePromedyTimeSession = this.handlePromedyTimeSession.bind(this);
+        this.ConsultaGraficaAnchoBanda = this.ConsultaGraficaAnchoBanda.bind(this);
+        this.handleConnectedPeopleLocation = this.handleConnectedPeopleLocation.bind(this);
+        this.ConsultaGraficaTiempoConexion = this.ConsultaGraficaTiempoConexion.bind(this);
     }
     
     componentDidMount(){
@@ -97,6 +104,11 @@ export default class Analytical extends Component {
         this.TopZonas();
         this.ConsultaEventos();
         this.TopVisitas();
+        this.handlePromedyBandwidth();
+        this.handlePromedyTimeSession();
+        this.handleConnectedPeopleLocation();
+        this.ConsultaGraficaAnchoBanda();
+        this.ConsultaGraficaTiempoConexion();
         let column = "fecha_creacion";
         this.state.form.column = [column];
         this.ConsultaGraficas(column)
@@ -372,12 +384,145 @@ export default class Analytical extends Component {
         this.ConsultaGraficas(column)
     }
 
+    async handlePromedyBandwidth(){
+        try {
+            let config = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(this.state.form)
+            }
+            let res = await fetch(`${localStorage.urlDomain}api/promedyBandwidth`, config);
+            let promedyBandwidth = await res.json()
+            let type = "Bytes";
+            let promedy = Math.round(promedyBandwidth.Promedio*10)/10;
+            if(promedy > 1024.0){
+                promedy = Math.round((promedy/1024)*10)/10;
+                type = "Kb";
+            }
+            if(promedy > 1024.0){
+                promedy = Math.round((promedy/1024)*10)/10;
+                type = "Mb";
+            }
+            if(promedy > 1024.0){
+                promedy = Math.round((promedy/1024)*10)/10;
+                type = "Gb";
+            }
+            if(promedy > 1024.0){
+                promedy = Math.round((promedy/1024)*10)/10;
+                type = "Tb";
+            }
 
+            this.setState({
+                promedyBandwidth:{
+                    promedy: promedy,
+                    type: type,
+                }
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
+    async handlePromedyTimeSession(){
+        try {
+            let config = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(this.state.form)
+            }
+            let res = await fetch(`${localStorage.urlDomain}api/promedyTimeSession`, config);
+            let promedyTimeSession = await res.json()
+            let type = "Seg";
+            let promedy = Math.round(promedyTimeSession.Promedio);
+            if(promedy >= 60){
+                promedy = Math.round((promedy/60));
+                type = "Min";
+            }
+            if(promedy >= 60){
+                promedy = Math.round((promedy/60));
+                type = "Hrs";
+            }
+
+            this.setState({
+                promedyTimeSession:{
+                    promedy: promedy,
+                    type: type,
+                }
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async ConsultaGraficaAnchoBanda(){
+        try {
+            let config = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(this.state.form)
+            }
+            let res = await fetch(`${localStorage.urlDomain}api/ChartBandwidth`, config);
+            let ChartBandwidth = await res.json();
+            this.state.data.ChartBandwidth = ChartBandwidth;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async handleConnectedPeopleLocation(){
+        try {
+            let config = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(this.state.form)
+            }
+            let res = await fetch(`${localStorage.urlDomain}api/ConnectedPeopleLocation`, config);
+            let ConnectedPeopleLocation = await res.json();
+            this.state.ConnectedPeopleLocation = ConnectedPeopleLocation.People;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async ConsultaGraficaTiempoConexion(){
+        try {
+            let config = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(this.state.form)
+            }
+            let res = await fetch(`${localStorage.urlDomain}api/ChartTimeConnect`, config);
+            let ChartTimeConnect = await res.json();
+            this.state.data.ChartTimeConnect = ChartTimeConnect;
+            this.setState({
+                form:{
+                    ...this.state.form,
+                    filterPersonalizado: false,
+                }
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     render() {
         const { events,form } = this.state;
-        const { dataTop, lastTenUsers, topZones, topVisits } = this.state;
+        const { promedyTimeSession, lastTenUsers, promedyBandwidth, topVisits, ConnectedPeopleLocation } = this.state;
         const { location } = this.props.match.params
         return (
             <div className="cardsmasonry-wrapper" >
@@ -413,7 +558,7 @@ export default class Analytical extends Component {
                     <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                         <CardInfo 
                             titleName={"Conectados"}
-                            dataNum={546}
+                            dataNum={ConnectedPeopleLocation ? ConnectedPeopleLocation : 0}
                             backgroundColor=""
                             classColor={"primary"}
                         />
@@ -430,9 +575,9 @@ export default class Analytical extends Component {
                     <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                         <CardInfo 
                             titleName={"Promedio"}
-                            dataNum={2}
+                            dataNum={promedyTimeSession.promedy ? promedyTimeSession.promedy : 0}
                             backgroundColor=""
-                            time={" hrs"}
+                            time={` ${promedyTimeSession.type ? promedyTimeSession.type : 'Seg'}`}
                             classColor={"secondary"}
                         />
                     </div>
@@ -448,9 +593,9 @@ export default class Analytical extends Component {
                     <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                         <CardInfo 
                             titleName={"Promedio"}
-                            dataNum={5120}
+                            dataNum={promedyBandwidth.promedy ? promedyBandwidth.promedy : 0}
                             backgroundColor=""
-                            time={"  Kbps"}
+                            time={` ${promedyBandwidth.type ? promedyBandwidth.type : 'Bytes'}`}
                             classColor={"info"}
                         />
                     </div>
@@ -508,7 +653,8 @@ export default class Analytical extends Component {
                     fullBlock
                     customClasses="overflow-hidden"
                 >
-                        <ChartAnchoBanda />
+                    
+                    <ChartAnchoBanda data={this.state.data.ChartBandwidth} paddingRight={20}/>
                 </RctCollapsibleCard>
                 <RctCollapsibleCard
                     customClasses=""
@@ -519,7 +665,7 @@ export default class Analytical extends Component {
                     customClasses="overflow-hidden"
                     fullBlock
                 >
-                        <ChartConexionClientes />
+                        <ChartConexionClientes data={this.state.data.ChartTimeConnect} paddingRight={20}/>
                 </RctCollapsibleCard>
                 <RctCollapsibleCard
                     customClasses=""

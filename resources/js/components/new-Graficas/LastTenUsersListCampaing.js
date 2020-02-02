@@ -15,7 +15,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { Badge } from 'reactstrap';
-
+import SwipeableViewInfoDB from 'Components/SwipeableViewsDB/SwipeableViewInfoDB';
+import SweetAlert from 'react-bootstrap-sweetalert'
 // intl messages
 import IntlMessages from 'Util/IntlMessages';
 
@@ -25,10 +26,76 @@ const LastTenUsersCampaingColumns2 = ['Posicion','Nombre', 'Apellido', 'MAC', 'H
 const LastTenUsersCampaingColumns3 = ['Posicion','Nombre', 'Apellido', 'MAC', 'Fecha Registro'];
 
 class LastTenUsersListCampaing extends Component {
+   
+   constructor(props){
+      super(props)
+      const nombreCampania = localStorage.user_campaing_db
+      this.state = {
+         modalInfo: false,
+         form:{
+            rowData:[],
+            idUsuario: "",
+            userMac: "",
+            nombreCampania: nombreCampania
+         },
+         prefferDayOfWeekDB:[]
+      }
+      this.openModalInfo = this.openModalInfo.bind(this)
+   }
 
+   async openModalInfo(idUsuario){
+      this.setState({ 
+         modalInfo: true 
+      });
+      try {
+         let config = {
+            method: 'POST',
+            headers: {
+               'Accept': 'application/json',
+               'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ idUsuario:idUsuario, nombreCampania:this.state.form.nombreCampania })
+         }
+         let res = await fetch(`${localStorage.urlDomain}api/userInfoDB`, config);
+         let rowData = await res.json()
+
+         this.setState({
+            form:{
+                  ...this.state.form,
+               rowData:rowData,
+               idUsuario:idUsuario
+            },
+         })
+
+         let config1 = {
+            method: 'POST',
+            headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.state.form)
+         }
+         let res1 = await fetch(`${localStorage.urlDomain}api/prefferWeekDayDB`, config1);
+         let prefferDayOfWeekDB = await res1.json()
+
+         this.setState({
+            prefferDayOfWeekDB:prefferDayOfWeekDB
+         })
+      } catch (error) {
+         
+      }
+	}
+
+	handleCloseModal(e){
+		e.preventDefault();
+		this.setState({ 
+			modalInfo: false 
+		});
+	}
 
    render() {
       const { listData, vertical } = this.props;
+      const { modalInfo, form, prefferDayOfWeekDB} = this.state;
       return (
          <div className="Transaction-table-wrap Tab-wrap" style={{marginTop: "4px"}}>
             
@@ -45,7 +112,7 @@ class LastTenUsersListCampaing extends Component {
                            </TableHead>
                            <TableBody >
                               {listData && listData.map((list, index) => (
-                                 <TableRow key={index}>
+                                 <TableRow key={index} onClick={() => this.openModalInfo(list.id)}>
                                     <TableCell align='center'>#{index+1}</TableCell>
                                     <TableCell>{list.Nombre}</TableCell>
                                     <TableCell>{list.Apellido}</TableCell>
@@ -69,7 +136,7 @@ class LastTenUsersListCampaing extends Component {
                            </TableHead>
                            <TableBody >
                               {listData && listData.map((list, index) => (
-                                 <TableRow key={index}>
+                                 <TableRow key={index} onClick={() => this.openModalInfo(list.id)}>
                                     <TableCell align='center'>#{index+1}</TableCell>
                                     <TableCell>{list.Nombre}</TableCell>
                                     <TableCell>{list.Apellido}</TableCell>
@@ -92,7 +159,7 @@ class LastTenUsersListCampaing extends Component {
                            </TableHead>
                            <TableBody >
                               {listData && listData.map((list, index) => (
-                                 <TableRow key={index}>
+                                 <TableRow key={index} onClick={() => this.openModalInfo(list.id)}>
                                     <TableCell align='center'>#{index+1}</TableCell>
                                     <TableCell>{list.Nombre}</TableCell>
                                     <TableCell>{list.Apellido}</TableCell>
@@ -105,6 +172,20 @@ class LastTenUsersListCampaing extends Component {
                      }
                   </div>
             </Scrollbars>
+            <SweetAlert
+						btnSize="sm"
+						show={modalInfo}
+						confirmBtnText="Cerrar"
+						onConfirm={() => this.handleCloseModal(event)}
+					>
+					<SwipeableViewInfoDB 
+                  rowData={form.rowData}
+                  idCampaing={form.idUsuario}
+                  nameCampaing={form.nombreCampania}
+                  userMac={form.userMac}
+                  prefferDayOfWeekDB= {prefferDayOfWeekDB}
+               />
+				</SweetAlert>
          </div>
       );
    }

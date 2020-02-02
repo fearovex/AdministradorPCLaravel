@@ -89,7 +89,7 @@ export default class campañas extends Component {
 					</ListItemIcon>
 				</Link>
 				datacampania[i]["Dashboard"] = 
-				<Link to={location.pathname + '/' + datacampania[i].Nombre+'/dashboard'} onClick={() => this.DashboardCampania(datacampania[i].id, datacampania[i].Vertical)}>
+				<Link to={location.pathname + '/' + datacampania[i].Nombre+'/dashboard'} onClick={() => this.DashboardCampania(datacampania[i].id, datacampania[i].campania, datacampania[i].Vertical)}>
 					<ListItemIcon className="menu-icon">
 						<i className='ti-pie-chart' style={{margin:"0 auto"}}></i>
 					</ListItemIcon>
@@ -178,8 +178,9 @@ export default class campañas extends Component {
 		localStorage.setItem('user_name_campaing', name_campaing);
 	}
 
-	DashboardCampania(id_campaing, vertical){
+	DashboardCampania(id_campaing, campaing_db, vertical){
 		localStorage.setItem('user_campaing', id_campaing);
+		localStorage.setItem('user_campaing_db', campaing_db);
 		localStorage.setItem('vertical', vertical);
 	}
 

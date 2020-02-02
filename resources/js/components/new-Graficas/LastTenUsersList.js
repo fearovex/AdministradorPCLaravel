@@ -15,6 +15,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { Badge } from 'reactstrap';
+import SwipeableViewInfoDB from 'Components/SwipeableViewsDB/SwipeableViewInfoDB';
+import SweetAlert from 'react-bootstrap-sweetalert'
 
 // intl messages
 import IntlMessages from 'Util/IntlMessages';
@@ -23,10 +25,80 @@ import IntlMessages from 'Util/IntlMessages';
 const LastTenUsersCampaingColumns = ['Posicion','Nombres', 'Apellidos', 'Fecha Registro', 'Campaña'];
 
 class LastTenUsersList extends Component {
+   
+   constructor(props){
+      super(props)
+      this.state ={
+         modalInfo: false,
+         form:{
+            rowData:[],
+            idUsuario: "",
+            nombreCampania: ""
+         },
+         prefferDayOfWeekDB:[]
+      }
+      this.openModalInfo = this.openModalInfo.bind(this)
+   }
 
+   async openModalInfo(idUsuario,nombreCampania){
+      this.setState({
+         modalInfo: true,
+      
+      })
+      
+      try {
+         let config = {
+            method: 'POST',
+            headers: {
+               'Accept': 'application/json',
+               'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({idUsuario:idUsuario, nombreCampania:nombreCampania })
+         }
+         let res = await fetch(`${localStorage.urlDomain}api/userInfoDB`, config);
+         let rowData = await res.json()
+         
+         this.state.form.rowData = rowData;
+         this.state.form.idUsuario = idUsuario;
+         this.state.form.nombreCampania = nombreCampania;
+      } catch (error) {
+         this.setState({
+            error:error
+         })
+      }
+
+      try {
+         let config1 = {
+            method: 'POST',
+            headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.state.form)
+         }
+         let res1 = await fetch(`${localStorage.urlDomain}api/prefferWeekDayDB`, config1);
+         let prefferDayOfWeekDB = await res1.json()
+
+         this.setState({
+            prefferDayOfWeekDB:prefferDayOfWeekDB
+         })
+      } catch (error) {
+         this.setState({
+            error:error
+         })
+      }
+	}
+
+	handleCloseModal(e){
+		e.preventDefault();
+		this.setState({ 
+			modalInfo: false 
+		});
+	}
 
    render() {
       const { listData } = this.props;
+      const { modalInfo, form, prefferDayOfWeekDB} = this.state;
       return (
          <div className="Transaction-table-wrap Tab-wrap" style={{marginTop: "4px"}}>
             
@@ -42,7 +114,7 @@ class LastTenUsersList extends Component {
                            </TableHead>
                            <TableBody >
                               {listData.map((list, index) => (
-                                 <TableRow key={index}>
+                                 <TableRow key={index} onClick={(e) => this.openModalInfo(list.idUsuario,list.tablaCampania)}>
                                     <TableCell align='center'>#{index+1}</TableCell>
                                     <TableCell>{list.Nombres}</TableCell>
                                     <TableCell>{list.Apellidos}</TableCell>
@@ -52,8 +124,29 @@ class LastTenUsersList extends Component {
                               ))}
                            </TableBody>
                         </Table>
+                       
                   </div>
             </Scrollbars>
+            <SweetAlert
+               btnSize="sm"
+               show={modalInfo}
+               // showCancel
+               confirmBtnText="Cerrar"
+               // cancelBtnText="Cancelar"
+               // cancelBtnBsStyle="danger"
+               // confirmBtnBsStyle="primary"
+               onConfirm={() => this.handleCloseModal(event)}
+               // onCancel={() => this.onCancel('modalEmailCsv')}
+            >
+               <SwipeableViewInfoDB 
+                  rowData={form.rowData}
+                  idCampaing={form.idUsuario}
+                  nameCampaing={form.nombreCampania}
+                  prefferDayOfWeekDB= {prefferDayOfWeekDB}
+
+                  
+               />
+            </SweetAlert>
          </div>
       );
    }

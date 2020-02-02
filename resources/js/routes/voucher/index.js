@@ -684,9 +684,8 @@ export default class Voucher extends Component {
 										<div className="row marginForm">
 											<div className="col-lg-12 mb-4">
 												<span style={{fontSize: '13px'}}>
-													Los siguientes campos serán agregados a la fecha en la cual se active el voucher,
-													recuerde que si la fecha fin del voucher excede la fecha final de la campaña, la siguiente fecha
-													será registrada en su lugar: <b>{form.finalDateCampaing}</b> 
+													Los siguientes campos serán agregados a la fecha fin del voucher en cuanto se active el mismo,
+													recuerde que si la fecha fin del voucher excede la fecha final de la campaña, la fecha fin del voucher sera asignada con la siguiente fecha: "<b>{form.finalDateCampaing}</b>"
 												</span>
 											</div>
 											<div className="col-lg-4 mb-4">

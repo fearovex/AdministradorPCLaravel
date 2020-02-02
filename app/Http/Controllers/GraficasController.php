@@ -156,7 +156,7 @@ class GraficasController extends Controller
     public function UsersMoreVisit(Request $request){
         $database = session('database');
         $tabla = DB::connection($database)->table('campania')->select('campania')->where('id', $request->id_campaing)->first();
-        $query = "select nombre as 'Nombre', apellidos as 'Apellido', email as 'Email', telefono as 'Celular', genero as 'Sexo', os as 'Sistema_Operativo', count(mac_cliente) as 'N_Visitas' FROM $database.$tabla->campania GROUP BY mac_cliente, nombre, apellidos, email, telefono, genero, os ORDER BY N_Visitas desc limit 10";
+        $query = "select nombre as 'Nombre', apellidos as 'Apellido', email as 'Email', telefono as 'Celular', genero as 'Sexo', os as 'Sistema_Operativo', count(mac_cliente) as 'N_Visitas', mac_cliente FROM $database.$tabla->campania GROUP BY mac_cliente, nombre, apellidos, email, telefono, genero, os ORDER BY N_Visitas desc limit 10";
         $UsersMoreVisit = DB::select($query);
         return $UsersMoreVisit;
     }
@@ -166,7 +166,7 @@ class GraficasController extends Controller
         $tabla = DB::connection($database)->table('campania')->select('campania')->where('id', $request->id_campaing)->first();
         if($request->vertical=='Centros Comerciales'){
             $tabla = DB::connection($database)->table('campania')->select('campania')->where('id', $request->id_campaing)->first();
-            $query = "select nombre as 'Nombre', apellidos as 'Apellido', email as 'Email', telefono as 'Celular', genero as 'Sexo', os as 'Sistema_Operativo', fecha_creacion as 'Fecha_Creacion' FROM $database.$tabla->campania ORDER BY fecha_creacion desc limit 10";
+            $query = "select nombre as 'Nombre', apellidos as 'Apellido', email as 'Email', telefono as 'Celular', genero as 'Sexo', os as 'Sistema_Operativo', fecha_creacion as 'Fecha_Creacion', id FROM $database.$tabla->campania ORDER BY fecha_creacion desc limit 10";
             $LastTenUsersListCampaing = DB::select($query);
             return $LastTenUsersListCampaing;
         }else{
@@ -176,12 +176,12 @@ class GraficasController extends Controller
             $existColumnVoucher = DB::select($ifExistColumnVoucher);
 
             if((!empty($existColumnRoom)) && (!empty($existColumnVoucher))){
-                $query = "select nombre as 'Nombre', apellidos as 'Apellido', num_habitacion as 'Habitacion', num_voucher as 'Voucher', mac_cliente as 'MAC', fecha_creacion as 'Fecha_Creacion' 
+                $query = "select nombre as 'Nombre', apellidos as 'Apellido', num_habitacion as 'Habitacion', num_voucher as 'Voucher', mac_cliente as 'MAC', fecha_creacion as 'Fecha_Creacion', id 
                 FROM $database.$tabla->campania ORDER BY fecha_creacion DESC LIMIT 10";
                 $LastTenUsersListCampaing = DB::select($query);
                 return $LastTenUsersListCampaing;
             }else{
-                $query = "select nombre as 'Nombre', apellidos as 'Apellido', mac_cliente as 'MAC', fecha_creacion as 'Fecha_Creacion' 
+                $query = "select nombre as 'Nombre', apellidos as 'Apellido', mac_cliente as 'MAC', fecha_creacion as 'Fecha_Creacion', id 
                 FROM $database.$tabla->campania  ORDER BY fecha_creacion DESC LIMIT 10";
                 $LastTenUsersListCampaing = DB::select($query);
                 return $LastTenUsersListCampaing;
@@ -264,4 +264,67 @@ class GraficasController extends Controller
         }
     }
     
+    public function UserInfoDB(Request $request){
+        $database = session('database');
+        if(isset($request->macUsuario)){
+            $queryDataUser= "select * FROM $database.$request->nombreCampania WHERE mac_cliente = '$request->macUsuario'";
+            $dataUser = DB::select($queryDataUser);
+            return response()->json($dataUser);
+        }
+        if(isset($request->idUsuario)){
+            $queryDataUser= "select * FROM $database.$request->nombreCampania WHERE id = $request->idUsuario";
+            $dataUser = DB::select($queryDataUser);
+            return response()->json($dataUser);
+        }
+    }
+
+    public function PrefferWeekDayDB(Request $request){
+        $database = session('database');
+        if(isset($request->rowData[0]["num_voucher"])){
+            $queryChangeEs = "SET @@lc_time_names = 'es_CO'";
+            $query = "select COUNT(*) AS cantidad, DAYNAME(fecha_creacion) AS dia_preferido FROM $database.$request->nombreCampania WHERE num_voucher = "."'".$request->rowData[0]["num_voucher"]."'"." GROUP BY dia_preferido ORDER BY cantidad desc LIMIT 1";
+            
+            DB::select($queryChangeEs);
+            $prefferWeekDayUser = DB::select($query);
+            $queryChangeEn= "SET @@lc_time_names = 'en_US'";
+            DB::select($queryChangeEn);
+            return  response()->json($prefferWeekDayUser);
+        }
+        if(isset($request->rowData[0]["email"])){
+            $queryChangeEs= "SET @@lc_time_names = 'es_CO'";
+            $query = "select COUNT(*) AS cantidad, DAYNAME(fecha_creacion) AS dia_preferido FROM $database.$request->nombreCampania WHERE email = "."'".$request->rowData[0]["email"]."'"." GROUP BY dia_preferido ORDER BY cantidad desc LIMIT 1";
+            
+            DB::select($queryChangeEs);
+            $prefferWeekDayUser = DB::select($query);
+            $queryChangeEn= "SET @@lc_time_names = 'en_US'";
+            DB::select($queryChangeEn);
+            return  response()->json($prefferWeekDayUser);
+        }
+    }
+    
+    public function visitHistoryUserDB(Request $request){
+        $database = session('database');
+        $tabla = DB::connection($database)->table('campania')->select('campania')->where('id', $request->rowData[0]["id_evento"])->first();
+
+        if(isset($request->rowData[0]["num_voucher"])){
+            $queryChangeEs = "SET @@lc_time_names = 'es_CO'";
+            $query = "select fecha_creacion as 'Fecha_Registro' FROM $database.$tabla->campania WHERE num_voucher = '".$request->rowData[0]["num_voucher"]."' ORDER BY Fecha_Registro desc";
+            
+            DB::select($queryChangeEs);
+            $visitHistoryUser = DB::select($query);
+            $queryChangeEn= "SET @@lc_time_names = 'en_US'";
+            DB::select($queryChangeEn);
+            return  response()->json($visitHistoryUser);
+        }
+        if(isset($request->rowData[0]["email"])){
+            $queryChangeEs= "SET @@lc_time_names = 'es_CO'";
+            $query = "select fecha_creacion as 'Fecha_Registro' FROM $database.$tabla->campania WHERE email = '".$request->rowData[0]["email"]."' ORDER BY Fecha_Registro desc";
+            
+            DB::select($queryChangeEs);
+            $visitHistoryUser = DB::select($query);
+            $queryChangeEn= "SET @@lc_time_names = 'en_US'";
+            DB::select($queryChangeEn);
+            return  response()->json($visitHistoryUser);
+        }
+    }
 }

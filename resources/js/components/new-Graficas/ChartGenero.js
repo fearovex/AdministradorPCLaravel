@@ -7,13 +7,10 @@ import React, { Component } from 'react';
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
-import SweetAlert from 'react-bootstrap-sweetalert'
-import MUIDataTable from "mui-datatables";
 
 am4core.useTheme(am4themes_animated);
 
 // rct card box
-import { RctCardContent } from 'Components/RctCard';
 
 class ChartGenero extends Component {
    constructor(props){
@@ -21,17 +18,6 @@ class ChartGenero extends Component {
 
       this.state={
          props: '',
-         columns: [],
-         data: [],
-         error: null,
-         id:0,
-         prompt: false,
-         modaledit:false,
-         zona:[],
-                  		
-         form: {
-            nombre: ""
-            }
       }
    }
 
@@ -105,25 +91,8 @@ class ChartGenero extends Component {
       markerTemplate.height = 10;
 
       this.chart = chart;
-      
-      pieSeries.slices.template.events.on("hit", function(ev) {
-         this.openAlert('prompt');
-         this.setState({
-            columns: [ev.target._dataItem.category],
-            data: [[ev.target._dataItem.value]]
-         })
-       }, this);
 
    }
-
-   onCancel(key) {
-      this.setState({ [key]: false })
-
-      }
-
-      openAlert(key) {
-         this.setState({ [key]: true });
-      }
 
    componentWillUnmount() {
       if (this.chart) {
@@ -132,33 +101,8 @@ class ChartGenero extends Component {
    }
 
    render() {
-
-      const { prompt } = this.state;
-      const columns = this.state.columns;
-      const data = this.state.data;
-      const options = {
-         filterType: 'dropdown',
-         selectableRows: false,
-			responsive: 'scrollMaxHeight'
-		};
       return (
-         <div id="chartgenero" style={{ width: "100%", height: "300px" }}>
-            <SweetAlert
-                     btnSize="sm"
-                     show={prompt}
-                     confirmBtnText="Cancelar"
-                     confirmBtnBsStyle="danger"
-                     title="Detalle Genero"
-                     onConfirm={() => this.onCancel('prompt')}
-               >
-                  <MUIDataTable
-                     data={data}
-                     columns={columns}
-                     options={options}
-                  />
-
-               </SweetAlert>
-         </div>
+         <div id="chartgenero" style={{ width: "100%", height: "300px" }}></div>
       );
    }
 }
