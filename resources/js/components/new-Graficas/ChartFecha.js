@@ -8,30 +8,16 @@ import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import am4lang_es_ES from "@amcharts/amcharts4/lang/es_ES";
-import SweetAlert from 'react-bootstrap-sweetalert'
-import MUIDataTable from "mui-datatables";
 am4core.useTheme(am4themes_animated);
 
 // rct card box
-import { RctCardContent } from 'Components/RctCard';
 
 class ChartFecha extends Component {
    constructor(props){
       super(props)
 
       this.state={
-         props: '',
-         columns: [],
-         data: [],
-         error: null,
-         id:0,
-         prompt: false,
-         modaledit:false,
-         zona:[],
-                  		
-         form: {
-            nombre: ""
-            }
+         props: ''
       }
    }
 
@@ -84,14 +70,15 @@ class ChartFecha extends Component {
       var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
       valueAxis.title.text = "Personas";
       valueAxis.title.fontWeight = "bold";
+      valueAxis.min = 0;
 
       // Create series
       let series = chart.series.push(new am4charts.LineSeries());
       series.dataFields.dateX = "fecha_creacion";
       series.dataFields.valueY = "personas";
       series.tooltipText = "{valueY}";
-      series.tooltip.pointerOrientation = "vertical";
-      series.tooltip.background.fillOpacity = 0.1;
+      // series.tooltip.pointerOrientation = "vertical";
+      series.tooltip.background.fillOpacity = 1;
 
       chart.cursor = new am4charts.XYCursor();
       chart.cursor.xAxis = dateAxis;
@@ -113,10 +100,7 @@ class ChartFecha extends Component {
    render() {
       
       return (
-         <RctCardContent>
-            <div id="chartfecha" style={{ width: "100%", height: "300px" }}>
-               </div>
-         </RctCardContent>
+         <div id="chartfecha" style={{ width: "100%", height: "300px" }}></div>
       );
    }
 }

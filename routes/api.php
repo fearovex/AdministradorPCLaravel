@@ -31,11 +31,14 @@ Route::group(['middleware' => 'cors'], function() {
 
         Route::post('/graficas', 'GraficasController@Consulta');
 
-        
-        
-        Route::post('/detailEvents','DetailEventsController@index');
-        
+        //apis para detalle de campañas
+        Route::post('/detailEvents','DetailEventsController@index');   
+
         Route::post('/nameColumnNames','DetailEventsController@getColumnNames');
+
+        Route::post('/prefferWeekDay','DetailEventsController@prefferWeekDayUser');
+        
+        Route::post('/visitHistory','DetailEventsController@visitHistoryUser');
         
         Route::resource('/locations','LocationsController');    
         
@@ -86,5 +89,29 @@ Route::group(['middleware' => 'cors'], function() {
         Route::post('/TopFiveRooms', 'GraficasController@TopFiveRooms');
 
         Route::post('/TopTenUsersCampaing', 'GraficasController@TopTenUsersCampaing');
+
+        Route::post('/userInfoDB', 'GraficasController@UserInfoDB');
+
+        Route::post('/prefferWeekDayDB', 'GraficasController@PrefferWeekDayDB');
+
+        Route::post('/radiusApiTimeAverage', 'RadiusController@getDataRadiusTimeAverage');
+        
+        Route::post('/radiusApiConnected', 'RadiusController@getDataRadiusConnected');
+        
+        Route::post('/visitHistoryDB','GraficasController@visitHistoryUserDB');
+
+        Route::post('/promedyBandwidth', 'RadiusController@getPromedyBandwidth');
+
+        Route::post('/promedyTimeSession', 'RadiusController@getPromedyTimeSession');
+
+        Route::post('/timeConnect', 'RadiusController@getTimeConnect');
+        
+        Route::post('/timeConnectDB', 'RadiusController@getTimeConnectDB');
+        
+        Route::post('/ConnectedPeopleLocation', 'RadiusController@getConnectedPeopleLocation');
+        
+        Route::post('/ChartBandwidth', 'RadiusController@getChartBandwidth');
+        
+        Route::post('/ChartTimeConnect', 'RadiusController@getChartTimeConnect');
     });
  });
