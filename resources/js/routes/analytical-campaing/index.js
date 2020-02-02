@@ -68,7 +68,8 @@ export default class AnalyticalCampaing extends Component {
             },
             events: [],
             timeConnectionRadius:0,
-            usersConnectedRadius:0
+            usersConnectedRadius:0,
+            type:""
         }
 
         this.ConsultaGraficas = this.ConsultaGraficas.bind(this);
@@ -487,10 +488,22 @@ export default class AnalyticalCampaing extends Component {
                     body: JSON.stringify(this.state.form)
                 }
                 let responseRadius = await fetch(`${localStorage.urlDomain}api/radiusApiTimeAverage`,config);
-                let radiusTimeUser = await responseRadius.json()
+                let radiusTimeUserConversion= await responseRadius.json()
+                let type = ' seg';
+                let radiusTimeUser = Math.round(radiusTimeUserConversion);
+
+                if(radiusTimeUser >= 60){
+                    radiusTimeUser = Math.round(radiusTimeUser/60)
+                    type = ' min';
+                }
+                if(radiusTimeUser >= 60){
+                    radiusTimeUser = Math.round(radiusTimeUser/60)
+                    type = ' hrs';
+                }
 
                 this.setState({
-                    timeConnectionRadius:radiusTimeUser
+                    timeConnectionRadius:radiusTimeUser,
+                    type: type
                 })
             } catch (error) {
                 console.log(error)
@@ -716,9 +729,9 @@ export default class AnalyticalCampaing extends Component {
                             <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                                 <CardInfo
                                     titleName={"Promedio"}
-                                    dataNum={timeConnectionRadius > 60 ? timeConnectionRadius/60 : timeConnectionRadius}
+                                    dataNum={this.state.timeConnectionRadius}
                                     backgroundColor=""
-                                    time={this.state.timeConnectionRadius > 60 ?" min": "s"}
+                                    time={this.state.type}
                                     classColor={"info"}
                                 />
                             </div>
