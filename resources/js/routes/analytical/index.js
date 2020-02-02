@@ -440,11 +440,11 @@ export default class Analytical extends Component {
             let promedyTimeSession = await res.json()
             let type = "Seg";
             let promedy = Math.round(promedyTimeSession.Promedio);
-            if(promedy > 60){
+            if(promedy >= 60){
                 promedy = Math.round((promedy/60));
                 type = "Min";
             }
-            if(promedy > 60){
+            if(promedy >= 60){
                 promedy = Math.round((promedy/60));
                 type = "Hrs";
             }
