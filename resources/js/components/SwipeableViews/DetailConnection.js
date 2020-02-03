@@ -46,7 +46,7 @@ class DetailConnection extends Component {
                   </ListItem>
                   <ListItem className="p-0 d-flex justify-content-start align-content-center">
                      <span className="mr-3 d-flex fw-semi-bold ">
-                        <i className="material-icons mr-10 ">tablet_mac</i>
+                        <i className='material-icons mr-10'>router</i>
                         Mac Dispositivo :
                      </span>
                      <span className=" text-truncate">

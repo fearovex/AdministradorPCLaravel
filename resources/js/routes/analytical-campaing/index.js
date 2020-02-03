@@ -89,7 +89,7 @@ export default class AnalyticalCampaing extends Component {
         this.TopFiveReasonVisits = this.TopFiveReasonVisits.bind(this)
         this.TopFiveRooms = this.TopFiveRooms.bind(this)
         this.AverageTimeConnectionRadius = this.AverageTimeConnectionRadius.bind(this)
-        this.UsersConnectedRadius = this.UsersConnectedRadius.bind(this)
+        // this.UsersConnectedRadius = this.UsersConnectedRadius.bind(this)
         
     }
 
@@ -103,7 +103,7 @@ export default class AnalyticalCampaing extends Component {
         this.TopFiveReasonVisits()
         this.TopFiveRooms()
         this.AverageTimeConnectionRadius()
-        this.UsersConnectedRadius()
+        // this.UsersConnectedRadius()
         let column = "fecha_creacion";
         this.state.form.column = [column];
         this.ConsultaGraficas(column)
@@ -287,7 +287,6 @@ export default class AnalyticalCampaing extends Component {
                     TotalRecords: TotalRecords[0].TotalRecords
                 }
             })
-            // this.state.data.TotalRecords = TotalRecords[0].TotalRecords;
 
         } catch (error) {
             this.setState({
@@ -488,19 +487,20 @@ export default class AnalyticalCampaing extends Component {
                     body: JSON.stringify(this.state.form)
                 }
                 let responseRadius = await fetch(`${localStorage.urlDomain}api/radiusApiTimeAverage`,config);
-                let radiusTimeUserConversion= await responseRadius.json()
-                let type = ' seg';
-                let radiusTimeUser = Math.round(radiusTimeUserConversion);
+                let radiusTimeUserConversion = await responseRadius.json()
+                
+                let type = ' Seg';
+                let radiusTimeUser = Math.round(radiusTimeUserConversion.tiempoConexion);
 
                 if(radiusTimeUser >= 60){
                     radiusTimeUser = Math.round(radiusTimeUser/60)
-                    type = ' min';
+                    type = ' Min';
                 }
                 if(radiusTimeUser >= 60){
                     radiusTimeUser = Math.round(radiusTimeUser/60)
-                    type = ' hrs';
+                    type = ' Hrs';
                 }
-
+                
                 this.setState({
                     timeConnectionRadius:radiusTimeUser,
                     type: type
@@ -511,26 +511,25 @@ export default class AnalyticalCampaing extends Component {
         }
     }
 
-    async UsersConnectedRadius(){
-            try {
-                let config = {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(this.state.form)
-                }
-                let responseRadius = await fetch(`${localStorage.urlDomain}api/radiusApiConnected`,config);
-                let radiusUserConnected = await responseRadius.json()
-
-                this.setState({
-                    usersConnectedRadius:radiusUserConnected
-                })
-            } catch (error) {
-                console.log(error)
-            }
-    }
+    // async UsersConnectedRadius(){
+    //         try {
+    //             let config = {
+    //                 method: 'POST',
+    //                 headers: {
+    //                     'Accept': 'application/json',
+    //                     'Content-Type': 'application/json'
+    //                 },
+    //                 body: JSON.stringify(this.state.form)
+    //             }
+    //             let responseRadius = await fetch(`${localStorage.urlDomain}api/radiusApiConnected`,config);
+    //             let radiusUserConnected = await responseRadius.json()
+    //             this.setState({
+    //                 usersConnectedRadius:radiusUserConnected
+    //             })
+    //         } catch (error) {
+    //             console.log(error)
+    //         }
+    // }
 
     render() {
         const { events,form, data, timeConnectionRadius, usersConnectedRadius } = this.state;
@@ -561,7 +560,7 @@ export default class AnalyticalCampaing extends Component {
                     <div className="row">
                         <RctCollapsibleCard
                             customClasses=""
-                            colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
+                            colClasses="col-sm-12 col-md-6 col-lg-6 d-sm-full"
                             heading={"Numero de registros"}
                             collapsible
                             // reloadable
@@ -576,7 +575,7 @@ export default class AnalyticalCampaing extends Component {
                                 />
                             </div>
                         </RctCollapsibleCard>
-                        <RctCollapsibleCard
+                        {/* <RctCollapsibleCard
                             customClasses=""
                             colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
                             heading={"Total Conectados"}
@@ -587,38 +586,39 @@ export default class AnalyticalCampaing extends Component {
                             <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                                 <CardInfo
                                     titleName={"Conectados"}
-                                    dataNum={usersConnectedRadius[0] ? usersConnectedRadius[0].Conectados : 0}
+                                    dataNum={usersConnectedRadius.Conectados ? usersConnectedRadius.Conectados : 0}
                                     backgroundColor=""
                                     classColor={"secondary"}
                                 />
                             </div>
-                        </RctCollapsibleCard>
+                        </RctCollapsibleCard> */}
                         <RctCollapsibleCard
                             customClasses=""
-                            colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
+                            colClasses="col-sm-12 col-md-6 col-lg-6 d-sm-full"
                             heading={"Vouchers"}
                             collapsible
                             // reloadable
                             fullBlock
                         >
                             <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
-                                <div className="row">
-                                <CardInfo
-                                    titleName={"Sin Usar"}
-                                    className="col-sm-12 col-md-5 col-lg-5 mr-10 ml-20"
-                                    dataNum={data.V_SinUso ? data.V_SinUso : 0}
-                                    icono={false}
-                                    backgroundColor=""
-                                    classColor={"info"}
-                                />
-                                <CardInfo
-                                    titleName={"En Uso"}
-                                    className="col-sm-12 col-md-5 col-lg-5 mr-20 ml-10"
-                                    dataNum={data.V_EnUso ? data.V_EnUso : 0}
-                                    icono={false}
-                                    backgroundColor=""
-                                    classColor={"secondary"}
-                                />
+                                <div className="row" style={{padding:'0 0 0 50px'}}>
+                                    <CardInfo
+                                        titleName={"Sin Usar"}
+                                        className="col-sm-12 col-md-5 col-lg-5 mr-4"
+                                        dataNum={data.V_SinUso ? data.V_SinUso : 0}
+                                        icono={false}
+                                        backgroundColor=""
+                                        classColor={"info"}
+                                    />
+                                     {/* <div className="blank-wrapper" style={{padding: '0 10px'}}></div> */}
+                                    <CardInfo
+                                        titleName={"En Uso"}
+                                        className="col-sm-12 col-md-5 col-lg-5 ml-4"
+                                        dataNum={data.V_EnUso ? data.V_EnUso : 0}
+                                        icono={false}
+                                        backgroundColor=""
+                                        classColor={"secondary"}
+                                    />
                                 </div>
                             </div>
                         </RctCollapsibleCard>
@@ -686,7 +686,7 @@ export default class AnalyticalCampaing extends Component {
                     <div className="row">
                         <RctCollapsibleCard
                             customClasses=""
-                            colClasses="col-sm-12 col-md-3 col-lg-3 d-sm-full"
+                            colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
                             heading={"Numero de registros"}
                             collapsible
                             // reloadable
@@ -701,7 +701,7 @@ export default class AnalyticalCampaing extends Component {
                                 />
                             </div>
                         </RctCollapsibleCard>
-                        <RctCollapsibleCard
+                        {/* <RctCollapsibleCard
                             customClasses=""
                             colClasses="col-sm-12 col-md-3 col-lg-3 d-sm-full"
                             heading={"Total Conectados"}
@@ -712,15 +712,15 @@ export default class AnalyticalCampaing extends Component {
                             <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                                 <CardInfo
                                     titleName={"Conectados"}
-                                    dataNum={usersConnectedRadius[0] ? usersConnectedRadius[0].Conectados : 0}
+                                    dataNum={usersConnectedRadius.Conectados ? usersConnectedRadius.Conectados : 0}
                                     backgroundColor=""
                                     classColor={"secondary"}
                                 />
                             </div>
-                        </RctCollapsibleCard>
+                        </RctCollapsibleCard> */}
                         <RctCollapsibleCard
                             customClasses=""
-                            colClasses="col-sm-12 col-md-3 col-lg-3 d-sm-full"
+                            colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
                             heading={"Tiempo de Conexión"}
                             collapsible
                             // reloadable
@@ -729,7 +729,7 @@ export default class AnalyticalCampaing extends Component {
                             <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                                 <CardInfo
                                     titleName={"Promedio"}
-                                    dataNum={this.state.timeConnectionRadius}
+                                    dataNum={timeConnectionRadius ? timeConnectionRadius : 0}
                                     backgroundColor=""
                                     time={this.state.type}
                                     classColor={"info"}
@@ -738,7 +738,7 @@ export default class AnalyticalCampaing extends Component {
                         </RctCollapsibleCard>
                         <RctCollapsibleCard
                             customClasses=""
-                            colClasses="col-sm-12 col-md-3 col-lg-3 d-sm-full"
+                            colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
                             heading={"Promedio de Edad"}
                             collapsible
                             // reloadable
