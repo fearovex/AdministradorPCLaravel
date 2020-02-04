@@ -23,7 +23,7 @@ class RadiusController extends Controller
                     $whereQueryCampaing .= " OR ";
                 }
             }
-            $queryRadiusPromedy = DB::select("select ROUND(SUM(acctsessiontime)) as tiempoConexion from rd.radacct as r where r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate' and ($whereQueryCampaing)");
+            $queryRadiusPromedy =  DB::connection('radius')->select("select ROUND(SUM(acctsessiontime)) as tiempoConexion from rd.radacct as r where r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate' and ($whereQueryCampaing)");
             if(!$queryRadiusPromedy){
                 $queryRadiusPromedy[0] = [
                     'tiempoConexion' => 0
