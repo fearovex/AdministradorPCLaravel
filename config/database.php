@@ -60,7 +60,7 @@ return [
         ],
         'radius' => [
             'driver' => 'mysql',
-            'host' => '167.172.123.50',
+            'host' => '64.225.36.245',
             'port' => '3306',
             'database' => 'rd',
             'username' => 'rd',
