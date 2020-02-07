@@ -71,6 +71,7 @@ export default class CMS extends Component {
       this.state = {
          data: [],
          value:0,
+         valueLang:0,
          checkedB: true,
          form:{
             //formulario
@@ -83,26 +84,25 @@ export default class CMS extends Component {
             num_voucher:false,
             num_habitacion:false,
             razon_visita:false,
-            terminos_condiciones:"",
-            ESP:true,
-            ENG:false,
+            terminos_condiciones_esp:"",
+            terminos_condiciones_eng:"",
             //diseño
             titlePortal:"",
             fileBackground:"",
             fileLogo:"",
             sizeLogoMobile:"",
             sizeLogoWeb:"",
-            buttonColors:"#8e8e8e",
-            backgroundColorForm:"#8e8e8e",
-            colorTitleForm:"#8e8e8e",
-            colorFontForm:"#8e8e8e",
+            buttonColors:"",
+            backgroundColorForm:"",
+            colorTitleForm:"",
+            colorFontForm:"",
             filesBanner: [],
-            imgsBanner:true
+            imgsBannerSwitch:true
          },
       }
       this.handleChangeCheckBox = this.handleChangeCheckBox.bind(this)
-      this.handleChangeLanguage = this.handleChangeLanguage.bind(this)
-      this.rteChange = this.rteChange.bind(this);
+      this.rteChangeEsp = this.rteChangeEsp.bind(this);
+      this.rteChangeEng = this.rteChangeEng.bind(this);
 
       this.handleChange = this.handleChange.bind(this)
       this.handleSubmit = this.handleSubmit.bind(this)
@@ -118,15 +118,43 @@ export default class CMS extends Component {
    handleChangeTabsIndex = index => {
       this.setState({ value: index });
    };
+   //tabs lang
+   handleChangeTabsLang = (event, valueLang) => {
+      this.setState({ valueLang });
+   };
+
+   handleChangeTabsIndexLang = index => {
+      this.setState({ valueLang: index });
+   };
 
    //métodos formulario
    handleChangeCheckBox = name => event => {
-      this.setState({
-         form:{
-            ...this.state.form,
-            [name]: event.target.checked 
-         }
-      });
+      if(name == 'email'){
+         this.setState({
+            form:{
+               ...this.state.form,
+               email: true,
+               num_voucher: false
+            }
+         });
+      }
+      else if(name == 'num_voucher'){
+         this.setState({
+            form:{
+               ...this.state.form,
+               num_voucher: true,
+               email: false
+            }
+         });
+      }else{
+         this.setState({
+            form:{
+               ...this.state.form,
+               [name]: event.target.checked 
+            }
+         });
+      }
+      
    };
    handleSwitch = name => event => {
       this.setState({
@@ -134,32 +162,26 @@ export default class CMS extends Component {
       });
    };
 
-   rteChange = (content, delta, source, editor) => {
+   rteChangeEsp = (content, delta, source, editor) => {
 		// console.log(editor.getHTML()); // texto html
       // console.log(editor.getText()); // texto plano
       this.setState({
          form:{
             ...this.state.form,
-            terminos_condiciones: editor.getHTML()
+            terminos_condiciones_esp: editor.getHTML()
          }
         
       })
 		// console.log(editor.getLength()); // número de carácteres
    }
-   
-   handleChangeLanguage(lang){
-		if(lang == 'ESP'){
-         this.setState({
-            ESP:true,
-            ENG:false,
-         })
-      }
-      if(lang == 'ENG'){
-         this.setState({
-            ESP:false,
-            ENG:true,
-         })
-      }
+   rteChangeEng = (content, delta, source, editor) => {
+      this.setState({
+         form:{
+            ...this.state.form,
+            terminos_condiciones_eng: editor.getHTML()
+         }
+        
+      })
    }
    //fin métodos formulario
 
@@ -176,7 +198,7 @@ export default class CMS extends Component {
             })
 
          }
-         if(!((e.target.files[0].type).includes("image/"))){
+         else if(!((e.target.files[0].type).includes("image/"))){
             NotificationManager.error('El tipo de archivo no es valido','',5000);
             this.setState({
                form:{
@@ -200,7 +222,16 @@ export default class CMS extends Component {
          }
       }
       else if(e.target.name == 'fileLogo'){
-         if(e.target.files[0].size >= 50000 ){
+         if(!((e.target.files[0].type).includes("image/"))){
+            NotificationManager.error('El tipo de archivo no es valido','',5000);
+            this.setState({
+               form:{
+                  ...this.state.form,
+                  fileBackground:""
+               }
+            })
+         }
+         else if(e.target.files[0].size >= 70000 ){
             NotificationManager.error('El archivo excedió el tamaño límite','',5000);
             this.setState({
                form:{
@@ -208,7 +239,8 @@ export default class CMS extends Component {
                   fileBackground:""
                }
             })
-         }else{
+         }
+         else{
             let files = e.target.files;
             let reader = new FileReader();
             reader.readAsDataURL(files[0])
@@ -222,6 +254,42 @@ export default class CMS extends Component {
             }
          }
       }
+      else if(e.target.name == 'sizeLogoMobile' && e.target.value <= 0){
+            this.setState({
+               form:{
+                  ...this.state.form,
+                  [e.target.name]:""
+               }
+            })
+      }
+
+      else if(e.target.name == 'sizeLogoWeb' && e.target.value <= 0 ){
+         this.setState({
+            form:{
+               ...this.state.form,
+               [e.target.name]:""
+            }
+         })
+      }
+
+      // else if(e.target.name == 'sizeLogoMobile' && e.target.value < 10){
+      //    this.setState({
+      //       form:{
+      //          ...this.state.form,
+      //          [e.target.name]:10
+      //       }
+      //    })
+      // }
+
+      // else if(e.target.name == 'sizeLogoWeb' && e.target.value < 20 ){
+      //    this.setState({
+      //       form:{
+      //          ...this.state.form,
+      //          [e.target.name]:20
+      //       }
+      //    })
+      // }
+
       else{
          this.setState({
             form:{
@@ -234,13 +302,45 @@ export default class CMS extends Component {
   
    async handleSubmit(e){
       e.preventDefault();
-      console.log(this.state.form)
+      const {
+         email,
+         nombre,
+         apellidos,
+         edad,
+         genero,
+         telefono,
+         num_voucher,
+         num_habitacion,
+         razon_visita,
+         terminos_condiciones_esp,
+         terminos_condiciones_eng,
+         titlePortal,
+         fileBackground,
+         fileLogo,
+         sizeLogoMobile,
+         sizeLogoWeb,
+         buttonColors,
+         backgroundColorForm,
+         colorTitleForm,
+         colorFontForm,
+         filesBanner,
+      } = this.state.form
+     console.log(this.state.form)
+      // (((titlePortal == "" && fileBackground == "") && (fileLogo == "" && sizeLogoMobile == "")) && (sizeLogoWeb == "" && buttonColors == "") && (colorTitleForm == "" && colorFontForm == "")) && (filesBanner == [])
+      if( (((titlePortal == "" || fileBackground == "") || (fileLogo == "" || sizeLogoMobile == "")) || (sizeLogoWeb == "" || buttonColors == "") || (colorTitleForm == "" || colorFontForm == ""))){
+         NotificationManager.error('Todos los campos son obligatorios','',5000);
+      }else{
+         console.log(this.state.form)
+      }
    }
 
    //fin métodos diseño
    
    render() {
       const theme = {
+         direction: 'rlt'
+      }
+      const themeLang = {
          direction: 'rlt'
       }
       const {
@@ -256,7 +356,8 @@ export default class CMS extends Component {
          razon_visita,
          ESP,
          ENG,
-         terminos_condiciones,
+         terminos_condiciones_esp,
+         terminos_condiciones_eng,
          // constantes diseño
          titlePortal,
          sizeLogoMobile,
@@ -265,7 +366,7 @@ export default class CMS extends Component {
          backgroundColorForm,
          colorTitleForm,
          colorFontForm,
-         imgsBanner 
+         imgsBannerSwitch 
       } = this.state.form;
 
       //constantes formulario
@@ -406,6 +507,11 @@ export default class CMS extends Component {
                                                 control={<Checkbox checked={genero} onChange={this.handleChangeCheckBox('genero')} value="genero" />}
                                                 label="Genero"
                                              />
+                                          </FormGroupUI>
+                                       </div>
+
+                                       <div className="col-lg-6">
+                                          <FormGroupUI>
                                              <FormControlLabelUI
                                                 control={<Checkbox checked={telefono} onChange={this.handleChangeCheckBox('telefono')} value="telefono" />}
                                                 label="Teléfono"
@@ -424,17 +530,47 @@ export default class CMS extends Component {
                                              />
                                           </FormGroupUI>
                                        </div>
-                                       <div className="col-lg-6">
-                                          <div className="editor-wrapper">
-                                             <h4 className="termsCon">Terminos y Condiciones</h4>
-                                             <ButtonUI size="small" className="btn btn-primary" onClick={() => this.handleChangeLanguage('ESP')} style={{ margin:"0 auto", padding:"3px 10px",borderRadius:"0" }}>
-                                                   ESP
-                                             </ButtonUI>
-                                             <ButtonUI size="small" className="btn btn-secondary" onClick={() =>this.handleChangeLanguage('ENG')} style={{ margin:"0 auto", padding:"3px 10px",borderRadius:"0" }}>
-                                                   ENG
-                                             </ButtonUI>
-                                             <ReactQuill theme="snow" modules={modules} formats={formats} value={terminos_condiciones} 
-                                                onChange={this.rteChange}/>
+                                       <div className="col-lg-12" style={{marginTop:"15px"}}>
+                                          <h4 className="termsCon">Terminos y Condiciones</h4>
+                                          <div className="Tab-wrap">
+                                             <AppBar position="static" >
+                                                <Tabs
+                                                   value={this.state.valueLang}
+                                                   onChange={this.handleChangeTabsLang}
+                                                   indicatorColor="primary"
+                                                   textColor="primary"
+                                                   variant="standard"
+                                                >
+                                                   <Tab style={{backgroundColor:"#304158"}} label={'Español'} />
+                                                   <Tab style={{backgroundColor:"#354f71"}} label={'Inglés'} />
+                                                </Tabs>
+                                             </AppBar>
+                                             <SwipeableViews
+                                                axis={themeLang.direction === 'rtl' ? 'x-reverse' : 'x'}
+                                                index={this.state.valueLang}
+                                                onChangeIndex={this.handleChangeTabsIndexLang}
+                                             >
+                                             <div className="card mb-0 transaction-box">
+                                                <TabContainer dir={themeLang.direction}>
+                                                   <RctCardContent>
+                                                   <div className="editor-wrapper">
+                                                      <ReactQuill theme="snow" modules={modules} formats={formats} value={terminos_condiciones_esp} 
+                                                         onChange={this.rteChangeEsp}/>
+                                                   </div>
+                                                   </RctCardContent>
+                                                </TabContainer>
+                                             </div>
+                                             <div className="card mb-0 transaction-box">
+                                                <TabContainer dir={themeLang.direction}>
+                                                   <RctCardContent>
+                                                   <div className="editor-wrapper">
+                                                      <ReactQuill theme="snow" modules={modules} formats={formats} value={terminos_condiciones_eng} 
+                                                         onChange={this.rteChangeEng}/>
+                                                   </div>
+                                                   </RctCardContent>
+                                                </TabContainer>
+                                             </div>
+                                             </SwipeableViews>
                                           </div>
                                        </div>
                                     </div>
@@ -444,16 +580,15 @@ export default class CMS extends Component {
                            <div className="card mb-0 transaction-box">
                               <TabContainer dir={theme.direction}>
                                  <RctCardContent>
-                                    <Form onSubmit={this.handleSubmit}>
                                        <div className="row" style={{backgroundColor: "#35475f",padding: "20px"}}>
                                           <div className="col-lg-6">
                                              <FormGroup>
                                                 <Label for="titlePortal">Titulo Portal Cautivo</Label>
-                                                <Input type="text" name="titlePortal" id="titlePortal" value={titlePortal} onChange={() => this.handleChange(event)} placeholder="Titulo Portal Cautivo" />
+                                                <Input type="text" autoComplete="off" name="titlePortal" id="titlePortal" value={titlePortal} onChange={() => this.handleChange(event)} placeholder="Titulo Portal Cautivo" />
                                              </FormGroup>
                                              <FormGroup>
                                                 <Label for="fileBackground">Imagen de Fondo</Label>
-                                                <Input accept="image/*" type="file" name="fileBackground" id="fileBackground" onChange={(e) => this.handleChange(e)} />
+                                                <Input accept="image/*" type="file" autoComplete="off" name="fileBackground" id="fileBackground" onChange={(e) => this.handleChange(e)} />
                                                 <FormText color="muted">
                                                    Recuerde que el tamaño máximo es de 500kb y
                                                    1920 x 1280.
@@ -461,71 +596,72 @@ export default class CMS extends Component {
                                              </FormGroup>
                                              <FormGroup>
                                                 <Label for="fileLogo">Logo</Label>
-                                                <Input accept="image/*" type="file" name="fileLogo" id="fileLogo" onChange={(e) => this.handleChange(e)} />
+                                                <Input accept="image/*" type="file" autoComplete="off" name="fileLogo" id="fileLogo" onChange={(e) => this.handleChange(e)} />
                                                 <FormText color="muted">
                                                    Recuerde que el tamaño máximo es de 50kb.
                                                 </FormText>
                                              </FormGroup>
                                              <FormGroup>
                                                 <Label for="sizeLogoMobile">Tamaño Logo Movil</Label>
-                                                <Input type="number" name="sizeLogoMobile" id="sizeLogoMobile" value={sizeLogoMobile} onChange={() => this.handleChange(event)} placeholder="Tamaño Logo Movil" />
+                                                <Input type="number" autoComplete="off" name="sizeLogoMobile" id="sizeLogoMobile" value={sizeLogoMobile} onChange={() => this.handleChange(event)} placeholder="Tamaño Logo Movil" />
                                              </FormGroup>
                                              <FormGroup>
                                                 <Label for="sizeLogoWeb">Tamaño Logo Web</Label>
-                                                <Input type="number" name="sizeLogoWeb" id="sizeLogoWeb" value={sizeLogoWeb} onChange={() => this.handleChange(event)} placeholder="Tamaño Logo Web" />
+                                                <Input type="number" autoComplete="off" name="sizeLogoWeb" id="sizeLogoWeb" value={sizeLogoWeb} onChange={() => this.handleChange(event)} placeholder="Tamaño Logo Web" />
                                              </FormGroup>
                                              <FormGroup>
                                                 <Label for="buttonColors">Color de Botones</Label>
-                                                <input type="color" name="buttonColors" id="buttonColors" value={buttonColors} onChange={() => this.handleChange(event)} className="inputColor"/>
+                                                <input type="color" autoComplete="off" name="buttonColors" id="buttonColors" value={buttonColors} onChange={() => this.handleChange(event)} className="inputColor"/>
                                              </FormGroup>
                                              
                                           
                                           </div>
-                                          <div className="col-lg-6">
-                                             <FormGroup>
+                                          <div className="col-lg-6" style={{marginBottom:"38px", marginTop:"20px"}}>
                                                 <div style={{marginBottom:"39px"}}>
                                                    <Label for="colorTitleForm">Color de Fondo del Formulario</Label>
-                                                   <input type="color" name="backgroundColorForm" id="backgroundColorForm" value={backgroundColorForm} onChange={() => this.handleChange(event)} className="inputColor"/>
+                                                   <input type="color" autoComplete="off" name="backgroundColorForm" id="backgroundColorForm" value={backgroundColorForm} onChange={() => this.handleChange(event)} className="inputColor"/>
                                                 </div>
                                                 <div style={{marginBottom:"39px"}}>
                                                    <Label for="colorTitleForm">Color Titulo del Formulario</Label>
-                                                   <input type="color" name="colorTitleForm" id="colorTitleForm" value={colorTitleForm} onChange={() => this.handleChange(event)} className="inputColor"/>
+                                                   <input type="color" autoComplete="off" name="colorTitleForm" id="colorTitleForm" value={colorTitleForm} onChange={() => this.handleChange(event)} className="inputColor"/>
                                                 </div>
                                                 <div style={{marginTop:"15px"}}>
                                                       <Label for="colorFontForm">Color de la Fuente del Formulario</Label>
-                                                      <input type="color" name="colorFontForm" id="colorFontForm" value={colorFontForm} onChange={() => this.handleChange(event)} className="inputColor"/>
+                                                      <input type="color" autoComplete="off" name="colorFontForm" id="colorFontForm" value={colorFontForm} onChange={() => this.handleChange(event)} className="inputColor"/>
                                                 </div>
                                                 <div style={{marginTop:"35px"}}>
                                                    <FormControlLabel
-                                                      control={<Checkbox checked={imgsBanner} onChange={this.handleChangeCheckBox('imgsBanner')} value="imgsBanner" />}
+                                                      control={<Checkbox checked={imgsBannerSwitch} onChange={this.handleChangeCheckBox('imgsBannerSwitch')} value="imgsBannerSwitch" />}
                                                       label="Imagenes del Banner"
                                                    />
                                                 </div>
-                                                {imgsBanner?
-                                                <Dropzone onDrop={this.onDrop}>
-                                                   {({getRootProps, getInputProps}) => (
-                                                      <section className="container">
-                                                         <div {...getRootProps({className: 'dropzone'})}>
-                                                         <input {...getInputProps()} />
-                                                         <p> Arrastre y suelte algunas imagenes aquí, o haga click para seleccionarlas</p>
-                                                         </div>
-                                                         <aside>
-                                                         <h4 className="filesStyle">Archivos</h4>
-                                                         <ul>{files}</ul>
-                                                         </aside>
-                                                      </section>
-                                                   )}
-                                                </Dropzone>
+                                                {imgsBannerSwitch?
+                                                <FormGroup>
+                                                   <Dropzone onDrop={this.onDrop}>
+                                                      {({getRootProps, getInputProps}) => (
+                                                         <section className="container">
+                                                            <div {...getRootProps({className: 'dropzone'})}>
+                                                            <input {...getInputProps()} />
+                                                            <p> Arrastre y suelte algunas imagenes aquí, o haga click para seleccionarlas</p>
+                                                            </div>
+                                                            <aside>
+                                                            <h4 className="filesStyle">Archivos</h4>
+                                                            <ul>{files}</ul>
+                                                            </aside>
+                                                         </section>
+                                                      )}
+                                                   </Dropzone>
+                                                </FormGroup>
                                                 :
-                                                <div></div>
+                                                <div style={{paddingTop:"186px"}}>
+                                                   &nbsp;
+                                                </div>
                                                 }
-                                             </FormGroup>
                                           </div>
-                                          <div className="col-lg-12">
-                                             <Button type="submit" color="primary" style={{ margin:"0 auto", padding:"10px 30px" }}>Guardar</Button>
+                                          <div className="col-lg-12" style={{paddingBottom:"35px",paddingTop:"10px"}}>
+                                             <Button onClick={() => this.handleSubmit(event)} color="primary" style={{ margin:"0 auto", padding:"10px 50px" }}>Guardar</Button>
                                           </div>
                                        </div>
-                                    </Form>
                                  </RctCardContent>
                               </TabContainer>
                            </div>
@@ -549,14 +685,14 @@ export default class CMS extends Component {
                                     <div className="form-row">
                                     { nombre ?
                                        <div className="form-group col-md-6" name="form_group_nombre" id="form_group_nombre">
-                                          <input className="colorPlaceHolder" type="text" readonly className="form-control form-control-sm" id="nombre" name="nombre" placeholder="Nombre" />
+                                          <input className="colorPlaceHolder" type="text" autoComplete="off" className="form-control form-control-sm" id="nombre" name="nombre" placeholder="Nombre" />
                                        </div>
                                        :
                                        <div></div>
                                     }
                                     { apellidos ?
                                        <div className="form-group col-md-6" name="form_group_apellidos" id="form_group_apellidos">
-                                          <input className="colorPlaceHolder" type="text" readonly  className="form-control form-control-sm" id="apellidos" name="apellidos" placeholder="Apellidos"/>
+                                          <input className="colorPlaceHolder" type="text" autoComplete="off"  className="form-control form-control-sm" id="apellidos" name="apellidos" placeholder="Apellidos"/>
                                        </div>
                                     :
                                     <div></div>
@@ -564,21 +700,21 @@ export default class CMS extends Component {
                                     </div>
                                        { email ? 
                                        <div className="form-group" id="form_group_email"  name="form_group_email">
-                                          <input className="colorPlaceHolder" type="email" readonly className="form-control form-control-sm" id="email" name="email" placeholder="Correo Electrónico" />
+                                          <input className="colorPlaceHolder" type="email" autoComplete="off" className="form-control form-control-sm" id="email" name="email" placeholder="Correo Electrónico" />
                                        </div>
                                        :
                                        <div></div>
                                        }
                                        { telefono ?
                                        <div className="form-group" id="form_group_telefono"  name="form_group_telefono">
-                                          <input className="colorPlaceHolder" type="tel" readonly className="form-control form-control-sm" id="telefono" name="telefono" placeholder="Telefono" />
+                                          <input className="colorPlaceHolder" type="tel" autoComplete="off" className="form-control form-control-sm" id="telefono" name="telefono" placeholder="Telefono" />
                                        </div>
                                        :
                                        <div></div>
                                        }
                                        { edad ?
                                        <div className="form-group" id="form_group_edad"  name="form_group_edad">
-                                          <input className="colorPlaceHolder" type="text" readonly className="form-control form-control-sm" id="edad" name="edad" placeholder="Edad" />
+                                          <input className="colorPlaceHolder" type="text" autoComplete="off" className="form-control form-control-sm" id="edad" name="edad" placeholder="Edad" />
                                        </div>
                                           :
                                        <div></div>
@@ -597,14 +733,14 @@ export default class CMS extends Component {
                                        }
                                        { num_habitacion ?
                                        <div className="form-group" id="form_group_habitacion"  name="form_group_habitacion">
-                                          <input type="text" autocomplete="off" className="form-control form-control-sm" id="num_habitacion" name="num_habitacion" placeholder="Ingrese el número de habitación" />
+                                          <input type="text" autoComplete="off" className="form-control form-control-sm" id="num_habitacion" name="num_habitacion" placeholder="Ingrese el número de habitación" />
                                        </div>
                                           :
                                        <div></div>
                                        }
                                        { num_voucher ?
                                        <div className="form-group" id="form_group_voucher" name="form_group_voucher">
-                                          <input type="text" required autocomplete="off" className="form-control form-control-sm" id="num_voucher" name="num_voucher" placeholder="Ingrese el pin acceso a internet" />
+                                          <input type="text"  autoComplete="off" className="form-control form-control-sm" id="num_voucher" name="num_voucher" placeholder="Ingrese el pin acceso a internet" />
                                        </div>
                                           :
                                        <div></div>
@@ -660,7 +796,6 @@ export default class CMS extends Component {
                                        <img src="" alt="" />
                                     </div>
                                     <div style={{color:"black"}}>
-                                       {terminos_condiciones}
                                     </div>
                                  </div>              
                               </div>

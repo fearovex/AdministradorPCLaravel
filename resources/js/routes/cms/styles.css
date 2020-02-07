@@ -59,6 +59,8 @@
 .termsCon{
     text-align: center;
     margin-bottom: 13px;
+    border: 1px solid;
+    padding: 10px;
 }
 .inputColor{
     width: 100%;
