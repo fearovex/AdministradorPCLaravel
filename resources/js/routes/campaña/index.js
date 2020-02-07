@@ -28,6 +28,13 @@ export default class campañas extends Component {
 
 		const id_location = localStorage.user_location
 
+		let date = moment(new Date, 'YYYY/MM/DD hh:mm a');
+		let año = date.year();
+		let mes = date.month() + 1;
+		let dia = date.dates();
+		let hora = date.hours();
+		let minutos = date.minute();
+
 		this.state = {
 			data: [],
 			error: null,
@@ -38,11 +45,12 @@ export default class campañas extends Component {
 			modaledit: false,
 			form: {
 				nombre_campaña: "",
-				fecha_inicio: "",
-				fecha_fin: "",
+				fecha_inicio: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos) + ":00",
+				fecha_fin: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos) + ":00",
 				descripcion: "",
 				zona_ap: "",
 				anio: "",
+				vertical_economica:""
 			},
 		}
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -64,6 +72,7 @@ export default class campañas extends Component {
 				data: data,
 				form: {
 					id_location: id_location
+					
 				}
 			})
 
@@ -124,11 +133,16 @@ export default class campañas extends Component {
 
 			await fetch(`${localStorage.urlDomain}api/campanias`, config);
 
+			let redirectCMS = this.props.history.location.pathname;
+			let nameCampaingCreated = this.state.form.nombre_campaña
+			// this.props.history.push(redirectCMS+'/'+nameCampaingCreated+'/cms')// al terminar cms
+			this.props.history.push(redirectCMS+'/crear/cms')
+			localStorage.setItem('campaingCreated',nameCampaingCreated);
 			this.setState({
 				prompt: false
 			})
 			
-			this.componentDidMount();
+			// this.componentDidMount();
 
 		} catch (error) {
 			console.log(error);
@@ -276,20 +290,20 @@ export default class campañas extends Component {
 				<div className="blank-wrapper">
 					<div className="sweet-alert-wrapper">
 
-						{/* <Button
+						<Button
 							variant="contained"
 							color="primary"
 							className="boton"
 							onClick={() => this.openAlert('prompt')}
 						>Crear campaña
-						</Button> */}
+						</Button>
 
 						<SweetAlert
 
 							btnSize="sm"
 							show={prompt}
 							showCancel
-							confirmBtnText="Guardar"
+							confirmBtnText="Siguiente"
 							cancelBtnText="Cancelar"
 							cancelBtnBsStyle="danger"
 							confirmBtnBsStyle="primary"
@@ -366,7 +380,7 @@ export default class campañas extends Component {
 											name="descripcion"
 											id="descripcion"
 											className="has-input input-lg"
-											placeholder="Descripciòn"
+											placeholder="Descripción"
 											onChange={() => this.handleChange(event)}
 										/>
 									</div>
@@ -379,6 +393,16 @@ export default class campañas extends Component {
 											placeholder="Año"
 											onChange={() => this.handleChange(event)}
 										/>
+									</div>
+									<div className="col-lg-10">
+										<Select name="vertical_economica" native onChange={() => this.handleChange(event)}
+											className="has-input input-lg"
+										>
+											<option value="">Seleccione una vertical</option>
+											<option value='Hoteles'>Hoteles</option>
+											<option value='Centros Comerciales'>Centros Comerciales</option>
+
+										</Select>
 									</div>
 								</div>
 

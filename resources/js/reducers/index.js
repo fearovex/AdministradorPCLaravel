@@ -10,7 +10,6 @@ import todoAppReducer from './TodoAppReducer';
 import authUserReducer from './AuthUserReducer';
 import feedbacksReducer from './FeedbacksReducer';
 import ecommerceReducer from './EcommerceReducer';
-import CrmReducer from './CrmReducer';
 
 const reducers = combineReducers({
    settings,
@@ -21,7 +20,6 @@ const reducers = combineReducers({
    authUser: authUserReducer,
    feedback: feedbacksReducer,
    ecommerce: ecommerceReducer,
-   CrmReducer: CrmReducer
 });
 
 export default reducers;

@@ -1,0 +1,326 @@
+
+.formulario {
+    padding: 2%;
+    background: #005153ad;
+    border-radius: 10px;
+    color: #EEE;
+}
+
+
+.form-group {
+    margin-bottom: 0.6rem;
+}
+
+.check-terminos {
+    text-align: center;
+}
+
+a {
+    color: #EEE;
+}
+
+a:hover {
+    cursor: pointer ;
+    color: black;
+}
+
+.form-btn {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.5rem;
+}
+
+.input_error input {
+    background-color: rgb(251,154,154,0.73);
+}
+
+.input_error input::placeholder {
+    color: #EEE;
+}
+
+.input_error select {
+    background-color: rgb(251,154,154,0.73);
+    color: #EEE;
+}
+
+.input_error span {
+    font-size: 13px;
+}
+
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+
+/* * {
+    margin: 0;
+    box-sizing: border-box;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+} */
+
+/* html {   
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+} */
+
+/* body {
+    background: transparent;
+} */
+
+/* 
+html, body {
+    height: 100%;
+} */
+
+.selector-idioma {
+    position: absolute;
+    top: 3%;
+    left: 5%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+.icono-idioma {
+    position: absolute;
+    text-align: center;;
+}
+
+.icono-idioma img {
+    width: 2rem;
+}
+
+.icono-idioma span {
+    font-size: small;
+    font-weight: bold;
+}
+
+.icono-idioma img:hover {
+    border: 1px solid #20396f;
+}
+
+.container {
+    height: 100%;
+    background: transparent;
+    min-width: 100px;
+}
+
+.card {
+    background:transparent;
+    padding: 2%;
+    border: 0px solid rgba(0,0,0,.125);
+}
+
+.logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20%;
+}
+
+.logo p {
+    font-size: 1.2rem;
+    text-align: center;
+    color: black;
+    font-weight: bold;
+}
+
+.logo_terminos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 5%;
+}
+
+.logo_terminos img {
+    width: 250px;
+    margin: 1%;
+}
+
+.logo_terminos p {
+    font-size: 1.2rem;
+    text-align: center;
+    color: black;
+    font-weight: bold;
+}
+
+/* 
+.dark-mode .colorPlaceHolder>input::placeholder{
+    color: red!important;
+} */
+
+.container_terminos {
+    width: 100%;
+    height: 100%;
+}
+
+.container_terminos h2 {
+    color: black; 
+    text-align: center;
+    font-size: 25px;  
+}
+
+.a {
+    color: black;
+    font-weight: bold;
+}
+
+.popup {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0rem;
+    right: 0rem;
+    width: 100%;
+    height: 100%;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 2;
+    visibility: hidden;
+    opacity: 0;
+    overflow: hidden;
+    transition: .64s ease-in-out;
+}
+.popup-inner {
+    background: #005153ad;
+    position: relative;
+    bottom: -100vw;
+    right: -100vh;
+    display: flex;
+    align-items: center;
+    max-width: 800px;
+    max-height: 600px;
+    width: 60%;
+    height: 80%;
+    background-color: #fff;
+    -webkit-transform: rotate(32deg);
+            transform: rotate(32deg);
+    transition: .64s ease-in-out;
+    border-radius: 20px 20px 20px 20px;
+}
+
+  .popup__text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding-left: 4rem;
+    padding-right: 4rem;
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+  }
+  .popup__text h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    color: #0A0A0A;
+  }
+  /* .popup__text p {
+    font-size: .875rem;
+    color: #686868;
+    line-height: 1.5;
+  } */
+  .popup:target {
+    visibility: visible;
+    opacity: 1;
+  }
+  .popup:target .popup-inner {
+    bottom: 0;
+    right: 0;
+    -webkit-transform: rotate(0);
+            transform: rotate(0);
+  }
+  .popup__close {
+    position: absolute;
+    right: -1rem;
+    top: -1rem;
+    width: 3rem;
+    height: 3rem;
+    font-size: .875rem;
+    font-weight: 300;
+    border-radius: 100%;
+    background-color: #0A0A0A;
+    z-index: 4;
+    color: #fff;
+    line-height: 3rem;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+
+.titulo-terminos {
+    font-weight: bold;;
+}
+
+.literales-condiciones {
+    padding: 3%;
+    text-align: justify;
+}
+
+.literales-condiciones strong {
+    font-weight: bold;;
+}
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .popup__text {
+        padding: 1.2rem;
+    }
+
+    .container_terminos h2 {
+        padding-bottom: 10px;
+        margin-bottom: 30px;
+    }
+  }
+
+@media (min-width: 411px) and (max-width: 767px) {
+    .popup-inner {
+        width: 85%;
+    }
+
+    .popup__text {
+        padding: 1.2rem;
+    }
+
+    .container_terminos h2 {
+        padding-bottom: 10px;
+        margin-bottom: 30px;
+    }
+}
+
+@media (min-width: 360px) and (max-width: 410px) {
+    .popup-inner {
+        width: 85%;
+    }
+
+    .popup__text {
+        padding: 1.2rem;
+    }
+
+    .container_terminos h2 {
+        padding-bottom: 10px;
+        margin-bottom: 30px;
+    }
+}
+
+@media (min-width: 320px) and (max-width: 359px) {
+    .popup-inner {
+        width: 85%;
+    }
+
+    .popup__text {
+        padding: 1.2rem;
+    }
+
+    .container_terminos h2 {
+        padding-bottom: 10px;
+        margin-bottom: 30px;
+    }
+}
+

@@ -21,7 +21,6 @@ import RctDefaultLayout from './DefaultLayout';
 // boxed layout
 import RctBoxedLayout from './RctBoxedLayout';
 // CRM layout
-import CRMLayout from './CRMLayout';
 // app signin
 import AppSignIn from './SigninFirebase';
 import AppSignUp from './SignupFirebase';
@@ -103,7 +102,6 @@ class App extends Component {
             <Route path="/horizontal" component={HorizontalLayout} />
             <Route path="/agency" component={AgencyLayout} />
             <Route path="/boxed" component={RctBoxedLayout} />
-            <Route path="/dashboard" component={CRMLayout} />
             <Route path="/signin" component={AppSignIn} />
             <Route path="/signup" component={AppSignUp} />
             <Route path="/password/email" component={AppForgotPassword} />
