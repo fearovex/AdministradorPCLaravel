@@ -108,7 +108,7 @@ html, body {
     min-width: 100px;
 }
 
-.card {
+.cardCont {
     background:transparent;
     padding: 2%;
     border: 0px solid rgba(0,0,0,.125);
@@ -121,10 +121,9 @@ html, body {
     margin-top: 20%;
 }
 
-.logo p {
+.titleForm{
     font-size: 1.2rem;
     text-align: center;
-    color: black;
     font-weight: bold;
 }
 
@@ -151,6 +150,19 @@ html, body {
 .dark-mode .colorPlaceHolder>input::placeholder{
     color: red!important;
 } */
+.dark-mode .colorPlaceHolder input::placeholder{
+    color: black!important;
+ }
+ .dark-mode .colorPlaceHolder > select{
+    color: black!important;
+ }
+ .dark-mode .colorPlaceHolder input{
+    background-color:white!important;
+ }
+ .dark-mode .colorPlaceHolder select{
+    background-color:white!important;
+ }
+ 
 
 .container_terminos {
     width: 100%;

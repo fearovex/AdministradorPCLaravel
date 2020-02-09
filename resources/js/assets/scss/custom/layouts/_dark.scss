@@ -131,8 +131,9 @@ body.dark-mode .app-boxed .rct-page {
    textarea,
    .total-earn-chart .default-btn-group button,
    .ais-Panel-header {
-      color: $dark-bg-color !important;
+      color: $dark-bg-color;
    }
+   //was !important 
    .pricing-wrapper,
    .about-wrapper,
    .panel-wrapper,

@@ -78,3 +78,6 @@
 .transaction-box{
     padding:0;
 }
+.Tab-wrap header button span{
+    color: white!important;
+}

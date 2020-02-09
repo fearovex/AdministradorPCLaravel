@@ -45,6 +45,11 @@ import {
 import '../cms/formStyles.css';
 import '../cms/styles.css';
 
+import axios, { post } from 'axios'
+
+
+// import Radium, { Style } from 'radium'
+
 function TabContainer({ children, dir }) {
    return (
       <Typography component="div" dir={dir} style={{ padding: 8 * 3, overflowX: 'hidden' }}>
@@ -94,10 +99,11 @@ export default class CMS extends Component {
             sizeLogoWeb:"",
             buttonColors:"",
             backgroundColorForm:"",
-            colorTitleForm:"",
+            colorTitleForm:"#000",
             colorFontForm:"",
             filesBanner: [],
-            imgsBannerSwitch:true
+            imgsBannerSwitch:true,
+            imgUploadeBackground:""
          },
       }
       this.handleChangeCheckBox = this.handleChangeCheckBox.bind(this)
@@ -107,7 +113,7 @@ export default class CMS extends Component {
       this.handleChange = this.handleChange.bind(this)
       this.handleSubmit = this.handleSubmit.bind(this)
    }
-   
+
    async componentDidMount(){
 
    }
@@ -186,7 +192,7 @@ export default class CMS extends Component {
    //fin métodos formulario
 
    //métodos diseño 
-   handleChange(e){
+   async handleChange(e){
       if(e.target.name == 'fileBackground'){
          if(e.target.files[0].size >= 500000 ){
             NotificationManager.error('El archivo excedió el tamaño límite','',5000);
@@ -212,12 +218,22 @@ export default class CMS extends Component {
             let reader = new FileReader();
             reader.readAsDataURL(files[0])
             reader.onload=(e)=>{
+
                this.setState({
                   form:{
                      ...this.state.form,
                      fileBackground:e.target.result
                   }
                })
+              
+               let url =`${localStorage.urlDomain}api/uploadImage`
+               let formData = {fileBackground:this.state.form.fileBackground};
+
+               return post(url,formData)
+               .then(response=>(
+                  console.log(response)
+               ))
+               
             }
          }
       }
@@ -263,29 +279,11 @@ export default class CMS extends Component {
             })
       }
 
-      else if(e.target.name == 'sizeLogoWeb' && e.target.value <= 0 ){
-         this.setState({
-            form:{
-               ...this.state.form,
-               [e.target.name]:""
-            }
-         })
-      }
-
       // else if(e.target.name == 'sizeLogoMobile' && e.target.value < 10){
       //    this.setState({
       //       form:{
       //          ...this.state.form,
       //          [e.target.name]:10
-      //       }
-      //    })
-      // }
-
-      // else if(e.target.name == 'sizeLogoWeb' && e.target.value < 20 ){
-      //    this.setState({
-      //       form:{
-      //          ...this.state.form,
-      //          [e.target.name]:20
       //       }
       //    })
       // }
@@ -325,6 +323,7 @@ export default class CMS extends Component {
          colorFontForm,
          filesBanner,
       } = this.state.form
+     
      console.log(this.state.form)
       // (((titlePortal == "" && fileBackground == "") && (fileLogo == "" && sizeLogoMobile == "")) && (sizeLogoWeb == "" && buttonColors == "") && (colorTitleForm == "" && colorFontForm == "")) && (filesBanner == [])
       if( (((titlePortal == "" || fileBackground == "") || (fileLogo == "" || sizeLogoMobile == "")) || (sizeLogoWeb == "" || buttonColors == "") || (colorTitleForm == "" || colorFontForm == ""))){
@@ -337,6 +336,7 @@ export default class CMS extends Component {
    //fin métodos diseño
    
    render() {
+     
       const theme = {
          direction: 'rlt'
       }
@@ -354,8 +354,7 @@ export default class CMS extends Component {
          num_voucher,
          num_habitacion,
          razon_visita,
-         ESP,
-         ENG,
+        
          terminos_condiciones_esp,
          terminos_condiciones_eng,
          // constantes diseño
@@ -454,8 +453,7 @@ export default class CMS extends Component {
            />
          );
        });
-       
-       
+      
       return (
          <div className="row" style={{marginBottom:"20px"}}>
             <div className="col-lg-6" >
@@ -471,7 +469,7 @@ export default class CMS extends Component {
                               textColor="primary"
                               variant="standard"
                            >
-                              <Tab  style={{backgroundColor: "#3e7296"}} label={'Formulario'} />
+                              <Tab style={{backgroundColor: "#3e7296"}} label={'Formulario'} />
                               <Tab style={{backgroundColor: "#099c96"}} label={'Diseño'} />
                            </Tabs>
                         </AppBar>
@@ -676,51 +674,53 @@ export default class CMS extends Component {
                   <div className="container" >
                         <div className="row h-100">
                            <div className="col-sm-12 my-auto" >
-                              <div className="card" style={{background: "white"}}>
+                             
+                               <div className="cardCont" style={{background: "white", backgroundImage: `url(${ this.state.form.imgUploadeBackground != '' ? require('../../../../storage/temporaryImg'+this.state.form.imgUploadeBackground): ''}`, backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }}>
                                     <div className="logo">                        
-                                       <img className="img-logo" src="img" alt="s" />
-                                       <p style={{color: "black!important"}}>Titulo</p>
+                                       {/* <img className="img-logo" src={require('../../../../storage/temporaryImg/backgroundImg.jpeg')} alt="s" /> */}
+                                       <img className="img-logo" src="" alt="s" />
+                                       <div className="titleForm" style={{color:colorTitleForm}}>{titlePortal}</div>
                                     </div>
-                                 <form className="formulario"  action="" style={{background: "gray"}}>
+                                 <form className="formulario"  action="" style={{background: backgroundColorForm}}>
                                     <div className="form-row">
                                     { nombre ?
-                                       <div className="form-group col-md-6" name="form_group_nombre" id="form_group_nombre">
-                                          <input className="colorPlaceHolder" type="text" autoComplete="off" className="form-control form-control-sm" id="nombre" name="nombre" placeholder="Nombre" />
+                                       <div className="form-group col-md-6 colorPlaceHolder" name="form_group_nombre" id="form_group_nombre">
+                                          <input className="" type="text" autoComplete="off" className="form-control form-control-sm" id="nombre" name="nombre" placeholder="Nombre" />
                                        </div>
                                        :
                                        <div></div>
                                     }
                                     { apellidos ?
-                                       <div className="form-group col-md-6" name="form_group_apellidos" id="form_group_apellidos">
-                                          <input className="colorPlaceHolder" type="text" autoComplete="off"  className="form-control form-control-sm" id="apellidos" name="apellidos" placeholder="Apellidos"/>
+                                       <div className="form-group col-md-6 colorPlaceHolder" name="form_group_apellidos" id="form_group_apellidos">
+                                          <input className="" type="text" autoComplete="off"  className="form-control form-control-sm" id="apellidos" name="apellidos" placeholder="Apellidos"/>
                                        </div>
                                     :
                                     <div></div>
                                     }
                                     </div>
                                        { email ? 
-                                       <div className="form-group" id="form_group_email"  name="form_group_email">
+                                       <div className="form-group colorPlaceHolder" id="form_group_email"  name="form_group_email">
                                           <input className="colorPlaceHolder" type="email" autoComplete="off" className="form-control form-control-sm" id="email" name="email" placeholder="Correo Electrónico" />
                                        </div>
                                        :
                                        <div></div>
                                        }
                                        { telefono ?
-                                       <div className="form-group" id="form_group_telefono"  name="form_group_telefono">
+                                       <div className="form-group colorPlaceHolder" id="form_group_telefono"  name="form_group_telefono">
                                           <input className="colorPlaceHolder" type="tel" autoComplete="off" className="form-control form-control-sm" id="telefono" name="telefono" placeholder="Telefono" />
                                        </div>
                                        :
                                        <div></div>
                                        }
                                        { edad ?
-                                       <div className="form-group" id="form_group_edad"  name="form_group_edad">
+                                       <div className="form-group colorPlaceHolder" id="form_group_edad"  name="form_group_edad">
                                           <input className="colorPlaceHolder" type="text" autoComplete="off" className="form-control form-control-sm" id="edad" name="edad" placeholder="Edad" />
                                        </div>
                                           :
                                        <div></div>
                                        }
                                        { genero ?
-                                       <div className="form-group" id="form_group_genero"  name="form_group_genero">
+                                       <div className="form-group colorPlaceHolder" id="form_group_genero"  name="form_group_genero">
                                           <select id="genero"  name="genero" className="form-control form-control-sm">
                                                 <option selected value="">Selecciona un género</option>
                                                 <option value="Hombre">Hombre</option>
@@ -732,21 +732,21 @@ export default class CMS extends Component {
                                           <div></div>
                                        }
                                        { num_habitacion ?
-                                       <div className="form-group" id="form_group_habitacion"  name="form_group_habitacion">
+                                       <div className="form-group colorPlaceHolder" id="form_group_habitacion"  name="form_group_habitacion">
                                           <input type="text" autoComplete="off" className="form-control form-control-sm" id="num_habitacion" name="num_habitacion" placeholder="Ingrese el número de habitación" />
                                        </div>
                                           :
                                        <div></div>
                                        }
                                        { num_voucher ?
-                                       <div className="form-group" id="form_group_voucher" name="form_group_voucher">
+                                       <div className="form-group colorPlaceHolder" id="form_group_voucher" name="form_group_voucher">
                                           <input type="text"  autoComplete="off" className="form-control form-control-sm" id="num_voucher" name="num_voucher" placeholder="Ingrese el pin acceso a internet" />
                                        </div>
                                           :
                                        <div></div>
                                        }
                                        { razon_visita ?
-                                       <div className="form-group" id="form_group_razon_visita"  name="form_group_razon_visita">
+                                       <div className="form-group colorPlaceHolder" id="form_group_razon_visita"  name="form_group_razon_visita">
                                           <select id="razon_visita"  name="razon_visita" className="form-control form-control-sm">
                                                 <option selected value="">Selecciona una razón de visita</option>
                                                 <option value="Vacaciones">Vacaciones</option>
@@ -759,7 +759,7 @@ export default class CMS extends Component {
                                           :
                                           <div></div>
                                        }
-                                       <div className="form-group check-terminos" id="form_group_check" name="form_group_check">
+                                       <div className="form-group check-terminos colorPlaceHolder" id="form_group_check" name="form_group_check">
                                              <div className="custom-control custom-switch">
                                                 <input type="checkbox" className="custom-control-input" id="customSwitches" name="customSwitches" />
                                                 
@@ -773,14 +773,14 @@ export default class CMS extends Component {
                                                       />
                                                       
                                                    }
-                                                   label={<a href="#popup">Terminos y Condiciones</a>}
+                                                   label={<a href="#popup" style={{color:colorFontForm}}>Terminos y Condiciones</a>}
                                                 />
                                                
                                              </div>
                                        </div>
 
                                        <div className="form-btn">
-                                          <button type="submit" id="submit" className="btn btn-conect">Continuar</button>
+                                          <button type="submit" id="submit" className="btn" style={{backgroundColor:buttonColors, color:colorFontForm}}>Continuar</button>
                                        </div>     
                                  </form>
                               </div>
