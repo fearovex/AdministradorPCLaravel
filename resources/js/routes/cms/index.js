@@ -103,7 +103,7 @@ export default class CMS extends Component {
             colorFontForm:"",
             filesBanner: [],
             imgsBannerSwitch:true,
-            imgUploadeBackground:""
+            imgBackgroundPreviewUrl:null
          },
       }
       this.handleChangeCheckBox = this.handleChangeCheckBox.bind(this)
@@ -217,23 +217,15 @@ export default class CMS extends Component {
             let files = e.target.files;
             let reader = new FileReader();
             reader.readAsDataURL(files[0])
+            
             reader.onload=(e)=>{
-
                this.setState({
                   form:{
                      ...this.state.form,
                      fileBackground:e.target.result
+                     
                   }
-               })
-              
-               let url =`${localStorage.urlDomain}api/uploadImage`
-               let formData = {fileBackground:this.state.form.fileBackground};
-
-               return post(url,formData)
-               .then(response=>(
-                  console.log(response)
-               ))
-               
+               })   
             }
          }
       }
@@ -358,6 +350,8 @@ export default class CMS extends Component {
          terminos_condiciones_esp,
          terminos_condiciones_eng,
          // constantes diseño
+         fileBackground,
+         fileLogo,
          titlePortal,
          sizeLogoMobile,
          sizeLogoWeb,
@@ -674,11 +668,119 @@ export default class CMS extends Component {
                   <div className="container" >
                         <div className="row h-100">
                            <div className="col-sm-12 my-auto" >
-                             
-                               <div className="cardCont" style={{background: "white", backgroundImage: `url(${ this.state.form.imgUploadeBackground != '' ? require('../../../../storage/temporaryImg'+this.state.form.imgUploadeBackground): ''}`, backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }}>
+                           { fileBackground ?  
+                              <div className="cardCont" style={{background: "white", backgroundImage: `url(${fileBackground})`, backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }}>
                                     <div className="logo">                        
-                                       {/* <img className="img-logo" src={require('../../../../storage/temporaryImg/backgroundImg.jpeg')} alt="s" /> */}
-                                       <img className="img-logo" src="" alt="s" />
+                                       <img className="img-logo" src={fileLogo ? fileLogo:''} style={{marginBottom:'10px',maxWidth: `${sizeLogoWeb}px`}} alt="s" />
+                                       <div className="titleForm" style={{color:colorTitleForm, }}>{titlePortal}</div>
+                                    </div>
+                                 <form className="formulario"  action="" style={{background: backgroundColorForm}}>
+                                    <div className="form-row">
+                                    { nombre ?
+                                       <div className="form-group col-md-6 colorPlaceHolder" name="form_group_nombre" id="form_group_nombre">
+                                          <input className="" type="text" autoComplete="off" className="form-control form-control-sm" id="nombre" name="nombre" placeholder="Nombre" />
+                                       </div>
+                                       :
+                                       <div></div>
+                                    }
+                                    { apellidos ?
+                                       <div className="form-group col-md-6 colorPlaceHolder" name="form_group_apellidos" id="form_group_apellidos">
+                                          <input className="" type="text" autoComplete="off"  className="form-control form-control-sm" id="apellidos" name="apellidos" placeholder="Apellidos"/>
+                                       </div>
+                                    :
+                                    <div></div>
+                                    }
+                                    </div>
+                                       { email ? 
+                                       <div className="form-group colorPlaceHolder" id="form_group_email"  name="form_group_email">
+                                          <input className="colorPlaceHolder" type="email" autoComplete="off" className="form-control form-control-sm" id="email" name="email" placeholder="Correo Electrónico" />
+                                       </div>
+                                       :
+                                       <div></div>
+                                       }
+                                       { telefono ?
+                                       <div className="form-group colorPlaceHolder" id="form_group_telefono"  name="form_group_telefono">
+                                          <input className="colorPlaceHolder" type="tel" autoComplete="off" className="form-control form-control-sm" id="telefono" name="telefono" placeholder="Telefono" />
+                                       </div>
+                                       :
+                                       <div></div>
+                                       }
+                                       { edad ?
+                                       <div className="form-group colorPlaceHolder" id="form_group_edad"  name="form_group_edad">
+                                          <input className="colorPlaceHolder" type="text" autoComplete="off" className="form-control form-control-sm" id="edad" name="edad" placeholder="Edad" />
+                                       </div>
+                                          :
+                                       <div></div>
+                                       }
+                                       { genero ?
+                                       <div className="form-group colorPlaceHolder" id="form_group_genero"  name="form_group_genero">
+                                          <select id="genero"  name="genero" className="form-control form-control-sm">
+                                                <option selected value="">Selecciona un género</option>
+                                                <option value="Hombre">Hombre</option>
+                                                <option value="Mujer">Mujer</option>
+                                                <option value="Otro">Otro</option>
+                                          </select>
+                                       </div>
+                                          :
+                                          <div></div>
+                                       }
+                                       { num_habitacion ?
+                                       <div className="form-group colorPlaceHolder" id="form_group_habitacion"  name="form_group_habitacion">
+                                          <input type="text" autoComplete="off" className="form-control form-control-sm" id="num_habitacion" name="num_habitacion" placeholder="Ingrese el número de habitación" />
+                                       </div>
+                                          :
+                                       <div></div>
+                                       }
+                                       { num_voucher ?
+                                       <div className="form-group colorPlaceHolder" id="form_group_voucher" name="form_group_voucher">
+                                          <input type="text"  autoComplete="off" className="form-control form-control-sm" id="num_voucher" name="num_voucher" placeholder="Ingrese el pin acceso a internet" />
+                                       </div>
+                                          :
+                                       <div></div>
+                                       }
+                                       { razon_visita ?
+                                       <div className="form-group colorPlaceHolder" id="form_group_razon_visita"  name="form_group_razon_visita">
+                                          <select id="razon_visita"  name="razon_visita" className="form-control form-control-sm">
+                                                <option selected value="">Selecciona una razón de visita</option>
+                                                <option value="Vacaciones">Vacaciones</option>
+                                                <option value="Trabajo">Trabajo</option>
+                                                <option value="Congreso">Congreso</option>
+                                                <option value="Convencion">Convencion</option>
+                                                <option value="Otro">Otro</option>
+                                          </select>
+                                       </div>
+                                          :
+                                          <div></div>
+                                       }
+                                       <div className="form-group check-terminos colorPlaceHolder" id="form_group_check" name="form_group_check">
+                                             <div className="custom-control custom-switch">
+                                                <input type="checkbox" className="custom-control-input" id="customSwitches" name="customSwitches" />
+                                                
+
+                                                <FormControlLabel
+                                                   control={
+                                                      <IOSSwitch
+                                                         checked={this.state.checkedB}
+                                                         onChange={this.handleSwitch('checkedB')}
+                                                         value="checkedB"
+                                                      />
+                                                      
+                                                   }
+                                                   label={<a href="#popup" style={{color:colorFontForm}}>Terminos y Condiciones</a>}
+                                                />
+                                               
+                                             </div>
+                                       </div>
+
+                                       <div className="form-btn">
+                                          <button type="submit" id="submit" className="btn" style={{backgroundColor:buttonColors, color:colorFontForm}}>Continuar</button>
+                                       </div>     
+                                 </form>
+                              </div>
+                              :
+                              <div className="cardCont" style={{background: "white", backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }}>
+                                    <div className="logo">                        
+                                       <img className="img-logo" src={fileLogo ? fileLogo : ''} style={{marginBottom:'10px',maxWidth: `${sizeLogoWeb}px`}} alt="s" />
                                        <div className="titleForm" style={{color:colorTitleForm}}>{titlePortal}</div>
                                     </div>
                                  <form className="formulario"  action="" style={{background: backgroundColorForm}}>
@@ -784,6 +886,7 @@ export default class CMS extends Component {
                                        </div>     
                                  </form>
                               </div>
+                           }
                            </div>
                         </div>
                     </div>
