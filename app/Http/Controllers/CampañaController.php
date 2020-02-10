@@ -38,6 +38,7 @@ class CampañaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request){
+        $NameTabla = str_replace(["-", " "],"_",$request->nombre_campaña."_".date('Y-m-d', strtotime($request->fecha_inicio)));
         $campaña= new Campaña();
         $campaña->setConnection(session('database'));
         $campaña->nombre = $request->nombre_campaña;
@@ -47,11 +48,11 @@ class CampañaController extends Controller
         $campaña->zona_ap = $request->zona_ap;
         $campaña->ano_evento = $request->anio;
         $campaña->id_locacion = $request->id_location;
-        $campaña->campania = str_replace(["-", " "],"_",$request->nombre_campaña."_".date('Y-m-d', strtotime($request->fecha_inicio)));
+        $NameTabla = $NameTabla;
         $campaña->vertical_economica = $request->vertical_economica;
         $campaña->save();
         
-        Schema::connection(session('database'))->create($campaña->campania, function (Blueprint $table) use ($request) {
+        Schema::connection(session('database'))->create($NameTabla, function (Blueprint $table) use ($request) {
             $table->increments('id');
             $table->bigInteger('id_evento');
             $table->dateTime('fecha_creacion');
@@ -120,7 +121,7 @@ class CampañaController extends Controller
         $userportal = env('DB_USERNAME');
         $password = env('DB_PASSWORD');
         $database = session('database');
-        $campania = $campaña->campania;
+        $campania = $NameTabla;
         $config = '[database]
         host = "'.$host.'"
         port = ""
@@ -130,9 +131,9 @@ class CampañaController extends Controller
         campania = "'.$campania.'"';
         for ($i=0; $i < count($portal_cautivo); $i++) { 
             $new_path[$i] = substr($portal_cautivo[$i], 15);
-            Storage::disk("ftp_".session('database')."")->put($campaña->campania."/$new_path[$i]", Storage::disk('public')->get($portal_cautivo[$i]));
+            Storage::disk("ftp_".session('database')."")->put($NameTabla."/$new_path[$i]", Storage::disk('public')->get($portal_cautivo[$i]));
         }
-        Storage::disk("ftp_".session('database')."")->prepend($campaña->campania."/db/parameter.ini.dist", $config);
+        Storage::disk("ftp_".session('database')."")->prepend($NameTabla."/db/parameter.ini.dist", $config);
 
         SideBarController::getSideBarRol(session('rol'),session('database'));
     }
