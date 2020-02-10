@@ -157,22 +157,60 @@ export default class CMS extends Component {
    //métodos formulario
    handleChangeCheckBox = name => event => {
       if(name == 'email'){
-         this.setState({
-            form:{
-               ...this.state.form,
-               email: true,
-               num_voucher: false
-            }
-         });
+         if(!this.state.form.num_voucher){
+            this.setState({
+               form:{
+                  ...this.state.form,
+                  email: true,
+               }
+            });
+         }
+         else{
+            this.setState({
+               form:{
+                  ...this.state.form,
+                  email: event.target.checked,
+               }
+            });
+         }
       }
       else if(name == 'num_voucher'){
-         this.setState({
-            form:{
-               ...this.state.form,
-               num_voucher: true,
-               email: false
-            }
-         });
+         if(!this.state.form.email){
+            this.setState({
+               form:{
+                  ...this.state.form,
+                  num_voucher: true,
+               }
+            });
+         }else{
+            this.setState({
+               form:{
+                  ...this.state.form,
+                  num_voucher: event.target.checked,
+               }
+            });
+         }
+         
+      }
+      else if(name == 'nombre'){
+         if(event.target.checked != false){
+            this.setState({
+               form:{
+                  ...this.state.form,
+                  nombre: event.target.checked,
+                  apellidos: true 
+               }
+            });
+         }
+         else{
+            this.setState({
+               form:{
+                  ...this.state.form,
+                  nombre: event.target.checked,
+                  apellidos: false 
+               }
+            });
+         }
       }else{
          this.setState({
             form:{
@@ -346,9 +384,13 @@ export default class CMS extends Component {
          filesBanner,
       } = this.state.form
      
-      if( (((titlePortal == "" || fileBackground == "") || (fileLogo == "" || sizeLogoMobile == "")) || (sizeLogoWeb == "" || buttonColors == "") || (colorTitleForm == "" || colorFontForm == ""))){
+      if(terminos_condiciones_esp == '' || terminos_condiciones_eng == ''){
+         NotificationManager.error('Los terminos y condiciones son requeridos','',5000);
+      }
+      else if( (((titlePortal == "" || fileBackground == "") || (fileLogo == "" || sizeLogoMobile == "")) || (sizeLogoWeb == "" || buttonColors == "") || (colorTitleForm == "" || colorFontForm == ""))){
          NotificationManager.error('Todos los campos son obligatorios','',5000);
-      }else{
+      } 
+      else{
          let config = {
 				method: 'POST',
 				headers: {
@@ -358,7 +400,9 @@ export default class CMS extends Component {
 				body: JSON.stringify(this.state.form)
 			};
 
-			await fetch(`${localStorage.urlDomain}api/campanias`, config);
+         await fetch(`${localStorage.urlDomain}api/campanias`, config);
+         
+         this.props.history.goBack();
       }
    }
 
@@ -522,11 +566,7 @@ export default class CMS extends Component {
                                              />
                                              <FormControlLabelUI
                                                 control={<Checkbox checked={nombre} onChange={this.handleChangeCheckBox('nombre')} value="nombre" />}
-                                                label="Nombres"
-                                             />
-                                             <FormControlLabelUI
-                                                control={<Checkbox checked={apellidos} onChange={this.handleChangeCheckBox('apellidos')} value="apellidos" />}
-                                                label="Apellidos"
+                                                label="Nombres y Apellidos"
                                              />
                                              <FormControlLabelUI
                                                 control={<Checkbox checked={edad} onChange={this.handleChangeCheckBox('edad')} value="edad" />}
@@ -618,7 +658,7 @@ export default class CMS extends Component {
                                              <FormGroup>
                                                 <Label for="fileBackground">Imagen de Fondo</Label>
                                                 <Input accept="image/*" type="file" autoComplete="off" name="fileBackground" id="fileBackground" onChange={(e) => this.handleChange(e)} />
-                                                <FormText color="muted">
+                                                <FormText color="white">
                                                    Recuerde que el tamaño máximo es de 500kb y
                                                    1920 x 1280.
                                                 </FormText>
@@ -626,7 +666,7 @@ export default class CMS extends Component {
                                              <FormGroup>
                                                 <Label for="fileLogo">Logo</Label>
                                                 <Input accept="image/*" type="file" autoComplete="off" name="fileLogo" id="fileLogo" onChange={(e) => this.handleChange(e)} />
-                                                <FormText color="muted">
+                                                <FormText color="white">
                                                    Recuerde que el tamaño máximo es de 50kb.
                                                 </FormText>
                                              </FormGroup>
