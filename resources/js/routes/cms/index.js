@@ -375,8 +375,7 @@ export default class CMS extends Component {
       } = this.state.form
      
      console.log(this.state.form)
-      // (((titlePortal == "" && fileBackground == "") && (fileLogo == "" && sizeLogoMobile == "")) && (sizeLogoWeb == "" && buttonColors == "") && (colorTitleForm == "" && colorFontForm == "")) && (filesBanner == [])
-      if(terminos_condiciones_esp == '' || terminos_condiciones_eng == ''){
+      if((terminos_condiciones_esp == '' || terminos_condiciones_eng == '') || (terminos_condiciones_esp == '<p><br></p>' || terminos_condiciones_eng == '<p><br></p>')){
          NotificationManager.error('Los terminos y condiciones son requeridos','',5000);
       }
       else if( (((titlePortal == "" || fileBackground == "") || (fileLogo == "" || sizeLogoMobile == "")) || (sizeLogoWeb == "" || buttonColors == "") || (colorTitleForm == "" || colorFontForm == ""))){

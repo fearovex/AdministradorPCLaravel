@@ -306,10 +306,11 @@ export default class campañas extends Component {
 						<Button
 							variant="contained"
 							color="primary"
-							className="boton"
+							className="botonCampaña"
 							onClick={() => this.openAlert('prompt')}
 						>Crear campaña
 						</Button>
+
 
 						<SweetAlert
 
@@ -334,14 +335,14 @@ export default class campañas extends Component {
 											type="text"
 											name="nombre_campaña"
 											id="nombre_campaña"
-											className="has-input input-lg"
+											className="has-input input-lg "
 											placeholder="Nombre campaña"
 											onChange={() => this.handleChange(event)}
 										/>
 									</div>
 									<div className="col-lg-6">
 										<Select name="zona_ap" native onChange={() => this.handleChange(event)}
-											className="has-input input-lg"
+											className="has-input input-lg generalMarginInputs"
 										>
 											<option value="">Seleccione una zona</option>
 											{data && data.map((data) => (
@@ -355,9 +356,10 @@ export default class campañas extends Component {
 								<div className="row">
 									<div className="col-lg-5 mb-4 ml-3" >
 										<DateTimePicker
-											className="has-input input-lg"
+											className="has-input input-lg "
 											key="fecha_inicio"
 											label="Fecha Inicio"
+											// style={{marginRight:"1.9em"}}
 											required
 											value={form.fecha_inicio}
 											format="YYYY/MM/DD hh:mm a"
@@ -370,9 +372,10 @@ export default class campañas extends Component {
 									</div>
 									<div className="col-lg-6">
 										<DateTimePicker
-											className="has-input input-lg"
+											className="has-input input-lg "
 											key="fecha_fin"
 											label="Fecha Fin"
+											style={{marginRight:"1.9em"}}
 											required
 											value={form.fecha_fin}
 											minDate={moment(form.fecha_inicio, 'YYYY/MM/DD hh:mm a')}
@@ -392,7 +395,7 @@ export default class campañas extends Component {
 											type="text"
 											name="descripcion"
 											id="descripcion"
-											className="has-input input-lg"
+											className="has-input input-lg "
 											placeholder="Descripción"
 											onChange={() => this.handleChange(event)}
 										/>
@@ -402,14 +405,14 @@ export default class campañas extends Component {
 											type="text"
 											name="anio"
 											id="anio"
-											className="has-input input-lg"
+											className="has-input input-lg generalMarginInputs"
 											placeholder="Año"
 											onChange={() => this.handleChange(event)}
 										/>
 									</div>
 									<div className="col-lg-10">
 										<Select name="vertical_economica" native onChange={() => this.handleChange(event)}
-											className="has-input input-lg"
+											className="has-input input-lg generalMarginInputs"
 										>
 											<option value="">Seleccione una vertical</option>
 											<option value='Hoteles'>Hoteles</option>
@@ -448,14 +451,14 @@ export default class campañas extends Component {
 											name="nombre_campaña"
 											id="nombre_campaña"
 											value={this.state.form.nombre_campaña}
-											className="has-input input-lg"
+											className="has-input input-lg "
 											placeholder="Nombre campaña"
 											onChange={() => this.handleChangeEdit(event)}
 										/>
 									</div>
 									<div className="col-lg-6">
 										<Select name="zona_ap" native onChange={() => this.handleChangeEdit(event)}
-											className="has-input input-lg"
+											className="has-input input-lg generalMarginInputs"
 											value={this.state.form.zona_ap}
 										>
 											<option value="">Seleccione una zona</option>
@@ -470,7 +473,7 @@ export default class campañas extends Component {
 								<div className="row">
 									<div className="col-lg-5 mb-4 ml-3" >
 										<DateTimePicker
-											className="has-input input-lg"
+											className="has-input input-lg "
 											key="fecha_inicio"
 											label="Fecha Inicio"
 											required
@@ -485,9 +488,10 @@ export default class campañas extends Component {
 									</div>
 									<div className="col-lg-6">
 										<DateTimePicker
-											className="has-input input-lg"
+											className="has-input input-lg "
 											key="fecha_fin"
 											label="Fecha Fin"
+											style={{marginRight:"1.9em"}}
 											required
 											value={form.fecha_fin}
 											minDate={moment(form.fecha_inicio, 'YYYY/MM/DD hh:mm a')}
@@ -508,8 +512,8 @@ export default class campañas extends Component {
 											name="descripcion"
 											id="descripcion"
 											value={this.state.form.descripcion}
-											className="has-input input-lg"
-											placeholder="Descripciòn"
+											className="has-input input-lg "
+											placeholder="Descripción"
 											onChange={() => this.handleChangeEdit(event)}
 										/>
 									</div>
@@ -519,7 +523,7 @@ export default class campañas extends Component {
 											name="anio"
 											id="anio"
 											value={this.state.form.anio}
-											className="has-input input-lg"
+											className="has-input input-lg generalMarginInputs"
 											placeholder="Año"
 											onChange={() => this.handleChangeEdit(event)}
 										/>
@@ -536,6 +540,7 @@ export default class campañas extends Component {
 
 				<RctCollapsibleCard fullBlock>
 					<MUIDataTable
+						className="mui-tableRes"
 						data={this.state.datacampania}
 						columns={columns}
 						options={options}
