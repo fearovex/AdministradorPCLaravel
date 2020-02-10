@@ -77,6 +77,7 @@ export default class CMS extends Component {
          data: [],
          value:0,
          valueLang:0,
+         valueViewsFormat:0,
          checkedB: true,
          form:{
             //formulario
@@ -132,6 +133,16 @@ export default class CMS extends Component {
    handleChangeTabsIndexLang = index => {
       this.setState({ valueLang: index });
    };
+
+   handleChangeTabsViewsFormat = (event, valueViewsFormat) => {
+      this.setState({ valueViewsFormat });
+   };
+
+   handleChangeTabsIndexViewsFormat = index => {
+      this.setState({ valueViewsFormat: index });
+   };
+
+   
 
    //métodos formulario
    handleChangeCheckBox = name => event => {
@@ -235,7 +246,7 @@ export default class CMS extends Component {
             this.setState({
                form:{
                   ...this.state.form,
-                  fileBackground:""
+                  fileLogo:""
                }
             })
          }
@@ -244,7 +255,7 @@ export default class CMS extends Component {
             this.setState({
                form:{
                   ...this.state.form,
-                  fileBackground:""
+                  fileLogo:""
                }
             })
          }
@@ -270,6 +281,15 @@ export default class CMS extends Component {
                }
             })
       }
+
+      else if(e.target.name == 'sizeLogoWeb' && e.target.value <= 0){
+         this.setState({
+            form:{
+               ...this.state.form,
+               [e.target.name]:""
+            }
+         })
+   }
 
       // else if(e.target.name == 'sizeLogoMobile' && e.target.value < 10){
       //    this.setState({
@@ -611,7 +631,7 @@ export default class CMS extends Component {
                                           <div className="col-lg-6" style={{marginBottom:"38px", marginTop:"20px"}}>
                                                 <div style={{marginBottom:"39px"}}>
                                                    <Label for="colorTitleForm">Color de Fondo del Formulario</Label>
-                                                   <input type="color" autoComplete="off" name="backgroundColorForm" id="backgroundColorForm" value={backgroundColorForm} onChange={() => this.handleChange(event)} className="inputColor"/>
+                                                   <input type="color" autoComplete="off" name="backgroundColorForm" rgba id="backgroundColorForm" value={backgroundColorForm} onChange={() => this.handleChange(event)} className="inputColor"/>
                                                 </div>
                                                 <div style={{marginBottom:"39px"}}>
                                                    <Label for="colorTitleForm">Color Titulo del Formulario</Label>
@@ -619,7 +639,7 @@ export default class CMS extends Component {
                                                 </div>
                                                 <div style={{marginTop:"15px"}}>
                                                       <Label for="colorFontForm">Color de la Fuente del Formulario</Label>
-                                                      <input type="color" autoComplete="off" name="colorFontForm" id="colorFontForm" value={colorFontForm} onChange={() => this.handleChange(event)} className="inputColor"/>
+                                                      <input type="color" autoComplete="off" name="colorFontForm" id="colorFontForm"  value={colorFontForm} onChange={() => this.handleChange(event)} className="inputColor"/>
                                                 </div>
                                                 <div style={{marginTop:"35px"}}>
                                                    <FormControlLabel
@@ -669,223 +689,508 @@ export default class CMS extends Component {
                         <div className="row h-100">
                            <div className="col-sm-12 my-auto" >
                            { fileBackground ?  
-                              <div className="cardCont" style={{background: "white", backgroundImage: `url(${fileBackground})`, backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }}>
-                                    <div className="logo">                        
-                                       <img className="img-logo" src={fileLogo ? fileLogo:''} style={{marginBottom:'10px',maxWidth: `${sizeLogoWeb}px`}} alt="s" />
-                                       <div className="titleForm" style={{color:colorTitleForm, }}>{titlePortal}</div>
-                                    </div>
-                                 <form className="formulario"  action="" style={{background: backgroundColorForm}}>
-                                    <div className="form-row">
-                                    { nombre ?
-                                       <div className="form-group col-md-6 colorPlaceHolder" name="form_group_nombre" id="form_group_nombre">
-                                          <input className="" type="text" autoComplete="off" className="form-control form-control-sm" id="nombre" name="nombre" placeholder="Nombre" />
-                                       </div>
-                                       :
-                                       <div></div>
-                                    }
-                                    { apellidos ?
-                                       <div className="form-group col-md-6 colorPlaceHolder" name="form_group_apellidos" id="form_group_apellidos">
-                                          <input className="" type="text" autoComplete="off"  className="form-control form-control-sm" id="apellidos" name="apellidos" placeholder="Apellidos"/>
-                                       </div>
-                                    :
-                                    <div></div>
-                                    }
-                                    </div>
-                                       { email ? 
-                                       <div className="form-group colorPlaceHolder" id="form_group_email"  name="form_group_email">
-                                          <input className="colorPlaceHolder" type="email" autoComplete="off" className="form-control form-control-sm" id="email" name="email" placeholder="Correo Electrónico" />
-                                       </div>
-                                       :
-                                       <div></div>
-                                       }
-                                       { telefono ?
-                                       <div className="form-group colorPlaceHolder" id="form_group_telefono"  name="form_group_telefono">
-                                          <input className="colorPlaceHolder" type="tel" autoComplete="off" className="form-control form-control-sm" id="telefono" name="telefono" placeholder="Telefono" />
-                                       </div>
-                                       :
-                                       <div></div>
-                                       }
-                                       { edad ?
-                                       <div className="form-group colorPlaceHolder" id="form_group_edad"  name="form_group_edad">
-                                          <input className="colorPlaceHolder" type="text" autoComplete="off" className="form-control form-control-sm" id="edad" name="edad" placeholder="Edad" />
-                                       </div>
-                                          :
-                                       <div></div>
-                                       }
-                                       { genero ?
-                                       <div className="form-group colorPlaceHolder" id="form_group_genero"  name="form_group_genero">
-                                          <select id="genero"  name="genero" className="form-control form-control-sm">
-                                                <option selected value="">Selecciona un género</option>
-                                                <option value="Hombre">Hombre</option>
-                                                <option value="Mujer">Mujer</option>
-                                                <option value="Otro">Otro</option>
-                                          </select>
-                                       </div>
-                                          :
-                                          <div></div>
-                                       }
-                                       { num_habitacion ?
-                                       <div className="form-group colorPlaceHolder" id="form_group_habitacion"  name="form_group_habitacion">
-                                          <input type="text" autoComplete="off" className="form-control form-control-sm" id="num_habitacion" name="num_habitacion" placeholder="Ingrese el número de habitación" />
-                                       </div>
-                                          :
-                                       <div></div>
-                                       }
-                                       { num_voucher ?
-                                       <div className="form-group colorPlaceHolder" id="form_group_voucher" name="form_group_voucher">
-                                          <input type="text"  autoComplete="off" className="form-control form-control-sm" id="num_voucher" name="num_voucher" placeholder="Ingrese el pin acceso a internet" />
-                                       </div>
-                                          :
-                                       <div></div>
-                                       }
-                                       { razon_visita ?
-                                       <div className="form-group colorPlaceHolder" id="form_group_razon_visita"  name="form_group_razon_visita">
-                                          <select id="razon_visita"  name="razon_visita" className="form-control form-control-sm">
-                                                <option selected value="">Selecciona una razón de visita</option>
-                                                <option value="Vacaciones">Vacaciones</option>
-                                                <option value="Trabajo">Trabajo</option>
-                                                <option value="Congreso">Congreso</option>
-                                                <option value="Convencion">Convencion</option>
-                                                <option value="Otro">Otro</option>
-                                          </select>
-                                       </div>
-                                          :
-                                          <div></div>
-                                       }
-                                       <div className="form-group check-terminos colorPlaceHolder" id="form_group_check" name="form_group_check">
-                                             <div className="custom-control custom-switch">
-                                                <input type="checkbox" className="custom-control-input" id="customSwitches" name="customSwitches" />
-                                                
-
-                                                <FormControlLabel
-                                                   control={
-                                                      <IOSSwitch
-                                                         checked={this.state.checkedB}
-                                                         onChange={this.handleSwitch('checkedB')}
-                                                         value="checkedB"
-                                                      />
-                                                      
-                                                   }
-                                                   label={<a href="#popup" style={{color:colorFontForm}}>Terminos y Condiciones</a>}
-                                                />
-                                               
+                              <div className="Tab-wrap" style={{backgroundColor: "#35475f",border: "0.3px solid #c1c1c1", padding:"1px"}}>
+                                 <AppBar position="static" >
+                                    <Tabs
+                                       value={this.state.valueViewsFormat}
+                                       onChange={this.handleChangeTabsViewsFormat}
+                                       indicatorColor="primary"
+                                       textColor="primary"
+                                       variant="standard"
+                                    >
+                                       <Tab style={{backgroundColor:"#304158"}} label={'Web'} />
+                                       <Tab style={{backgroundColor:"#354f71"}} label={'Móvil'} />
+                                    </Tabs>
+                                 </AppBar>
+                                 <SwipeableViews
+                                    axis={themeLang.direction === 'rtl' ? 'x-reverse' : 'x'}
+                                    index={this.state.valueViewsFormat}
+                                    onChangeIndex={this.handleChangeTabsIndexViewsFormat}
+                                 >
+                                 <div className="card mb-0 transaction-box" style={{padding: "26px 5px 10px 5px", backgroundColor:"#35475f"}}>
+                                    <TabContainer dir={themeLang.direction}>
+                                       <RctCardContent>
+                                       <div className="cardCont" style={{background: "white", backgroundImage: `url(${fileBackground})`, backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }}>
+                                          <div className="logo">                        
+                                             <img className="img-logo" src={fileLogo ? fileLogo:''} style={{maxWidth: `${sizeLogoWeb}px`}} alt="" />
+                                             <div className="titleForm" style={{color:colorTitleForm}}>{titlePortal}</div>
+                                          </div>
+                                       <form className="formulario"  action="" style={{background: backgroundColorForm}}>
+                                          <div className="form-row">
+                                          { nombre ?
+                                             <div className="form-group col-md-6 colorPlaceHolder" name="form_group_nombre" id="form_group_nombre">
+                                                <input className="" type="text" autoComplete="off" className="form-control form-control-sm" id="nombre" name="nombre" placeholder="Nombre" />
                                              </div>
-                                       </div>
+                                             :
+                                             <div></div>
+                                          }
+                                          { apellidos ?
+                                             <div className="form-group col-md-6 colorPlaceHolder" name="form_group_apellidos" id="form_group_apellidos">
+                                                <input className="" type="text" autoComplete="off"  className="form-control form-control-sm" id="apellidos" name="apellidos" placeholder="Apellidos"/>
+                                             </div>
+                                          :
+                                          <div></div>
+                                          }
+                                          </div>
+                                             { email ? 
+                                             <div className="form-group colorPlaceHolder" id="form_group_email"  name="form_group_email">
+                                                <input className="colorPlaceHolder" type="email" autoComplete="off" className="form-control form-control-sm" id="email" name="email" placeholder="Correo Electrónico" />
+                                             </div>
+                                             :
+                                             <div></div>
+                                             }
+                                             { telefono ?
+                                             <div className="form-group colorPlaceHolder" id="form_group_telefono"  name="form_group_telefono">
+                                                <input className="colorPlaceHolder" type="tel" autoComplete="off" className="form-control form-control-sm" id="telefono" name="telefono" placeholder="Telefono" />
+                                             </div>
+                                             :
+                                             <div></div>
+                                             }
+                                             { edad ?
+                                             <div className="form-group colorPlaceHolder" id="form_group_edad"  name="form_group_edad">
+                                                <input className="colorPlaceHolder" type="text" autoComplete="off" className="form-control form-control-sm" id="edad" name="edad" placeholder="Edad" />
+                                             </div>
+                                                :
+                                             <div></div>
+                                             }
+                                             { genero ?
+                                             <div className="form-group colorPlaceHolder" id="form_group_genero"  name="form_group_genero">
+                                                <select id="genero"  name="genero" className="form-control form-control-sm">
+                                                      <option selected value="">Selecciona un género</option>
+                                                      <option value="Hombre">Hombre</option>
+                                                      <option value="Mujer">Mujer</option>
+                                                      <option value="Otro">Otro</option>
+                                                </select>
+                                             </div>
+                                                :
+                                                <div></div>
+                                             }
+                                             { num_habitacion ?
+                                             <div className="form-group colorPlaceHolder" id="form_group_habitacion"  name="form_group_habitacion">
+                                                <input type="text" autoComplete="off" className="form-control form-control-sm" id="num_habitacion" name="num_habitacion" placeholder="Ingrese el número de habitación" />
+                                             </div>
+                                                :
+                                             <div></div>
+                                             }
+                                             { num_voucher ?
+                                             <div className="form-group colorPlaceHolder" id="form_group_voucher" name="form_group_voucher">
+                                                <input type="text"  autoComplete="off" className="form-control form-control-sm" id="num_voucher" name="num_voucher" placeholder="Ingrese el pin acceso a internet" />
+                                             </div>
+                                                :
+                                             <div></div>
+                                             }
+                                             { razon_visita ?
+                                             <div className="form-group colorPlaceHolder" id="form_group_razon_visita"  name="form_group_razon_visita">
+                                                <select id="razon_visita"  name="razon_visita" className="form-control form-control-sm">
+                                                      <option selected value="">Selecciona una razón de visita</option>
+                                                      <option value="Vacaciones">Vacaciones</option>
+                                                      <option value="Trabajo">Trabajo</option>
+                                                      <option value="Congreso">Congreso</option>
+                                                      <option value="Convencion">Convencion</option>
+                                                      <option value="Otro">Otro</option>
+                                                </select>
+                                             </div>
+                                                :
+                                                <div></div>
+                                             }
+                                             <div className="form-group check-terminos colorPlaceHolder" id="form_group_check" name="form_group_check">
+                                                   <div className="custom-control custom-switch">
+                                                      <input type="checkbox" className="custom-control-input" id="customSwitches" name="customSwitches" />
+                                                      
 
-                                       <div className="form-btn">
-                                          <button type="submit" id="submit" className="btn" style={{backgroundColor:buttonColors, color:colorFontForm}}>Continuar</button>
-                                       </div>     
-                                 </form>
+                                                      <FormControlLabel
+                                                         control={
+                                                            <IOSSwitch
+                                                               checked={this.state.checkedB}
+                                                               onChange={this.handleSwitch('checkedB')}
+                                                               value="checkedB"
+                                                            />
+                                                            
+                                                         }
+                                                         // label={<a href="#popup" style={{color:colorFontForm}}>Terminos y Condiciones</a>}
+                                                         label={<a  style={{color:colorFontForm}}>Aceptar Terminos y Condiciones</a>}
+                                                      />
+                                                   
+                                                   </div>
+                                             </div>
+
+                                             <div className="form-btn">
+                                                <button type="submit" id="submit" className="btn" style={{backgroundColor:buttonColors, color:colorFontForm}}>Continuar</button>
+                                             </div>     
+                                       </form>
+                                    </div>
+                                       </RctCardContent>
+                                    </TabContainer>
+                                 </div>
+                                 <div className="card mb-0 transaction-box" style={{padding: "26px 44px 10px 44px", backgroundColor:"#35475f"}}>
+                                    <TabContainer dir={themeLang.direction}>
+                                       <RctCardContent>
+                                       <div className="cardCont" style={{background: "white", backgroundImage: `url(${fileBackground})`, backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }}>
+                                          <div className="logo">                        
+                                             <img className="img-logo" src={fileLogo ? fileLogo:''} style={{maxWidth: `${sizeLogoMobile}px`}} alt="" />
+                                             <div className="titleForm" style={{color:colorTitleForm}}>{titlePortal}</div>
+                                          </div>
+                                          <form className="formulario"  action="" style={{background: backgroundColorForm}}>
+                                             <div className="form-row">
+                                             { nombre ?
+                                                <div className="form-group col-md-12 colorPlaceHolder" name="form_group_nombre" id="form_group_nombre">
+                                                   <input className="" type="text" autoComplete="off" className="form-control form-control-sm" id="nombre" name="nombre" placeholder="Nombre" />
+                                                </div>
+                                                :
+                                                <div></div>
+                                             }
+                                             { apellidos ?
+                                                <div className="form-group col-md-12 colorPlaceHolder" name="form_group_apellidos" id="form_group_apellidos">
+                                                   <input className="" type="text" autoComplete="off"  className="form-control form-control-sm" id="apellidos" name="apellidos" placeholder="Apellidos"/>
+                                                </div>
+                                             :
+                                             <div></div>
+                                             }
+                                             </div>
+                                                { email ? 
+                                                <div className="form-group colorPlaceHolder" id="form_group_email"  name="form_group_email">
+                                                   <input className="colorPlaceHolder" type="email" autoComplete="off" className="form-control form-control-sm" id="email" name="email" placeholder="Correo Electrónico" />
+                                                </div>
+                                                :
+                                                <div></div>
+                                                }
+                                                { telefono ?
+                                                <div className="form-group colorPlaceHolder" id="form_group_telefono"  name="form_group_telefono">
+                                                   <input className="colorPlaceHolder" type="tel" autoComplete="off" className="form-control form-control-sm" id="telefono" name="telefono" placeholder="Telefono" />
+                                                </div>
+                                                :
+                                                <div></div>
+                                                }
+                                                { edad ?
+                                                <div className="form-group colorPlaceHolder" id="form_group_edad"  name="form_group_edad">
+                                                   <input className="colorPlaceHolder" type="text" autoComplete="off" className="form-control form-control-sm" id="edad" name="edad" placeholder="Edad" />
+                                                </div>
+                                                   :
+                                                <div></div>
+                                                }
+                                                { genero ?
+                                                <div className="form-group colorPlaceHolder" id="form_group_genero"  name="form_group_genero">
+                                                   <select id="genero"  name="genero" className="form-control form-control-sm">
+                                                         <option selected value="">Selecciona un género</option>
+                                                         <option value="Hombre">Hombre</option>
+                                                         <option value="Mujer">Mujer</option>
+                                                         <option value="Otro">Otro</option>
+                                                   </select>
+                                                </div>
+                                                   :
+                                                   <div></div>
+                                                }
+                                                { num_habitacion ?
+                                                <div className="form-group colorPlaceHolder" id="form_group_habitacion"  name="form_group_habitacion">
+                                                   <input type="text" autoComplete="off" className="form-control form-control-sm" id="num_habitacion" name="num_habitacion" placeholder="Ingrese el número de habitación" />
+                                                </div>
+                                                   :
+                                                <div></div>
+                                                }
+                                                { num_voucher ?
+                                                <div className="form-group colorPlaceHolder" id="form_group_voucher" name="form_group_voucher">
+                                                   <input type="text"  autoComplete="off" className="form-control form-control-sm" id="num_voucher" name="num_voucher" placeholder="Ingrese el pin acceso a internet" />
+                                                </div>
+                                                   :
+                                                <div></div>
+                                                }
+                                                { razon_visita ?
+                                                <div className="form-group colorPlaceHolder" id="form_group_razon_visita"  name="form_group_razon_visita">
+                                                   <select id="razon_visita"  name="razon_visita" className="form-control form-control-sm">
+                                                         <option selected value="">Selecciona una razón de visita</option>
+                                                         <option value="Vacaciones">Vacaciones</option>
+                                                         <option value="Trabajo">Trabajo</option>
+                                                         <option value="Congreso">Congreso</option>
+                                                         <option value="Convencion">Convencion</option>
+                                                         <option value="Otro">Otro</option>
+                                                   </select>
+                                                </div>
+                                                   :
+                                                   <div></div>
+                                                }
+                                                <div className="form-group check-terminos colorPlaceHolder" id="form_group_check" name="form_group_check">
+                                                      <div className="custom-control custom-switch">
+                                                         <input type="checkbox" className="custom-control-input" id="customSwitches" name="customSwitches" />
+                                                         
+
+                                                         <FormControlLabel
+                                                            control={
+                                                               <IOSSwitch
+                                                                  checked={this.state.checkedB}
+                                                                  onChange={this.handleSwitch('checkedB')}
+                                                                  value="checkedB"
+                                                               />
+                                                               
+                                                            }
+                                                            // label={<a href="#popup" style={{color:colorFontForm}}>Terminos y Condiciones</a>}
+                                                            label={<a  style={{color:colorFontForm}}>Aceptar Terminos y Condiciones</a>}
+                                                         />
+                                                      
+                                                      </div>
+                                                </div>
+
+                                                <div className="form-btn">
+                                                   <button type="submit" id="submit" className="btn" style={{backgroundColor:buttonColors, color:colorFontForm}}>Continuar</button>
+                                                </div>     
+                                          </form>
+                                       </div>
+                                       </RctCardContent>
+                                    </TabContainer>
+                                 </div>
+                                 </SwipeableViews>
                               </div>
                               :
-                              <div className="cardCont" style={{background: "white", backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }}>
-                                    <div className="logo">                        
-                                       <img className="img-logo" src={fileLogo ? fileLogo : ''} style={{marginBottom:'10px',maxWidth: `${sizeLogoWeb}px`}} alt="s" />
-                                       <div className="titleForm" style={{color:colorTitleForm}}>{titlePortal}</div>
-                                    </div>
-                                 <form className="formulario"  action="" style={{background: backgroundColorForm}}>
-                                    <div className="form-row">
-                                    { nombre ?
-                                       <div className="form-group col-md-6 colorPlaceHolder" name="form_group_nombre" id="form_group_nombre">
-                                          <input className="" type="text" autoComplete="off" className="form-control form-control-sm" id="nombre" name="nombre" placeholder="Nombre" />
+
+                              <div className="Tab-wrap" style={{backgroundColor: "#35475f",border: "0.3px solid #c1c1c1", padding:"1px"}}>
+                              <AppBar position="static" >
+                                 <Tabs
+                                    value={this.state.valueViewsFormat}
+                                    onChange={this.handleChangeTabsViewsFormat}
+                                    indicatorColor="primary"
+                                    textColor="primary"
+                                    variant="standard"
+                                 >
+                                    <Tab style={{backgroundColor:"#304158"}} label={'Web'} />
+                                    <Tab style={{backgroundColor:"#354f71"}} label={'Móvil'} />
+                                 </Tabs>
+                              </AppBar>
+                              <SwipeableViews
+                                 axis={themeLang.direction === 'rtl' ? 'x-reverse' : 'x'}
+                                 index={this.state.valueViewsFormat}
+                                 onChangeIndex={this.handleChangeTabsIndexViewsFormat}
+                              >
+                              <div className="card mb-0 transaction-box" style={{padding: "26px 5px 10px 5px", backgroundColor:"#35475f"}}>
+                                 <TabContainer dir={themeLang.direction}>
+                                    <RctCardContent>
+                                    <div className="cardCont" style={{background: "white", backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }}>
+                                       <div className="logo">                        
+                                          <img className="img-logo" src={fileLogo ? fileLogo : ''} style={{marginBottom:'10px',maxWidth: `${sizeLogoWeb}px`}} alt="s" />
+                                          <div className="titleForm" style={{color:colorTitleForm}}>{titlePortal}</div>
                                        </div>
-                                       :
-                                       <div></div>
-                                    }
-                                    { apellidos ?
-                                       <div className="form-group col-md-6 colorPlaceHolder" name="form_group_apellidos" id="form_group_apellidos">
-                                          <input className="" type="text" autoComplete="off"  className="form-control form-control-sm" id="apellidos" name="apellidos" placeholder="Apellidos"/>
-                                       </div>
-                                    :
-                                    <div></div>
-                                    }
-                                    </div>
-                                       { email ? 
-                                       <div className="form-group colorPlaceHolder" id="form_group_email"  name="form_group_email">
-                                          <input className="colorPlaceHolder" type="email" autoComplete="off" className="form-control form-control-sm" id="email" name="email" placeholder="Correo Electrónico" />
-                                       </div>
-                                       :
-                                       <div></div>
-                                       }
-                                       { telefono ?
-                                       <div className="form-group colorPlaceHolder" id="form_group_telefono"  name="form_group_telefono">
-                                          <input className="colorPlaceHolder" type="tel" autoComplete="off" className="form-control form-control-sm" id="telefono" name="telefono" placeholder="Telefono" />
-                                       </div>
-                                       :
-                                       <div></div>
-                                       }
-                                       { edad ?
-                                       <div className="form-group colorPlaceHolder" id="form_group_edad"  name="form_group_edad">
-                                          <input className="colorPlaceHolder" type="text" autoComplete="off" className="form-control form-control-sm" id="edad" name="edad" placeholder="Edad" />
-                                       </div>
-                                          :
-                                       <div></div>
-                                       }
-                                       { genero ?
-                                       <div className="form-group colorPlaceHolder" id="form_group_genero"  name="form_group_genero">
-                                          <select id="genero"  name="genero" className="form-control form-control-sm">
-                                                <option selected value="">Selecciona un género</option>
-                                                <option value="Hombre">Hombre</option>
-                                                <option value="Mujer">Mujer</option>
-                                                <option value="Otro">Otro</option>
-                                          </select>
-                                       </div>
+                                    <form className="formulario"  action="" style={{background: backgroundColorForm}}>
+                                       <div className="form-row">
+                                       { nombre ?
+                                          <div className="form-group col-md-6 colorPlaceHolder" name="form_group_nombre" id="form_group_nombre">
+                                             <input className="" type="text" autoComplete="off" className="form-control form-control-sm" id="nombre" name="nombre" placeholder="Nombre" />
+                                          </div>
                                           :
                                           <div></div>
                                        }
-                                       { num_habitacion ?
-                                       <div className="form-group colorPlaceHolder" id="form_group_habitacion"  name="form_group_habitacion">
-                                          <input type="text" autoComplete="off" className="form-control form-control-sm" id="num_habitacion" name="num_habitacion" placeholder="Ingrese el número de habitación" />
-                                       </div>
-                                          :
+                                       { apellidos ?
+                                          <div className="form-group col-md-6 colorPlaceHolder" name="form_group_apellidos" id="form_group_apellidos">
+                                             <input className="" type="text" autoComplete="off"  className="form-control form-control-sm" id="apellidos" name="apellidos" placeholder="Apellidos"/>
+                                          </div>
+                                       :
                                        <div></div>
                                        }
-                                       { num_voucher ?
-                                       <div className="form-group colorPlaceHolder" id="form_group_voucher" name="form_group_voucher">
-                                          <input type="text"  autoComplete="off" className="form-control form-control-sm" id="num_voucher" name="num_voucher" placeholder="Ingrese el pin acceso a internet" />
                                        </div>
-                                          :
-                                       <div></div>
-                                       }
-                                       { razon_visita ?
-                                       <div className="form-group colorPlaceHolder" id="form_group_razon_visita"  name="form_group_razon_visita">
-                                          <select id="razon_visita"  name="razon_visita" className="form-control form-control-sm">
-                                                <option selected value="">Selecciona una razón de visita</option>
-                                                <option value="Vacaciones">Vacaciones</option>
-                                                <option value="Trabajo">Trabajo</option>
-                                                <option value="Congreso">Congreso</option>
-                                                <option value="Convencion">Convencion</option>
-                                                <option value="Otro">Otro</option>
-                                          </select>
-                                       </div>
+                                          { email ? 
+                                          <div className="form-group colorPlaceHolder" id="form_group_email"  name="form_group_email">
+                                             <input className="colorPlaceHolder" type="email" autoComplete="off" className="form-control form-control-sm" id="email" name="email" placeholder="Correo Electrónico" />
+                                          </div>
                                           :
                                           <div></div>
-                                       }
-                                       <div className="form-group check-terminos colorPlaceHolder" id="form_group_check" name="form_group_check">
-                                             <div className="custom-control custom-switch">
-                                                <input type="checkbox" className="custom-control-input" id="customSwitches" name="customSwitches" />
+                                          }
+                                          { telefono ?
+                                          <div className="form-group colorPlaceHolder" id="form_group_telefono"  name="form_group_telefono">
+                                             <input className="colorPlaceHolder" type="tel" autoComplete="off" className="form-control form-control-sm" id="telefono" name="telefono" placeholder="Telefono" />
+                                          </div>
+                                          :
+                                          <div></div>
+                                          }
+                                          { edad ?
+                                          <div className="form-group colorPlaceHolder" id="form_group_edad"  name="form_group_edad">
+                                             <input className="colorPlaceHolder" type="text" autoComplete="off" className="form-control form-control-sm" id="edad" name="edad" placeholder="Edad" />
+                                          </div>
+                                             :
+                                          <div></div>
+                                          }
+                                          { genero ?
+                                          <div className="form-group colorPlaceHolder" id="form_group_genero"  name="form_group_genero">
+                                             <select id="genero"  name="genero" className="form-control form-control-sm">
+                                                   <option selected value="">Selecciona un género</option>
+                                                   <option value="Hombre">Hombre</option>
+                                                   <option value="Mujer">Mujer</option>
+                                                   <option value="Otro">Otro</option>
+                                             </select>
+                                          </div>
+                                             :
+                                             <div></div>
+                                          }
+                                          { num_habitacion ?
+                                          <div className="form-group colorPlaceHolder" id="form_group_habitacion"  name="form_group_habitacion">
+                                             <input type="text" autoComplete="off" className="form-control form-control-sm" id="num_habitacion" name="num_habitacion" placeholder="Ingrese el número de habitación" />
+                                          </div>
+                                             :
+                                          <div></div>
+                                          }
+                                          { num_voucher ?
+                                          <div className="form-group colorPlaceHolder" id="form_group_voucher" name="form_group_voucher">
+                                             <input type="text"  autoComplete="off" className="form-control form-control-sm" id="num_voucher" name="num_voucher" placeholder="Ingrese el pin acceso a internet" />
+                                          </div>
+                                             :
+                                          <div></div>
+                                          }
+                                          { razon_visita ?
+                                          <div className="form-group colorPlaceHolder" id="form_group_razon_visita"  name="form_group_razon_visita">
+                                             <select id="razon_visita"  name="razon_visita" className="form-control form-control-sm">
+                                                   <option selected value="">Selecciona una razón de visita</option>
+                                                   <option value="Vacaciones">Vacaciones</option>
+                                                   <option value="Trabajo">Trabajo</option>
+                                                   <option value="Congreso">Congreso</option>
+                                                   <option value="Convencion">Convencion</option>
+                                                   <option value="Otro">Otro</option>
+                                             </select>
+                                          </div>
+                                             :
+                                             <div></div>
+                                          }
+                                          <div className="form-group check-terminos colorPlaceHolder" id="form_group_check" name="form_group_check">
+                                                <div className="custom-control custom-switch">
+                                                   <input type="checkbox" className="custom-control-input" id="customSwitches" name="customSwitches" />
+                                                   
+
+                                                   <FormControlLabel
+                                                      control={
+                                                         <IOSSwitch
+                                                            checked={this.state.checkedB}
+                                                            onChange={this.handleSwitch('checkedB')}
+                                                            value="checkedB"
+                                                         />
+                                                         
+                                                      }
+                                                      // label={<a href="#popup" style={{color:colorFontForm}}>Terminos y Condiciones</a>}
+                                                      label={<a  style={{color:colorFontForm}}>Aceptar Terminos y Condiciones</a>}
+                                                   />
                                                 
+                                                </div>
+                                          </div>
 
-                                                <FormControlLabel
-                                                   control={
-                                                      <IOSSwitch
-                                                         checked={this.state.checkedB}
-                                                         onChange={this.handleSwitch('checkedB')}
-                                                         value="checkedB"
-                                                      />
-                                                      
-                                                   }
-                                                   label={<a href="#popup" style={{color:colorFontForm}}>Terminos y Condiciones</a>}
-                                                />
-                                               
-                                             </div>
-                                       </div>
-
-                                       <div className="form-btn">
-                                          <button type="submit" id="submit" className="btn" style={{backgroundColor:buttonColors, color:colorFontForm}}>Continuar</button>
-                                       </div>     
-                                 </form>
+                                          <div className="form-btn">
+                                             <button type="submit" id="submit" className="btn" style={{backgroundColor:buttonColors, color:colorFontForm}}>Continuar</button>
+                                          </div>     
+                                    </form>
+                                 </div>
+                                    </RctCardContent>
+                                 </TabContainer>
                               </div>
+                              <div className="card mb-0 transaction-box" style={{padding: "26px 44px 10px 44px", backgroundColor:"#35475f"}}>
+                                 <TabContainer dir={themeLang.direction}>
+                                    <RctCardContent>
+                                       <div className="cardCont" style={{background: "white", backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }}>
+                                          <div className="logo">                        
+                                             <img className="img-logo" src={fileLogo ? fileLogo : ''} style={{marginBottom:'10px',maxWidth: `${sizeLogoMobile}px`}} alt="s" />
+                                             <div className="titleForm" style={{color:colorTitleForm}}>{titlePortal}</div>
+                                          </div>
+                                       <form className="formulario"  action="" style={{background: backgroundColorForm}}>
+                                          <div className="form-row">
+                                          { nombre ?
+                                             <div className="form-group col-md-12 colorPlaceHolder" name="form_group_nombre" id="form_group_nombre">
+                                                <input className="" type="text" autoComplete="off" className="form-control form-control-sm" id="nombre" name="nombre" placeholder="Nombre" />
+                                             </div>
+                                             :
+                                             <div></div>
+                                          }
+                                          { apellidos ?
+                                             <div className="form-group col-md-12 colorPlaceHolder" name="form_group_apellidos" id="form_group_apellidos">
+                                                <input className="" type="text" autoComplete="off"  className="form-control form-control-sm" id="apellidos" name="apellidos" placeholder="Apellidos"/>
+                                             </div>
+                                          :
+                                          <div></div>
+                                          }
+                                          </div>
+                                             { email ? 
+                                             <div className="form-group colorPlaceHolder" id="form_group_email"  name="form_group_email">
+                                                <input className="colorPlaceHolder" type="email" autoComplete="off" className="form-control form-control-sm" id="email" name="email" placeholder="Correo Electrónico" />
+                                             </div>
+                                             :
+                                             <div></div>
+                                             }
+                                             { telefono ?
+                                             <div className="form-group colorPlaceHolder" id="form_group_telefono"  name="form_group_telefono">
+                                                <input className="colorPlaceHolder" type="tel" autoComplete="off" className="form-control form-control-sm" id="telefono" name="telefono" placeholder="Telefono" />
+                                             </div>
+                                             :
+                                             <div></div>
+                                             }
+                                             { edad ?
+                                             <div className="form-group colorPlaceHolder" id="form_group_edad"  name="form_group_edad">
+                                                <input className="colorPlaceHolder" type="text" autoComplete="off" className="form-control form-control-sm" id="edad" name="edad" placeholder="Edad" />
+                                             </div>
+                                                :
+                                             <div></div>
+                                             }
+                                             { genero ?
+                                             <div className="form-group colorPlaceHolder" id="form_group_genero"  name="form_group_genero">
+                                                <select id="genero"  name="genero" className="form-control form-control-sm">
+                                                      <option selected value="">Selecciona un género</option>
+                                                      <option value="Hombre">Hombre</option>
+                                                      <option value="Mujer">Mujer</option>
+                                                      <option value="Otro">Otro</option>
+                                                </select>
+                                             </div>
+                                                :
+                                                <div></div>
+                                             }
+                                             { num_habitacion ?
+                                             <div className="form-group colorPlaceHolder" id="form_group_habitacion"  name="form_group_habitacion">
+                                                <input type="text" autoComplete="off" className="form-control form-control-sm" id="num_habitacion" name="num_habitacion" placeholder="Ingrese el número de habitación" />
+                                             </div>
+                                                :
+                                             <div></div>
+                                             }
+                                             { num_voucher ?
+                                             <div className="form-group colorPlaceHolder" id="form_group_voucher" name="form_group_voucher">
+                                                <input type="text"  autoComplete="off" className="form-control form-control-sm" id="num_voucher" name="num_voucher" placeholder="Ingrese el pin acceso a internet" />
+                                             </div>
+                                                :
+                                             <div></div>
+                                             }
+                                             { razon_visita ?
+                                             <div className="form-group colorPlaceHolder" id="form_group_razon_visita"  name="form_group_razon_visita">
+                                                <select id="razon_visita"  name="razon_visita" className="form-control form-control-sm">
+                                                      <option selected value="">Selecciona una razón de visita</option>
+                                                      <option value="Vacaciones">Vacaciones</option>
+                                                      <option value="Trabajo">Trabajo</option>
+                                                      <option value="Congreso">Congreso</option>
+                                                      <option value="Convencion">Convencion</option>
+                                                      <option value="Otro">Otro</option>
+                                                </select>
+                                             </div>
+                                                :
+                                                <div></div>
+                                             }
+                                             <div className="form-group check-terminos colorPlaceHolder" id="form_group_check" name="form_group_check">
+                                                   <div className="custom-control custom-switch">
+                                                      <input type="checkbox" className="custom-control-input" id="customSwitches" name="customSwitches" />
+                                                      
+
+                                                      <FormControlLabel
+                                                         control={
+                                                            <IOSSwitch
+                                                               checked={this.state.checkedB}
+                                                               onChange={this.handleSwitch('checkedB')}
+                                                               value="checkedB"
+                                                            />
+                                                            
+                                                         }
+                                                         // label={<a href="#popup" style={{color:colorFontForm}}>Terminos y Condiciones</a>}
+                                                         label={<a  style={{color:colorFontForm}}>Aceptar Terminos y Condiciones</a>}
+                                                      />
+                                                   
+                                                   </div>
+                                             </div>
+
+                                             <div className="form-btn">
+                                                <button type="submit" id="submit" className="btn" style={{backgroundColor:buttonColors, color:colorFontForm}}>Continuar</button>
+                                             </div>     
+                                       </form>
+                                    </div>
+                                    </RctCardContent>
+                                 </TabContainer>
+                              </div>
+                              </SwipeableViews>
+                           </div>
                            }
                            </div>
                         </div>

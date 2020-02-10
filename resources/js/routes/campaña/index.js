@@ -122,16 +122,16 @@ export default class campañas extends Component {
 	async handleSubmit(e) {
 		e.preventDefault()
 		try {
-			let config = {
-				method: 'POST',
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(this.state.form)
-			};
+			// let config = {
+			// 	method: 'POST',
+			// 	headers: {
+			// 		'Accept': 'application/json',
+			// 		'Content-Type': 'application/json'
+			// 	},
+			// 	body: JSON.stringify(this.state.form)
+			// };
 
-			await fetch(`${localStorage.urlDomain}api/campanias`, config);
+			// await fetch(`${localStorage.urlDomain}api/campanias`, config);
 
 			let redirectCMS = this.props.history.location.pathname;
 			let nameCampaingCreated = this.state.form.nombre_campaña
