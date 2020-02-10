@@ -71,6 +71,7 @@ export default class campañas extends Component {
 			this.setState({
 				data: data,
 				form: {
+					...this.state.form,
 					id_location: id_location
 					
 				}
@@ -122,21 +123,24 @@ export default class campañas extends Component {
 	async handleSubmit(e) {
 		e.preventDefault()
 		try {
-			let config = {
-				method: 'POST',
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(this.state.form)
-			};
+			// let config = {
+			// 	method: 'POST',
+			// 	headers: {
+			// 		'Accept': 'application/json',
+			// 		'Content-Type': 'application/json'
+			// 	},
+			// 	body: JSON.stringify(this.state.form)
+			// };
 
-			await fetch(`${localStorage.urlDomain}api/campanias`, config);
+			// await fetch(`${localStorage.urlDomain}api/campanias`, config);
 
 			let redirectCMS = this.props.history.location.pathname;
 			let nameCampaingCreated = this.state.form.nombre_campaña
 			// this.props.history.push(redirectCMS+'/'+nameCampaingCreated+'/cms')// al terminar cms
-			this.props.history.push(redirectCMS+'/crear/cms')
+			this.props.history.push({
+				pathname: redirectCMS+'/crear/cms',
+				state: { form: this.state.form }
+			})
 			localStorage.setItem('campaingCreated',nameCampaingCreated);
 			this.setState({
 				prompt: false
@@ -212,6 +216,7 @@ export default class campañas extends Component {
 		let campania = await res.json();
 		this.setState({
 			form: {
+				...this.state.form,
 				nombre_campaña: campania.nombre,
 				fecha_inicio: campania.fecha_inicio,
 				fecha_fin: campania.fecha_fin,

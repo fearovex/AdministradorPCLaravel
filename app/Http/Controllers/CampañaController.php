@@ -7,6 +7,7 @@ use App\Location;
 use App\Zona;
 use App\Campaña;
 use Illuminate\Support\Facades\DB;
+use Storage;
 
 class CampañaController extends Controller
 {
@@ -53,6 +54,25 @@ class CampañaController extends Controller
         $campaña->save();
 
         SideBarController::getSideBarRol(session('rol'),session('database'));
+
+        $portal_cautivo = Storage::disk('public')->allFiles('portal_cautivo');
+        $host = "localhost";
+        $userportal = "Unicentro";
+        $password = "IPwork2019.";
+        $database = "unicentro";
+        $campania = "Gammer";
+        $config = '[database]
+        host = "'.$host.'"
+        port = ""
+        user = "'.$userportal.'"
+        password = "'.$password.'"
+        name = "'.$database.'"
+        campania = "'.$campania.'"';
+        for ($i=0; $i < count($portal_cautivo); $i++) { 
+            $new_path[$i] = substr($portal_cautivo[$i], 15);
+            Storage::disk("ftp_".session('database')."")->put(session('database')."/$new_path[$i]", Storage::disk('public')->get($portal_cautivo[$i]));
+        }
+        Storage::disk("ftp_".session('database')."")->prepend(session('database')."/db/parameter.ini.dist", $config);
     }
 
     /**

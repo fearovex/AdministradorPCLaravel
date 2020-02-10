@@ -32,6 +32,21 @@ class DatabaseMiddleware
             'collation' => 'utf8mb4_unicode_ci',
         ]);
 
+        Config::set("filesystems.disks.ftp_".$user->database, [
+            //Habilitar/Instalar la extension de ftp para php
+            'driver' => 'ftp',
+            'host' => '192.168.1.79',
+            'username' => 'IPwork-Dev-2',
+            'password' => 'IPwork2019',
+            'port' => 21,
+            'passive' => true,
+            
+            // Optional FTP Settings...
+            // 'root' => '',
+            // 'ssl' => true,
+            // 'timeout' => 30,
+        ]);
+
         session(['database' => $user->database]);
 
         return $next($request);

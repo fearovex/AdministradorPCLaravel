@@ -73,12 +73,23 @@ export default class CMS extends Component {
              })
           }
       }
+      console.log(this.props.location.state.form);
+      this.formCampaing = this.props.location.state.form;
       this.state = {
          data: [],
          value:0,
          valueLang:0,
          checkedB: true,
          form:{
+            //campaña
+            id_location: this.formCampaing.id_location,
+            nombre_campaña: this.formCampaing.nombre_campaña,
+				fecha_inicio: this.formCampaing.fecha_inicio,
+				fecha_fin: this.formCampaing.fecha_fin,
+            descripcion: this.formCampaing.descripcion,
+            vertical_economica: this.formCampaing.vertical_economica,
+				zona_ap: this.formCampaing.zona_ap,
+				anio: this.formCampaing.anio,
             //formulario
             email:true,
             nombre:false,
