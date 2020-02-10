@@ -34,6 +34,7 @@ class DatabaseMiddleware
 
         Config::set("filesystems.disks.ftp_".$user->database, [
             //Habilitar/Instalar la extension de ftp para php
+            //Configurar para redireccionar al ftp deseado
             'driver' => 'ftp',
             'host' => '192.168.1.79',
             'username' => 'IPwork-Dev-2',

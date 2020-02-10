@@ -73,7 +73,6 @@ export default class CMS extends Component {
              })
           }
       }
-      console.log(this.props.location.state.form);
       this.formCampaing = this.props.location.state.form;
       this.state = {
          data: [],
@@ -347,12 +346,19 @@ export default class CMS extends Component {
          filesBanner,
       } = this.state.form
      
-     console.log(this.state.form)
-      // (((titlePortal == "" && fileBackground == "") && (fileLogo == "" && sizeLogoMobile == "")) && (sizeLogoWeb == "" && buttonColors == "") && (colorTitleForm == "" && colorFontForm == "")) && (filesBanner == [])
       if( (((titlePortal == "" || fileBackground == "") || (fileLogo == "" || sizeLogoMobile == "")) || (sizeLogoWeb == "" || buttonColors == "") || (colorTitleForm == "" || colorFontForm == ""))){
          NotificationManager.error('Todos los campos son obligatorios','',5000);
       }else{
-         console.log(this.state.form)
+         let config = {
+				method: 'POST',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(this.state.form)
+			};
+
+			await fetch(`${localStorage.urlDomain}api/campanias`, config);
       }
    }
 

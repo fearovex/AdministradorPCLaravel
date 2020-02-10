@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Location;
-use App\Zona;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
 use App\Campaña;
 use Illuminate\Support\Facades\DB;
 use Storage;
@@ -37,8 +37,7 @@ class CampañaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         $campaña= new Campaña();
         $campaña->setConnection(session('database'));
         $campaña->nombre = $request->nombre_campaña;
@@ -48,19 +47,80 @@ class CampañaController extends Controller
         $campaña->zona_ap = $request->zona_ap;
         $campaña->ano_evento = $request->anio;
         $campaña->id_locacion = $request->id_location;
-        $campaña->campania = " ";
+        $campaña->campania = str_replace(["-", " "],"_",$request->nombre_campaña."_".date('Y-m-d', strtotime($request->fecha_inicio)));
         $campaña->vertical_economica = $request->vertical_economica;
-
         $campaña->save();
+        
+        Schema::connection(session('database'))->create($campaña->campania, function (Blueprint $table) use ($request) {
+            $table->increments('id');
+            $table->bigInteger('id_evento');
+            $table->dateTime('fecha_creacion');
+            if($request->email){
+                $table->string('email');
+            }            
+            if($request->nombre){
+                $table->string('nombre');
+            }            
+            if($request->apellidos){
+                $table->string('apellidos');
+            }            
+            if($request->edad){
+                $table->string('edad');
+            }            
+            if($request->genero){
+                $table->string('genero');
+            }            
+            if($request->telefono){
+                $table->string('telefono');
+            }            
+            if($request->num_voucher){
+                $table->string('num_voucher');
+            }            
+            if($request->num_habitacion){
+                $table->string('num_habitacion');
+            }            
+            if($request->razon_visita){
+                $table->string('razon_visita');
+            }
+            $table->string('os');
+            $table->string('ssid');
+            $table->string('mac_cliente');
+            $table->string('ip_cliente');
+            $table->string('ip_ap');
+            $table->string('mac_ap');
+        });
+        
+        DB::connection(session('database'))->table('styles_campania')->insert([
+            'id_campania' => $campaña->id,
+            'width_logo_web' => $request->sizeLogoWeb,
+            'margin_logo_web' => '5%',
+            'width_logo_movil' => $request->sizeLogoMobile,
+            'margin_logo_movil' => '5%',
+            'container_form_color' => $request->backgroundColorForm,
+            'container_form_font_color' => $request->colorFontForm,
+            'button_font_color' => $request->colorFontForm,
+            'button_background_color' => $request->buttonColors,
+            'button_border_color' => $request->buttonColors,
+            'button_hover_font_color' => '#EEE',
+            'button_hover_background_color' => '#000',
+            'checkbox_terms_background_color' => $request->buttonColors,
+            'checkbox_terms_border_color' => $request->buttonColors,
+            'msg_error_color_font' => '#EEE',
+            'msg_error_color_background' => 'rgb(160,19,35,0.91)'
+        ]);
 
-        SideBarController::getSideBarRol(session('rol'),session('database'));
-
+        DB::connection(session('database'))->table('terms_conditions_campania')->insert([
+            'id_campania' => $campaña->id,
+            'terms_conditions_es' => $request->terminos_condiciones_esp,
+            'terms_conditions_en' => $request->terminos_condiciones_eng         
+        ]);
+        
         $portal_cautivo = Storage::disk('public')->allFiles('portal_cautivo');
-        $host = "localhost";
-        $userportal = "Unicentro";
-        $password = "IPwork2019.";
-        $database = "unicentro";
-        $campania = "Gammer";
+        $host = env("DB_HOST");
+        $userportal = env('DB_USERNAME');
+        $password = env('DB_PASSWORD');
+        $database = session('database');
+        $campania = $campaña->campania;
         $config = '[database]
         host = "'.$host.'"
         port = ""
@@ -70,11 +130,13 @@ class CampañaController extends Controller
         campania = "'.$campania.'"';
         for ($i=0; $i < count($portal_cautivo); $i++) { 
             $new_path[$i] = substr($portal_cautivo[$i], 15);
-            Storage::disk("ftp_".session('database')."")->put(session('database')."/$new_path[$i]", Storage::disk('public')->get($portal_cautivo[$i]));
+            Storage::disk("ftp_".session('database')."")->put($campaña->campania."/$new_path[$i]", Storage::disk('public')->get($portal_cautivo[$i]));
         }
-        Storage::disk("ftp_".session('database')."")->prepend(session('database')."/db/parameter.ini.dist", $config);
-    }
+        Storage::disk("ftp_".session('database')."")->prepend($campaña->campania."/db/parameter.ini.dist", $config);
 
+        SideBarController::getSideBarRol(session('rol'),session('database'));
+    }
+    
     /**
      * Display the specified resource.
      *
@@ -84,7 +146,7 @@ class CampañaController extends Controller
     public function show($id)
     {
         $zonas = DB::connection(session('database'))
-            ->table('campania')
+        ->table('campania')
             ->select('id','nombre as Nombre','descripcion as Descripcion','fecha_inicio as Fecha Inicio','fecha_fin as Fecha Fin', 'campania','vertical_economica as Vertical')
             ->where('id_locacion', $id)
             ->get();
