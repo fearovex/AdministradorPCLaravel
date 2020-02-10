@@ -16,6 +16,7 @@ import queryString from 'query-string';
 import moment from "moment";
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import { DateTimePicker } from '@material-ui/pickers';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
 
 import './styles.css'
 
@@ -71,6 +72,7 @@ export default class campañas extends Component {
 			this.setState({
 				data: data,
 				form: {
+					...this.state.form,
 					id_location: id_location
 					
 				}
@@ -132,16 +134,26 @@ export default class campañas extends Component {
 			// };
 
 			// await fetch(`${localStorage.urlDomain}api/campanias`, config);
+			const {
+				nombre_campaña,
+				descripcion,
+				zona_ap,
+				anio,
+				vertical_economica,
+			} = this.state.form
 
-			let redirectCMS = this.props.history.location.pathname;
-			let nameCampaingCreated = this.state.form.nombre_campaña
-			// this.props.history.push(redirectCMS+'/'+nameCampaingCreated+'/cms')// al terminar cms
-			this.props.history.push(redirectCMS+'/crear/cms')
-			localStorage.setItem('campaingCreated',nameCampaingCreated);
-			this.setState({
-				prompt: false
-			})
-			
+			if(((nombre_campaña == '' || descripcion == '') || (descripcion == '')) || ((zona_ap == '') || (anio == '' || vertical_economica == ''))){
+				NotificationManager.error('Los campos son obligatorios','',5000);
+			}else{
+				let redirectCMS = this.props.history.location.pathname;
+				let nameCampaingCreated = this.state.form.nombre_campaña
+				// this.props.history.push(redirectCMS+'/'+nameCampaingCreated+'/cms')// al terminar cms
+				this.props.history.push(redirectCMS+'/crear/cms')
+				localStorage.setItem('campaingCreated',nameCampaingCreated);
+				this.setState({
+					prompt: false
+				})
+			}
 			// this.componentDidMount();
 
 		} catch (error) {
@@ -212,6 +224,7 @@ export default class campañas extends Component {
 		let campania = await res.json();
 		this.setState({
 			form: {
+				...this.state.form,
 				nombre_campaña: campania.nombre,
 				fecha_inicio: campania.fecha_inicio,
 				fecha_fin: campania.fecha_fin,
