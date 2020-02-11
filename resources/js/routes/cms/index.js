@@ -190,7 +190,6 @@ export default class CMS extends Component {
       })
    }
    handleChangeColorButtonStyle = (color) => {
-      console.log(color)
       this.setState({
         form:{
            ...this.state.form,

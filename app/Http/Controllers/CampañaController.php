@@ -39,6 +39,7 @@ class CampañaController extends Controller
      */
     public function store(Request $request){
         $NameTabla = str_replace(["-", " "],"_",$request->nombre_campaña."_".date('Y-m-d', strtotime($request->fecha_inicio)));
+        
         $campaña= new Campaña();
         $campaña->setConnection(session('database'));
         $campaña->nombre = $request->nombre_campaña;
@@ -52,6 +53,18 @@ class CampañaController extends Controller
         $campaña->vertical_economica = $request->vertical_economica;
         $campaña->save();
         
+        CampañaController::createTable($request, $NameTabla);
+        
+        CampañaController::add_Styles_Terms($request, $campaña);
+        
+        CampañaController::ftp_portal_cautivo($NameTabla);
+
+        CampañaController::sendImages($request, $NameTabla, $campaña);
+        
+        SideBarController::getSideBarRol(session('rol'),session('database'));
+    }
+
+    private function createTable($request, $NameTabla){
         Schema::connection(session('database'))->create($NameTabla, function (Blueprint $table) use ($request) {
             $table->increments('id');
             $table->bigInteger('id_evento');
@@ -90,12 +103,14 @@ class CampañaController extends Controller
             $table->string('ip_ap');
             $table->string('mac_ap');
         });
-        
+    }
+
+    private function add_Styles_Terms($request, $campaña){
         DB::connection(session('database'))->table('styles_campania')->insert([
             'id_campania' => $campaña->id,
-            'width_logo_web' => $request->sizeLogoWeb,
+            'width_logo_web' => $request->sizeLogoWeb.'px',
             'margin_logo_web' => '5%',
-            'width_logo_movil' => $request->sizeLogoMobile,
+            'width_logo_movil' => $request->sizeLogoMobile.'px',
             'margin_logo_movil' => '5%',
             'container_form_color' => "rgba(".$request->backgroundColorForm['r'].", ".$request->backgroundColorForm['g'].", ".$request->backgroundColorForm['b'].", ".$request->backgroundColorForm['a'].")",
             'container_form_font_color' => "rgba(".$request->colorFontForm['r'].", ".$request->colorFontForm['g'].", ".$request->colorFontForm['b'].", ".$request->colorFontForm['a'].")",
@@ -107,7 +122,8 @@ class CampañaController extends Controller
             'checkbox_terms_background_color' => "rgba(".$request->buttonColors['r'].", ".$request->buttonColors['g'].", ".$request->buttonColors['b'].", ".$request->buttonColors['a'].")",
             'checkbox_terms_border_color' => "rgba(".$request->buttonColors['r'].", ".$request->buttonColors['g'].", ".$request->buttonColors['b'].", ".$request->buttonColors['a'].")",
             'msg_error_color_font' => '#EEE',
-            'msg_error_color_background' => 'rgb(160,19,35,0.91)'
+            'msg_error_color_background' => 'rgb(160,19,35,0.91)',
+            'title_portal' => $request->titlePortal,
         ]);
 
         DB::connection(session('database'))->table('terms_conditions_campania')->insert([
@@ -115,7 +131,9 @@ class CampañaController extends Controller
             'terms_conditions_es' => $request->terminos_condiciones_esp,
             'terms_conditions_en' => $request->terminos_condiciones_eng         
         ]);
-        
+    }
+
+    private function ftp_portal_cautivo($NameTabla){
         $portal_cautivo = Storage::disk('public')->allFiles('portal_cautivo');
         $host = env("DB_HOST");
         $userportal = env('DB_USERNAME');
@@ -134,8 +152,41 @@ class CampañaController extends Controller
             Storage::disk("ftp_".session('database')."")->put($NameTabla."/$new_path[$i]", Storage::disk('public')->get($portal_cautivo[$i]));
         }
         Storage::disk("ftp_".session('database')."")->prepend($NameTabla."/db/parameter.ini.dist", $config);
+    }
 
-        SideBarController::getSideBarRol(session('rol'),session('database'));
+    private function sendImages($request, $NameTabla, $campaña){
+        $background = explode(';base64,', $request->fileBackground);
+        Storage::disk("ftp_".session('database')."")->put($NameTabla."/img/background.png", base64_decode($background[1]));
+
+        $logo = explode(';base64,', $request->fileLogo);
+        Storage::disk("ftp_".session('database')."")->put($NameTabla."/img/logo.png", base64_decode($logo[1]));
+
+        Storage::disk("ftp_".session('database')."")->put($NameTabla."/img/favicon.ico", base64_decode($logo[1]));
+        
+        DB::connection(session('database'))->table('files_campania')->insert([
+            'id_campania' => $campaña->id,
+            'id_tipo_archivo_multimedia' => 1,
+            'nombre' => '/img/background.png',
+            'fecha_creacion' => date('Y-m-d H:i:s')         
+        ]);
+        DB::connection(session('database'))->table('files_campania')->insert([
+            'id_campania' => $campaña->id,
+            'id_tipo_archivo_multimedia' => 2,
+            'nombre' => '/img/logo.png',
+            'fecha_creacion' => date('Y-m-d H:i:s')
+        ]);
+        DB::connection(session('database'))->table('files_campania')->insert([
+            'id_campania' => $campaña->id,
+            'id_tipo_archivo_multimedia' => 3,
+            'nombre' => '/img/favicon.ico',
+            'fecha_creacion' => date('Y-m-d H:i:s')
+        ]);
+        
+        // if($request->imgsBannerSwitch && count($request->filesBanner) > 0){
+        //     for($i=0; $i < count($request->filesBanner); $i++){
+        //         echo $request->filesBanner[$i];
+        //     }
+        // }
     }
     
     /**
