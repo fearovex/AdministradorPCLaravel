@@ -124,6 +124,7 @@ class CampañaController extends Controller
             'msg_error_color_font' => '#EEE',
             'msg_error_color_background' => 'rgb(160,19,35,0.91)',
             'title_portal' => $request->titlePortal,
+            'color_title_portal' => "rgba(".$request->colorTitleForm['r'].", ".$request->colorTitleForm['g'].", ".$request->colorTitleForm['b'].", ".$request->colorTitleForm['a'].")"
         ]);
 
         DB::connection(session('database'))->table('terms_conditions_campania')->insert([
@@ -182,11 +183,18 @@ class CampañaController extends Controller
             'fecha_creacion' => date('Y-m-d H:i:s')
         ]);
         
-        // if($request->imgsBannerSwitch && count($request->filesBanner) > 0){
-        //     for($i=0; $i < count($request->filesBanner); $i++){
-        //         echo $request->filesBanner[$i];
-        //     }
-        // }
+        if($request->imgsBannerSwitch && count($request->filesBanner) > 0){
+            for($i=0; $i < count($request->filesBanner); $i++){
+                $banner = explode(';base64,', $request->filesBanner[$i]);
+                Storage::disk("ftp_".session('database')."")->put($NameTabla."/img/banner/banner".($i+1).".png", base64_decode($banner[1]));
+                DB::connection(session('database'))->table('banner_files_campania')->insert([
+                    'id_campania' => $campaña->id,
+                    'nombre_img_web' => "/img/banner/banner".($i+1).".png",
+                    'nombre_img_movil' => "/img/banner/banner".($i+1).".png",
+                    'fecha_creacion' => date('Y-m-d H:i:s')
+                ]);
+            }
+        }
     }
     
     /**
