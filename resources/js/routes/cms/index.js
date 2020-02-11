@@ -47,6 +47,9 @@ import '../cms/styles.css';
 
 import axios, { post } from 'axios'
 
+import reactCSS from 'reactcss'
+import { SketchPicker } from 'react-color'
+
 
 // import Radium, { Style } from 'radium'
 
@@ -80,6 +83,10 @@ export default class CMS extends Component {
          valueLang:0,
          valueViewsFormat:0,
          checkedB: true,
+         displayColorPickerButtonStyle: false,
+         displayColorPickerFormStyle: false,
+         displayColorPickerTitleStyle: false,
+         displayColorPickerFontStyle: false,
          form:{
             //campaña
             id_location: this.formCampaing.id_location,
@@ -108,10 +115,30 @@ export default class CMS extends Component {
             fileLogo:"",
             sizeLogoMobile:"",
             sizeLogoWeb:"",
-            buttonColors:"",
-            backgroundColorForm:"",
-            colorTitleForm:"#000",
-            colorFontForm:"",
+            buttonColors:{
+               r:'155',
+               g:'155',
+               b:'155',
+               a:'1',
+            },
+            backgroundColorForm:{
+               r:'0',
+               g:'0',
+               b:'0',
+               a:'0.7',
+            },
+            colorTitleForm:{
+               r:'0',
+               g:'0',
+               b:'0',
+               a:'1',
+            },
+            colorFontForm:{
+               r:'0',
+               g:'0',
+               b:'0',
+               a:'1',
+            },
             filesBanner: [],
             imgsBannerSwitch:true,
             imgBackgroundPreviewUrl:null
@@ -120,7 +147,6 @@ export default class CMS extends Component {
       this.handleChangeCheckBox = this.handleChangeCheckBox.bind(this)
       this.rteChangeEsp = this.rteChangeEsp.bind(this);
       this.rteChangeEng = this.rteChangeEng.bind(this);
-
       this.handleChange = this.handleChange.bind(this)
       this.handleSubmit = this.handleSubmit.bind(this)
    }
@@ -153,6 +179,82 @@ export default class CMS extends Component {
    };
 
    
+   handleClickButtonStyle = () =>{
+      this.setState({
+         displayColorPickerButtonStyle: !this.state.displayColorPickerButtonStyle
+      })
+   }
+   handleCloseButtonStyle = () =>{
+      this.setState({
+         displayColorPickerButtonStyle:false
+      })
+   }
+   handleChangeColorButtonStyle = (color) => {
+      console.log(color)
+      this.setState({
+        form:{
+           ...this.state.form,
+           buttonColors: color.rgb
+        }
+      })
+   }
+
+   handleClickFormStyle = () =>{
+      this.setState({
+         displayColorPickerFormStyle: !this.state.displayColorPickerFormStyle
+      })
+   }
+   handleCloseFormStyle = () =>{
+      this.setState({
+         displayColorPickerFormStyle:false
+      })
+   }
+   handleChangeColorFormStyle = (color) => {
+      this.setState({
+        form:{
+           ...this.state.form,
+           backgroundColorForm: color.rgb
+        }
+      })
+   }
+
+   handleClickTitleStyle = () =>{
+      this.setState({
+         displayColorPickerTitleStyle: !this.state.displayColorPickerTitleStyle
+      })
+   }
+   handleCloseTitleStyle = () =>{
+      this.setState({
+         displayColorPickerTitleStyle:false
+      })
+   }
+   handleChangeColorTitleStyle = (color) => {
+      this.setState({
+        form:{
+           ...this.state.form,
+           colorTitleForm: color.rgb
+        }
+      })
+   }
+
+   handleClickFontStyle = () =>{
+      this.setState({
+         displayColorPickerFontStyle: !this.state.displayColorPickerFontStyle
+      })
+   }
+   handleCloseFontStyle = () =>{
+      this.setState({
+         displayColorPickerFontStyle:false
+      })
+   }
+   handleChangeColorFontStyle = (color) => {
+      this.setState({
+        form:{
+           ...this.state.form,
+           colorFontForm: color.rgb
+        }
+      })
+   }
 
    //métodos formulario
    handleChangeCheckBox = name => event => {
@@ -384,7 +486,7 @@ export default class CMS extends Component {
          filesBanner,
       } = this.state.form
      
-      if(terminos_condiciones_esp == '' || terminos_condiciones_eng == ''){
+      if((terminos_condiciones_esp == '' || terminos_condiciones_eng == '') || (terminos_condiciones_esp == '<p><br></p>' || terminos_condiciones_eng == '<p><br></p>')){
          NotificationManager.error('Los terminos y condiciones son requeridos','',5000);
       }
       else if( (((titlePortal == "" || fileBackground == "") || (fileLogo == "" || sizeLogoMobile == "")) || (sizeLogoWeb == "" || buttonColors == "") || (colorTitleForm == "" || colorFontForm == ""))){
@@ -488,13 +590,13 @@ export default class CMS extends Component {
              transform: 'translateX(16px)',
              color: theme.palette.common.white,
              '& + $track': {
-               backgroundColor: '#52c6d8',
+               backgroundColor: `rgb(150, 150, 150)`,
                opacity: 1,
                border: 'none',
              },
            },
            '&$focusVisible $thumb': {
-             color: '#52c6d8',
+             color:  `rgb(150, 150, 150)`,
              border: '6px solid #fff',
            },
          },
@@ -528,6 +630,132 @@ export default class CMS extends Component {
            />
          );
        });
+
+       const stylesButtonColorPicker = reactCSS({
+         'default': {
+            color: {
+              width: '100%',
+              height: '12px',
+              borderRadius: '2px',
+              border: '0.04em solid rgba(255,255,255,0.5)',
+              background: `rgba(${buttonColors.r }, ${buttonColors.g }, ${buttonColors.b }, ${buttonColors.a })`,
+            },
+            swatch: {
+              padding: '5px',
+              background: '#2c3644',
+              borderRadius: '1px',
+              boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+              display: 'inline-block',
+              cursor: 'pointer',
+            },
+            popover: {
+              position: 'absolute',
+              zIndex: '2',
+              bottom: '59px'
+            },
+            cover: {
+              position: 'fixed',
+              top: '0px',
+              right: '0px',
+              bottom: '0px',
+              left: '0px',
+            },
+          },
+       })
+
+       const stylesColorPicker = reactCSS({
+         'default': {
+            color: {
+              width: '100%',
+              height: '12px',
+              borderRadius: '2px',
+              border: '0.04em solid rgba(255,255,255,0.5)',
+              background: `rgba(${backgroundColorForm.r }, ${backgroundColorForm.g }, ${backgroundColorForm.b }, ${backgroundColorForm.a })`,
+            },
+            swatch: {
+              padding: '5px',
+              background: '#2c3644',
+              borderRadius: '1px',
+              boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+              display: 'inline-block',
+              cursor: 'pointer',
+            },
+            popover: {
+              position: 'absolute',
+              zIndex: '2',
+            },
+            cover: {
+              position: 'fixed',
+              top: '0px',
+              right: '0px',
+              bottom: '0px',
+              left: '0px',
+            },
+          },
+       })
+
+       const stylesTitleColorPicker = reactCSS({
+         'default': {
+            color: {
+              width: '100%',
+              height: '12px',
+              borderRadius: '2px',
+              border: '0.04em solid rgba(255,255,255,0.5)',
+              background: `rgba(${colorTitleForm.r }, ${colorTitleForm.g }, ${colorTitleForm.b }, ${colorTitleForm.a })`,
+            },
+            swatch: {
+              padding: '5px',
+              background: '#2c3644',
+              borderRadius: '1px',
+              boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+              display: 'inline-block',
+              cursor: 'pointer',
+            },
+            popover: {
+              position: 'absolute',
+              zIndex: '2',
+            },
+            cover: {
+              position: 'fixed',
+              top: '0px',
+              right: '0px',
+              bottom: '0px',
+              left: '0px',
+            },
+          },
+       })
+
+       const stylesFontColorPicker = reactCSS({
+         'default': {
+            color: {
+              width: '100%',
+              height: '12px',
+              borderRadius: '2px',
+              border: '0.04em solid rgba(255,255,255,0.5)',
+              background: `rgba(${colorFontForm.r }, ${colorFontForm.g }, ${colorFontForm.b }, ${colorFontForm.a })`,
+            },
+            swatch: {
+              padding: '5px',
+              background: '#2c3644',
+              borderRadius: '1px',
+              boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+              display: 'inline-block',
+              cursor: 'pointer',
+            },
+            popover: {
+              position: 'absolute',
+              zIndex: '2',
+            },
+            cover: {
+              position: 'fixed',
+              top: '0px',
+              right: '0px',
+              bottom: '0px',
+              left: '0px',
+            },
+          },
+       })
+
       
       return (
          <div className="row" style={{marginBottom:"20px"}}>
@@ -680,7 +908,14 @@ export default class CMS extends Component {
                                              </FormGroup>
                                              <FormGroup>
                                                 <Label for="buttonColors">Color de Botones</Label>
-                                                <input type="color" autoComplete="off" name="buttonColors" id="buttonColors" value={buttonColors} onChange={() => this.handleChange(event)} className="inputColor"/>
+                                                <div style={ stylesButtonColorPicker.swatch } onClick={ this.handleClickButtonStyle } className="inputColor">
+                                                   <div style={ stylesButtonColorPicker.color } />
+                                                </div>
+                                                { this.state.displayColorPickerButtonStyle ? <div style={ stylesButtonColorPicker.popover }>
+                                                <div style={ stylesButtonColorPicker.cover } onClick={ this.handleCloseButtonStyle } className="inputColor" />
+                                                   <SketchPicker className="pickerColor" color={ buttonColors } onChange={ this.handleChangeColorButtonStyle } />
+                                                </div> : null }
+                                                {/* <input type="color" autoComplete="off" name="buttonColors" id="buttonColors" value={buttonColors} onChange={() => this.handleChange(event)} className="inputColor"/> */}
                                              </FormGroup>
                                              
                                           
@@ -688,15 +923,36 @@ export default class CMS extends Component {
                                           <div className="col-lg-6" style={{marginBottom:"38px", marginTop:"20px"}}>
                                                 <div style={{marginBottom:"39px"}}>
                                                    <Label for="colorTitleForm">Color de Fondo del Formulario</Label>
-                                                   <input type="color" autoComplete="off" name="backgroundColorForm" rgba id="backgroundColorForm" value={backgroundColorForm} onChange={() => this.handleChange(event)} className="inputColor"/>
+                                                   <div style={ stylesColorPicker.swatch } onClick={ this.handleClickFormStyle } className="inputColor">
+                                                      <div style={ stylesColorPicker.color } />
+                                                   </div>
+                                                   { this.state.displayColorPickerFormStyle ? <div style={ stylesColorPicker.popover }>
+                                                   <div style={ stylesColorPicker.cover } onClick={ this.handleCloseFormStyle } className="inputColor" />
+                                                      <SketchPicker color={ backgroundColorForm } onChange={ this.handleChangeColorFormStyle } />
+                                                   </div> : null }
+                                                   {/* <input type="color" autoComplete="off" name="backgroundColorForm" rgba id="backgroundColorForm" value={backgroundColorForm} onChange={() => this.handleChange(event)} className="inputColor"/> */}
                                                 </div>
                                                 <div style={{marginBottom:"39px"}}>
                                                    <Label for="colorTitleForm">Color Titulo del Formulario</Label>
-                                                   <input type="color" autoComplete="off" name="colorTitleForm" id="colorTitleForm" value={colorTitleForm} onChange={() => this.handleChange(event)} className="inputColor"/>
+                                                   <div style={ stylesTitleColorPicker.swatch } onClick={ this.handleClickTitleStyle } className="inputColor">
+                                                      <div style={ stylesTitleColorPicker.color } />
+                                                   </div>
+                                                   { this.state.displayColorPickerTitleStyle ? <div style={ stylesTitleColorPicker.popover }>
+                                                   <div style={ stylesTitleColorPicker.cover } onClick={ this.handleCloseTitleStyle } className="inputColor" />
+                                                      <SketchPicker color={ colorTitleForm } onChange={ this.handleChangeColorTitleStyle } />
+                                                   </div> : null }
+                                                   {/* <input type="color" autoComplete="off" name="colorTitleForm" id="colorTitleForm" value={colorTitleForm} onChange={() => this.handleChange(event)} className="inputColor"/> */}
                                                 </div>
                                                 <div style={{marginTop:"15px"}}>
                                                       <Label for="colorFontForm">Color de la Fuente del Formulario</Label>
-                                                      <input type="color" autoComplete="off" name="colorFontForm" id="colorFontForm"  value={colorFontForm} onChange={() => this.handleChange(event)} className="inputColor"/>
+                                                      <div style={ stylesFontColorPicker.swatch } onClick={ this.handleClickFontStyle } className="inputColor">
+                                                         <div style={ stylesFontColorPicker.color } />
+                                                      </div>
+                                                      { this.state.displayColorPickerFontStyle ? <div style={ stylesFontColorPicker.popover }>
+                                                      <div style={ stylesFontColorPicker.cover } onClick={ this.handleCloseFontStyle } className="inputColor" />
+                                                         <SketchPicker color={ colorFontForm } onChange={ this.handleChangeColorFontStyle } />
+                                                      </div> : null }
+                                                      {/* <input type="color" autoComplete="off" name="colorFontForm" id="colorFontForm"  value={colorFontForm} onChange={() => this.handleChange(event)} className="inputColor"/> */}
                                                 </div>
                                                 <div style={{marginTop:"35px"}}>
                                                    <FormControlLabel
@@ -770,9 +1026,9 @@ export default class CMS extends Component {
                                        <div className="cardCont" style={{background: "white", backgroundImage: `url(${fileBackground})`, backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }}>
                                           <div className="logo">                        
                                              <img className="img-logo" src={fileLogo ? fileLogo:''} style={{maxWidth: `${sizeLogoWeb}px`}} alt="" />
-                                             <div className="titleForm" style={{color:colorTitleForm}}>{titlePortal}</div>
+                                             <div className="titleForm" style={{color:`rgba(${colorTitleForm.r }, ${colorTitleForm.g }, ${colorTitleForm.b }, ${colorTitleForm.a })`}}>{titlePortal}</div>
                                           </div>
-                                       <form className="formulario"  action="" style={{background: backgroundColorForm}}>
+                                       <form className="formulario"  action="" style={{background: `rgba(${backgroundColorForm.r }, ${backgroundColorForm.g }, ${backgroundColorForm.b }, ${backgroundColorForm.a })`}}>
                                           <div className="form-row">
                                           { nombre ?
                                              <div className="form-group col-md-6 colorPlaceHolder" name="form_group_nombre" id="form_group_nombre">
@@ -865,14 +1121,14 @@ export default class CMS extends Component {
                                                             
                                                          }
                                                          // label={<a href="#popup" style={{color:colorFontForm}}>Terminos y Condiciones</a>}
-                                                         label={<a  style={{color:colorFontForm}}>Aceptar Terminos y Condiciones</a>}
+                                                         label={<a  style={{color:`rgba(${colorFontForm.r }, ${colorFontForm.g }, ${colorFontForm.b }, ${colorFontForm.a })`}}>Aceptar Terminos y Condiciones</a>}
                                                       />
                                                    
                                                    </div>
                                              </div>
 
                                              <div className="form-btn">
-                                                <button type="submit" id="submit" className="btn" style={{backgroundColor:buttonColors, color:colorFontForm}}>Continuar</button>
+                                                <button type="submit" id="submit" className="btn" style={{backgroundColor:`rgba(${buttonColors.r }, ${buttonColors.g }, ${buttonColors.b }, ${buttonColors.a })`, color:`rgba(${colorFontForm.r }, ${colorFontForm.g }, ${colorFontForm.b }, ${colorFontForm.a })`}}>Continuar</button>
                                              </div>     
                                        </form>
                                     </div>
@@ -885,9 +1141,9 @@ export default class CMS extends Component {
                                        <div className="cardCont" style={{background: "white", backgroundImage: `url(${fileBackground})`, backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }}>
                                           <div className="logo">                        
                                              <img className="img-logo" src={fileLogo ? fileLogo:''} style={{maxWidth: `${sizeLogoMobile}px`}} alt="" />
-                                             <div className="titleForm" style={{color:colorTitleForm}}>{titlePortal}</div>
+                                             <div className="titleForm" style={{color:`rgba(${colorTitleForm.r }, ${colorTitleForm.g }, ${colorTitleForm.b }, ${colorTitleForm.a })`}}>{titlePortal}</div>
                                           </div>
-                                          <form className="formulario"  action="" style={{background: backgroundColorForm}}>
+                                          <form className="formulario"  action="" style={{background: `rgba(${backgroundColorForm.r }, ${backgroundColorForm.g }, ${backgroundColorForm.b }, ${backgroundColorForm.a })`}}>
                                              <div className="form-row">
                                              { nombre ?
                                                 <div className="form-group col-md-12 colorPlaceHolder" name="form_group_nombre" id="form_group_nombre">
@@ -980,14 +1236,14 @@ export default class CMS extends Component {
                                                                
                                                             }
                                                             // label={<a href="#popup" style={{color:colorFontForm}}>Terminos y Condiciones</a>}
-                                                            label={<a  style={{color:colorFontForm}}>Aceptar Terminos y Condiciones</a>}
+                                                            label={<a  style={{color:`rgba(${colorFontForm.r }, ${colorFontForm.g }, ${colorFontForm.b }, ${colorFontForm.a })`}}>Aceptar Terminos y Condiciones</a>}
                                                          />
                                                       
                                                       </div>
                                                 </div>
 
                                                 <div className="form-btn">
-                                                   <button type="submit" id="submit" className="btn" style={{backgroundColor:buttonColors, color:colorFontForm}}>Continuar</button>
+                                                   <button type="submit" id="submit" className="btn" style={{backgroundColor:`rgba(${buttonColors.r }, ${buttonColors.g }, ${buttonColors.b }, ${buttonColors.a })`, color:`rgba(${colorFontForm.r }, ${colorFontForm.g }, ${colorFontForm.b }, ${colorFontForm.a })`}}>Continuar</button>
                                                 </div>     
                                           </form>
                                        </div>
@@ -1022,9 +1278,9 @@ export default class CMS extends Component {
                                     <div className="cardCont" style={{background: "white", backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }}>
                                        <div className="logo">                        
                                           <img className="img-logo" src={fileLogo ? fileLogo : ''} style={{marginBottom:'10px',maxWidth: `${sizeLogoWeb}px`}} alt="s" />
-                                          <div className="titleForm" style={{color:colorTitleForm}}>{titlePortal}</div>
+                                          <div className="titleForm" style={{color:`rgba(${colorTitleForm.r }, ${colorTitleForm.g }, ${colorTitleForm.b }, ${colorTitleForm.a })`}}>{titlePortal}</div>
                                        </div>
-                                    <form className="formulario"  action="" style={{background: backgroundColorForm}}>
+                                    <form className="formulario"  action="" style={{background: `rgba(${backgroundColorForm.r }, ${backgroundColorForm.g }, ${backgroundColorForm.b }, ${backgroundColorForm.a })`}}>
                                        <div className="form-row">
                                        { nombre ?
                                           <div className="form-group col-md-6 colorPlaceHolder" name="form_group_nombre" id="form_group_nombre">
@@ -1117,15 +1373,15 @@ export default class CMS extends Component {
                                                          
                                                       }
                                                       // label={<a href="#popup" style={{color:colorFontForm}}>Terminos y Condiciones</a>}
-                                                      label={<a  style={{color:colorFontForm}}>Aceptar Terminos y Condiciones</a>}
+                                                      label={<a  style={{color:`rgba(${colorFontForm.r }, ${colorFontForm.g }, ${colorFontForm.b }, ${colorFontForm.a })`}}>Aceptar Terminos y Condiciones</a>}
                                                    />
                                                 
                                                 </div>
                                           </div>
 
                                           <div className="form-btn">
-                                             <button type="submit" id="submit" className="btn" style={{backgroundColor:buttonColors, color:colorFontForm}}>Continuar</button>
-                                          </div>     
+                                             <button type="submit" id="submit" className="btn" style={{backgroundColor:`rgba(${buttonColors.r }, ${buttonColors.g }, ${buttonColors.b }, ${buttonColors.a })`, color:`rgba(${colorFontForm.r }, ${colorFontForm.g }, ${colorFontForm.b }, ${colorFontForm.a })`}}>Continuar</button>
+                                          </div>      
                                     </form>
                                  </div>
                                     </RctCardContent>
@@ -1137,9 +1393,9 @@ export default class CMS extends Component {
                                        <div className="cardCont" style={{background: "white", backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }}>
                                           <div className="logo">                        
                                              <img className="img-logo" src={fileLogo ? fileLogo : ''} style={{marginBottom:'10px',maxWidth: `${sizeLogoMobile}px`}} alt="s" />
-                                             <div className="titleForm" style={{color:colorTitleForm}}>{titlePortal}</div>
+                                             <div className="titleForm" style={{color:`rgba(${colorTitleForm.r }, ${colorTitleForm.g }, ${colorTitleForm.b }, ${colorTitleForm.a })`}}>{titlePortal}</div>
                                           </div>
-                                       <form className="formulario"  action="" style={{background: backgroundColorForm}}>
+                                       <form className="formulario"  action="" style={{background: `rgba(${backgroundColorForm.r }, ${backgroundColorForm.g }, ${backgroundColorForm.b }, ${backgroundColorForm.a })`}}>
                                           <div className="form-row">
                                           { nombre ?
                                              <div className="form-group col-md-12 colorPlaceHolder" name="form_group_nombre" id="form_group_nombre">
@@ -1232,15 +1488,15 @@ export default class CMS extends Component {
                                                             
                                                          }
                                                          // label={<a href="#popup" style={{color:colorFontForm}}>Terminos y Condiciones</a>}
-                                                         label={<a  style={{color:colorFontForm}}>Aceptar Terminos y Condiciones</a>}
+                                                         label={<a  style={{color:`rgba(${colorFontForm.r }, ${colorFontForm.g }, ${colorFontForm.b }, ${colorFontForm.a })`}}>Aceptar Terminos y Condiciones</a>}
                                                       />
                                                    
                                                    </div>
                                              </div>
 
                                              <div className="form-btn">
-                                                <button type="submit" id="submit" className="btn" style={{backgroundColor:buttonColors, color:colorFontForm}}>Continuar</button>
-                                             </div>     
+                                                <button type="submit" id="submit" className="btn" style={{backgroundColor:`rgba(${buttonColors.r }, ${buttonColors.g }, ${buttonColors.b }, ${buttonColors.a })`, color:`rgba(${colorFontForm.r }, ${colorFontForm.g }, ${colorFontForm.b }, ${colorFontForm.a })`}}>Continuar</button>
+                                             </div>        
                                        </form>
                                     </div>
                                     </RctCardContent>
