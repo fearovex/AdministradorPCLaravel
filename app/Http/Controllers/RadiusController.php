@@ -13,18 +13,29 @@ class RadiusController extends Controller
         $tabla = DB::connection($database)->table('campania')->select('campania')->where('id', $request->id_campaing)->first();
         $query = "select * from $database.users_radius where id_campania = $request->id_campaing";
         $dataCampaing = DB::select($query);
-
-        $queryRadius=[];
-        for ($i=0; $i < count($dataCampaing); $i++) {
-                array_push($queryRadius,DB::connection('radius')->select("select username nombreUsuarioRadius, SUM(acctsessiontime) as tiempoConexion from radacct where username="."'".$dataCampaing[$i]->username."' GROUP BY username"));
+        $countUsers = count($dataCampaing);
+        $whereQueryCampaing = "";
+        
+        if($countUsers > 0){
+            for($i=0; $i < $countUsers;$i++){
+                $whereQueryCampaing .= "r.username = '".$dataCampaing[$i]->username."'";
+                if(($countUsers - 1) > $i){
+                    $whereQueryCampaing .= " OR ";
+                }
+            }
+            $queryRadiusPromedy =  DB::connection('radius')->select("select ROUND(SUM(acctsessiontime)) as tiempoConexion from rd.radacct as r where r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate' and ($whereQueryCampaing)");
+            if(!$queryRadiusPromedy){
+                $queryRadiusPromedy[0] = [
+                    'tiempoConexion' => 0
+                ];
+            }
         }
-        $timeConn=0;
-        for ($j=0; $j < count(array_filter($queryRadius)); $j++) { 
-           $timeConn += $queryRadius[$j][0]->tiempoConexion;
+        else {
+            $queryRadiusPromedy[0] = [
+                'tiempoConexion' => 0
+            ];
         }
-        $usersRadiusCount=count(array_filter($queryRadius));
-        $averageTime= $timeConn/$usersRadiusCount;
-        return response()->json($averageTime);
+        return response()->json($queryRadiusPromedy[0], 200);
     }
 
     public function getDataRadiusConnected(Request $request){
@@ -32,12 +43,29 @@ class RadiusController extends Controller
         $tabla = DB::connection($database)->table('campania')->select('campania')->where('id', $request->id_campaing)->first();
         $query = "select * from $database.users_radius where id_campania = $request->id_campaing";
         $dataCampaing = DB::select($query);
-
-        $queryRadius=[];
-        for ($i=0; $i < count($dataCampaing); $i++) {
-                array_push($queryRadius,DB::connection('radius')->select("select username nombreUsuarioRadius, count(*) as Conectados from radacct where username="."'".$dataCampaing[$i]->username."' and acctstoptime IS NULL GROUP BY acctstoptime"));
+       
+        $countUsers = count($dataCampaing);
+        $whereQueryCampaing = "";
+        if($countUsers > 0){
+            for($i=0; $i < $countUsers;$i++){
+                $whereQueryCampaing .= "r.username = '".$dataCampaing[$i]->username."'";
+                if(($countUsers - 1) > $i){
+                    $whereQueryCampaing .= " OR ";
+                }
+            }
+            $queryRadius = DB::connection('radius')->select("select count(*) as Conectados from radacct as r where r.acctstoptime IS NULL and ($whereQueryCampaing)");
+            if(!$queryRadius){
+                $queryRadius[0] = [
+                    'Conectados' => 0
+                ];
+            }
         }
-        return response()->json(array_filter($queryRadius));
+        else {
+            $queryRadius[0] = [
+                'Conectados' => 0
+            ];
+        }
+        return response()->json($queryRadius[0],200);
     }
 
     public function getPromedyBandwidth(Request $request){

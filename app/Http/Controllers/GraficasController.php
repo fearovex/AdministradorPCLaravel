@@ -200,7 +200,7 @@ class GraficasController extends Controller
     public function PromedyAge(Request $request){
         $database = session('database');
         $tabla = DB::connection($database)->table('campania')->select('campania')->where('id', $request->id_campaing)->first();
-        $query = "select round(avg(edad)) as Promedio FROM $database.$tabla->campania";
+        $query = "select round(avg(edad)) as Promedio FROM $database.$tabla->campania where fecha_creacion BETWEEN '$request->initialDate' and '$request->finalDate'";
         $PromedyAge = DB::select($query);
         return $PromedyAge;
     }

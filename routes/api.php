@@ -113,5 +113,7 @@ Route::group(['middleware' => 'cors'], function() {
         Route::post('/ChartBandwidth', 'RadiusController@getChartBandwidth');
         
         Route::post('/ChartTimeConnect', 'RadiusController@getChartTimeConnect');
+
+        Route::post('/uploadImage', 'CMSController@imgUpload');
     });
  });
