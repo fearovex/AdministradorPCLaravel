@@ -32,6 +32,22 @@ class DatabaseMiddleware
             'collation' => 'utf8mb4_unicode_ci',
         ]);
 
+        Config::set("filesystems.disks.ftp_".$user->database, [
+            //Habilitar/Instalar la extension de ftp para php
+            //Configurar para redireccionar al ftp deseado
+            'driver' => 'ftp',
+            'host' => env('FTP_HOST'),
+            'port' => env('FTP_PORT'),
+            'root' => env('FTP_ROOTPATH'),
+            'username' => env('FTP_USERNAME'),
+            'password' => env('FTP_PASSWORD'),
+            'passive' => true,
+            
+            // Optional FTP Settings...
+            // 'ssl' => true,
+            // 'timeout' => 30,
+        ]);
+
         session(['database' => $user->database]);
 
         return $next($request);

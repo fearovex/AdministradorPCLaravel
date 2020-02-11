@@ -65,6 +65,8 @@ function TabContainer({ children, dir }) {
 export default class CMS extends Component {
    constructor(props){
       super(props)
+      
+      this.formCampaing = this.props.location.state.form;
       this.state = {
          data: [],
          value:0,
@@ -77,6 +79,15 @@ export default class CMS extends Component {
          displayColorPickerFontStyle: false,
          countImgs:1,
          form:{
+            //campaña
+            id_location: this.formCampaing.id_location,
+            nombre_campaña: this.formCampaing.nombre_campaña,
+				fecha_inicio: this.formCampaing.fecha_inicio,
+				fecha_fin: this.formCampaing.fecha_fin,
+            descripcion: this.formCampaing.descripcion,
+            vertical_economica: this.formCampaing.vertical_economica,
+				zona_ap: this.formCampaing.zona_ap,
+				anio: this.formCampaing.anio,
             //formulario
             email:true,
             nombre:false,
@@ -482,7 +493,6 @@ export default class CMS extends Component {
          filesBanner,
       } = this.state.form
      
-     console.log(this.state.form)
       if((terminos_condiciones_esp == '' || terminos_condiciones_eng == '') || (terminos_condiciones_esp == '<p><br></p>' || terminos_condiciones_eng == '<p><br></p>')){
          NotificationManager.error('Los terminos y condiciones son requeridos','',5000);
       }
@@ -493,9 +503,20 @@ export default class CMS extends Component {
       }
       else if( (((titlePortal == "" || fileBackground == "") || (fileLogo == "" || sizeLogoMobile == "")) || (sizeLogoWeb == "" || buttonColors == "") || (colorTitleForm == "" || colorFontForm == ""))){
          NotificationManager.error('Todos los campos son obligatorios','',5000);
-      }
+      } 
       else{
-         console.log(this.state.form)
+         let config = {
+				method: 'POST',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(this.state.form)
+			};
+
+         await fetch(`${localStorage.urlDomain}api/campanias`, config);
+         
+         this.props.history.goBack();
       }
    }
 

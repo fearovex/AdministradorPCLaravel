@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Location;
-use App\Zona;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
 use App\Campaña;
 use Illuminate\Support\Facades\DB;
+use Storage;
 
 class CampañaController extends Controller
 {
@@ -36,8 +37,9 @@ class CampañaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request){
+        $NameTabla = str_replace(["-", " "],"_",$request->nombre_campaña."_".date('Y-m-d', strtotime($request->fecha_inicio)));
+        
         $campaña= new Campaña();
         $campaña->setConnection(session('database'));
         $campaña->nombre = $request->nombre_campaña;
@@ -47,14 +49,146 @@ class CampañaController extends Controller
         $campaña->zona_ap = $request->zona_ap;
         $campaña->ano_evento = $request->anio;
         $campaña->id_locacion = $request->id_location;
-        $campaña->campania = " ";
+        $campaña->campania = $NameTabla;
         $campaña->vertical_economica = $request->vertical_economica;
-
         $campaña->save();
+        
+        CampañaController::createTable($request, $NameTabla);
+        
+        CampañaController::add_Styles_Terms($request, $campaña);
+        
+        CampañaController::ftp_portal_cautivo($NameTabla);
 
+        CampañaController::sendImages($request, $NameTabla, $campaña);
+        
         SideBarController::getSideBarRol(session('rol'),session('database'));
     }
 
+    private function createTable($request, $NameTabla){
+        Schema::connection(session('database'))->create($NameTabla, function (Blueprint $table) use ($request) {
+            $table->increments('id');
+            $table->bigInteger('id_evento');
+            $table->dateTime('fecha_creacion');
+            if($request->email){
+                $table->string('email');
+            }            
+            if($request->nombre){
+                $table->string('nombre');
+            }            
+            if($request->apellidos){
+                $table->string('apellidos');
+            }            
+            if($request->edad){
+                $table->string('edad');
+            }            
+            if($request->genero){
+                $table->string('genero');
+            }            
+            if($request->telefono){
+                $table->string('telefono');
+            }            
+            if($request->num_voucher){
+                $table->string('num_voucher');
+            }            
+            if($request->num_habitacion){
+                $table->string('num_habitacion');
+            }            
+            if($request->razon_visita){
+                $table->string('razon_visita');
+            }
+            $table->string('os');
+            $table->string('ssid');
+            $table->string('mac_cliente');
+            $table->string('ip_cliente');
+            $table->string('ip_ap');
+            $table->string('mac_ap');
+        });
+    }
+
+    private function add_Styles_Terms($request, $campaña){
+        DB::connection(session('database'))->table('styles_campania')->insert([
+            'id_campania' => $campaña->id,
+            'width_logo_web' => $request->sizeLogoWeb.'px',
+            'margin_logo_web' => '5%',
+            'width_logo_movil' => $request->sizeLogoMobile.'px',
+            'margin_logo_movil' => '5%',
+            'container_form_color' => "rgba(".$request->backgroundColorForm['r'].", ".$request->backgroundColorForm['g'].", ".$request->backgroundColorForm['b'].", ".$request->backgroundColorForm['a'].")",
+            'container_form_font_color' => "rgba(".$request->colorFontForm['r'].", ".$request->colorFontForm['g'].", ".$request->colorFontForm['b'].", ".$request->colorFontForm['a'].")",
+            'button_font_color' => "rgba(".$request->colorFontForm['r'].", ".$request->colorFontForm['g'].", ".$request->colorFontForm['b'].", ".$request->colorFontForm['a'].")",
+            'button_background_color' => "rgba(".$request->buttonColors['r'].", ".$request->buttonColors['g'].", ".$request->buttonColors['b'].", ".$request->buttonColors['a'].")",
+            'button_border_color' => "rgba(".$request->buttonColors['r'].", ".$request->buttonColors['g'].", ".$request->buttonColors['b'].", ".$request->buttonColors['a'].")",
+            'button_hover_font_color' => '#EEE',
+            'button_hover_background_color' => '#000',
+            'checkbox_terms_background_color' => "rgba(".$request->buttonColors['r'].", ".$request->buttonColors['g'].", ".$request->buttonColors['b'].", ".$request->buttonColors['a'].")",
+            'checkbox_terms_border_color' => "rgba(".$request->buttonColors['r'].", ".$request->buttonColors['g'].", ".$request->buttonColors['b'].", ".$request->buttonColors['a'].")",
+            'msg_error_color_font' => '#EEE',
+            'msg_error_color_background' => 'rgb(160,19,35,0.91)',
+            'title_portal' => $request->titlePortal,
+        ]);
+
+        DB::connection(session('database'))->table('terms_conditions_campania')->insert([
+            'id_campania' => $campaña->id,
+            'terms_conditions_es' => $request->terminos_condiciones_esp,
+            'terms_conditions_en' => $request->terminos_condiciones_eng         
+        ]);
+    }
+
+    private function ftp_portal_cautivo($NameTabla){
+        $portal_cautivo = Storage::disk('public')->allFiles('portal_cautivo');
+        $host = env("DB_HOST");
+        $userportal = env('DB_USERNAME');
+        $password = env('DB_PASSWORD');
+        $database = session('database');
+        $campania = $NameTabla;
+        $config = '[database]
+        host = "'.$host.'"
+        port = ""
+        user = "'.$userportal.'"
+        password = "'.$password.'"
+        name = "'.$database.'"
+        campania = "'.$campania.'"';
+        for ($i=0; $i < count($portal_cautivo); $i++) { 
+            $new_path[$i] = substr($portal_cautivo[$i], 15);
+            Storage::disk("ftp_".session('database')."")->put($NameTabla."/$new_path[$i]", Storage::disk('public')->get($portal_cautivo[$i]));
+        }
+        Storage::disk("ftp_".session('database')."")->prepend($NameTabla."/db/parameter.ini.dist", $config);
+    }
+
+    private function sendImages($request, $NameTabla, $campaña){
+        $background = explode(';base64,', $request->fileBackground);
+        Storage::disk("ftp_".session('database')."")->put($NameTabla."/img/background.png", base64_decode($background[1]));
+
+        $logo = explode(';base64,', $request->fileLogo);
+        Storage::disk("ftp_".session('database')."")->put($NameTabla."/img/logo.png", base64_decode($logo[1]));
+
+        Storage::disk("ftp_".session('database')."")->put($NameTabla."/img/favicon.ico", base64_decode($logo[1]));
+        
+        DB::connection(session('database'))->table('files_campania')->insert([
+            'id_campania' => $campaña->id,
+            'id_tipo_archivo_multimedia' => 1,
+            'nombre' => '/img/background.png',
+            'fecha_creacion' => date('Y-m-d H:i:s')         
+        ]);
+        DB::connection(session('database'))->table('files_campania')->insert([
+            'id_campania' => $campaña->id,
+            'id_tipo_archivo_multimedia' => 2,
+            'nombre' => '/img/logo.png',
+            'fecha_creacion' => date('Y-m-d H:i:s')
+        ]);
+        DB::connection(session('database'))->table('files_campania')->insert([
+            'id_campania' => $campaña->id,
+            'id_tipo_archivo_multimedia' => 3,
+            'nombre' => '/img/favicon.ico',
+            'fecha_creacion' => date('Y-m-d H:i:s')
+        ]);
+        
+        // if($request->imgsBannerSwitch && count($request->filesBanner) > 0){
+        //     for($i=0; $i < count($request->filesBanner); $i++){
+        //         echo $request->filesBanner[$i];
+        //     }
+        // }
+    }
+    
     /**
      * Display the specified resource.
      *
@@ -64,7 +198,7 @@ class CampañaController extends Controller
     public function show($id)
     {
         $zonas = DB::connection(session('database'))
-            ->table('campania')
+        ->table('campania')
             ->select('id','nombre as Nombre','descripcion as Descripcion','fecha_inicio as Fecha Inicio','fecha_fin as Fecha Fin', 'campania','vertical_economica as Vertical')
             ->where('id_locacion', $id)
             ->get();

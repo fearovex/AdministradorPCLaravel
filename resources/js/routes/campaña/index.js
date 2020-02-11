@@ -148,7 +148,10 @@ export default class campañas extends Component {
 				let redirectCMS = this.props.history.location.pathname;
 				let nameCampaingCreated = this.state.form.nombre_campaña
 				// this.props.history.push(redirectCMS+'/'+nameCampaingCreated+'/cms')// al terminar cms
-				this.props.history.push(redirectCMS+'/crear/cms')
+				this.props.history.push({
+					pathname: redirectCMS+'/crear/cms',
+					state: { form: this.state.form }
+				})
 				localStorage.setItem('campaingCreated',nameCampaingCreated);
 				this.setState({
 					prompt: false
