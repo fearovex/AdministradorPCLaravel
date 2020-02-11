@@ -30,6 +30,7 @@ import Voucher from 'Routes/voucher';
 import Vouchers from 'Routes/vouchers';
 import VoucherInfo from 'Routes/voucher-info';
 import AnalyticalCampaing from 'Routes/analytical-campaing';
+import CMS from 'Routes/cms';
 
 // async component
 import {
@@ -163,6 +164,10 @@ export default [
    {
       path: 'locations/:location/campañas',
       component: campaña
+   },
+   {
+      path: 'locations/:location/campañas/crear/cms',
+      component: CMS
    },
    {
       path: 'locations/:location/campañas/:camp',

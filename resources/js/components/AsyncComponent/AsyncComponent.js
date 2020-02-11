@@ -510,31 +510,7 @@ const AsyncAdvanceUIAutoCompleteComponent = Loadable({
    loader: () => import("Routes/advance-ui-components/autoComplete"),
    loading: () => <RctPageLoader />,
 });
-// crm dashboard
-const AsyncCrmComponent = Loadable({
-   loader: () => import("Routes/crm/dashboard"),
-   loading: () => <RctPageLoader />,
-});
-// projects
-const AsyncProjectsComponent = Loadable({
-   loader: () => import("Routes/crm/projects"),
-   loading: () => <RctPageLoader />,
-});
-// project detail
-const AsyncProjectDetailComponent = Loadable({
-   loader: () => import("Routes/crm/project-detail"),
-   loading: () => <RctPageLoader />,
-});
-// clients
-const AsyncClientsComponent = Loadable({
-   loader: () => import("Routes/crm/clients"),
-   loading: () => <RctPageLoader />,
-});
-// reports
-const AsyncReportsComponent = Loadable({
-   loader: () => import("Routes/crm/reports"),
-   loading: () => <RctPageLoader />,
-});
+
 const AsyncEventsComponent = Loadable({
    loader: () => import("Routes/events"),
    loading: () => <RctPageLoader />,
@@ -551,6 +527,10 @@ const AsynclocacionComponent = Loadable({
 
 const AsynccampañaComponent = Loadable({
    loader: () => import("Routes/campaña"),
+   loading: () => <RctPageLoader />,
+});
+const AsynCMS = Loadable({
+   loader: () => import("Routes/cms"),
    loading: () => <RctPageLoader />,
 });
 const AsynczonasComponent = Loadable({
@@ -669,17 +649,13 @@ export {
    AsyncSaasDashboardComponent,
    AsyncAgencyDashboardComponent,
    AsyncNewsDashboardComponent,
-   AsyncCrmComponent,
-   AsyncProjectsComponent,
-   AsyncProjectDetailComponent,
-   AsyncClientsComponent,
-   AsyncReportsComponent,
    //events
    AsyncEventsComponent,
    //detail events
    AsyncDetailEventsComponent,
    AsynclocacionComponent,
    AsynccampañaComponent,
+   AsynCMS,
    AsynczonasComponent,
    AsyncdispositivosComponent,
    AsyncLocationsComponent,
