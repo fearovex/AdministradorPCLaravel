@@ -535,7 +535,7 @@ export default class CMS extends Component {
 
          await fetch(`${localStorage.urlDomain}api/campanias`, config);
          
-         // this.props.history.goBack();
+         this.props.history.goBack();
       }
    }
 
