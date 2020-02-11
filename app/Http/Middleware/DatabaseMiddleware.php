@@ -36,14 +36,14 @@ class DatabaseMiddleware
             //Habilitar/Instalar la extension de ftp para php
             //Configurar para redireccionar al ftp deseado
             'driver' => 'ftp',
-            'host' => '192.168.1.79',
-            'username' => 'IPwork-Dev-2',
-            'password' => 'IPwork2019',
-            'port' => 21,
+            'host' => env('FTP_HOST'),
+            'port' => env('FTP_PORT'),
+            'root' => env('FTP_ROOTPATH'),
+            'username' => env('FTP_USERNAME'),
+            'password' => env('FTP_PASSWORD'),
             'passive' => true,
             
             // Optional FTP Settings...
-            // 'root' => '',
             // 'ssl' => true,
             // 'timeout' => 30,
         ]);
