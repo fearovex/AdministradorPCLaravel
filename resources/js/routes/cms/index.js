@@ -303,7 +303,27 @@ export default class CMS extends Component {
                }
             });
          }
-      }else{
+      }
+      else if(name== 'imgsBannerSwitch') {
+         if(event.target.checked != false){
+            
+            this.setState({
+               form:{
+                  ...this.state.form,
+                  imgsBannerSwitch: event.target.checked,
+               }
+            });
+         }else{
+            this.state.form.filesBanner = [];
+            this.setState({
+               form:{
+                  ...this.state.form,
+                  imgsBannerSwitch: event.target.checked,
+               }
+            });
+         }
+      }
+      else{
          this.setState({
             form:{
                ...this.state.form,
@@ -311,6 +331,7 @@ export default class CMS extends Component {
             }
          });
       }
+      
       
    };
    handleSwitch = name => event => {
@@ -455,9 +476,9 @@ export default class CMS extends Component {
                   filesBanner
                };
             })
-            this.setState({
-               countImgs: this.state.countImgs+1
-            })
+           // this.setState({
+            //   countImgs: this.state.countImgs+1
+            //})
          }
       // }
       // else{
@@ -496,10 +517,8 @@ export default class CMS extends Component {
       if((terminos_condiciones_esp == '' || terminos_condiciones_eng == '') || (terminos_condiciones_esp == '<p><br></p>' || terminos_condiciones_eng == '<p><br></p>')){
          NotificationManager.error('Los terminos y condiciones son requeridos','',5000);
       }
-      else if(imgsBannerSwitch == true){
-         if(!filesBanner.length){
+      else if(imgsBannerSwitch == true && !filesBanner.length){
             NotificationManager.error('Las imagenes de banner son requeridas','',5000);
-         }
       }
       else if( (((titlePortal == "" || fileBackground == "") || (fileLogo == "" || sizeLogoMobile == "")) || (sizeLogoWeb == "" || buttonColors == "") || (colorTitleForm == "" || colorFontForm == ""))){
          NotificationManager.error('Todos los campos son obligatorios','',5000);
@@ -516,7 +535,7 @@ export default class CMS extends Component {
 
          await fetch(`${localStorage.urlDomain}api/campanias`, config);
          
-         this.props.history.goBack();
+         // this.props.history.goBack();
       }
    }
 
@@ -772,7 +791,7 @@ export default class CMS extends Component {
       // const djsConfig = this.djsConfig;
 
       // For a list of all possible events (there are many), see README.md!
-      var componentConfig = { iconFiletypes: ['.jpg', '.png', '.gif'], showFiletypeIcon: true, postUrl: 'no-url' };
+      var componentConfig = { iconFiletypes: ['.jpg', '.png', '.gif'], showFiletypeIcon: false, postUrl: 'no-url' };
       var djsConfig = { acceptedFiles: "image/jpeg,image/png,image/gif", autoProcessQueue: false }
       var eventHandlers = { addedfile: (file) => this.handleChangeBannerImgs(file)}
 
