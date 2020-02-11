@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 class CMSController extends Controller
 {
     public function imgUpload(Request $request){
-        // dd($request);
+        dd($request);
         $img = str_replace('data:image/jpeg;base64,', '', $request->input('fileBackground'));
         $img = str_replace('', '+', $img);
         $file = "/backgroundImg.jpeg";

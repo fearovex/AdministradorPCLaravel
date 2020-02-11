@@ -49,6 +49,7 @@ import axios, { post } from 'axios'
 
 import reactCSS from 'reactcss'
 import { SketchPicker } from 'react-color'
+import DropzoneComponent from 'react-dropzone-component';
 
 
 // import Radium, { Style } from 'radium'
@@ -64,18 +65,6 @@ function TabContainer({ children, dir }) {
 export default class CMS extends Component {
    constructor(props){
       super(props)
-      this.onDrop = (filesBanner) => {
-         if(filesBanner.length > 5){
-             NotificationManager.error('Ha excedido el número de imagenes (Max 5)','',5000);
-          }else{
-             this.setState({
-                form:{
-                   ...this.state.form,
-                   filesBanner
-                }
-             })
-          }
-      }
       this.state = {
          data: [],
          value:0,
@@ -86,6 +75,7 @@ export default class CMS extends Component {
          displayColorPickerFormStyle: false,
          displayColorPickerTitleStyle: false,
          displayColorPickerFontStyle: false,
+         countImgs:1,
          form:{
             //formulario
             email:true,
@@ -180,7 +170,6 @@ export default class CMS extends Component {
       })
    }
    handleChangeColorButtonStyle = (color) => {
-      console.log(color)
       this.setState({
         form:{
            ...this.state.form,
@@ -344,8 +333,10 @@ export default class CMS extends Component {
 
    //métodos diseño 
    async handleChange(e){
+     
       if(e.target.name == 'fileBackground'){
          if(e.target.files[0].size >= 500000 ){
+           
             NotificationManager.error('El archivo excedió el tamaño límite','',5000);
             this.setState({
                form:{
@@ -429,17 +420,7 @@ export default class CMS extends Component {
                [e.target.name]:""
             }
          })
-   }
-
-      // else if(e.target.name == 'sizeLogoMobile' && e.target.value < 10){
-      //    this.setState({
-      //       form:{
-      //          ...this.state.form,
-      //          [e.target.name]:10
-      //       }
-      //    })
-      // }
-
+      }
       else{
          this.setState({
             form:{
@@ -448,6 +429,30 @@ export default class CMS extends Component {
             }
          })
       }
+   }
+
+   handleChangeBannerImgs(imgs){
+      // console.log(imgs.getAsDataURL())
+      // if(this.state.countImgs <= 5){
+         let files = imgs;
+         let reader = new FileReader();
+         reader.readAsDataURL(files)
+         reader.onload=(e)=>{
+            this.setState(state =>{
+               const filesBanner = state.form.filesBanner.push(e.target.result)
+               return {
+                  filesBanner
+               };
+            })
+            this.setState({
+               countImgs: this.state.countImgs+1
+            })
+         }
+      // }
+      // else{
+      //    NotificationManager.error('El número de imagenes ha excedido el límite (Max 5)','',5000);
+      // }
+
    }
   
    async handleSubmit(e){
@@ -473,12 +478,18 @@ export default class CMS extends Component {
          backgroundColorForm,
          colorTitleForm,
          colorFontForm,
+         imgsBannerSwitch,
          filesBanner,
       } = this.state.form
      
      console.log(this.state.form)
       if((terminos_condiciones_esp == '' || terminos_condiciones_eng == '') || (terminos_condiciones_esp == '<p><br></p>' || terminos_condiciones_eng == '<p><br></p>')){
          NotificationManager.error('Los terminos y condiciones son requeridos','',5000);
+      }
+      else if(imgsBannerSwitch == true){
+         if(!filesBanner.length){
+            NotificationManager.error('Las imagenes de banner son requeridas','',5000);
+         }
       }
       else if( (((titlePortal == "" || fileBackground == "") || (fileLogo == "" || sizeLogoMobile == "")) || (sizeLogoWeb == "" || buttonColors == "") || (colorTitleForm == "" || colorFontForm == ""))){
          NotificationManager.error('Todos los campos son obligatorios','',5000);
@@ -736,7 +747,14 @@ export default class CMS extends Component {
           },
        })
 
-      
+      // const config = this.componentConfig;
+      // const djsConfig = this.djsConfig;
+
+      // For a list of all possible events (there are many), see README.md!
+      var componentConfig = { iconFiletypes: ['.jpg', '.png', '.gif'], showFiletypeIcon: true, postUrl: 'no-url' };
+      var djsConfig = { acceptedFiles: "image/jpeg,image/png,image/gif", autoProcessQueue: false }
+      var eventHandlers = { addedfile: (file) => this.handleChangeBannerImgs(file)}
+
       return (
          <div className="row" style={{marginBottom:"20px"}}>
             <div className="col-lg-6" >
@@ -941,22 +959,15 @@ export default class CMS extends Component {
                                                    />
                                                 </div>
                                                 {imgsBannerSwitch?
-                                                <FormGroup>
-                                                   <Dropzone onDrop={this.onDrop}>
-                                                      {({getRootProps, getInputProps}) => (
-                                                         <section className="container">
-                                                            <div {...getRootProps({className: 'dropzone'})}>
-                                                            <input {...getInputProps()} />
-                                                            <p> Arrastre y suelte algunas imagenes aquí, o haga click para seleccionarlas</p>
-                                                            </div>
-                                                            <aside>
-                                                            <h4 className="filesStyle">Archivos</h4>
-                                                            <ul>{files}</ul>
-                                                            </aside>
-                                                         </section>
-                                                      )}
-                                                   </Dropzone>
-                                                </FormGroup>
+                                                // <FormGroup>
+                                                   <div className="dropzone-wrapper">
+                                                         <DropzoneComponent
+                                                            config={componentConfig}
+                                                            eventHandlers={eventHandlers}
+                                                            djsConfig={djsConfig}
+                                                         />
+                                                   </div>
+                                                // </FormGroup>
                                                 :
                                                 <div style={{paddingTop:"186px"}}>
                                                    &nbsp;
