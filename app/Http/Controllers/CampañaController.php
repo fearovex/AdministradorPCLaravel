@@ -48,7 +48,7 @@ class CampañaController extends Controller
         $campaña->zona_ap = $request->zona_ap;
         $campaña->ano_evento = $request->anio;
         $campaña->id_locacion = $request->id_location;
-        $NameTabla = $NameTabla;
+        $campaña->campania = $NameTabla;
         $campaña->vertical_economica = $request->vertical_economica;
         $campaña->save();
         
@@ -97,15 +97,15 @@ class CampañaController extends Controller
             'margin_logo_web' => '5%',
             'width_logo_movil' => $request->sizeLogoMobile,
             'margin_logo_movil' => '5%',
-            'container_form_color' => $request->backgroundColorForm,
-            'container_form_font_color' => $request->colorFontForm,
-            'button_font_color' => $request->colorFontForm,
-            'button_background_color' => $request->buttonColors,
-            'button_border_color' => $request->buttonColors,
+            'container_form_color' => "rgba(".$request->backgroundColorForm['r'].", ".$request->backgroundColorForm['g'].", ".$request->backgroundColorForm['b'].", ".$request->backgroundColorForm['a'].")",
+            'container_form_font_color' => "rgba(".$request->colorFontForm['r'].", ".$request->colorFontForm['g'].", ".$request->colorFontForm['b'].", ".$request->colorFontForm['a'].")",
+            'button_font_color' => "rgba(".$request->colorFontForm['r'].", ".$request->colorFontForm['g'].", ".$request->colorFontForm['b'].", ".$request->colorFontForm['a'].")",
+            'button_background_color' => "rgba(".$request->buttonColors['r'].", ".$request->buttonColors['g'].", ".$request->buttonColors['b'].", ".$request->buttonColors['a'].")",
+            'button_border_color' => "rgba(".$request->buttonColors['r'].", ".$request->buttonColors['g'].", ".$request->buttonColors['b'].", ".$request->buttonColors['a'].")",
             'button_hover_font_color' => '#EEE',
             'button_hover_background_color' => '#000',
-            'checkbox_terms_background_color' => $request->buttonColors,
-            'checkbox_terms_border_color' => $request->buttonColors,
+            'checkbox_terms_background_color' => "rgba(".$request->buttonColors['r'].", ".$request->buttonColors['g'].", ".$request->buttonColors['b'].", ".$request->buttonColors['a'].")",
+            'checkbox_terms_border_color' => "rgba(".$request->buttonColors['r'].", ".$request->buttonColors['g'].", ".$request->buttonColors['b'].", ".$request->buttonColors['a'].")",
             'msg_error_color_font' => '#EEE',
             'msg_error_color_background' => 'rgb(160,19,35,0.91)'
         ]);
