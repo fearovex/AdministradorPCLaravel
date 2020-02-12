@@ -32,15 +32,27 @@ BEGIN
 		);
 		
 	while @countPrimary <= @countCampaings do
-   	set @queryNameTables = (select campania from nameCampaings where id=@countPrimary);
-	set @queryNameCampaing = (select nombre from nameCampaings where id=@countPrimary);  
-   	
-		SET @queryTableLastTen = CONCAT('
-        insert into dataLastTen (nombre,apellidos,fecha_creacion,ip,nombreCampania,tablaCampania,idUsuario) select nombre, apellidos, fecha_creacion, ip_cliente,','"',@queryNameCampaing,'"',' AS nombreCampania,','"',@queryNameTables,'"',' as tablaCampania, id as idUsuario  from ',nameDatabase,'.',@queryNameTables
-        );
-		PREPARE campaings FROM @queryTableLastTen;
-   	execute campaings;
+	set @queryNameTables = (select campania from nameCampaings where id=@countPrimary);
+	set @queryNameCampaing = (select nombre from nameCampaings where id=@countPrimary); 
 
+	drop table IF exists nameColumns;
+	set @queryCampains = concat ('
+		create temporary table nameColumns (
+			select column_name from information_schema.columns where table_schema = "',nameDataBase,'"and table_name = "',@queryNameTables,'"
+		)'
+	);
+	prepare campains from @queryCampains;
+	execute campains;
+
+	set @existe = (select exists (select * from nameColumns t where t.column_name = 'nombre'));
+		if @existe = 1 then
+			SET @queryTableLastTen = CONCAT('
+			insert into dataLastTen (nombre,apellidos,fecha_creacion,ip,nombreCampania,tablaCampania,idUsuario) select nombre, apellidos, fecha_creacion, ip_cliente,','"',@queryNameCampaing,'"',' AS nombreCampania,','"',@queryNameTables,'"',' as tablaCampania, id as idUsuario  from ',nameDatabase,'.',@queryNameTables
+		);
+		PREPARE campaings FROM @queryTableLastTen;
+		execute campaings;
+	end if;
+	
    	Set @countPrimary = @countPrimary+1;
    end while;
 
