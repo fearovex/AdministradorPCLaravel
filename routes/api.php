@@ -72,7 +72,7 @@ Route::group(['middleware' => 'cors'], function() {
         
         Route::post('/topVisits', 'GraficasController@TopVisits');
 
-        Route::post('/TotalRecords', 'GraficasController@TotalRecords');
+        // Route::post('/TotalRecords', 'GraficasController@TotalRecords');
 
         Route::post('/UsersMoreVisit', 'GraficasController@UsersMoreVisit');
 
@@ -104,11 +104,21 @@ Route::group(['middleware' => 'cors'], function() {
 
         Route::post('/promedyTimeSession', 'RadiusController@getPromedyTimeSession');
 
+        Route::post('/totalBandwidth', 'RadiusController@getTotalBandwidth');
+
+        Route::post('/totalTimeSession', 'RadiusController@getTotalTimeSession');
+
         Route::post('/timeConnect', 'RadiusController@getTimeConnect');
         
         Route::post('/timeConnectDB', 'RadiusController@getTimeConnectDB');
         
-        Route::post('/ConnectedPeopleLocation', 'RadiusController@getConnectedPeopleLocation');
+        Route::post('/ConnectedNewPeopleLocation', 'RadiusController@getConnectedNewPeopleLocation');
+
+        Route::post('/ConnectedOldPeopleLocation', 'RadiusController@getConnectedOldPeopleLocation');
+
+        Route::post('/ConnectedNewPeopleCampaing', 'RadiusController@getConnectedNewPeopleCampaing');
+
+        Route::post('/ConnectedOldPeopleCampaing', 'RadiusController@getConnectedOldPeopleCampaing');
         
         Route::post('/ChartBandwidth', 'RadiusController@getChartBandwidth');
         
