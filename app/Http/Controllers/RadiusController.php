@@ -324,4 +324,11 @@ class RadiusController extends Controller
         }
         return $UsersRadius;
     }
+
+    public static function getVisitHistory($userRadius){
+        // return $userRadius;
+        $QueryRadius = "select r.acctstarttime as Fecha_Registro, r.acctsessiontime as Tiempo_Conexion, r.acctoutputoctets as Data_Bajada, r.acctinputoctets as Data_Subida from radacct as r where r.username = '".$userRadius->username."' ORDER BY Fecha_Registro DESC";
+        $UsersRadius = DB::connection('radius')->select($QueryRadius);
+        return $UsersRadius;
+    }
 }

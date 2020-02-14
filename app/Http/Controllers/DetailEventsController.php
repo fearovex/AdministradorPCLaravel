@@ -81,23 +81,23 @@ class DetailEventsController extends Controller
 
         // return response()->json($request->objectDataUser["Email"]);
         if(isset($request->objectDataUser["Numero de Vouchers"])){
-            $queryChangeEs = "SET @@lc_time_names = 'es_CO'";
-            $query = "select fecha_creacion as 'Fecha_Registro' FROM $database.$tabla->campania WHERE num_voucher = '".$request->objectDataUser["Numero de Vouchers"]."' ORDER BY Fecha_Registro desc";
-            
-            DB::select($queryChangeEs);
-            $visitHistory = DB::select($query);
-            $queryChangeEn= "SET @@lc_time_names = 'en_US'";
-            DB::select($queryChangeEn);
+            $userRadius = DB::connection($database)->select("select ur.username from users_radius ur inner join $tabla tc on ur.id_cliente = tc.id WHERE num_voucher = '".$request->objectDataUser["Numero de Vouchers"]."'");
+            if($userRadius > 0){
+                $visitHistory = RadiusController::getVisitHistory($userRadius);
+            }
+            else{
+                $visitHistory = [];
+            }
             return  response()->json($visitHistory);
         }
         if(isset($request->objectDataUser["Email"])){
-            $queryChangeEs= "SET @@lc_time_names = 'es_CO'";
-            $query = "select fecha_creacion as 'Fecha_Registro' FROM $database.$tabla->campania WHERE email = '".$request->objectDataUser["Email"]."' ORDER BY Fecha_Registro desc";
-            
-            DB::select($queryChangeEs);
-            $visitHistory = DB::select($query);
-            $queryChangeEn= "SET @@lc_time_names = 'en_US'";
-            DB::select($queryChangeEn);
+            $userRadius = DB::connection($database)->select("select ur.username from users_radius ur inner join $tabla tc on ur.id_cliente = tc.id WHERE email = '".$request->objectDataUser["Email"]."'");
+            if($userRadius > 0){
+                $visitHistory = RadiusController::getVisitHistory($userRadius);
+            }
+            else{
+                $visitHistory = [];
+            }
             return  response()->json($visitHistory);
         }
     }

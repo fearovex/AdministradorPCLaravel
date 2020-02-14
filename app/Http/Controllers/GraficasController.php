@@ -323,24 +323,24 @@ class GraficasController extends Controller
         $tabla = DB::connection($database)->table('campania')->select('campania')->where('id', $request->rowData[0]["id_evento"])->first();
 
         if(isset($request->rowData[0]["num_voucher"])){
-            $queryChangeEs = "SET @@lc_time_names = 'es_CO'";
-            $query = "select fecha_creacion as 'Fecha_Registro' FROM $database.$tabla->campania WHERE num_voucher = '".$request->rowData[0]["num_voucher"]."' ORDER BY Fecha_Registro desc";
-            
-            DB::select($queryChangeEs);
-            $visitHistoryUser = DB::select($query);
-            $queryChangeEn= "SET @@lc_time_names = 'en_US'";
-            DB::select($queryChangeEn);
-            return  response()->json($visitHistoryUser);
+            $userRadius = DB::connection($database)->select("select ur.username from users_radius ur inner join $tabla->campania tc on ur.id_cliente = tc.id WHERE num_voucher = '".$request->rowData[0]["num_voucher"]."'");
+            if(count($userRadius) > 0){
+                $visitHistory = RadiusController::getVisitHistory($userRadius[0]);
+            }
+            else{
+                $visitHistory = [];
+            }
+            return  response()->json($visitHistory);
         }
         if(isset($request->rowData[0]["email"])){
-            $queryChangeEs= "SET @@lc_time_names = 'es_CO'";
-            $query = "select fecha_creacion as 'Fecha_Registro' FROM $database.$tabla->campania WHERE email = '".$request->rowData[0]["email"]."' ORDER BY Fecha_Registro desc";
-            
-            DB::select($queryChangeEs);
-            $visitHistoryUser = DB::select($query);
-            $queryChangeEn= "SET @@lc_time_names = 'en_US'";
-            DB::select($queryChangeEn);
-            return  response()->json($visitHistoryUser);
+            $userRadius = DB::connection($database)->select("select ur.username from users_radius ur inner join $tabla->campania tc on ur.id_cliente = tc.id WHERE email = '".$request->rowData[0]["email"]."'");
+            if(count($userRadius) > 0){
+                $visitHistory = RadiusController::getVisitHistory($userRadius[0]);
+            }
+            else{
+                $visitHistory = [];
+            }
+            return  response()->json($visitHistory);
         }
     }
 }
