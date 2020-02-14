@@ -1,17 +1,24 @@
 .paddingInfo{
-    background: #313d4e;
+    background: #404e77!important;
     padding-top: 20px !important;
     padding-right: 20px !important;
     padding-left: 20px !important;
-    padding-bottom: 70px !important;
+    padding-bottom: 61px !important;
     border-radius: 12px;
     font-size: 14px !important;
 }
+
 .styleCard1{
-    margin-top: 17px;
+    margin-top: 20px !important;
     padding-bottom: 5px !important;
     padding-top: 5px !important;
     margin-right: 12px;
+}
+.styleCard2{
+    margin-top: 2px !important;
+    padding-bottom: 5px !important;
+    padding-top: 5px !important;
+    margin-right: 1px;
 }
 .fontSize{
     font-size: 19px!important;;
@@ -23,7 +30,7 @@
     margin-top: 7px;
 }
 .paddingDetail{
-    background: #313d4e;
+    background: #404e77!important;
     padding-top: 20px !important;
     padding-right: 20px !important;
     padding-left: 20px !important;

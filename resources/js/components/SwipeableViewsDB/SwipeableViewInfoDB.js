@@ -147,12 +147,12 @@ class SwipeableViewInfoDB extends Component {
                <div className="card mb-0 transaction-box">
                   <TabContainer dir={theme.direction}>
                      <div className="row">
-                        <div className="col-lg-6 col-sm-6 col-xl-6 col-6 col-md-6">
+                        <div className="col-lg-7 col-sm-7 col-xl-7 col-7 col-md-7">
                            <DetailConnectionDB
                               rowData={rowData}
                            />
                         </div>
-                        <div className="col-lg-6 col-sm-6 col-xl-6 col-6 col-md-6">
+                        <div className="col-lg-5 col-sm-5 col-xl-5 col-5 col-md-5">
                            <CardInfo
                               titleName={"Tiempo de conexión"}
                               dataNum={timeConnect.time ? timeConnect.time : 0}
@@ -168,7 +168,7 @@ class SwipeableViewInfoDB extends Component {
                                  dataNum={prefferDayOfWeekDB[0].cantidad}
                                  backgroundColor=""
                                  classColor="secondary"
-                                 className="styleCard1"
+                                 className="styleCard2"
                                  customIcon="calendar-alt"
                               />
                               :

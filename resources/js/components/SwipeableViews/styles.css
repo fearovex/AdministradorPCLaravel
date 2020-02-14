@@ -1,16 +1,27 @@
 .paddingInfo{
-    background: #313d4e;
+    background: #404e77!important;
+    padding-bottom: 61px !important;
     padding-top: 20px !important;
     padding-right: 20px !important;
     padding-left: 20px !important;
-    padding-bottom: 70px !important;
     border-radius: 12px;
     font-size: 14px !important;
 }
 
 .styleCard1{
-    margin-top: 19px;
+    margin-top: 22px !important;
     padding-bottom: 5px !important;
+    padding-top: 5px !important;
+    margin-right: 1px;
+}
+.styleCard2{
+    margin-top: 1px !important;
+    padding-bottom: 5px !important;
+    padding-top: 5px !important;
+    margin-right: 1px;
+}
+.styleCard3{
+    margin-top: 2px !important;
     padding-top: 5px !important;
     margin-right: 1px;
 }
@@ -24,7 +35,7 @@
     margin-top: 7px;
 }
 .paddingDetail{
-    background: #313d4e;
+    background: #404e77!important;
     padding-top: 20px !important;
     padding-right: 20px !important;
     padding-left: 20px !important;

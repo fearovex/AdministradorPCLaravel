@@ -62,6 +62,10 @@
     border: 1px solid;
     padding: 10px;
 }
+.termsCon:hover{
+    background-color: #3a77ab;
+    cursor: pointer;
+}
 .inputColor{
     width: 100%;
 }
