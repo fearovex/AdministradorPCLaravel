@@ -156,8 +156,24 @@ class GraficasController extends Controller
     public function UsersMoreVisit(Request $request){
         $database = session('database');
         $tabla = DB::connection($database)->table('campania')->select('campania')->where('id', $request->id_campaing)->first();
-        $query = "select nombre as 'Nombre', apellidos as 'Apellido', email as 'Email', telefono as 'Celular', genero as 'Sexo', os as 'Sistema_Operativo', count(mac_cliente) as 'N_Visitas', mac_cliente FROM $database.$tabla->campania GROUP BY mac_cliente, nombre, apellidos, email, telefono, genero, os ORDER BY N_Visitas desc limit 10";
-        $UsersMoreVisit = DB::select($query);
+        $radiusUsersMoreVisit = RadiusController::getUsersMoreVisit($request);
+        if($radiusUsersMoreVisit == 0){
+            return response()->json("",500);
+        }
+        if(count($radiusUsersMoreVisit) > 0){
+            $contador = count($radiusUsersMoreVisit) <= 10 ? count($radiusUsersMoreVisit) : 10;
+            $query = "";
+            for($i=0; $i < $contador;$i++){
+                $query .= "select tc.nombre as 'Nombre', tc.apellidos as 'Apellido', tc.email as 'Email', tc.telefono as 'Celular', tc.genero as 'Sexo', tc.os as 'Sistema_Operativo', ".$radiusUsersMoreVisit[$i]->visitas." as 'N_Visitas', tc.mac_cliente FROM $database.$tabla->campania tc inner join users_radius as ur on ur.id_cliente = tc.id where ur.username = '".$radiusUsersMoreVisit[$i]->username."'";
+                if($i <> ($contador-1)){
+                    $query .= " UNION ALL ";
+                }
+            }
+            $UsersMoreVisit = DB::connection($database)->select($query);
+        }
+        else{
+            $UsersMoreVisit = [];
+        }
         return $UsersMoreVisit;
     }
 

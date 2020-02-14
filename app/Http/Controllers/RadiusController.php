@@ -299,4 +299,29 @@ class RadiusController extends Controller
 
         return response()->json($timeConnect, 200);
     }
+
+    public static function getUsersMoreVisit(Request $request){
+        $database = session('database');
+        $query = "select * from $database.users_radius where id_campania = $request->id_campaing";
+        $dataUsersRadius = DB::select($query);
+        $countUsers = count($dataUsersRadius);
+        $QueryWhere = "";
+
+        if($countUsers > 0){
+            for($i=0; $i < $countUsers;$i++){
+                for($i=0; $i < $countUsers;$i++){
+                    $QueryWhere .= "r.username = '".$dataUsersRadius[$i]->username."'";
+                    if(($countUsers - 1) > $i){
+                        $QueryWhere .= " OR ";
+                    }
+                }
+            }
+            $QueryRadius = "select r.username, COUNT(*) as visitas from radacct as r where r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate' and ($QueryWhere) GROUP BY r.username HAVING  COUNT(*) > 1 ORDER BY visitas DESC";
+            $UsersRadius = DB::connection('radius')->select($QueryRadius);
+        }
+        else {
+            $UsersRadius = 0;
+        }
+        return $UsersRadius;
+    }
 }
