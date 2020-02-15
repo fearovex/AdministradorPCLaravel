@@ -38,6 +38,7 @@ class SwipeableViewInfo extends Component {
          prefferDayOfWeek: [],
          visitHistory: [],
          timeConnect: [],
+         userRadius: "",
          form: {
             objectDataUser: objectDataUser,
             id_campaing: id_campaing
@@ -48,6 +49,7 @@ class SwipeableViewInfo extends Component {
    componentDidMount() {
       this.handlePrefferDayOfWeek();
       this.handleVisitHistory();
+      this.handleUserRadius();
       this.handleTimeConnect();
    }
 
@@ -94,6 +96,26 @@ class SwipeableViewInfo extends Component {
       }
    }
 
+   async handleUserRadius() {
+      try {
+         let config = {
+            method: 'POST',
+            headers: {
+               'Accept': 'application/json',
+               'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.state.form)
+         }
+         let res = await fetch(`${localStorage.urlDomain}api/userRadius`, config);
+         let userRadius = await res.json()
+         this.setState({
+            userRadius: userRadius
+         })
+      } catch (error) {
+
+      }
+   }
+
    async handleTimeConnect() {
       try {
          let config = {
@@ -108,13 +130,17 @@ class SwipeableViewInfo extends Component {
          let timeConnect = await res.json()
          let type = "Seg";
          let time = Math.round(timeConnect.Time);
-         if (time > 60) {
+         if (time >= 60) {
             time = Math.round((time / 60));
             type = "Min";
-         }
-         if (time > 60) {
-            time = Math.round((time / 60));
-            type = "Hrs";
+            if (time >= 60) {
+               time = Math.round((time / 60));
+               type = "Hrs";
+               if (time >= 24) {
+                  time = Math.round((time / 24));
+                  type = "Dias";
+               }
+            }
          }
 
          this.setState({
@@ -137,7 +163,7 @@ class SwipeableViewInfo extends Component {
    };
 
    render() {
-      const { rowData, columns, prefferDayOfWeek, visitHistory, timeConnect } = this.state;
+      const { rowData, columns, prefferDayOfWeek, visitHistory, timeConnect, userRadius } = this.state;
 
       const theme = {
          direction: 'rlt'
@@ -176,6 +202,7 @@ class SwipeableViewInfo extends Component {
                            <DetailConnection
                               rowData={rowData}
                               columns={columns}
+                              userRadius={userRadius}
                            />
                         </div>
                         <div className="col-lg-6 col-sm-6 col-xl-6 col-6 col-md-6">

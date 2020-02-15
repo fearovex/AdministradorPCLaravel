@@ -52,7 +52,6 @@ class DetailEventsController extends Controller
         $database = session('database');
         $tabla = DB::connection($database)->table('campania')->select('campania')->where('id', $request->id_campaing)->first();
 
-        // return response()->json($request->objectDataUser["Email"]);
         if(isset($request->objectDataUser["Numero de Vouchers"])){
             $queryChangeEs = "SET @@lc_time_names = 'es_CO'";
             $query = "select COUNT(*) AS cantidad, DAYNAME(fecha_creacion) AS dia_preferido FROM $database.$tabla->campania WHERE num_voucher = "."'".$request->objectDataUser["Numero de Vouchers"]."'"." GROUP BY dia_preferido ORDER BY cantidad desc LIMIT 1";
@@ -79,11 +78,10 @@ class DetailEventsController extends Controller
         $database = session('database');
         $tabla = DB::connection($database)->table('campania')->select('campania')->where('id', $request->id_campaing)->first();
 
-        // return response()->json($request->objectDataUser["Email"]);
         if(isset($request->objectDataUser["Numero de Vouchers"])){
-            $userRadius = DB::connection($database)->select("select ur.username from users_radius ur inner join $tabla tc on ur.id_cliente = tc.id WHERE num_voucher = '".$request->objectDataUser["Numero de Vouchers"]."'");
+            $userRadius = DB::connection($database)->select("select ur.username from users_radius ur inner join $tabla->campania tc on ur.id_cliente = tc.id WHERE num_voucher = '".$request->objectDataUser["Numero de Vouchers"]."'");
             if($userRadius > 0){
-                $visitHistory = RadiusController::getVisitHistory($userRadius);
+                $visitHistory = RadiusController::getVisitHistory($userRadius[0]);
             }
             else{
                 $visitHistory = [];
@@ -91,9 +89,35 @@ class DetailEventsController extends Controller
             return  response()->json($visitHistory);
         }
         if(isset($request->objectDataUser["Email"])){
-            $userRadius = DB::connection($database)->select("select ur.username from users_radius ur inner join $tabla tc on ur.id_cliente = tc.id WHERE email = '".$request->objectDataUser["Email"]."'");
+            $userRadius = DB::connection($database)->select("select ur.username from users_radius ur inner join $tabla->campania tc on ur.id_cliente = tc.id WHERE email = '".$request->objectDataUser["Email"]."'");
             if($userRadius > 0){
-                $visitHistory = RadiusController::getVisitHistory($userRadius);
+                $visitHistory = RadiusController::getVisitHistory($userRadius[0]);
+            }
+            else{
+                $visitHistory = [];
+            }
+            return  response()->json($visitHistory);
+        }
+    }
+
+    public function UserRadius(Request $request){
+        $database = session('database');
+        $tabla = DB::connection($database)->table('campania')->select('campania')->where('id', $request->id_campaing)->first();
+
+        if(isset($request->objectDataUser["Numero de Vouchers"])){
+            $userRadius = DB::connection($database)->select("select ur.username from users_radius ur inner join $tabla->campania tc on ur.id_cliente = tc.id WHERE num_voucher = '".$request->objectDataUser["Numero de Vouchers"]."' limit 1");
+            if($userRadius > 0){
+                $visitHistory = $userRadius[0]->username;
+            }
+            else{
+                $visitHistory = [];
+            }
+            return  response()->json($visitHistory);
+        }
+        if(isset($request->objectDataUser["Email"])){
+            $userRadius = DB::connection($database)->select("select ur.username from users_radius ur inner join $tabla->campania tc on ur.id_cliente = tc.id WHERE email = '".$request->objectDataUser["Email"]."' limit 1");
+            if($userRadius > 0){
+                $visitHistory = $userRadius[0]->username;
             }
             else{
                 $visitHistory = [];

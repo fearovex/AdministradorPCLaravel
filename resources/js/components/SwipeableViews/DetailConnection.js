@@ -8,7 +8,7 @@ import { RctCardContent } from 'Components/RctCard';
 
 class DetailConnection extends Component {
    render() {
-    const { rowData, columns } = this.props
+    const { rowData, columns, userRadius } = this.props
     let objectDataUser = {}
 
     columns.forEach((column, i) => objectDataUser[column] = rowData[i]);
@@ -60,6 +60,15 @@ class DetailConnection extends Component {
                      </span>
                      <span className=" text-truncate">
                            {objectDataUser.Ssid}
+                     </span>
+                  </ListItem>
+                  <ListItem className="p-0 d-flex justify-content-start align-content-center">
+                     <span className="mr-3 d-flex fw-semi-bold ">
+                        <i className="material-icons mr-10 ">nature_people</i>
+                        Usuario Radius :
+                     </span>
+                     <span className=" text-truncate">
+                           {userRadius}
                      </span>
                   </ListItem>
                </List>

@@ -40,6 +40,8 @@ Route::group(['middleware' => 'cors'], function() {
         
         Route::post('/visitHistory','DetailEventsController@visitHistoryUser');
         
+        Route::post('/userRadius','DetailEventsController@UserRadius');
+        
         Route::resource('/locations','LocationsController');    
         
         Route::get('/logout', 'Auth\LoginController@logout');
@@ -91,6 +93,8 @@ Route::group(['middleware' => 'cors'], function() {
         Route::post('/TopTenUsersCampaing', 'GraficasController@TopTenUsersCampaing');
 
         Route::post('/userInfoDB', 'GraficasController@UserInfoDB');
+        
+        Route::post('/userRadiusDB', 'GraficasController@UserRadiusDB');
 
         Route::post('/prefferWeekDayDB', 'GraficasController@PrefferWeekDayDB');
 

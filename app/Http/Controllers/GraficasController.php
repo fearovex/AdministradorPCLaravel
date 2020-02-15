@@ -343,4 +343,30 @@ class GraficasController extends Controller
             return  response()->json($visitHistory);
         }
     }
+
+    public function UserRadiusDB(Request $request){
+        $database = session('database');
+        $tabla = DB::connection($database)->table('campania')->select('campania')->where('id', $request->rowData[0]["id_evento"])->first();
+
+        if(isset($request->rowData[0]["num_voucher"])){
+            $userRadius = DB::connection($database)->select("select ur.username from users_radius ur inner join $tabla->campania tc on ur.id_cliente = tc.id WHERE num_voucher = '".$request->rowData[0]["num_voucher"]."'");
+            if(count($userRadius) > 0){
+                $visitHistory = $userRadius[0]->username;
+            }
+            else{
+                $visitHistory = [];
+            }
+            return  response()->json($visitHistory);
+        }
+        if(isset($request->rowData[0]["email"])){
+            $userRadius = DB::connection($database)->select("select ur.username from users_radius ur inner join $tabla->campania tc on ur.id_cliente = tc.id WHERE email = '".$request->rowData[0]["email"]."'");
+            if(count($userRadius) > 0){
+                $visitHistory = $userRadius[0]->username;
+            }
+            else{
+                $visitHistory = [];
+            }
+            return  response()->json($visitHistory);
+        }
+    }
 }
