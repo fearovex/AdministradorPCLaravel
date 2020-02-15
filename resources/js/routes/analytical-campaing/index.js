@@ -80,7 +80,8 @@ export default class AnalyticalCampaing extends Component {
         this.handleDateFilterCancel = this.handleDateFilterCancel.bind(this)
         this.handleChangeFilter = this.handleChangeFilter.bind(this)
         this.handleReload = this.handleReload.bind(this)
-        this.handleTotalRecords = this.handleTotalRecords.bind(this);
+        this.handleConnectedOldPeopleCampaing = this.handleConnectedOldPeopleCampaing.bind(this);
+        this.handleConnectedNewPeopleCampaing = this.handleConnectedNewPeopleCampaing.bind(this);
         this.UsersMoreVisit = this.UsersMoreVisit.bind(this)
         this.LastTenUsersListCampaing = this.LastTenUsersListCampaing.bind(this)
         this.TopTenAgesList = this.TopTenAgesList.bind(this)
@@ -94,7 +95,8 @@ export default class AnalyticalCampaing extends Component {
     }
 
     componentDidMount() {
-        this.handleTotalRecords()
+        this.handleConnectedOldPeopleCampaing()
+        this.handleConnectedNewPeopleCampaing()
         this.VouchersUse()
         this.UsersMoreVisit()
         this.LastTenUsersListCampaing()
@@ -268,7 +270,7 @@ export default class AnalyticalCampaing extends Component {
         this.ConsultaGraficas(column)
     }
 
-    async handleTotalRecords(){
+    async handleConnectedOldPeopleCampaing(){
         try {
             let config = {
             method: 'POST',
@@ -278,13 +280,40 @@ export default class AnalyticalCampaing extends Component {
             },
             body: JSON.stringify(this.state.form)
             }
-            let res = await fetch(`${localStorage.urlDomain}api/TotalRecords`, config)
-            let TotalRecords = await res.json()
+            let res = await fetch(`${localStorage.urlDomain}api/ConnectedOldPeopleCampaing`, config)
+            let traditionalPeople = await res.json()
             
             this.setState({
                 data:{
                     ...this.state.data,
-                    TotalRecords: TotalRecords[0].TotalRecords
+                    traditionalPeople: traditionalPeople.traditionalPeople
+                }
+            })
+
+        } catch (error) {
+            this.setState({
+                error:error
+            })
+        }
+    }
+
+    async handleConnectedNewPeopleCampaing(){
+        try {
+            let config = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.state.form)
+            }
+            let res = await fetch(`${localStorage.urlDomain}api/ConnectedNewPeopleCampaing`, config)
+            let newPeople = await res.json()
+            
+            this.setState({
+                data:{
+                    ...this.state.data,
+                    newPeople: newPeople.newPeople
                 }
             })
 
@@ -495,10 +524,14 @@ export default class AnalyticalCampaing extends Component {
                 if(radiusTimeUser >= 60){
                     radiusTimeUser = Math.round(radiusTimeUser/60)
                     type = ' Min';
-                }
-                if(radiusTimeUser >= 60){
-                    radiusTimeUser = Math.round(radiusTimeUser/60)
-                    type = ' Hrs';
+                    if(radiusTimeUser >= 60){
+                        radiusTimeUser = Math.round(radiusTimeUser/60)
+                        type = ' Hrs';
+                        if(radiusTimeUser >= 24){
+                            radiusTimeUser = Math.round(radiusTimeUser/24)
+                            type = ' Dias';
+                        }
+                    }
                 }
                 
                 this.setState({
@@ -566,13 +599,23 @@ export default class AnalyticalCampaing extends Component {
                             // reloadable
                             fullBlock
                         >
-                            <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
-                                <CardInfo
-                                    titleName={"Registros"}
-                                    dataNum={data.TotalRecords ? data.TotalRecords : 0}
-                                    backgroundColor=""
-                                    classColor={"primary"}
-                                />
+                            <div className="row" style={{ padding: '0 20px'}}>
+                                <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
+                                    <CardInfo 
+                                        titleName={"Nuevos"}
+                                        dataNum={data.newPeople ? data.newPeople : 0}
+                                        backgroundColor=""
+                                        classColor={"dark"}
+                                    />
+                                </div>
+                                <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
+                                    <CardInfo 
+                                        titleName={"Tradicionales"}
+                                        dataNum={data.traditionalPeople ? data.traditionalPeople : 0}
+                                        backgroundColor=""
+                                        classColor={"info"}
+                                    />
+                                </div>
                             </div>
                         </RctCollapsibleCard>
                         {/* <RctCollapsibleCard
@@ -600,24 +643,23 @@ export default class AnalyticalCampaing extends Component {
                             // reloadable
                             fullBlock
                         >
-                            <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
-                                <div className="row" style={{padding:'0 0 0 50px'}}>
-                                    <CardInfo
+                            <div className="row" style={{ padding: '0 20px'}}>
+                                <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
+                                <CardInfo
                                         titleName={"Sin Usar"}
-                                        className="col-sm-12 col-md-5 col-lg-5 mr-4"
                                         dataNum={data.V_SinUso ? data.V_SinUso : 0}
                                         icono={false}
                                         backgroundColor=""
-                                        classColor={"info"}
+                                        classColor={"secondary"}
                                     />
-                                     {/* <div className="blank-wrapper" style={{padding: '0 10px'}}></div> */}
+                                </div>
+                                <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
                                     <CardInfo
                                         titleName={"En Uso"}
-                                        className="col-sm-12 col-md-5 col-lg-5 ml-4"
                                         dataNum={data.V_EnUso ? data.V_EnUso : 0}
                                         icono={false}
                                         backgroundColor=""
-                                        classColor={"secondary"}
+                                        classColor={"primary"}
                                     />
                                 </div>
                             </div>
@@ -692,13 +734,23 @@ export default class AnalyticalCampaing extends Component {
                             // reloadable
                             fullBlock
                         >
-                            <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
-                                <CardInfo
-                                    titleName={"Registros"}
-                                    dataNum={data.TotalRecords ? data.TotalRecords : 0}
-                                    backgroundColor=""
-                                    classColor={"primary"}
-                                />
+                            <div className="row" style={{ padding: '0 20px'}}>
+                                <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
+                                    <CardInfo 
+                                        titleName={"Nuevos"}
+                                        dataNum={data.newPeople ? data.newPeople : 0}
+                                        backgroundColor=""
+                                        classColor={"dark"}
+                                    />
+                                </div>
+                                <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
+                                    <CardInfo 
+                                        titleName={"Tradicionales"}
+                                        dataNum={data.traditionalPeople ? data.traditionalPeople : 0}
+                                        backgroundColor=""
+                                        classColor={"info"}
+                                    />
+                                </div>
                             </div>
                         </RctCollapsibleCard>
                         {/* <RctCollapsibleCard

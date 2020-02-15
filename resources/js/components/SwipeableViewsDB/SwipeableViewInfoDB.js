@@ -36,8 +36,10 @@ class SwipeableViewInfoDB extends Component {
          },
          props: '',
          visitHistory: [],
+         userRadius: "",
          timeConnect: [],
       }
+      this.handleUserRadius = this.handleUserRadius.bind(this)
    }
 
    handleChangeTabs = (event, value) => {
@@ -50,6 +52,7 @@ class SwipeableViewInfoDB extends Component {
          this.state.form.rowData = rowData;
          this.state.props = rowData;
          this.handleVisitHistory();
+         this.handleUserRadius();
          this.handleTimeConnect();
       }
    }
@@ -78,6 +81,26 @@ class SwipeableViewInfoDB extends Component {
       }
    }
 
+   async handleUserRadius() {
+      try {
+         let config = {
+            method: 'POST',
+            headers: {
+               'Accept': 'application/json',
+               'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.state.form)
+         }
+         let res = await fetch(`${localStorage.urlDomain}api/userRadiusDB`, config);
+         let userRadius = await res.json()
+         this.setState({
+            userRadius: userRadius
+         })
+      } catch (error) {
+
+      }
+   }
+
    async handleTimeConnect() {
       try {
          let config = {
@@ -92,13 +115,17 @@ class SwipeableViewInfoDB extends Component {
          let timeConnect = await res.json()
          let type = "Seg";
          let time = Math.round(timeConnect.Time);
-         if (time > 60) {
+         if (time >= 60) {
             time = Math.round((time / 60));
             type = "Min";
-         }
-         if (time > 60) {
-            time = Math.round((time / 60));
-            type = "Hrs";
+            if (time >= 60) {
+               time = Math.round((time / 60));
+               type = "Hrs";
+               if (time >= 24) {
+                  time = Math.round((time / 24));
+                  type = "Dias";
+               }
+            }
          }
 
          this.setState({
@@ -113,7 +140,7 @@ class SwipeableViewInfoDB extends Component {
    }
 
    render() {
-      const { visitHistory, timeConnect } = this.state;
+      const { visitHistory, timeConnect, userRadius } = this.state;
       const { rowData, prefferDayOfWeekDB } = this.props;
       const theme = {
          direction: 'rlt'
@@ -147,12 +174,13 @@ class SwipeableViewInfoDB extends Component {
                <div className="card mb-0 transaction-box">
                   <TabContainer dir={theme.direction}>
                      <div className="row">
-                        <div className="col-lg-6 col-sm-6 col-xl-6 col-6 col-md-6">
+                        <div className="col-lg-7 col-sm-7 col-xl-7 col-7 col-md-7">
                            <DetailConnectionDB
                               rowData={rowData}
+                              userRadius={userRadius}
                            />
                         </div>
-                        <div className="col-lg-6 col-sm-6 col-xl-6 col-6 col-md-6">
+                        <div className="col-lg-5 col-sm-5 col-xl-5 col-5 col-md-5">
                            <CardInfo
                               titleName={"Tiempo de conexión"}
                               dataNum={timeConnect.time ? timeConnect.time : 0}
@@ -168,7 +196,7 @@ class SwipeableViewInfoDB extends Component {
                                  dataNum={prefferDayOfWeekDB[0].cantidad}
                                  backgroundColor=""
                                  classColor="secondary"
-                                 className="styleCard1"
+                                 className="styleCard2"
                                  customIcon="calendar-alt"
                               />
                               :

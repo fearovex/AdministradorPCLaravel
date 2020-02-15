@@ -175,7 +175,8 @@ class LastTenUsersListCampaing extends Component {
             <SweetAlert
 						btnSize="sm"
 						show={modalInfo}
-						confirmBtnText="Cerrar"
+                  confirmBtnText="Cerrar"
+                  confirmBtnBsStyle="danger"
 						onConfirm={() => this.handleCloseModal(event)}
 					>
 					<SwipeableViewInfoDB 
