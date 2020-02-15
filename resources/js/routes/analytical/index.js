@@ -401,18 +401,18 @@ export default class Analytical extends Component {
             if(promedy > 1024.0){
                 promedy = Math.round((promedy/1024)*10)/10;
                 type = "Kb";
-            }
-            if(promedy > 1024.0){
-                promedy = Math.round((promedy/1024)*10)/10;
-                type = "Mb";
-            }
-            if(promedy > 1024.0){
-                promedy = Math.round((promedy/1024)*10)/10;
-                type = "Gb";
-            }
-            if(promedy > 1024.0){
-                promedy = Math.round((promedy/1024)*10)/10;
-                type = "Tb";
+                if(promedy > 1024.0){
+                    promedy = Math.round((promedy/1024)*10)/10;
+                    type = "Mb";
+                    if(promedy > 1024.0){
+                        promedy = Math.round((promedy/1024)*10)/10;
+                        type = "Gb";
+                        if(promedy > 1024.0){
+                            promedy = Math.round((promedy/1024)*10)/10;
+                            type = "Tb";
+                        }
+                    }
+                }
             }
 
             this.setState({
@@ -443,10 +443,14 @@ export default class Analytical extends Component {
             if(promedy >= 60){
                 promedy = Math.round((promedy/60));
                 type = "Min";
-            }
-            if(promedy >= 60){
-                promedy = Math.round((promedy/60));
-                type = "Hrs";
+                if(promedy >= 60){
+                    promedy = Math.round((promedy/60));
+                    type = "Hrs";
+                    if(promedy >= 24){
+                        promedy = Math.round((promedy/24));
+                        type = "Dias";
+                    }
+                }
             }
 
             this.setState({

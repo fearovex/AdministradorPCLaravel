@@ -495,10 +495,14 @@ export default class AnalyticalCampaing extends Component {
                 if(radiusTimeUser >= 60){
                     radiusTimeUser = Math.round(radiusTimeUser/60)
                     type = ' Min';
-                }
-                if(radiusTimeUser >= 60){
-                    radiusTimeUser = Math.round(radiusTimeUser/60)
-                    type = ' Hrs';
+                    if(radiusTimeUser >= 60){
+                        radiusTimeUser = Math.round(radiusTimeUser/60)
+                        type = ' Hrs';
+                        if(radiusTimeUser >= 24){
+                            radiusTimeUser = Math.round(radiusTimeUser/24)
+                            type = ' Dias';
+                        }
+                    }
                 }
                 
                 this.setState({
