@@ -13,9 +13,95 @@ import { RctCardContent } from 'Components/RctCard';
 
 const VisitHistoryColumns = ['Fecha Registro','Tiempo Conexion', 'Data Bajada', 'Data Subida'];
 
-export default class VisitHistory extends Component {    
+export default class VisitHistory extends Component {   
+    constructor(props){
+        super(props);
+
+        this.state = {
+            props: '',
+            visitHistory: []
+        }
+        this.handleVisit = this.handleVisit.bind(this);
+    }
+    
+    handleVisit(visitHistory){
+        for (let i = 0; i < visitHistory.length; i++) {
+            let typeTime = "Seg";
+            let Time = Math.round(visitHistory[i].Tiempo_Conexion);
+            if(Time >= 60){
+                Time = Math.round((Time/60));
+                typeTime = "Min";
+                if(Time >= 60){
+                    Time = Math.round((Time/60));
+                    typeTime = "Hrs";
+                    if(Time >= 24){
+                        Time = Math.round((Time/24));
+                        typeTime = "Dias";
+                    }
+                }
+            }
+
+            let typeBajada = "Bytes";
+            let Data_Bajada = Math.round(visitHistory[i].Data_Bajada*10)/10;
+            if(Data_Bajada > 1024.0){
+                Data_Bajada = Math.round((Data_Bajada/1024)*10)/10;
+                typeBajada = "Kb";
+                if(Data_Bajada > 1024.0){
+                    Data_Bajada = Math.round((Data_Bajada/1024)*10)/10;
+                    typeBajada = "Mb";
+                    if(Data_Bajada > 1024.0){
+                        Data_Bajada = Math.round((Data_Bajada/1024)*10)/10;
+                        typeBajada = "Gb";
+                        if(Data_Bajada > 1024.0){
+                            Data_Bajada = Math.round((Data_Bajada/1024)*10)/10;
+                            typeBajada = "Tb";
+                        }
+                    }
+                }
+            }
+            
+            let typeSubida = "Bytes";
+            let Data_Subida = Math.round(visitHistory[i].Data_Subida*10)/10;
+            if(Data_Subida > 1024.0){
+                Data_Subida = Math.round((Data_Subida/1024)*10)/10;
+                typeSubida = "Kb";
+                if(Data_Subida > 1024.0){
+                    Data_Subida = Math.round((Data_Subida/1024)*10)/10;
+                    typeSubida = "Mb";
+                    if(Data_Subida > 1024.0){
+                        Data_Subida = Math.round((Data_Subida/1024)*10)/10;
+                        typeSubida = "Gb";
+                        if(Data_Subida > 1024.0){
+                            Data_Subida = Math.round((Data_Subida/1024)*10)/10;
+                            typeSubida = "Tb";
+                        }
+                    }
+                }
+            }
+
+            this.state.visitHistory[i] = {
+                Fecha_Registro : visitHistory[i].Fecha_Registro,
+                Tiempo_Conexion : Time,
+                typeTime : typeTime,
+                Data_Bajada : Data_Bajada,
+                typeBajada : typeBajada,
+                Data_Subida : Data_Subida,
+                typeSubida : typeSubida,
+            }
+        }
+    }
+
+    componentDidUpdate() {
+        if(this.state.props != this.props.visitHistory){
+           this.handleVisit(this.props.visitHistory)
+           this.setState({
+              props: this.props.visitHistory
+           })
+        }
+     }
+
     render() {
-        const { visitHistory } = this.props;
+        const { visitHistory } = this.state;
 
         return (
             <RctCardContent>
@@ -29,47 +115,12 @@ export default class VisitHistory extends Component {
                             </TableRow>
                         </TableHead>
                         <TableBody >
-                            {visitHistory && visitHistory.map((list, index, typeTime="", typeBajada="", typeSubida="") => (
-                                list.Tiempo_Conexion = Math.round(list.Tiempo_Conexion),
-                                list.Tiempo_Conexion < 60 ? (list.Tiempo_Conexion = list.Tiempo_Conexion, typeTime = " Seg") : 
-                                (
-                                    Math.round(list.Tiempo_Conexion/60) < 60 ? (list.Tiempo_Conexion = Math.round(list.Tiempo_Conexion/60), typeTime = " Min") : 
-                                    (
-                                        (Math.round(list.Tiempo_Conexion/60/60) < 60 ? (list.Tiempo_Conexion = Math.round(list.Tiempo_Conexion/60/60), typeTime = " Hrs") : 
-                                        (
-                                            Math.round(list.Tiempo_Conexion/60/60/24), typeTime = " Dias") 
-                                        )
-                                    )
-                                ),
-
-                                list.Data_Bajada = Math.round(list.Data_Bajada*10)/10,
-                                list.Data_Bajada < 1024.0 ? (list.Data_Bajada = list.Data_Bajada,  typeBajada = " Kb") : 
-                                (
-                                    Math.round(list.Data_Bajada/1024*10)/10 < 1024.0 ? (list.Data_Bajada = Math.round(list.Data_Bajada/1024*10)/10,  typeBajada = " Mb") : 
-                                    (
-                                        Math.round(list.Data_Bajada/1024/1024*10)/10 < 1024.0 ? (list.Data_Bajada = Math.round(list.Data_Bajada/1024/1024*10)/10,  typeBajada = " Gb") : 
-                                        (
-                                            list.Data_Bajada = Math.round(list.Data_Bajada/1024/1024/1024*10)/10,  typeBajada = " Tb"
-                                        )
-                                    )
-                                ),
-
-                                list.Data_Subida = Math.round(list.Data_Subida*10)/10,
-                                list.Data_Subida < 1024.0 ? (list.Data_Subida = list.Data_Subida,  typeSubida = " Kb") : 
-                                (
-                                    Math.round(list.Data_Subida/1024*10)/10 < 1024.0 ? (list.Data_Subida = Math.round(list.Data_Subida/1024*10)/10,  typeSubida = " Mb") : 
-                                    (
-                                        Math.round(list.Data_Subida/1024/1024*10)/10 < 1024.0 ? (list.Data_Subida = Math.round(list.Data_Subida/1024/1024*10)/10,  typeSubida = " Gb") : 
-                                        (
-                                            list.Data_Subida = Math.round(list.Data_Subida/1024/1024/1024*10)/10,  typeSubida = " Tb"
-                                        )
-                                    )
-                                ),
+                            {visitHistory && visitHistory.map((list, index) => (
                                 <TableRow key={index}>
                                     <TableCell>{list.Fecha_Registro}</TableCell>
-                                    <TableCell>{list.Tiempo_Conexion+typeTime}</TableCell>
-                                    <TableCell>{list.Data_Bajada+typeBajada}</TableCell>
-                                    <TableCell>{list.Data_Subida+typeSubida}</TableCell>
+                                    <TableCell>{list.Tiempo_Conexion+" "+list.typeTime}</TableCell>
+                                    <TableCell>{list.Data_Bajada+" "+list.typeBajada}</TableCell>
+                                    <TableCell>{list.Data_Subida+" "+list.typeSubida}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
