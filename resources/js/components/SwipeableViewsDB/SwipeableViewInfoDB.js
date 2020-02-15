@@ -200,7 +200,7 @@ class SwipeableViewInfoDB extends Component {
                                  customIcon="calendar-alt"
                               />
                               :
-                              <div>
+                              <div style={{paddingBottom: '115px!important'}}>
 
                               </div>
                            }
