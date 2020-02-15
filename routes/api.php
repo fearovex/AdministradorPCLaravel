@@ -100,6 +100,8 @@ Route::group(['middleware' => 'cors'], function() {
 
         Route::post('/radiusApiTimeAverage', 'RadiusController@getDataRadiusTimeAverage');
         
+        Route::post('/radiusApiTimeTotal', 'RadiusController@getDataRadiusTimeTotal');
+        
         Route::post('/radiusApiConnected', 'RadiusController@getDataRadiusConnected');
         
         Route::post('/visitHistoryDB','GraficasController@visitHistoryUserDB');

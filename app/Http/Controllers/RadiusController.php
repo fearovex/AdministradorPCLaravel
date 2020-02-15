@@ -23,7 +23,7 @@ class RadiusController extends Controller
                     $whereQueryCampaing .= " OR ";
                 }
             }
-            $queryRadiusPromedy =  DB::connection('radius')->select("select ROUND(SUM(acctsessiontime)) as tiempoConexion from rd.radacct as r where r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate' and ($whereQueryCampaing)");
+            $queryRadiusPromedy =  DB::connection('radius')->select("select ROUND(AVG(acctsessiontime)) as tiempoConexion from rd.radacct as r where r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate' and ($whereQueryCampaing)");
             if(!$queryRadiusPromedy){
                 $queryRadiusPromedy[0] = [
                     'tiempoConexion' => 0
@@ -36,6 +36,36 @@ class RadiusController extends Controller
             ];
         }
         return response()->json($queryRadiusPromedy[0], 200);
+    }
+
+    public function getDataRadiusTimeTotal(Request $request){
+        $database = session('database');
+        $tabla = DB::connection($database)->table('campania')->select('campania')->where('id', $request->id_campaing)->first();
+        $query = "select * from $database.users_radius where id_campania = $request->id_campaing";
+        $dataCampaing = DB::select($query);
+        $countUsers = count($dataCampaing);
+        $whereQueryCampaing = "";
+        
+        if($countUsers > 0){
+            for($i=0; $i < $countUsers;$i++){
+                $whereQueryCampaing .= "r.username = '".$dataCampaing[$i]->username."'";
+                if(($countUsers - 1) > $i){
+                    $whereQueryCampaing .= " OR ";
+                }
+            }
+            $queryRadiusTotal =  DB::connection('radius')->select("select ROUND(SUM(acctsessiontime)) as tiempoConexionTotal from rd.radacct as r where r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate' and ($whereQueryCampaing)");
+            if(!$queryRadiusTotal){
+                $queryRadiusTotal[0] = [
+                    'tiempoConexionTotal' => 0
+                ];
+            }
+        }
+        else {
+            $queryRadiusTotal[0] = [
+                'tiempoConexionTotal' => 0
+            ];
+        }
+        return response()->json($queryRadiusTotal[0], 200);
     }
 
     public function getDataRadiusConnected(Request $request){
