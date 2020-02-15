@@ -76,7 +76,9 @@ export default class Analytical extends Component {
             },
             events: [],
             promedyBandwidth: [],
+            totalBandwidth: [],
             promedyTimeSession: [],
+            totalTimeSession: [],
             ConnectedPeopleLocation: [],
         }
         this.ConsultaGraficas = this.ConsultaGraficas.bind(this);
@@ -93,8 +95,11 @@ export default class Analytical extends Component {
         this.TopVisitas = this.TopVisitas.bind(this);
         this.handlePromedyBandwidth = this.handlePromedyBandwidth.bind(this);
         this.handlePromedyTimeSession = this.handlePromedyTimeSession.bind(this);
+        this.handleTotalBandwidth = this.handleTotalBandwidth.bind(this);
+        this.handleTotalTimeSession = this.handleTotalTimeSession.bind(this);
         this.ConsultaGraficaAnchoBanda = this.ConsultaGraficaAnchoBanda.bind(this);
-        this.handleConnectedPeopleLocation = this.handleConnectedPeopleLocation.bind(this);
+        this.handleConnectedNewPeopleLocation = this.handleConnectedNewPeopleLocation.bind(this);
+        this.handleConnectedOldPeopleLocation = this.handleConnectedOldPeopleLocation.bind(this);
         this.ConsultaGraficaTiempoConexion = this.ConsultaGraficaTiempoConexion.bind(this);
     }
     
@@ -106,7 +111,10 @@ export default class Analytical extends Component {
         this.TopVisitas();
         this.handlePromedyBandwidth();
         this.handlePromedyTimeSession();
-        this.handleConnectedPeopleLocation();
+        this.handleTotalBandwidth();
+        this.handleTotalTimeSession();
+        this.handleConnectedNewPeopleLocation();
+        this.handleConnectedOldPeopleLocation();
         this.ConsultaGraficaAnchoBanda();
         this.ConsultaGraficaTiempoConexion();
         let column = "fecha_creacion";
@@ -426,6 +434,48 @@ export default class Analytical extends Component {
         }
     }
 
+    async handleTotalBandwidth(){
+        try {
+            let config = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(this.state.form)
+            }
+            let res = await fetch(`${localStorage.urlDomain}api/totalBandwidth`, config);
+            let totalBandwidth = await res.json()
+            let type = "Bytes";
+            let total = Math.round(totalBandwidth.Total*10)/10;
+            if(total > 1024.0){
+                total = Math.round((total/1024)*10)/10;
+                type = "Kb";
+            }
+            if(total > 1024.0){
+                total = Math.round((total/1024)*10)/10;
+                type = "Mb";
+            }
+            if(total > 1024.0){
+                total = Math.round((total/1024)*10)/10;
+                type = "Gb";
+            }
+            if(total > 1024.0){
+                total = Math.round((total/1024)*10)/10;
+                type = "Tb";
+            }
+
+            this.setState({
+                totalBandwidth:{
+                    total: total,
+                    type: type,
+                }
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     async handlePromedyTimeSession(){
         try {
             let config = {
@@ -464,6 +514,40 @@ export default class Analytical extends Component {
         }
     }
 
+    async handleTotalTimeSession(){
+        try {
+            let config = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(this.state.form)
+            }
+            let res = await fetch(`${localStorage.urlDomain}api/totalTimeSession`, config);
+            let totalTimeSession = await res.json()
+            let type = "Seg";
+            let total = Math.round(totalTimeSession.Total);
+            if(total >= 60){
+                total = Math.round((total/60));
+                type = "Min";
+            }
+            if(total >= 60){
+                total = Math.round((total/60));
+                type = "Hrs";
+            }
+           
+            this.setState({
+                totalTimeSession:{
+                    total: total,
+                    type: type,
+                }
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     async ConsultaGraficaAnchoBanda(){
         try {
             let config = {
@@ -482,7 +566,7 @@ export default class Analytical extends Component {
         }
     }
 
-    async handleConnectedPeopleLocation(){
+    async handleConnectedNewPeopleLocation(){
         try {
             let config = {
                 method: 'POST',
@@ -492,13 +576,33 @@ export default class Analytical extends Component {
                 },
                 body: JSON.stringify(this.state.form)
             }
-            let res = await fetch(`${localStorage.urlDomain}api/ConnectedPeopleLocation`, config);
-            let ConnectedPeopleLocation = await res.json();
-            this.state.ConnectedPeopleLocation = ConnectedPeopleLocation.People;
+            let res = await fetch(`${localStorage.urlDomain}api/ConnectedNewPeopleLocation`, config);
+            let ConnectedNewPeopleLocation = await res.json();
+            this.state.ConnectedNewPeopleLocation = ConnectedNewPeopleLocation.newPeople;
         } catch (error) {
             console.log(error);
         }
     }
+
+    async handleConnectedOldPeopleLocation(){
+        try {
+            let config = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(this.state.form)
+            }
+            let res = await fetch(`${localStorage.urlDomain}api/ConnectedOldPeopleLocation`, config);
+            let ConnectedOldPeopleLocation = await res.json();
+            this.state.ConnectedOldPeopleLocation = ConnectedOldPeopleLocation.oldPeople;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    
 
     async ConsultaGraficaTiempoConexion(){
         try {
@@ -526,7 +630,7 @@ export default class Analytical extends Component {
 
     render() {
         const { events,form } = this.state;
-        const { promedyTimeSession, lastTenUsers, promedyBandwidth, topVisits, ConnectedPeopleLocation } = this.state;
+        const { promedyTimeSession, totalTimeSession, lastTenUsers, promedyBandwidth, totalBandwidth, topVisits, ConnectedNewPeopleLocation, ConnectedOldPeopleLocation } = this.state;
         const { location } = this.props.match.params
         return (
             <div className="cardsmasonry-wrapper" >
@@ -554,54 +658,86 @@ export default class Analytical extends Component {
                 <RctCollapsibleCard
                     customClasses=""
                     colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
-                    heading={"Total Conectados"}
+                    heading={"Total Registrados"}
                     collapsible
                     //reloadable
                     fullBlock
                 >
-                    <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
-                        <CardInfo 
-                            titleName={"Conectados"}
-                            dataNum={ConnectedPeopleLocation ? ConnectedPeopleLocation : 0}
-                            backgroundColor=""
-                            classColor={"primary"}
-                        />
+                    <div className="row" style={{ padding: '0 20px'}}>
+                        <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
+                            <CardInfo 
+                                titleName={"Nuevos"}
+                                dataNum={ConnectedNewPeopleLocation ? ConnectedNewPeopleLocation: 0}
+                                backgroundColor=""
+                                classColor={"dark"}
+                            />
+                        </div>
+                        <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
+                            <CardInfo 
+                                titleName={"Tradicionales"}
+                                dataNum={ConnectedOldPeopleLocation ? ConnectedOldPeopleLocation : 0}
+                                backgroundColor=""
+                                classColor={"info"}
+                            />
+                        </div>
                     </div>
                 </RctCollapsibleCard>
                 <RctCollapsibleCard
                     customClasses=""
                     colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
-                    heading={"Promedio Tiempo de Conexión"}
+                    heading={"Tiempo de Conexión"}
                     collapsible
                     //reloadable
                     fullBlock
                 >
-                    <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
-                        <CardInfo 
-                            titleName={"Promedio"}
-                            dataNum={promedyTimeSession.promedy ? promedyTimeSession.promedy : 0}
-                            backgroundColor=""
-                            time={` ${promedyTimeSession.type ? promedyTimeSession.type : 'Seg'}`}
-                            classColor={"secondary"}
-                        />
+                    <div className="row" style={{ padding: '0 20px'}}>
+                        <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
+                            <CardInfo 
+                                titleName={"Promedio"}
+                                dataNum={promedyTimeSession.promedy ? promedyTimeSession.promedy : 0}
+                                backgroundColor=""
+                                time={` ${promedyTimeSession.type ? promedyTimeSession.type : 'Seg'}`}
+                                classColor={"primary"}
+                            />
+                        </div>
+                        <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
+                            <CardInfo 
+                                titleName={"Total"}
+                                dataNum={totalTimeSession.total ? totalTimeSession.total : 0}
+                                backgroundColor=""
+                                time={` ${totalTimeSession.type ? totalTimeSession.type : 'Seg'}`}
+                                classColor={"secondary"}
+                            />
+                        </div>
                     </div>
                 </RctCollapsibleCard>
                 <RctCollapsibleCard
                     customClasses=""
                     colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
-                    heading={"Promedio de Ancho de Banda"}
+                    heading={"Ancho de Banda"}
                     collapsible
                     //reloadable
                     fullBlock
                 >
-                    <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
-                        <CardInfo 
-                            titleName={"Promedio"}
-                            dataNum={promedyBandwidth.promedy ? promedyBandwidth.promedy : 0}
-                            backgroundColor=""
-                            time={` ${promedyBandwidth.type ? promedyBandwidth.type : 'Bytes'}`}
-                            classColor={"info"}
-                        />
+                    <div className="row" style={{ padding: '0 20px'}}>
+                        <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
+                            <CardInfo 
+                                titleName={"Promedio"}
+                                dataNum={promedyBandwidth.promedy ? promedyBandwidth.promedy : 0}
+                                backgroundColor=""
+                                time={` ${promedyBandwidth.type ? promedyBandwidth.type : 'Bytes'}`}
+                                classColor={"primary"}
+                            />
+                        </div>
+                        <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
+                            <CardInfo 
+                                titleName={"Total"}
+                                dataNum={totalBandwidth.total ? totalBandwidth.total : 0}
+                                backgroundColor=""
+                                time={` ${totalBandwidth.type ? totalBandwidth.type : 'Bytes'}`}
+                                classColor={"secondary"}
+                            />
+                        </div>
                     </div>
                 </RctCollapsibleCard>
 

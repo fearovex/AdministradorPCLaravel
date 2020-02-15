@@ -638,7 +638,7 @@ export default class Voucher extends Component {
 									</div>
 									{form.expira && form.expira == true?
 										<div className="row marginForm">
-											<div className="col-lg-12 mb-4">
+											<div className="col-lg-12 mb-4" style={{color:"white"}}>
 												La fecha fin de la campaña es: {form.finalDateCampaing}
 											</div>
 											<div className="col-lg-6 mb-4" >

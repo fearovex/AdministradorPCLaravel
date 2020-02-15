@@ -39,7 +39,7 @@ const FilterDateForm = ({ form, onChange, onChangeFilter, onSubmit, onClick, onC
                     }
                     <div className="mt-5 col-lg-1 col-md-1 col-sm-1 col-xl-1 col-1">
                         <button className="btn btn-info " onClick={onClick}>
-                            <ListItemIcon className="menu-icon">
+                            <ListItemIcon className="menu-icon" style={{marginLeft: "9px"}}>
                                 <i className='ti-pencil-alt'></i>
                             </ListItemIcon>
                         </button>

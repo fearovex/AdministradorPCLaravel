@@ -78,6 +78,7 @@ export default class CMS extends Component {
          displayColorPickerTitleStyle: false,
          displayColorPickerFontStyle: false,
          countImgs:1,
+         termsConditions:false,
          form:{
             //campaña
             id_location: this.formCampaing.id_location,
@@ -140,6 +141,7 @@ export default class CMS extends Component {
       this.rteChangeEng = this.rteChangeEng.bind(this);
       this.handleChange = this.handleChange.bind(this)
       this.handleSubmit = this.handleSubmit.bind(this)
+      this.handleChangeTerms = this.handleChangeTerms.bind(this)
    }
 
    async componentDidMount(){
@@ -539,6 +541,18 @@ export default class CMS extends Component {
       }
    }
 
+   handleChangeTerms = () =>{
+      if(!this.state.termsConditions){
+         this.setState({
+            termsConditions: true
+         })
+      }else{
+         this.setState({
+            termsConditions: false
+         })
+      }
+      
+   }
    //fin métodos diseño
    
    render() {
@@ -800,7 +814,7 @@ export default class CMS extends Component {
             <div className="col-lg-6" >
                <Card variant="outlined">
                   <CardContent>
-                     <div className="Tab-wrap" style={{backgroundColor: "#35475f",border: "0.3px solid #c1c1c1", padding:"1px"}}>
+                     <div className="Tab-wrap" style={{backgroundColor: "#404e77",border: "0.3px solid #c1c1c1", padding:"1px"}}>
                         {/* border: "0.3px solid #c1c1c1 !important",borderRadius:"6px !important", padding: "20px!important", */}
                         <AppBar position="static" >
                            <Tabs
@@ -810,8 +824,8 @@ export default class CMS extends Component {
                               textColor="primary"
                               variant="standard"
                            >
-                              <Tab style={{backgroundColor: "#3e7296"}} label={'Formulario'} />
-                              <Tab style={{backgroundColor: "#099c96"}} label={'Diseño'} />
+                              <Tab style={{backgroundColor: "#175f92"}} label={'Formulario'} />
+                              <Tab style={{backgroundColor: "#2c8998"}} label={'Diseño'} />
                            </Tabs>
                         </AppBar>
                         <SwipeableViews
@@ -822,7 +836,7 @@ export default class CMS extends Component {
                            <div className="card mb-0 transaction-box">
                               <TabContainer dir={theme.direction}>
                                  <RctCardContent>
-                                    <div className="row" style={{backgroundColor: "#35475f",padding: "20px"}}>
+                                    <div className="row" style={{backgroundColor: "#404e77",padding: "20px"}}>
                                        <div className="col-lg-6">
                                           <FormGroupUI>
                                              <FormControlLabelUI
@@ -866,7 +880,8 @@ export default class CMS extends Component {
                                           </FormGroupUI>
                                        </div>
                                        <div className="col-lg-12" style={{marginTop:"15px"}}>
-                                          <h4 className="termsCon">Terminos y Condiciones</h4>
+                                          <h4 className="termsCon" onClick={this.handleChangeTerms}>Terminos y Condiciones</h4>
+                                          {this.state.termsConditions?
                                           <div className="Tab-wrap">
                                              <AppBar position="static" >
                                                 <Tabs
@@ -876,8 +891,8 @@ export default class CMS extends Component {
                                                    textColor="primary"
                                                    variant="standard"
                                                 >
-                                                   <Tab style={{backgroundColor:"#304158"}} label={'Español'} />
-                                                   <Tab style={{backgroundColor:"#354f71"}} label={'Inglés'} />
+                                                   <Tab style={{backgroundColor:"#216a9e"}} label={'Español'} />
+                                                   <Tab style={{backgroundColor:"#477cbd"}} label={'Inglés'} />
                                                 </Tabs>
                                              </AppBar>
                                              <SwipeableViews
@@ -907,6 +922,10 @@ export default class CMS extends Component {
                                              </div>
                                              </SwipeableViews>
                                           </div>
+                                             :
+                                          <div></div>
+                                          }
+                                          
                                        </div>
                                     </div>
                                  </RctCardContent>
@@ -915,7 +934,7 @@ export default class CMS extends Component {
                            <div className="card mb-0 transaction-box">
                               <TabContainer dir={theme.direction}>
                                  <RctCardContent>
-                                       <div className="row" style={{backgroundColor: "#35475f",padding: "20px"}}>
+                                       <div className="row" style={{backgroundColor: "#404e77",padding: "20px"}}>
                                           <div className="col-lg-6">
                                              <FormGroup>
                                                 <Label for="titlePortal">Titulo Portal Cautivo</Label>
@@ -1033,7 +1052,7 @@ export default class CMS extends Component {
                         <div className="row h-100">
                            <div className="col-sm-12 my-auto" >
                            { fileBackground ?  
-                              <div className="Tab-wrap" style={{backgroundColor: "#35475f",border: "0.3px solid #c1c1c1", padding:"1px"}}>
+                              <div className="Tab-wrap" style={{backgroundColor: "#404e77",border: "0.3px solid #c1c1c1", padding:"1px"}}>
                                  <AppBar position="static" >
                                     <Tabs
                                        value={this.state.valueViewsFormat}
@@ -1042,8 +1061,8 @@ export default class CMS extends Component {
                                        textColor="primary"
                                        variant="standard"
                                     >
-                                       <Tab style={{backgroundColor:"#304158"}} label={'Web'} />
-                                       <Tab style={{backgroundColor:"#354f71"}} label={'Móvil'} />
+                                       <Tab style={{backgroundColor:"#175f92"}} label={'Web'} />
+                                       <Tab style={{backgroundColor:"#2c8998"}} label={'Móvil'} />
                                     </Tabs>
                                  </AppBar>
                                  <SwipeableViews
@@ -1051,7 +1070,7 @@ export default class CMS extends Component {
                                     index={this.state.valueViewsFormat}
                                     onChangeIndex={this.handleChangeTabsIndexViewsFormat}
                                  >
-                                 <div className="card mb-0 transaction-box" style={{padding: "26px 5px 10px 5px", backgroundColor:"#35475f"}}>
+                                 <div className="card mb-0 transaction-box" style={{padding: "26px 5px 10px 5px", backgroundColor:"#404e77"}}>
                                     <TabContainer dir={themeLang.direction}>
                                        <RctCardContent>
                                        <div className="cardCont" style={{background: "white", backgroundImage: `url(${fileBackground})`, backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }}>
@@ -1166,7 +1185,7 @@ export default class CMS extends Component {
                                        </RctCardContent>
                                     </TabContainer>
                                  </div>
-                                 <div className="card mb-0 transaction-box" style={{padding: "26px 44px 10px 44px", backgroundColor:"#35475f"}}>
+                                 <div className="card mb-0 transaction-box" style={{padding: "26px 44px 10px 44px", backgroundColor:"#404e77"}}>
                                     <TabContainer dir={themeLang.direction}>
                                        <RctCardContent>
                                        <div className="cardCont" style={{background: "white", backgroundImage: `url(${fileBackground})`, backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }}>
@@ -1285,7 +1304,7 @@ export default class CMS extends Component {
                               </div>
                               :
 
-                              <div className="Tab-wrap" style={{backgroundColor: "#35475f",border: "0.3px solid #c1c1c1", padding:"1px"}}>
+                              <div className="Tab-wrap" style={{backgroundColor: "#404e77",border: "0.3px solid #c1c1c1", padding:"1px"}}>
                               <AppBar position="static" >
                                  <Tabs
                                     value={this.state.valueViewsFormat}
@@ -1294,8 +1313,8 @@ export default class CMS extends Component {
                                     textColor="primary"
                                     variant="standard"
                                  >
-                                    <Tab style={{backgroundColor:"#304158"}} label={'Web'} />
-                                    <Tab style={{backgroundColor:"#354f71"}} label={'Móvil'} />
+                                    <Tab style={{backgroundColor:"#175f92"}} label={'Web'} />
+                                    <Tab style={{backgroundColor:"#2c8998"}} label={'Móvil'} />
                                  </Tabs>
                               </AppBar>
                               <SwipeableViews
@@ -1303,7 +1322,7 @@ export default class CMS extends Component {
                                  index={this.state.valueViewsFormat}
                                  onChangeIndex={this.handleChangeTabsIndexViewsFormat}
                               >
-                              <div className="card mb-0 transaction-box" style={{padding: "26px 5px 10px 5px", backgroundColor:"#35475f"}}>
+                              <div className="card mb-0 transaction-box" style={{padding: "26px 5px 10px 5px", backgroundColor:"#404e77"}}>
                                  <TabContainer dir={themeLang.direction}>
                                     <RctCardContent>
                                     <div className="cardCont" style={{background: "white", backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }}>
@@ -1418,7 +1437,7 @@ export default class CMS extends Component {
                                     </RctCardContent>
                                  </TabContainer>
                               </div>
-                              <div className="card mb-0 transaction-box" style={{padding: "26px 44px 10px 44px", backgroundColor:"#35475f"}}>
+                              <div className="card mb-0 transaction-box" style={{padding: "26px 44px 10px 44px", backgroundColor:"#404e77"}}>
                                  <TabContainer dir={themeLang.direction}>
                                     <RctCardContent>
                                        <div className="cardCont" style={{background: "white", backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }}>

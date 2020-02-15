@@ -134,7 +134,7 @@ class LastTenUsersList extends Component {
                confirmBtnText="Cerrar"
                // cancelBtnText="Cancelar"
                // cancelBtnBsStyle="danger"
-               // confirmBtnBsStyle="primary"
+               confirmBtnBsStyle="danger"
                onConfirm={() => this.handleCloseModal(event)}
                // onCancel={() => this.onCancel('modalEmailCsv')}
             >
