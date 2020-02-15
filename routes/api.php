@@ -40,6 +40,8 @@ Route::group(['middleware' => 'cors'], function() {
         
         Route::post('/visitHistory','DetailEventsController@visitHistoryUser');
         
+        Route::post('/userRadius','DetailEventsController@UserRadius');
+        
         Route::resource('/locations','LocationsController');    
         
         Route::get('/logout', 'Auth\LoginController@logout');
@@ -72,7 +74,7 @@ Route::group(['middleware' => 'cors'], function() {
         
         Route::post('/topVisits', 'GraficasController@TopVisits');
 
-        Route::post('/TotalRecords', 'GraficasController@TotalRecords');
+        // Route::post('/TotalRecords', 'GraficasController@TotalRecords');
 
         Route::post('/UsersMoreVisit', 'GraficasController@UsersMoreVisit');
 
@@ -91,6 +93,8 @@ Route::group(['middleware' => 'cors'], function() {
         Route::post('/TopTenUsersCampaing', 'GraficasController@TopTenUsersCampaing');
 
         Route::post('/userInfoDB', 'GraficasController@UserInfoDB');
+        
+        Route::post('/userRadiusDB', 'GraficasController@UserRadiusDB');
 
         Route::post('/prefferWeekDayDB', 'GraficasController@PrefferWeekDayDB');
 
@@ -104,14 +108,26 @@ Route::group(['middleware' => 'cors'], function() {
 
         Route::post('/promedyTimeSession', 'RadiusController@getPromedyTimeSession');
 
+        Route::post('/totalBandwidth', 'RadiusController@getTotalBandwidth');
+
+        Route::post('/totalTimeSession', 'RadiusController@getTotalTimeSession');
+
         Route::post('/timeConnect', 'RadiusController@getTimeConnect');
         
         Route::post('/timeConnectDB', 'RadiusController@getTimeConnectDB');
         
-        Route::post('/ConnectedPeopleLocation', 'RadiusController@getConnectedPeopleLocation');
+        Route::post('/ConnectedNewPeopleLocation', 'RadiusController@getConnectedNewPeopleLocation');
+
+        Route::post('/ConnectedOldPeopleLocation', 'RadiusController@getConnectedOldPeopleLocation');
+
+        Route::post('/ConnectedNewPeopleCampaing', 'RadiusController@getConnectedNewPeopleCampaing');
+
+        Route::post('/ConnectedOldPeopleCampaing', 'RadiusController@getConnectedOldPeopleCampaing');
         
         Route::post('/ChartBandwidth', 'RadiusController@getChartBandwidth');
         
         Route::post('/ChartTimeConnect', 'RadiusController@getChartTimeConnect');
+
+        Route::post('/uploadImage', 'CMSController@imgUpload');
     });
  });

@@ -136,7 +136,8 @@ export class UserBlockClass extends Component {
 								<li className="border-top">
 									<a href="#" onClick={(e) => this.logoutUser(e)}>
 										<i className="zmdi zmdi-power text-danger mr-3"></i>
-										<IntlMessages id="widgets.logOut" />
+										<span style={{color:'white'}}>Cerrar Sesión</span>
+										
 									</a>
 								</li>
 							</ul>

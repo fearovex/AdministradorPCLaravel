@@ -16,6 +16,7 @@ import queryString from 'query-string';
 import moment from "moment";
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import { DateTimePicker } from '@material-ui/pickers';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
 
 import './styles.css'
 
@@ -28,6 +29,13 @@ export default class campañas extends Component {
 
 		const id_location = localStorage.user_location
 
+		let date = moment(new Date, 'YYYY/MM/DD hh:mm a');
+		let año = date.year();
+		let mes = date.month() + 1;
+		let dia = date.dates();
+		let hora = date.hours();
+		let minutos = date.minute();
+
 		this.state = {
 			data: [],
 			error: null,
@@ -38,11 +46,12 @@ export default class campañas extends Component {
 			modaledit: false,
 			form: {
 				nombre_campaña: "",
-				fecha_inicio: "",
-				fecha_fin: "",
+				fecha_inicio: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos) + ":00",
+				fecha_fin: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos) + ":00",
 				descripcion: "",
 				zona_ap: "",
 				anio: "",
+				vertical_economica:""
 			},
 		}
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -63,7 +72,9 @@ export default class campañas extends Component {
 			this.setState({
 				data: data,
 				form: {
+					...this.state.form,
 					id_location: id_location
+					
 				}
 			})
 
@@ -113,22 +124,40 @@ export default class campañas extends Component {
 	async handleSubmit(e) {
 		e.preventDefault()
 		try {
-			let config = {
-				method: 'POST',
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(this.state.form)
-			};
+			// let config = {
+			// 	method: 'POST',
+			// 	headers: {
+			// 		'Accept': 'application/json',
+			// 		'Content-Type': 'application/json'
+			// 	},
+			// 	body: JSON.stringify(this.state.form)
+			// };
 
-			await fetch(`${localStorage.urlDomain}api/campanias`, config);
+			// await fetch(`${localStorage.urlDomain}api/campanias`, config);
+			const {
+				nombre_campaña,
+				descripcion,
+				zona_ap,
+				anio,
+				vertical_economica,
+			} = this.state.form
 
-			this.setState({
-				prompt: false
-			})
-			
-			this.componentDidMount();
+			if(((nombre_campaña == '' || descripcion == '') || (descripcion == '')) || ((zona_ap == '') || (anio == '' || vertical_economica == ''))){
+				NotificationManager.error('Los campos son obligatorios','',5000);
+			}else{
+				let redirectCMS = this.props.history.location.pathname;
+				let nameCampaingCreated = this.state.form.nombre_campaña
+				// this.props.history.push(redirectCMS+'/'+nameCampaingCreated+'/cms')// al terminar cms
+				this.props.history.push({
+					pathname: redirectCMS+'/crear/cms',
+					state: { form: this.state.form }
+				})
+				localStorage.setItem('campaingCreated',nameCampaingCreated);
+				this.setState({
+					prompt: false
+				})
+			}
+			// this.componentDidMount();
 
 		} catch (error) {
 			console.log(error);
@@ -198,6 +227,7 @@ export default class campañas extends Component {
 		let campania = await res.json();
 		this.setState({
 			form: {
+				...this.state.form,
 				nombre_campaña: campania.nombre,
 				fecha_inicio: campania.fecha_inicio,
 				fecha_fin: campania.fecha_fin,
@@ -276,20 +306,21 @@ export default class campañas extends Component {
 				<div className="blank-wrapper">
 					<div className="sweet-alert-wrapper">
 
-						{/* <Button
+						<Button
 							variant="contained"
 							color="primary"
-							className="boton"
+							className="botonCampaña"
 							onClick={() => this.openAlert('prompt')}
 						>Crear campaña
-						</Button> */}
+						</Button>
+
 
 						<SweetAlert
 
 							btnSize="sm"
 							show={prompt}
 							showCancel
-							confirmBtnText="Guardar"
+							confirmBtnText="Siguiente"
 							cancelBtnText="Cancelar"
 							cancelBtnBsStyle="danger"
 							confirmBtnBsStyle="primary"
@@ -307,14 +338,14 @@ export default class campañas extends Component {
 											type="text"
 											name="nombre_campaña"
 											id="nombre_campaña"
-											className="has-input input-lg"
+											className="has-input input-lg "
 											placeholder="Nombre campaña"
 											onChange={() => this.handleChange(event)}
 										/>
 									</div>
 									<div className="col-lg-6">
 										<Select name="zona_ap" native onChange={() => this.handleChange(event)}
-											className="has-input input-lg"
+											className="has-input input-lg generalMarginInputs"
 										>
 											<option value="">Seleccione una zona</option>
 											{data && data.map((data) => (
@@ -328,9 +359,10 @@ export default class campañas extends Component {
 								<div className="row">
 									<div className="col-lg-5 mb-4 ml-3" >
 										<DateTimePicker
-											className="has-input input-lg"
+											className="has-input input-lg "
 											key="fecha_inicio"
 											label="Fecha Inicio"
+											// style={{marginRight:"1.9em"}}
 											required
 											value={form.fecha_inicio}
 											format="YYYY/MM/DD hh:mm a"
@@ -343,9 +375,10 @@ export default class campañas extends Component {
 									</div>
 									<div className="col-lg-6">
 										<DateTimePicker
-											className="has-input input-lg"
+											className="has-input input-lg "
 											key="fecha_fin"
 											label="Fecha Fin"
+											style={{marginRight:"1.9em"}}
 											required
 											value={form.fecha_fin}
 											minDate={moment(form.fecha_inicio, 'YYYY/MM/DD hh:mm a')}
@@ -365,8 +398,8 @@ export default class campañas extends Component {
 											type="text"
 											name="descripcion"
 											id="descripcion"
-											className="has-input input-lg"
-											placeholder="Descripciòn"
+											className="has-input input-lg "
+											placeholder="Descripción"
 											onChange={() => this.handleChange(event)}
 										/>
 									</div>
@@ -375,10 +408,20 @@ export default class campañas extends Component {
 											type="text"
 											name="anio"
 											id="anio"
-											className="has-input input-lg"
+											className="has-input input-lg generalMarginInputs"
 											placeholder="Año"
 											onChange={() => this.handleChange(event)}
 										/>
+									</div>
+									<div className="col-lg-10">
+										<Select name="vertical_economica" native onChange={() => this.handleChange(event)}
+											className="has-input input-lg generalMarginInputs"
+										>
+											<option value="">Seleccione una vertical</option>
+											<option value='Hoteles'>Hoteles</option>
+											<option value='Centros Comerciales'>Centros Comerciales</option>
+
+										</Select>
 									</div>
 								</div>
 
@@ -411,14 +454,14 @@ export default class campañas extends Component {
 											name="nombre_campaña"
 											id="nombre_campaña"
 											value={this.state.form.nombre_campaña}
-											className="has-input input-lg"
+											className="has-input input-lg "
 											placeholder="Nombre campaña"
 											onChange={() => this.handleChangeEdit(event)}
 										/>
 									</div>
 									<div className="col-lg-6">
 										<Select name="zona_ap" native onChange={() => this.handleChangeEdit(event)}
-											className="has-input input-lg"
+											className="has-input input-lg generalMarginInputs"
 											value={this.state.form.zona_ap}
 										>
 											<option value="">Seleccione una zona</option>
@@ -433,7 +476,7 @@ export default class campañas extends Component {
 								<div className="row">
 									<div className="col-lg-5 mb-4 ml-3" >
 										<DateTimePicker
-											className="has-input input-lg"
+											className="has-input input-lg "
 											key="fecha_inicio"
 											label="Fecha Inicio"
 											required
@@ -448,9 +491,10 @@ export default class campañas extends Component {
 									</div>
 									<div className="col-lg-6">
 										<DateTimePicker
-											className="has-input input-lg"
+											className="has-input input-lg "
 											key="fecha_fin"
 											label="Fecha Fin"
+											style={{marginRight:"1.9em"}}
 											required
 											value={form.fecha_fin}
 											minDate={moment(form.fecha_inicio, 'YYYY/MM/DD hh:mm a')}
@@ -471,8 +515,8 @@ export default class campañas extends Component {
 											name="descripcion"
 											id="descripcion"
 											value={this.state.form.descripcion}
-											className="has-input input-lg"
-											placeholder="Descripciòn"
+											className="has-input input-lg "
+											placeholder="Descripción"
 											onChange={() => this.handleChangeEdit(event)}
 										/>
 									</div>
@@ -482,7 +526,7 @@ export default class campañas extends Component {
 											name="anio"
 											id="anio"
 											value={this.state.form.anio}
-											className="has-input input-lg"
+											className="has-input input-lg generalMarginInputs"
 											placeholder="Año"
 											onChange={() => this.handleChangeEdit(event)}
 										/>
@@ -499,6 +543,7 @@ export default class campañas extends Component {
 
 				<RctCollapsibleCard fullBlock>
 					<MUIDataTable
+						className="mui-tableRes"
 						data={this.state.datacampania}
 						columns={columns}
 						options={options}

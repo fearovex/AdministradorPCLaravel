@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { logoutUserFromFirebase } from 'Actions';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import IntlMessages from 'Util/IntlMessages';
+import './styles.css';
 
 export class AutoLogout extends Component {
     constructor(props) {
@@ -86,6 +87,7 @@ export class AutoLogout extends Component {
         return (
             <SweetAlert
                 warning
+                customClass='classSweetAlert'
                 btnSize="sm"
                 show={showAlert}
                 title={"Sesión Cerrada"}
@@ -93,6 +95,7 @@ export class AutoLogout extends Component {
                 confirmBtnBsStyle="success"
                 onConfirm={() => this.logout()}
             >
+
             </SweetAlert>
         )
     }

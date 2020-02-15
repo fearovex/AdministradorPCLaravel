@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { Progress } from 'reactstrap';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-// rct card box
 import { RctCardContent } from 'Components/RctCard';
+
 
 class DetailConnectionDB extends Component {
    render() {
-    const { rowData } = this.props
+    const { rowData, userRadius } = this.props
       return (
          <RctCardContent>
             <div className="ongoing-projects-wrap paddingDetail">
@@ -41,7 +41,7 @@ class DetailConnectionDB extends Component {
                   </ListItem>
                   <ListItem className="p-0 d-flex justify-content-start align-content-center">
                      <span className="mr-3 d-flex fw-semi-bold ">
-                        <i className="material-icons mr-10 ">tablet_mac</i>
+                     <i className='material-icons mr-10'>router</i>
                         Mac Dispositivo :
                      </span>
                      <span className=" text-truncate">
@@ -55,6 +55,15 @@ class DetailConnectionDB extends Component {
                      </span>
                      <span className=" text-truncate">
                            {rowData[0] && rowData[0].ssid}
+                     </span>
+                  </ListItem>
+                  <ListItem className="p-0 d-flex justify-content-start align-content-center">
+                     <span className="mr-3 d-flex fw-semi-bold ">
+                        <i className="material-icons mr-10 ">nature_people</i>
+                        Usuario Radius :
+                     </span>
+                     <span className=" text-truncate">
+                           {userRadius}
                      </span>
                   </ListItem>
                </List>

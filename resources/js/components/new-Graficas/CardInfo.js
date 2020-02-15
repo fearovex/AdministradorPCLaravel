@@ -19,7 +19,7 @@ class CardInfo extends Component {
                     <div className="d-flex justify-content-between">
                         <div className="align-items-start">
                             <h4 className="mb-10">{titleName}</h4>
-                            <h2 className="mb-0 fontSize"><CountUp start={0} end={dataNum} />{time}</h2>
+                            <h2 className="mb-0 fontSize" ><CountUp start={0} end={dataNum} />{time}</h2>
                         </div>
                         {icono &&
                             <div className="align-items-end">

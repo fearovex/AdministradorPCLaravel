@@ -32,6 +32,35 @@ class DatabaseMiddleware
             'collation' => 'utf8mb4_unicode_ci',
         ]);
 
+        Config::set("filesystems.disks.ftp_".$user->database, [
+            //Habilitar/Instalar la extension de ftp para php
+            //Configurar para redireccionar al ftp deseado
+
+            //pre y producción
+            'driver' => env('FTP_DRIVER'),
+            'host' => env('FTP_HOST'),
+            'port' => env('FTP_PORT'),
+            'root' => env('FTP_ROOTPATH'),
+            'username' => env('FTP_USERNAME'),
+            'password' => env('FTP_PASSWORD'),
+            'passive' => true,
+            'visibility' => 'public',
+            'permPublic' => 0777,
+            'directoryPerm' => 0777,
+
+            //local
+            // 'driver' => 'ftp',
+            // 'host' => '192.168.1.9',
+            // 'port' => '21',
+            // 'root' => '/',
+            // 'username' =>'Miguel Acevedo',
+            // 'password' => 'dogfire1',
+            
+            // Optional FTP Settings...
+            // 'ssl' => true,
+            // 'timeout' => 30,
+        ]);
+
         session(['database' => $user->database]);
 
         return $next($request);

@@ -87,6 +87,16 @@ class ChartAnchoBanda extends Component {
       chart.cursor = new am4charts.XYCursor();
       chart.cursor.xAxis = dateAxis;
 
+      var bullet = series.bullets.push(new am4charts.CircleBullet());
+      bullet.strokeWidth = 2;
+      bullet.stroke = am4core.color("#fff");
+      bullet.setStateOnChildren = true;
+      bullet.propertyFields.fillOpacity = "opacity";
+      bullet.propertyFields.strokeOpacity = "opacity";
+
+      var hoverState = bullet.states.create("hover");
+      hoverState.properties.scale = 1.5;
+
       let scrollbarX = new am4core.Scrollbar();
       scrollbarX.marginBottom = 20;
       chart.scrollbarX = scrollbarX;
