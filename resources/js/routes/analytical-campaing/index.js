@@ -790,7 +790,7 @@ export default class AnalyticalCampaing extends Component {
                                 </div>
                                 <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
                                     <CardInfo 
-                                        titleName={"Tradicionales"}
+                                        titleName={"Antiguos"}
                                         dataNum={data.traditionalPeople ? data.traditionalPeople : 0}
                                         backgroundColor=""
                                         classColor={"info"}
