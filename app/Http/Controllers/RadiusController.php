@@ -326,9 +326,20 @@ class RadiusController extends Controller
     }
 
     public static function getVisitHistory($userRadius){
-        // return $userRadius;
         $QueryRadius = "select r.acctstarttime as Fecha_Registro, r.acctsessiontime as Tiempo_Conexion, r.acctoutputoctets as Data_Bajada, r.acctinputoctets as Data_Subida from radacct as r where r.username = '".$userRadius->username."' ORDER BY Fecha_Registro DESC";
         $UsersRadius = DB::connection('radius')->select($QueryRadius);
         return $UsersRadius;
+    }
+
+    public static function getPrefferWeekDayUser($userRadius){
+        $queryChangeEs = "SET @@lc_time_names = 'es_CO'";
+        $QueryRadius = "select COUNT(*) AS cantidad, DAYNAME(r.acctstarttime) AS dia_preferido FROM radacct as r where r.username = '".$userRadius->username."' GROUP BY dia_preferido ORDER BY cantidad desc LIMIT 1";
+
+        DB::connection('radius')->select($queryChangeEs);
+        $prefferWeekDayUser = DB::connection('radius')->select($QueryRadius);
+        $queryChangeEn= "SET @@lc_time_names = 'en_US'";
+        DB::connection('radius')->select($queryChangeEn);
+
+        return $prefferWeekDayUser;
     }
 }

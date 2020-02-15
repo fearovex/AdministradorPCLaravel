@@ -51,25 +51,25 @@ class DetailEventsController extends Controller
     public function prefferWeekDayUser(Request $request){
         $database = session('database');
         $tabla = DB::connection($database)->table('campania')->select('campania')->where('id', $request->id_campaing)->first();
-
+        
         if(isset($request->objectDataUser["Numero de Vouchers"])){
-            $queryChangeEs = "SET @@lc_time_names = 'es_CO'";
-            $query = "select COUNT(*) AS cantidad, DAYNAME(fecha_creacion) AS dia_preferido FROM $database.$tabla->campania WHERE num_voucher = "."'".$request->objectDataUser["Numero de Vouchers"]."'"." GROUP BY dia_preferido ORDER BY cantidad desc LIMIT 1";
-            
-            DB::select($queryChangeEs);
-            $prefferWeekDayUser = DB::select($query);
-            $queryChangeEn= "SET @@lc_time_names = 'en_US'";
-            DB::select($queryChangeEn);
+            $userRadius = DB::connection($database)->select("select ur.username from users_radius ur inner join $tabla->campania tc on ur.id_cliente = tc.id WHERE num_voucher = '".$request->objectDataUser["Numero de Vouchers"]."'");
+            if($userRadius > 0){
+                $prefferWeekDayUser = RadiusController::getPrefferWeekDayUser($userRadius[0]);
+            }
+            else{
+                $prefferWeekDayUser = [];
+            }
             return  response()->json($prefferWeekDayUser);
         }
         if(isset($request->objectDataUser["Email"])){
-            $queryChangeEs= "SET @@lc_time_names = 'es_CO'";
-            $query = "select COUNT(*) AS cantidad, DAYNAME(fecha_creacion) AS dia_preferido FROM $database.$tabla->campania WHERE email = "."'".$request->objectDataUser["Email"]."'"." GROUP BY dia_preferido ORDER BY cantidad desc LIMIT 1";
-            
-            DB::select($queryChangeEs);
-            $prefferWeekDayUser = DB::select($query);
-            $queryChangeEn= "SET @@lc_time_names = 'en_US'";
-            DB::select($queryChangeEn);
+            $userRadius = DB::connection($database)->select("select ur.username from users_radius ur inner join $tabla->campania tc on ur.id_cliente = tc.id WHERE email = '".$request->objectDataUser["Email"]."'");
+            if($userRadius > 0){
+                $prefferWeekDayUser = RadiusController::getPrefferWeekDayUser($userRadius[0]);
+            }
+            else{
+                $prefferWeekDayUser = [];
+            }
             return  response()->json($prefferWeekDayUser);
         }
     }
