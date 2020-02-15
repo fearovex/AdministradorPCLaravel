@@ -54,7 +54,7 @@ class DetailEventsController extends Controller
         
         if(isset($request->objectDataUser["Numero de Vouchers"])){
             $userRadius = DB::connection($database)->select("select ur.username from users_radius ur inner join $tabla->campania tc on ur.id_cliente = tc.id WHERE num_voucher = '".$request->objectDataUser["Numero de Vouchers"]."'");
-            if($userRadius > 0){
+            if($userRadius <> ""){
                 $prefferWeekDayUser = RadiusController::getPrefferWeekDayUser($userRadius[0]);
             }
             else{
@@ -64,7 +64,7 @@ class DetailEventsController extends Controller
         }
         if(isset($request->objectDataUser["Email"])){
             $userRadius = DB::connection($database)->select("select ur.username from users_radius ur inner join $tabla->campania tc on ur.id_cliente = tc.id WHERE email = '".$request->objectDataUser["Email"]."'");
-            if($userRadius > 0){
+            if($userRadius <> ""){
                 $prefferWeekDayUser = RadiusController::getPrefferWeekDayUser($userRadius[0]);
             }
             else{
@@ -80,7 +80,7 @@ class DetailEventsController extends Controller
 
         if(isset($request->objectDataUser["Numero de Vouchers"])){
             $userRadius = DB::connection($database)->select("select ur.username from users_radius ur inner join $tabla->campania tc on ur.id_cliente = tc.id WHERE num_voucher = '".$request->objectDataUser["Numero de Vouchers"]."'");
-            if($userRadius > 0){
+            if($userRadius <> ""){
                 $visitHistory = RadiusController::getVisitHistory($userRadius[0]);
             }
             else{
@@ -90,7 +90,7 @@ class DetailEventsController extends Controller
         }
         if(isset($request->objectDataUser["Email"])){
             $userRadius = DB::connection($database)->select("select ur.username from users_radius ur inner join $tabla->campania tc on ur.id_cliente = tc.id WHERE email = '".$request->objectDataUser["Email"]."'");
-            if($userRadius > 0){
+            if($userRadius <> ""){
                 $visitHistory = RadiusController::getVisitHistory($userRadius[0]);
             }
             else{
@@ -106,7 +106,7 @@ class DetailEventsController extends Controller
 
         if(isset($request->objectDataUser["Numero de Vouchers"])){
             $userRadius = DB::connection($database)->select("select ur.username from users_radius ur inner join $tabla->campania tc on ur.id_cliente = tc.id WHERE num_voucher = '".$request->objectDataUser["Numero de Vouchers"]."' limit 1");
-            if($userRadius > 0){
+            if($userRadius <> ""){
                 $visitHistory = $userRadius[0]->username;
             }
             else{
@@ -116,7 +116,7 @@ class DetailEventsController extends Controller
         }
         if(isset($request->objectDataUser["Email"])){
             $userRadius = DB::connection($database)->select("select ur.username from users_radius ur inner join $tabla->campania tc on ur.id_cliente = tc.id WHERE email = '".$request->objectDataUser["Email"]."' limit 1");
-            if($userRadius > 0){
+            if($userRadius <> ""){
                 $visitHistory = $userRadius[0]->username;
             }
             else{
