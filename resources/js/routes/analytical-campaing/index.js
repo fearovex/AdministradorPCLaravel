@@ -68,8 +68,10 @@ export default class AnalyticalCampaing extends Component {
             },
             events: [],
             timeConnectionRadius:0,
+            timeConnectionRadiusTotal:0,
             usersConnectedRadius:0,
-            type:""
+            type:"",
+            typeTotal:""
         }
 
         this.ConsultaGraficas = this.ConsultaGraficas.bind(this);
@@ -90,6 +92,7 @@ export default class AnalyticalCampaing extends Component {
         this.TopFiveReasonVisits = this.TopFiveReasonVisits.bind(this)
         this.TopFiveRooms = this.TopFiveRooms.bind(this)
         this.AverageTimeConnectionRadius = this.AverageTimeConnectionRadius.bind(this)
+        this.TotalTimeConnectionRadius = this.TotalTimeConnectionRadius.bind(this)
         // this.UsersConnectedRadius = this.UsersConnectedRadius.bind(this)
         
     }
@@ -105,6 +108,7 @@ export default class AnalyticalCampaing extends Component {
         this.TopFiveReasonVisits()
         this.TopFiveRooms()
         this.AverageTimeConnectionRadius()
+        this.TotalTimeConnectionRadius()
         // this.UsersConnectedRadius()
         let column = "fecha_creacion";
         this.state.form.column = [column];
@@ -544,6 +548,47 @@ export default class AnalyticalCampaing extends Component {
         }
     }
 
+    async TotalTimeConnectionRadius(){
+        let vertical = this.state.form.vertical
+        if(vertical == 'Centros Comerciales'){
+            try {
+                let config = {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(this.state.form)
+                }
+                let responseRadius = await fetch(`${localStorage.urlDomain}api/radiusApiTimeTotal`,config);
+                let radiusTimeUserConversion = await responseRadius.json()
+                
+                let typeTotal = ' Seg';
+                let radiusTimeUserTotal = Math.round(radiusTimeUserConversion.tiempoConexionTotal);
+
+                if(radiusTimeUserTotal >= 60){
+                    radiusTimeUserTotal = Math.round(radiusTimeUserTotal/60)
+                    typeTotal = ' Min';
+                    if(radiusTimeUserTotal >= 60){
+                        radiusTimeUserTotal = Math.round(radiusTimeUserTotal/60)
+                        typeTotal = ' Hrs';
+                        if(radiusTimeUserTotal >= 24){
+                            radiusTimeUserTotal = Math.round(radiusTimeUserTotal/24)
+                            typeTotal = ' Días';
+                        }
+                    }
+                }
+                
+                this.setState({
+                    timeConnectionRadiusTotal:radiusTimeUserTotal,
+                    typeTotal: typeTotal
+                })
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    }
+
     // async UsersConnectedRadius(){
     //         try {
     //             let config = {
@@ -565,7 +610,7 @@ export default class AnalyticalCampaing extends Component {
     // }
 
     render() {
-        const { events,form, data, timeConnectionRadius, usersConnectedRadius } = this.state;
+        const { events,form, data, timeConnectionRadius, usersConnectedRadius, timeConnectionRadiusTotal } = this.state;
         const { camp } = this.props.match.params
         const { vertical } = this.state.form
         return (
@@ -610,7 +655,7 @@ export default class AnalyticalCampaing extends Component {
                                 </div>
                                 <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
                                     <CardInfo 
-                                        titleName={"Tradicionales"}
+                                        titleName={"Antiguos"}
                                         dataNum={data.traditionalPeople ? data.traditionalPeople : 0}
                                         backgroundColor=""
                                         classColor={"info"}
@@ -778,7 +823,27 @@ export default class AnalyticalCampaing extends Component {
                             // reloadable
                             fullBlock
                         >
-                            <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
+                            <div className="row" style={{ padding: '0 20px'}}>
+                                <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
+                                    <CardInfo 
+                                        titleName={"Promedio"}
+                                        dataNum={timeConnectionRadius ? timeConnectionRadius : 0}
+                                        backgroundColor=""
+                                        time={` ${this.state.type ? this.state.type : 'Seg'}`}
+                                        classColor={"primary"}
+                                    />
+                                </div>
+                                <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
+                                    <CardInfo 
+                                        titleName={"Total"}
+                                        dataNum={timeConnectionRadiusTotal ? timeConnectionRadiusTotal : 0}
+                                        backgroundColor=""
+                                        time={` ${this.state.typeTotal ? this.state.typeTotal : 'Seg'}`}
+                                        classColor={"secondary"}
+                                    />
+                                </div>
+                            </div>
+                            {/* <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                                 <CardInfo
                                     titleName={"Promedio"}
                                     dataNum={timeConnectionRadius ? timeConnectionRadius : 0}
@@ -786,7 +851,7 @@ export default class AnalyticalCampaing extends Component {
                                     time={this.state.type}
                                     classColor={"info"}
                                 />
-                            </div>
+                            </div> */}
                         </RctCollapsibleCard>
                         <RctCollapsibleCard
                             customClasses=""
