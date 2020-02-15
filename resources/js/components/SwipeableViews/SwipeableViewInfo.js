@@ -225,8 +225,7 @@ class SwipeableViewInfo extends Component {
                                  customIcon="calendar-alt"
                               />
                               :
-                              <div>
-
+                              <div className="paddingFix">
                               </div>
                            }
                         </div>
