@@ -536,7 +536,10 @@ export default class Analytical extends Component {
                 total = Math.round((total/60));
                 type = "Hrs";
             }
-           
+            if(total >= 24){
+                total = Math.round((total/60));
+                type = "Días";
+            }
             this.setState({
                 totalTimeSession:{
                     total: total,
@@ -674,7 +677,7 @@ export default class Analytical extends Component {
                         </div>
                         <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
                             <CardInfo 
-                                titleName={"Tradicionales"}
+                                titleName={"Antiguos"}
                                 dataNum={ConnectedOldPeopleLocation ? ConnectedOldPeopleLocation : 0}
                                 backgroundColor=""
                                 classColor={"info"}
