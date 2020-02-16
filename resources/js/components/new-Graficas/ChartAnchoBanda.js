@@ -93,9 +93,10 @@ class ChartAnchoBanda extends Component {
       bullet.setStateOnChildren = true;
       bullet.propertyFields.fillOpacity = "opacity";
       bullet.propertyFields.strokeOpacity = "opacity";
+      bullet.properties.scale = 1.4;
 
       var hoverState = bullet.states.create("hover");
-      hoverState.properties.scale = 1.5;
+      hoverState.properties.scale = 1.8;
 
       let scrollbarX = new am4core.Scrollbar();
       scrollbarX.marginBottom = 20;
