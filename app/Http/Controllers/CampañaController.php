@@ -222,14 +222,23 @@ class CampañaController extends Controller
      */
     public function edit($id)
     {
+        // dd($id);
+        
         try {
-            $campania = DB::connection(session('database'))
-                ->table('campania')
-                ->where('id', $id)
-                ->first();
-                return response()->json($campania, 200);
+            $table_name= DB::connection(session('database'))->table('campania')->select('campania')->where('id',$id)->first()->campania;
+            $db = session('database');
+            $getColumnNames = DB::select("SELECT COLUMN_NAME
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_SCHEMA = '".$db."' AND TABLE_NAME = '".$table_name."';");
+
+            $dataCampaing = DB::connection(session('database'))
+                ->select("select cs.nombre, cs.descripcion, cs.fecha_inicio, cs.fecha_fin, cs.zona_ap, cs.vertical_economica, sc.width_logo_web, sc.container_form_color, sc.container_form_font_color, sc.button_font_color, sc.button_background_color, sc.title_portal, sc.color_title_portal, sc.width_logo_web, sc.width_logo_movil, tcc.terms_conditions_es, tcc.terms_conditions_en FROM campania cs 
+                INNER JOIN styles_campania sc ON sc.id_campania = cs.id
+                INNER JOIN terms_conditions_campania tcc on tcc.id_campania = cs.id 
+                WHERE cs.id = $id");
+                return response()->json([$dataCampaing[0],$getColumnNames], 200);
         } catch (\Throwable $th) {
-            return response()->json($campania, 500);
+            return response()->json($dataCampaing[0], 500);
         }
     }
 
