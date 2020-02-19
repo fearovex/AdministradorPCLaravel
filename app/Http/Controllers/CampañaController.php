@@ -211,15 +211,9 @@ class CampañaController extends Controller
             ->select('campania')
             ->where('id_locacion', $id)
             ->first();
-        
-        // $zonas = DB::connection(session('database'))
-        //     ->table('campania')
-        //     ->select('id','nombre as Nombre',''.DB::connection(session('database'))->select("select fecha_creacion as Ultima_Fecha from $table->campania order by Ultima_Fecha desc limit 1")[0]->Ultima_Fecha.' as Ultima_Fecha',DB::connection(session('database'))->select("select count(*) as Total_Registros from $table->campania")[0]->Total_Registros.' as Total_Registros','fecha_inicio as Fecha Inicio','fecha_fin as Fecha Fin', 'campania','vertical_economica as Vertical')
-        //     ->where('id_locacion', $id)
-        //     ->get();
         $zonas = DB::connection(session('database'))
             ->select("
-                select id, nombre as Nombre, (select fecha_creacion from $table->campania order by fecha_creacion desc limit 1) as 'Ultima Fecha', (select count(*) from $table->campania) as 'Total Registros', fecha_inicio as 'Fecha Inicio', fecha_fin as 'Fecha Fin', campania, vertical_economica as Vertical from campania where id_locacion = $id
+                select id, nombre as Nombre, (select fecha_creacion from $table->campania order by fecha_creacion desc limit 1) as 'Ultima Fecha', (select count(*) from $table->campania) as 'Total Registros', fecha_inicio as 'Fecha Inicio', fecha_fin as 'Fecha Fin', campania, vertical_economica as Vertical, path_campania from campania where id_locacion = $id
             ");
         return response()->json($zonas, 200);
     }
@@ -232,14 +226,23 @@ class CampañaController extends Controller
      */
     public function edit($id)
     {
+        // dd($id);
+        
         try {
-            $campania = DB::connection(session('database'))
-                ->table('campania')
-                ->where('id', $id)
-                ->first();
-                return response()->json($campania, 200);
+            $table_name= DB::connection(session('database'))->table('campania')->select('campania')->where('id',$id)->first()->campania;
+            $db = session('database');
+            $getColumnNames = DB::select("SELECT COLUMN_NAME
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_SCHEMA = '".$db."' AND TABLE_NAME = '".$table_name."';");
+
+            $dataCampaing = DB::connection(session('database'))
+                ->select("select cs.nombre, cs.descripcion, cs.fecha_inicio, cs.fecha_fin, cs.zona_ap, cs.vertical_economica, sc.width_logo_web, sc.container_form_color, sc.container_form_font_color, sc.button_font_color, sc.button_background_color, sc.title_portal, sc.color_title_portal, sc.width_logo_web, sc.width_logo_movil, tcc.terms_conditions_es, tcc.terms_conditions_en FROM campania cs 
+                INNER JOIN styles_campania sc ON sc.id_campania = cs.id
+                INNER JOIN terms_conditions_campania tcc on tcc.id_campania = cs.id 
+                WHERE cs.id = $id");
+                return response()->json([$dataCampaing[0],$getColumnNames], 200);
         } catch (\Throwable $th) {
-            return response()->json($campania, 500);
+            return response()->json($dataCampaing[0], 500);
         }
     }
 

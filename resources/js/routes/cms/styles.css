@@ -56,6 +56,9 @@
 .ql-blank{
     border-top: 1px solid white;
 }
+.ql-container {
+    height: 286px !important;
+}
 .termsCon{
     text-align: center;
     margin-bottom: 13px;
@@ -84,4 +87,7 @@
 }
 .Tab-wrap header button span{
     color: white!important;
+}
+.dark-mode .MuiInputBase-input  {
+    padding-left: 15px !important;
 }

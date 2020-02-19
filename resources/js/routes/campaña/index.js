@@ -54,10 +54,9 @@ export default class campañas extends Component {
 				vertical_economica:""
 			},
 		}
-		this.handleSubmit = this.handleSubmit.bind(this);
+		this.redirectCMS = this.redirectCMS.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.handleEdit = this.handleEdit.bind(this);
-		this.openAlertTest = this.openAlertTest.bind(this);
 		this.DataCampania = this.DataCampania.bind(this);
 		this.DashboardCampania = this.DashboardCampania.bind(this);
 
@@ -88,7 +87,7 @@ export default class campañas extends Component {
 			let datacampania = await res.json()
 			for (let i = 0; i < datacampania.length; i++) {
 				datacampania[i]["Editar"] = 
-				<Link to={location.pathname} onClick={() => this.openAlertTest('modaledit', datacampania[i].id)}>
+				<Link to={{pathname:location.pathname+'/editar/cms',state:{id_campaing: datacampania[i].id}}}>
 					<ListItemIcon className="menu-icon">
 						<i className='ti-pencil-alt' style={{margin:"0 auto"}}></i>
 					</ListItemIcon>
@@ -105,6 +104,12 @@ export default class campañas extends Component {
 						<i className='ti-pie-chart' style={{margin:"0 auto"}}></i>
 					</ListItemIcon>
 				</Link>
+				datacampania[i]["Portal"] =
+				<a href={datacampania[i].path_campania} target="_blank">
+					<ListItemIcon className="menu-icon">
+						<i className='ti-world' style={{margin:"0 auto"}}></i>
+					</ListItemIcon>
+				</a>
 			}
 
 			this.setState({
@@ -121,50 +126,14 @@ export default class campañas extends Component {
 	}
 
 
-	async handleSubmit(e) {
-		e.preventDefault()
-		try {
-			// let config = {
-			// 	method: 'POST',
-			// 	headers: {
-			// 		'Accept': 'application/json',
-			// 		'Content-Type': 'application/json'
-			// 	},
-			// 	body: JSON.stringify(this.state.form)
-			// };
-
-			// await fetch(`${localStorage.urlDomain}api/campanias`, config);
-			const {
-				nombre_campaña,
-				descripcion,
-				zona_ap,
-				anio,
-				vertical_economica,
-			} = this.state.form
-
-			if(((nombre_campaña == '' || descripcion == '') || (descripcion == '')) || ((zona_ap == '') || (anio == '' || vertical_economica == ''))){
-				NotificationManager.error('Los campos son obligatorios','',5000);
-			}else{
-				let redirectCMS = this.props.history.location.pathname;
-				let nameCampaingCreated = this.state.form.nombre_campaña
-				// this.props.history.push(redirectCMS+'/'+nameCampaingCreated+'/cms')// al terminar cms
-				this.props.history.push({
-					pathname: redirectCMS+'/crear/cms',
-					state: { form: this.state.form }
-				})
-				localStorage.setItem('campaingCreated',nameCampaingCreated);
-				this.setState({
-					prompt: false
-				})
-			}
-			// this.componentDidMount();
-
-		} catch (error) {
-			console.log(error);
-			this.setState({
-				error
-			});
-		}
+	redirectCMS() {
+		let redirectCMSLocation = this.props.history.location.pathname;
+		// let nameCampaingCreated = this.state.form.nombre_campaña
+		// this.props.history.push(redirectCMS+'/'+nameCampaingCreated+'/cms')// al terminar cms
+		this.props.history.push({
+			pathname: redirectCMSLocation +'/crear/cms',
+			state: { id_campaing: 0 }
+		})
 	}
 
 	async handleEdit(e) {
@@ -221,26 +190,6 @@ export default class campañas extends Component {
 	openAlert(key) {
 		this.setState({ [key]: true });
 	}
-	async openAlertTest(key, id) {
-		this.setState({ [key]: true });
-		let res = await fetch(`${localStorage.urlDomain}api/campanias/${id}/edit`);
-		let campania = await res.json();
-		this.setState({
-			form: {
-				...this.state.form,
-				nombre_campaña: campania.nombre,
-				fecha_inicio: campania.fecha_inicio,
-				fecha_fin: campania.fecha_fin,
-				descripcion: campania.descripcion,
-				zona_ap: campania.zona_ap,
-				anio: campania.ano_evento,
-				path_campania: campania.path_campania,
-				id_campain: id,
-
-			}
-		});
-
-	}
 
 	/**
 	 * On Cancel dialog
@@ -283,7 +232,7 @@ export default class campañas extends Component {
 	}
 	render() {
 		const { data, form } = this.state;
-		const columns = ['Nombre', 'Ultima Fecha','Total Registros', 'Fecha Inicio', 'Fecha Fin', 'Editar', 'Datos','Dashboard'];
+		const columns = ['Nombre', 'Ultima Fecha','Total Registros', 'Fecha Inicio', 'Fecha Fin', 'Editar', 'Datos','Dashboard', 'Portal'];
 		const { prompt, modaledit } = this.state;
 		const options = {
 			filterType: 'dropdown',
@@ -311,7 +260,7 @@ export default class campañas extends Component {
 							variant="contained"
 							color="primary"
 							className="botonCampaña"
-							onClick={() => this.openAlert('prompt')}
+							onClick={() => this.redirectCMS()}
 						>Crear campaña
 						</Button>
 
