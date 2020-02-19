@@ -57,6 +57,15 @@ function TabContainer({ children, dir }) {
    );
 }
 
+const toDataURL = url => fetch(url)
+   .then(response => response.blob())
+   .then(blob => new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onloadend = () => resolve(reader.result)
+      reader.onerror = reject
+      reader.readAsDataURL(blob)
+   }))
+
 export default class CMS extends Component {
    constructor(props){
       super(props)
@@ -86,6 +95,7 @@ export default class CMS extends Component {
             //campaña
             id_campaing: this.stateCampaing.id_campaing,
             nombre_campaña: "",
+            campaingForDelete:"",
 				fecha_inicio: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos) + ":00",
 				fecha_fin: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos) + ":00",
 				descripcion: "",
@@ -147,6 +157,7 @@ export default class CMS extends Component {
       this.handleSubmit = this.handleSubmit.bind(this)
       this.handleChangeTerms = this.handleChangeTerms.bind(this)
       this.settingValuesFormEdit = this.settingValuesFormEdit.bind(this)
+      this.handleSubmitEdit = this.handleSubmitEdit.bind(this)
    }
 
    async componentDidMount(){
@@ -175,9 +186,12 @@ export default class CMS extends Component {
       }
    }
 
+   
+
    async settingValuesFormEdit(id_campaing){
          let res = await fetch(`${localStorage.urlDomain}api/campanias/${id_campaing}/edit`);
          let dataCampaing = await res.json();
+         const urlDomain = localStorage.getItem('urlDomain')
          console.log(dataCampaing[0])
          let newState = {};
          dataCampaing[1].forEach(function(column, i) {
@@ -258,6 +272,65 @@ export default class CMS extends Component {
          let cleanRGBAFontFormString = colorFontForm.replace(/([rgba( )])/g,'')
          cleanRGBAFontFormString = cleanRGBAFontFormString.split(',')
 
+         if((dataCampaing[0].campania != 'Coworking' && dataCampaing[0].campania != 'Gammer') && (dataCampaing[0].campania != 'portal_cautivo_habitaciones' &&  dataCampaing[0].campania != 'portal_cautivo_formulario')){
+            toDataURL(urlDomain+'portales/'+dataCampaing[0].campania+dataCampaing[0].background)
+            .then(dataUrl => {
+               this.setState({
+                  form:{
+                     ...this.state.form,
+                     fileBackground:dataUrl
+                  }
+               })
+            })
+            toDataURL(urlDomain+'portales/'+dataCampaing[0].campania+dataCampaing[0].logo)
+            .then(dataUrl => {
+               this.setState({
+                  form:{
+                     ...this.state.form,
+                     fileLogo:dataUrl
+                  }
+               })
+            })
+         }
+         else if(dataCampaing[0].campania === 'Coworking'){
+            let urlUnicentro = "https://www.unicentro.ipwork.io/";
+            // toDataURL(urlUnicentro+dataCampaing[0].campania+dataCampaing[0].background)
+            // .then(dataUrl => {
+            //    this.setState({
+            //       form:{
+            //          ...this.state.form,
+            //          fileBackground:dataUrl
+            //       }
+            //    })
+            // })
+            // toDataURL(urlUnicentro+dataCampaing[0].campania+dataCampaing[0].logo)
+            // .then(dataUrl => {
+            //    this.setState({
+            //       form:{
+            //          ...this.state.form,
+            //          fileLogo:dataUrl
+            //       }
+            //    })
+            // })
+            this.setState({
+               form:{
+                  ...this.state.form,
+                  fileBackground:urlUnicentro+dataCampaing[0].campania+dataCampaing[0].background,
+                  fileLogo:urlUnicentro+dataCampaing[0].campania+dataCampaing[0].logo
+               }
+            })
+         }
+         else if(dataCampaing[0].campania == 'Gammer'){
+            let urlUnicentro = "https://www.unicentro.ipwork.io/";
+            this.setState({
+               form:{
+                  ...this.state.form,
+                  fileBackground:urlUnicentro+'Gamers'+dataCampaing[0].background,
+                  fileLogo:urlUnicentro+'Gamers'+dataCampaing[0].logo
+               }
+            })
+         }
+
          this.setState({
             form: {
                ...this.state.form,
@@ -271,6 +344,7 @@ export default class CMS extends Component {
                num_habitacion: newState.num_habitacion,
                razon_visita: newState.razon_visita,
                nombre_campaña: dataCampaing[0].nombre,
+               campaingForDelete: dataCampaing[0].campania,
                fecha_inicio: dataCampaing[0].fecha_inicio,
                fecha_fin: dataCampaing[0].fecha_fin,
                descripcion: dataCampaing[0].descripcion,
@@ -281,7 +355,8 @@ export default class CMS extends Component {
                titlePortal: dataCampaing[0].title_portal,
                sizeLogoMobile: widthMovilToInt,
                sizeLogoWeb: widthWebToInt,
-               // fileBackground: ,
+               // fileBackground:urlUnicentro,
+               // fileLogo:urlLogo,
                buttonColors: {
                   r:cleanRGBAButtonString[0],
                   g:cleanRGBAButtonString[1],
@@ -683,6 +758,7 @@ export default class CMS extends Component {
 
    // }
   
+  
    async handleSubmit(e){
       e.preventDefault();
       const {
@@ -736,6 +812,60 @@ export default class CMS extends Component {
       }
    }
 
+   async handleSubmitEdit(e){
+      e.preventDefault();
+      const {
+         id_campaing,
+         anio,
+         descripcion,
+         fecha_fin,
+         fecha_inicio,
+         nombre_campaña,
+         vertical_economica,
+         zona_ap,
+         terminos_condiciones_esp,
+         terminos_condiciones_eng,
+         titlePortal,
+         fileBackground,
+         fileLogo,
+         sizeLogoMobile,
+         sizeLogoWeb,
+         buttonColors,
+         backgroundColorForm,
+         colorTitleForm,
+         colorFontForm,
+         // imgsBannerSwitch,
+         // filesBanner,
+      } = this.state.form
+      console.log(this.state.form)
+      if((nombre_campaña == "" || descripcion == "") || (zona_ap == "" ||  vertical_economica == "")){
+         	NotificationManager.error('Los campos son obligatorios','',5000);
+      }
+      else if((terminos_condiciones_esp == "" || terminos_condiciones_eng == "") || (terminos_condiciones_esp == '<p><br></p>' || terminos_condiciones_eng == '<p><br></p>')){
+         NotificationManager.error('Los terminos y condiciones son requeridos',"",5000);
+      }
+      // else if(imgsBannerSwitch == true && !filesBanner.length){
+      //       NotificationManager.error('Las imagenes de banner son requeridas','',5000);
+      // }
+      else if( (((titlePortal == "" || fileBackground == "") || (fileLogo == "" || sizeLogoMobile == "")) || (sizeLogoWeb == "" || buttonColors == "") || (colorTitleForm == "" || colorFontForm == ""))){
+         NotificationManager.error('Todos los campos son obligatorios','',5000);
+      } 
+      else{
+         let config = {
+				method: 'PATCH',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(this.state.form)
+			};
+
+			await fetch(`${localStorage.urlDomain}api/campanias/` + id_campaing, config);
+
+         this.props.history.goBack();
+      }
+   }
+
    handleChangeTerms = () =>{
       if(!this.state.termsConditions){
          this.setState({
@@ -759,7 +889,7 @@ export default class CMS extends Component {
          direction: 'rlt'
       }
       const {
-         //constante campaña
+         id_campaing,
          anio,
          descripcion,
          fecha_fin,
@@ -1317,7 +1447,11 @@ export default class CMS extends Component {
                                                 } */}
                                           </div>
                                           <div className="col-lg-12" style={{paddingBottom:"35px",paddingTop:"10px"}}>
+                                             {id_campaing && id_campaing != 0 ?
+                                             <Button onClick={() => this.handleSubmitEdit(event)} color="primary" style={{ margin:"0 auto", padding:"10px 100px" }}>Editar</Button>
+                                                :
                                              <Button onClick={() => this.handleSubmit(event)} color="primary" style={{ margin:"0 auto", padding:"10px 100px" }}>Guardar</Button>
+                                             }
                                           </div>
                                        </div>
                                  </RctCardContent>

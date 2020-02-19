@@ -222,8 +222,6 @@ class CampañaController extends Controller
      */
     public function edit($id)
     {
-        // dd($id);
-        
         try {
             $table_name= DB::connection(session('database'))->table('campania')->select('campania')->where('id',$id)->first()->campania;
             $db = session('database');
@@ -232,13 +230,90 @@ class CampañaController extends Controller
             WHERE TABLE_SCHEMA = '".$db."' AND TABLE_NAME = '".$table_name."';");
 
             $dataCampaing = DB::connection(session('database'))
-                ->select("select cs.nombre, cs.descripcion, cs.fecha_inicio, cs.fecha_fin, cs.zona_ap, cs.vertical_economica, sc.width_logo_web, sc.container_form_color, sc.container_form_font_color, sc.button_font_color, sc.button_background_color, sc.title_portal, sc.color_title_portal, sc.width_logo_web, sc.width_logo_movil, tcc.terms_conditions_es, tcc.terms_conditions_en FROM campania cs 
+                ->select("SELECT cs.nombre, cs.campania, cs.descripcion, cs.fecha_inicio, cs.fecha_fin, cs.zona_ap, cs.vertical_economica, sc.width_logo_web, sc.container_form_color, sc.container_form_font_color, sc.button_font_color, sc.button_background_color, sc.title_portal, sc.color_title_portal, sc.width_logo_web, sc.width_logo_movil, tcc.terms_conditions_es, tcc.terms_conditions_en, (SELECT fc.nombre FROM files_campania fc WHERE fc.id_tipo_archivo_multimedia = 1 AND fc.id_campania = cs.id) AS background,(SELECT fc.nombre FROM files_campania fc WHERE fc.id_tipo_archivo_multimedia = 2 AND fc.id_campania = cs.id) AS logo, (SELECT fc.nombre FROM files_campania fc WHERE fc.id_tipo_archivo_multimedia = 3 AND fc.id_campania = cs.id) AS favico FROM campania cs 
                 INNER JOIN styles_campania sc ON sc.id_campania = cs.id
-                INNER JOIN terms_conditions_campania tcc on tcc.id_campania = cs.id 
+                INNER JOIN terms_conditions_campania tcc ON tcc.id_campania = cs.id 
                 WHERE cs.id = $id");
+
+                return response()->json([$dataCampaing[0],$getColumnNames], 200);
                 return response()->json([$dataCampaing[0],$getColumnNames], 200);
         } catch (\Throwable $th) {
-            return response()->json($dataCampaing[0], 500);
+            return response()->json($dataCampaing, 500);
+        }
+    }
+
+    public function deleteFolderFtp($NameTableForDelete){
+        Storage::disk("ftp_".session('database'),"")->deleteDirectory($NameTableForDelete);
+    }
+    
+    private function alterTable($NameTabla, $NameTableForDelete){
+        Schema::connection(session('database'))->rename($NameTableForDelete, $NameTabla);
+    }
+
+    private function update_Styles_Terms($request){
+        DB::connection(session('database'))->table('styles_campania')->where('id_campania', $request->id_campaing)->update([
+            'width_logo_web' => $request->sizeLogoWeb.'px',
+            'margin_logo_web' => '5%',
+            'width_logo_movil' => $request->sizeLogoMobile.'px',
+            'margin_logo_movil' => '5%',
+            'container_form_color' => "rgba(".$request->backgroundColorForm['r'].", ".$request->backgroundColorForm['g'].", ".$request->backgroundColorForm['b'].", ".$request->backgroundColorForm['a'].")",
+            'container_form_font_color' => "rgba(".$request->colorFontForm['r'].", ".$request->colorFontForm['g'].", ".$request->colorFontForm['b'].", ".$request->colorFontForm['a'].")",
+            'button_font_color' => "rgba(".$request->colorFontForm['r'].", ".$request->colorFontForm['g'].", ".$request->colorFontForm['b'].", ".$request->colorFontForm['a'].")",
+            'button_background_color' => "rgba(".$request->buttonColors['r'].", ".$request->buttonColors['g'].", ".$request->buttonColors['b'].", ".$request->buttonColors['a'].")",
+            'button_border_color' => "rgba(".$request->buttonColors['r'].", ".$request->buttonColors['g'].", ".$request->buttonColors['b'].", ".$request->buttonColors['a'].")",
+            'button_hover_font_color' => '#EEE',
+            'button_hover_background_color' => '#000',
+            'checkbox_terms_background_color' => "rgba(".$request->buttonColors['r'].", ".$request->buttonColors['g'].", ".$request->buttonColors['b'].", ".$request->buttonColors['a'].")",
+            'checkbox_terms_border_color' => "rgba(".$request->buttonColors['r'].", ".$request->buttonColors['g'].", ".$request->buttonColors['b'].", ".$request->buttonColors['a'].")",
+            'msg_error_color_font' => '#EEE',
+            'msg_error_color_background' => 'rgb(160,19,35,0.91)',
+            'title_portal' => $request->titlePortal,
+            'color_title_portal' => "rgba(".$request->colorTitleForm['r'].", ".$request->colorTitleForm['g'].", ".$request->colorTitleForm['b'].", ".$request->colorTitleForm['a'].")"
+        ]);
+
+        DB::connection(session('database'))->table('terms_conditions_campania')->where('id_campania', $request->id_campaing)->update([
+            'terms_conditions_es' => $request->terminos_condiciones_esp,
+            'terms_conditions_en' => $request->terminos_condiciones_eng         
+        ]);
+    }
+
+    private function sendImagesWithUpdate($request, $NameTable){
+
+        $background = explode(';base64,', $request->fileBackground);
+        Storage::disk("ftp_".session('database')."")->put($NameTable."/img/background.png", base64_decode($background[1]));
+
+        $logo = explode(';base64,', $request->fileLogo);
+        Storage::disk("ftp_".session('database')."")->put($NameTable."/img/logo.png", base64_decode($logo[1]));
+
+        Storage::disk("ftp_".session('database')."")->put($NameTable."/img/favicon.ico", base64_decode($logo[1]));
+        
+        DB::connection(session('database'))->table('files_campania')->where('id_campania', $request->id_campaing)->where('id_tipo_archivo_multimedia', 1)->update([
+            'id_tipo_archivo_multimedia' => 1,
+            'nombre' => '/img/background.png',
+            'fecha_creacion' => date('Y-m-d H:i:s')         
+        ]);
+        DB::connection(session('database'))->table('files_campania')->where('id_campania', $request->id_campaing)->where('id_tipo_archivo_multimedia', 2)->update([
+            'id_tipo_archivo_multimedia' => 2,
+            'nombre' => '/img/logo.png',
+            'fecha_creacion' => date('Y-m-d H:i:s')
+        ]);
+        DB::connection(session('database'))->table('files_campania')->where('id_campania', $request->id_campaing)->where('id_tipo_archivo_multimedia', 3)->update([
+            'id_tipo_archivo_multimedia' => 3,
+            'nombre' => '/img/favicon.ico',
+            'fecha_creacion' => date('Y-m-d H:i:s')
+        ]);
+        
+        if($request->imgsBannerSwitch && count($request->filesBanner) > 0){
+            for($i=0; $i < count($request->filesBanner); $i++){
+                $banner = explode(';base64,', $request->filesBanner[$i]);
+                Storage::disk("ftp_".session('database')."")->put($NameTable."/img/banner/banner".($i+1).".png", base64_decode($banner[1]));
+                DB::connection(session('database'))->table('banner_files_campania')->insert([
+                    'id_campania' => $campaña->id,
+                    'nombre_img_web' => "/img/banner/banner".($i+1).".png",
+                    'nombre_img_movil' => "/img/banner/banner".($i+1).".png",
+                    'fecha_creacion' => date('Y-m-d H:i:s')
+                ]);
+            }
         }
     }
 
@@ -251,12 +326,43 @@ class CampañaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $campania = DB::connection(session('database'))
+        $NameTable = str_replace(["-", " "],"_",$request->nombre_campaña."_".date('Y-m-d', strtotime($request->fecha_inicio)));
+
+        $NameTableForDelete = $request->campaingForDelete;
+        
+        if($NameTableForDelete != $NameTable){
+            CampañaController::alterTable($NameTable, $NameTableForDelete);
+            $campania = DB::connection(session('database'))
             ->table('campania')
             ->where('id', $id)
-            ->update(['nombre' => $request->nombre_campaña,'fecha_inicio' => $request->fecha_inicio,'fecha_fin' => $request->fecha_fin,'descripcion' => $request->descripcion,'zona_ap' => $request->zona_ap,'ano_evento' => $request->anio]);
+            ->update(['nombre' => $request->nombre_campaña,'fecha_inicio' => $request->fecha_inicio,'fecha_fin' => $request->fecha_fin,'descripcion' => $request->descripcion,'zona_ap' => $request->zona_ap,'ano_evento' => $request->anio, 'campania' => $NameTable,'vertical_economica' => $request->vertical_economica]);
+        
+            CampañaController::update_Styles_Terms($request);
+
+            CampañaController::deleteFolderFtp($NameTableForDelete);
+
+            CampañaController::ftp_portal_cautivo($NameTable);
             
-        SideBarController::getSideBarRol(session('rol'),session('database'));
+            CampañaController::sendImagesWithUpdate($request, $NameTable);
+
+            SideBarController::getSideBarRol(session('rol'),session('database'));
+        }else{
+            $campania = DB::connection(session('database'))
+            ->table('campania')
+            ->where('id', $id)
+            ->update(['nombre' => $request->nombre_campaña,'fecha_inicio' => $request->fecha_inicio,'fecha_fin' => $request->fecha_fin,'descripcion' => $request->descripcion,'zona_ap' => $request->zona_ap,'ano_evento' => $request->anio, 'campania' => $NameTable,'vertical_economica' => $request->vertical_economica]);
+        
+            CampañaController::update_Styles_Terms($request);
+
+            CampañaController::deleteFolderFtp($NameTableForDelete);
+
+            CampañaController::ftp_portal_cautivo($NameTable);
+            
+            CampañaController::sendImagesWithUpdate($request, $NameTable);
+            
+            SideBarController::getSideBarRol(session('rol'),session('database'));
+        }
+
     }
 
     /**
