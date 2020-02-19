@@ -234,6 +234,7 @@ export default class campañas extends Component {
 				descripcion: campania.descripcion,
 				zona_ap: campania.zona_ap,
 				anio: campania.ano_evento,
+				path_campania: campania.path_campania,
 				id_campain: id,
 
 			}
@@ -282,7 +283,7 @@ export default class campañas extends Component {
 	}
 	render() {
 		const { data, form } = this.state;
-		const columns = ['Nombre', 'Descripcion', 'Fecha Inicio', 'Fecha Fin', 'Editar', 'Datos','Dashboard'];
+		const columns = ['Nombre', 'Ultima Fecha','Total Registros', 'Fecha Inicio', 'Fecha Fin', 'Editar', 'Datos','Dashboard'];
 		const { prompt, modaledit } = this.state;
 		const options = {
 			filterType: 'dropdown',
@@ -530,6 +531,13 @@ export default class campañas extends Component {
 											placeholder="Año"
 											onChange={() => this.handleChangeEdit(event)}
 										/>
+									</div>
+									<div className="col-lg-12">
+										<label>Dirección Portal Cautivo:  
+											{form.path_campania && 
+												<a href={form.path_campania} target="_blank"> {form.path_campania}</a>
+											}
+										</label>
 									</div>
 								</div>
 

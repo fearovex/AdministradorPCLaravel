@@ -421,7 +421,6 @@ class RadiusController extends Controller
     public function getConnectedOldPeopleCampaing(Request $request){
         $database = session('database');
         $users_radius = RadiusController::getUsersRadius($request);
-        return $users_radius;
         $whereUsersQuery = "";
         
         $count = count($users_radius);
