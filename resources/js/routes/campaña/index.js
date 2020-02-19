@@ -104,6 +104,12 @@ export default class campañas extends Component {
 						<i className='ti-pie-chart' style={{margin:"0 auto"}}></i>
 					</ListItemIcon>
 				</Link>
+				datacampania[i]["Portal"] =
+				<a href={datacampania[i].path_campania} target="_blank">
+					<ListItemIcon className="menu-icon">
+						<i className='ti-world' style={{margin:"0 auto"}}></i>
+					</ListItemIcon>
+				</a>
 			}
 
 			this.setState({
@@ -226,7 +232,7 @@ export default class campañas extends Component {
 	}
 	render() {
 		const { data, form } = this.state;
-		const columns = ['Nombre', 'Descripcion', 'Fecha Inicio', 'Fecha Fin', 'Editar', 'Datos','Dashboard'];
+		const columns = ['Nombre', 'Ultima Fecha','Total Registros', 'Fecha Inicio', 'Fecha Fin', 'Editar', 'Datos','Dashboard', 'Portal'];
 		const { prompt, modaledit } = this.state;
 		const options = {
 			filterType: 'dropdown',
@@ -474,6 +480,13 @@ export default class campañas extends Component {
 											placeholder="Año"
 											onChange={() => this.handleChangeEdit(event)}
 										/>
+									</div>
+									<div className="col-lg-12">
+										<label>Dirección Portal Cautivo:  
+											{form.path_campania && 
+												<a href={form.path_campania} target="_blank"> {form.path_campania}</a>
+											}
+										</label>
 									</div>
 								</div>
 

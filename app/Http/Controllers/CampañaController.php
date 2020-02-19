@@ -51,6 +51,7 @@ class CampañaController extends Controller
         $campaña->id_locacion = $request->id_location;
         $campaña->campania = $NameTabla;
         $campaña->vertical_economica = $request->vertical_economica;
+        $campaña->path_campania = env("APP_URL").$NameTabla;
         $campaña->save();
         
         CampañaController::createTable($request, $NameTabla);
@@ -205,12 +206,15 @@ class CampañaController extends Controller
      */
     public function show($id)
     {
-        $zonas = DB::connection(session('database'))
-        ->table('campania')
-            ->select('id','nombre as Nombre','descripcion as Descripcion','fecha_inicio as Fecha Inicio','fecha_fin as Fecha Fin', 'campania','vertical_economica as Vertical')
+        $table = DB::connection(session('database'))
+            ->table('campania')
+            ->select('campania')
             ->where('id_locacion', $id)
-            ->get();
-            
+            ->first();
+        $zonas = DB::connection(session('database'))
+            ->select("
+                select id, nombre as Nombre, (select fecha_creacion from $table->campania order by fecha_creacion desc limit 1) as 'Ultima Fecha', (select count(*) from $table->campania) as 'Total Registros', fecha_inicio as 'Fecha Inicio', fecha_fin as 'Fecha Fin', campania, vertical_economica as Vertical, path_campania from campania where id_locacion = $id
+            ");
         return response()->json($zonas, 200);
     }
 

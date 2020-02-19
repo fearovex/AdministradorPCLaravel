@@ -8,6 +8,31 @@ use Config;
 
 class RadiusController extends Controller
 {
+    public function getUsersRadius(Request $request){
+        $database = session('database');
+        $fecha_inicial =  $request->initialDate;  
+        $fecha_final   =  $request->finalDate;
+        $usersRadius = [];
+        if($request->id_event == 0 && $request->id_location){
+            $tables = DB::connection($database)->select('select campania from campania where id_locacion ='.$request->id_location);
+            foreach($tables as $table){
+                $users = DB::connection($database)->select("select ur.username from users_radius ur inner join $table->campania t on ur.id_cliente = t.id where t.fecha_creacion between '$fecha_inicial' and '$fecha_final'");
+                array_push($usersRadius, $users);
+            } 
+            return $usersRadius;
+        }
+        else if($request->id_campaing){
+            $table = DB::connection($database)->select('select campania from campania where id ='.$request->id_campaing)[0];
+            $users = DB::connection($database)->select("select ur.username from users_radius ur inner join $table->campania t on ur.id_cliente = t.id where t.fecha_creacion between '$fecha_inicial' and '$fecha_final'");
+            array_push($usersRadius, $users);
+            return $usersRadius[0];
+        }
+        else{
+            $usersRadius = [];
+            return $usersRadius;
+        }
+    }
+
     public function getDataRadiusTimeAverage(Request $request){
         $database = session('database');
         $tabla = DB::connection($database)->table('campania')->select('campania')->where('id', $request->id_campaing)->first();
@@ -339,25 +364,18 @@ class RadiusController extends Controller
     
     public function getConnectedNewPeopleLocation(Request $request){
         $database = session('database');
-        $users_radius = DB::connection($database)
-            ->table('users_radius as ur')
-            ->join('campania as c', 'ur.id_campania', '=', 'c.id')
-            ->join('locaciones as l', 'c.id_locacion', '=', 'l.id')
-            ->select('ur.username')
-            ->where('l.id', $request->id_location)
-            ->get();
-
+        $users_radius = RadiusController::getUsersRadius($request);
         $whereUsersQuery = "";
-        $count = count($users_radius);
+        $count = count($users_radius[0]);
         if ($count > 0) {
-            foreach ($users_radius as $key => $user) {
-                $whereUsersQuery .= "r.username='" . $user->username . "'";
-                if (($count - 1) > $key) {
-                    $whereUsersQuery .= " OR ";
+            foreach ($users_radius as $users) {
+                foreach ($users as $user){
+                    $whereUsersQuery .= "'" . $user->username . "',";
                 }
             }
+            $whereUsersQuery = substr($whereUsersQuery, 0, -1);
             $connectedNewPeopleLocation = DB::connection('radius')->select(
-                "select count(connected) as newPeople FROM (SELECT COUNT(*) connected, username FROM radacct as r where r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate' and ($whereUsersQuery) GROUP BY username ORDER BY connected ASC) AS rd WHERE rd.connected = 1 GROUP BY rd.connected");
+                "select count(s.cantidad) newPeople from (select count(*) cantidad, r.username FROM radacct as r where r.username in ($whereUsersQuery) and (r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate') GROUP BY r.username having cantidad = 1) s");
             if(!$connectedNewPeopleLocation){
                 $connectedNewPeopleLocation[0] = [
                     'newPeople' => 0
@@ -374,25 +392,18 @@ class RadiusController extends Controller
 
     public function getConnectedOldPeopleLocation(Request $request){
         $database = session('database');
-        $users_radius = DB::connection($database)
-            ->table('users_radius as ur')
-            ->join('campania as c', 'ur.id_campania', '=', 'c.id')
-            ->join('locaciones as l', 'c.id_locacion', '=', 'l.id')
-            ->select('ur.username')
-            ->where('l.id', $request->id_location)
-            ->get();
-
+        $users_radius = RadiusController::getUsersRadius($request);
         $whereUsersQuery = "";
         $count = count($users_radius);
         if ($count > 0) {
-            foreach ($users_radius as $key => $user) {
-                $whereUsersQuery .= "r.username='" . $user->username . "'";
-                if (($count - 1) > $key) {
-                    $whereUsersQuery .= " OR ";
+            foreach ($users_radius as $users) {
+                foreach ($users as $user){
+                    $whereUsersQuery .= "'" . $user->username . "',";
                 }
             }
+            $whereUsersQuery = substr($whereUsersQuery, 0, -1);
             $connectedOldPeopleLocation = DB::connection('radius')->select(
-                "select count(connected) as oldPeople FROM (SELECT COUNT(*) connected, username FROM radacct as r where r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate' and ($whereUsersQuery) GROUP BY username ORDER BY connected ASC) AS rd WHERE rd.connected > 1 GROUP BY rd.connected");
+                "select count(s.cantidad) oldPeople from (select count(*) cantidad, r.username FROM radacct as r where r.username in ($whereUsersQuery) and (r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate') GROUP BY r.username having cantidad > 1) s");
             if(!$connectedOldPeopleLocation){
                 $connectedOldPeopleLocation[0] = [
                     'oldPeople' => 0
@@ -409,26 +420,17 @@ class RadiusController extends Controller
 
     public function getConnectedOldPeopleCampaing(Request $request){
         $database = session('database');
-        $users_radius = DB::connection($database)
-            ->table('users_radius as ur')
-            ->join('campania as c', 'ur.id_campania', '=', 'c.id')
-            ->join('locaciones as l', 'c.id_locacion', '=', 'l.id')
-            ->select('ur.username')
-            ->where('c.id', $request->id_campaing)
-            ->get();
-
+        $users_radius = RadiusController::getUsersRadius($request);
         $whereUsersQuery = "";
         
         $count = count($users_radius);
         if ($count > 0) {
-            foreach ($users_radius as $key => $user) {
-                $whereUsersQuery .= "r.username='" . $user->username . "'";
-                if (($count - 1) > $key) {
-                    $whereUsersQuery .= " OR ";
-                }
+            foreach ($users_radius as $user) {
+                $whereUsersQuery .= "r.username='" . $user->username . "',";
             }
+            $whereUsersQuery = substr($whereUsersQuery, 0, -1);
             $connectedOldPeopleCampaing = DB::connection('radius')->select(
-                "select count(connected) as traditionalPeople FROM (SELECT COUNT(*) connected, username FROM radacct as r where r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate' and ($whereUsersQuery) GROUP BY username ORDER BY connected ASC) AS rd WHERE rd.connected > 1 GROUP BY rd.connected");
+                "select count(s.cantidad) traditionalPeople from (select count(*) cantidad, r.username FROM radacct as r where r.username in ($whereUsersQuery) and (r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate') GROUP BY r.username having cantidad > 1) s");
             if(!$connectedOldPeopleCampaing){
                 $connectedOldPeopleCampaing[0] = [
                     'traditionalPeople' => 0
@@ -444,26 +446,18 @@ class RadiusController extends Controller
 
     public function getConnectedNewPeopleCampaing(Request $request){
         $database = session('database');
-        $users_radius = DB::connection($database)
-            ->table('users_radius as ur')
-            ->join('campania as c', 'ur.id_campania', '=', 'c.id')
-            ->join('locaciones as l', 'c.id_locacion', '=', 'l.id')
-            ->select('ur.username')
-            ->where('c.id', $request->id_campaing)
-            ->get();
+        $users_radius = RadiusController::getUsersRadius($request);
 
         $whereUsersQuery = "";
         
         $count = count($users_radius);
         if ($count > 0) {
             foreach ($users_radius as $key => $user) {
-                $whereUsersQuery .= "r.username='" . $user->username . "'";
-                if (($count - 1) > $key) {
-                    $whereUsersQuery .= " OR ";
-                }
+                $whereUsersQuery .= "r.username='" . $user->username . "',";
             }
+            $whereUsersQuery = substr($whereUsersQuery, 0, -1);
             $connectedNewPeopleCampaing = DB::connection('radius')->select(
-                "select count(connected) as newPeople FROM (SELECT COUNT(*) connected, username FROM radacct as r where r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate' and ($whereUsersQuery) GROUP BY username ORDER BY connected ASC) AS rd WHERE rd.connected = 1 GROUP BY rd.connected");
+                "select count(s.cantidad) newPeople from (select count(*) cantidad, r.username FROM radacct as r where r.username in ($whereUsersQuery) and (r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate') GROUP BY r.username having cantidad > 1) s");
             if(!$connectedNewPeopleCampaing){
                 $connectedNewPeopleCampaing[0] = [
                     'newPeople' => 0

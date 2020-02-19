@@ -694,7 +694,7 @@ export default class Analytical extends Component {
                     fullBlock
                 >
                     <div className="row" style={{ padding: '0 20px'}}>
-                        <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
+                        <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                             <CardInfo 
                                 titleName={"Promedio"}
                                 dataNum={promedyTimeSession.promedy ? promedyTimeSession.promedy : 0}
@@ -703,7 +703,7 @@ export default class Analytical extends Component {
                                 classColor={"primary"}
                             />
                         </div>
-                        <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
+                        {/* <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
                             <CardInfo 
                                 titleName={"Total"}
                                 dataNum={totalTimeSession.total ? totalTimeSession.total : 0}
@@ -711,7 +711,7 @@ export default class Analytical extends Component {
                                 time={` ${totalTimeSession.type ? totalTimeSession.type : 'Seg'}`}
                                 classColor={"secondary"}
                             />
-                        </div>
+                        </div> */}
                     </div>
                 </RctCollapsibleCard>
                 <RctCollapsibleCard

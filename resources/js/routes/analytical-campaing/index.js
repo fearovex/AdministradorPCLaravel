@@ -824,7 +824,7 @@ export default class AnalyticalCampaing extends Component {
                             fullBlock
                         >
                             <div className="row" style={{ padding: '0 20px'}}>
-                                <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
+                                <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                                     <CardInfo 
                                         titleName={"Promedio"}
                                         dataNum={timeConnectionRadius ? timeConnectionRadius : 0}
@@ -833,7 +833,7 @@ export default class AnalyticalCampaing extends Component {
                                         classColor={"primary"}
                                     />
                                 </div>
-                                <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
+                                {/* <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
                                     <CardInfo 
                                         titleName={"Total"}
                                         dataNum={timeConnectionRadiusTotal ? timeConnectionRadiusTotal : 0}
@@ -841,7 +841,7 @@ export default class AnalyticalCampaing extends Component {
                                         time={` ${this.state.typeTotal ? this.state.typeTotal : 'Seg'}`}
                                         classColor={"secondary"}
                                     />
-                                </div>
+                                </div> */}
                             </div>
                             {/* <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
                                 <CardInfo
