@@ -28,60 +28,25 @@ export default class campañas extends Component {
 		super(props)
 
 		const id_location = localStorage.user_location
-
-		let date = moment(new Date, 'YYYY/MM/DD hh:mm a');
-		let año = date.year();
-		let mes = date.month() + 1;
-		let dia = date.dates();
-		let hora = date.hours();
-		let minutos = date.minute();
-
 		this.state = {
 			data: [],
 			error: null,
-			activeStep: 0,
 			prompt: false,
 			id_location: id_location,
 			campania: [],
-			modaledit: false,
-			form: {
-				nombre_campaña: "",
-				fecha_inicio: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos) + ":00",
-				fecha_fin: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos) + ":00",
-				descripcion: "",
-				zona_ap: "",
-				anio: "",
-				vertical_economica:""
-			},
+			url:false
 		}
 		this.redirectCMS = this.redirectCMS.bind(this);
-		this.handleChange = this.handleChange.bind(this);
-		this.handleEdit = this.handleEdit.bind(this);
 		this.DataCampania = this.DataCampania.bind(this);
 		this.DashboardCampania = this.DashboardCampania.bind(this);
+
+		this.openUrl = this.openUrl.bind(this);
+		this.closeUrl = this.closeUrl.bind(this);
 
 	}
 	async componentDidMount() {
 		const id_location = localStorage.user_location
 		const { location } = this.props
-		try {
-			let res = await fetch(`${localStorage.urlDomain}api/zonas/${id_location}`)
-			let data = await res.json()
-
-			this.setState({
-				data: data,
-				form: {
-					...this.state.form,
-					id_location: id_location
-					
-				}
-			})
-
-		} catch (error) {
-			this.setState({
-				error
-			})
-		}
 		try {
 			let res = await fetch(`${localStorage.urlDomain}api/campanias/${id_location}`)
 			let datacampania = await res.json()
@@ -105,7 +70,7 @@ export default class campañas extends Component {
 					</ListItemIcon>
 				</Link>
 				datacampania[i]["Portal"] =
-				<a href={datacampania[i].path_campania} target="_blank">
+				<a onClick={() => this.openUrl('url',datacampania[i].path_campania)} target="_blank">
 					<ListItemIcon className="menu-icon">
 						<i className='ti-world' style={{margin:"0 auto"}}></i>
 					</ListItemIcon>
@@ -136,41 +101,6 @@ export default class campañas extends Component {
 		})
 	}
 
-	async handleEdit(e) {
-		e.preventDefault()
-		try {
-			let config = {
-				method: 'PATCH',
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(this.state.form)
-			};
-
-			await fetch(`${localStorage.urlDomain}api/campanias/` + this.state.form.id_campain, config);
-
-			this.setState({
-				modaledit: false
-			})
-
-			this.componentDidMount();
-
-		} catch (error) {
-			console.log(error);
-			this.setState({
-				error
-			});
-		}
-	}
-
-
-
-	onConfirm(key) {
-		this.setState({ [key]: false })
-	}
-
-
 	DataCampania(id_campaing, name_campaing) {
 		localStorage.setItem('user_campaing', id_campaing);
 		localStorage.setItem('user_name_campaing', name_campaing);
@@ -187,53 +117,26 @@ export default class campañas extends Component {
 	 * Open Alert
 	 * @param {key} key
 	 */
-	openAlert(key) {
-		this.setState({ [key]: true });
+	openUrl(key,portalUrl) {
+		this.setState({ 
+			[key]: true,
+			portalUrl:portalUrl
+		 });
 	}
 
 	/**
 	 * On Cancel dialog
 	 * @param {string} key
 	 */
-	onCancel(key) {
+	closeUrl(key) {
 		this.setState({ [key]: false })
 	}
-	handleChange(e, name=null) {
-		if(e.target){
-            this.setState({
-                form:{
-                    ...this.state.form,
-                    [e.target.name]: e.target.value
-                }
-            })
-        }
-        else if(e._d){
-            let date = moment(e._d, 'YYYY/MM/DD hh:mm a');
-            let año = date.year();
-            let mes = date.month()+1;
-            let dia = date.date();
-            let hora = date.hour();
-            let minutos = date.minute();
-            this.setState({
-                form:{
-            		...this.state.form,
-                    [name]: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos)
-                }
-            })
-        }
-	}
-	handleChangeEdit(e) {
-		this.setState({
-			form: {
-				...this.state.form,
-				[e.target.name]: e.target.value
-			}
-		})
-	}
+	
+	
+
 	render() {
-		const { data, form } = this.state;
 		const columns = ['Nombre', 'Ultima Fecha','Total Registros', 'Fecha Inicio', 'Fecha Fin', 'Editar', 'Datos','Dashboard', 'Portal'];
-		const { prompt, modaledit } = this.state;
+		const { url, portalUrl } = this.state;
 		const options = {
 			filterType: 'dropdown',
 			selectableRows: false,
@@ -255,7 +158,6 @@ export default class campañas extends Component {
 				/>
 				<div className="blank-wrapper">
 					<div className="sweet-alert-wrapper">
-
 						<Button
 							variant="contained"
 							color="primary"
@@ -263,240 +165,23 @@ export default class campañas extends Component {
 							onClick={() => this.redirectCMS()}
 						>Crear campaña
 						</Button>
-
-
 						<SweetAlert
-
+							info
 							btnSize="sm"
-							show={prompt}
-							showCancel
-							confirmBtnText="Siguiente"
-							cancelBtnText="Cancelar"
-							cancelBtnBsStyle="danger"
-							confirmBtnBsStyle="primary"
-							title="Agregar Campaña"
-							onConfirm={() => this.handleSubmit(event)}
-							onCancel={() => this.onCancel('prompt')}
+							show={url}
+							// showCancel
+							confirmBtnText="Cerrar"
+							confirmBtnBsStyle="danger"
+							// cancelBtnBsStyle="danger"
+							title="Url Portal Cautivo"
+							// onConfirm={() => this.openUrl('url')}
+							onConfirm={() => this.closeUrl('url')}
 						>
+							<div style={{color: "#50b2c1", wordWrap:"break-word",border: "1px solid white", margin: "24px 73px", fontSize: "17px", padding:"20px"}}>{portalUrl}</div>
+        				</SweetAlert>
 
-
-
-							<form onSubmit={this.handleSubmit}>
-								<div className="row">
-									<div className="col-lg-5 mb-4 ml-3" >
-										<Input
-											type="text"
-											name="nombre_campaña"
-											id="nombre_campaña"
-											className="has-input input-lg "
-											placeholder="Nombre campaña"
-											onChange={() => this.handleChange(event)}
-										/>
-									</div>
-									<div className="col-lg-6">
-										<Select name="zona_ap" native onChange={() => this.handleChange(event)}
-											className="has-input input-lg generalMarginInputs"
-										>
-											<option value="">Seleccione una zona</option>
-											{data && data.map((data) => (
-
-												<option key={data.id} value={data.id}>{data.Nombre}</option>
-											))}
-
-										</Select>
-									</div>
-								</div>
-								<div className="row">
-									<div className="col-lg-5 mb-4 ml-3" >
-										<DateTimePicker
-											className="has-input input-lg "
-											key="fecha_inicio"
-											label="Fecha Inicio"
-											// style={{marginRight:"1.9em"}}
-											required
-											value={form.fecha_inicio}
-											format="YYYY/MM/DD hh:mm a"
-											onChange={(event) => this.handleChange(event, 'fecha_inicio')}
-											animateYearScrolling={false}
-											leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
-											rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
-											showTodayButton={true}
-										/>
-									</div>
-									<div className="col-lg-6">
-										<DateTimePicker
-											className="has-input input-lg "
-											key="fecha_fin"
-											label="Fecha Fin"
-											style={{marginRight:"1.9em"}}
-											required
-											value={form.fecha_fin}
-											minDate={moment(form.fecha_inicio, 'YYYY/MM/DD hh:mm a')}
-											format="YYYY/MM/DD hh:mm a"
-											onChange={(event) => this.handleChange(event, 'fecha_fin')}
-											animateYearScrolling={false}
-											leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
-											rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
-											showTodayButton={true}
-										/>
-									</div>
-								</div>
-								<div className="row">
-									<div className="col-lg-5 mb-4 ml-3" >
-
-										<Input
-											type="text"
-											name="descripcion"
-											id="descripcion"
-											className="has-input input-lg "
-											placeholder="Descripción"
-											onChange={() => this.handleChange(event)}
-										/>
-									</div>
-									<div className="col-lg-6">
-										<Input
-											type="text"
-											name="anio"
-											id="anio"
-											className="has-input input-lg generalMarginInputs"
-											placeholder="Año"
-											onChange={() => this.handleChange(event)}
-										/>
-									</div>
-									<div className="col-lg-10">
-										<Select name="vertical_economica" native onChange={() => this.handleChange(event)}
-											className="has-input input-lg generalMarginInputs"
-										>
-											<option value="">Seleccione una vertical</option>
-											<option value='Hoteles'>Hoteles</option>
-											<option value='Centros Comerciales'>Centros Comerciales</option>
-
-										</Select>
-									</div>
-								</div>
-
-
-							</form>
-
-						</SweetAlert>
-
-						<SweetAlert
-
-							btnSize="sm"
-							show={modaledit}
-							showCancel
-							confirmBtnText="Editar"
-							cancelBtnText="Cancelar"
-							cancelBtnBsStyle="danger"
-							confirmBtnBsStyle="primary"
-							title="Editar Campaña"
-							onConfirm={() => this.handleEdit(event)}
-							onCancel={() => this.onCancel('modaledit')}
-						>
-
-
-
-							<form onSubmit={this.handleEdit}>
-								<div className="row">
-									<div className="col-lg-5 mb-4 ml-3" >
-										<Input
-											type="text"
-											name="nombre_campaña"
-											id="nombre_campaña"
-											value={this.state.form.nombre_campaña}
-											className="has-input input-lg "
-											placeholder="Nombre campaña"
-											onChange={() => this.handleChangeEdit(event)}
-										/>
-									</div>
-									<div className="col-lg-6">
-										<Select name="zona_ap" native onChange={() => this.handleChangeEdit(event)}
-											className="has-input input-lg generalMarginInputs"
-											value={this.state.form.zona_ap}
-										>
-											<option value="">Seleccione una zona</option>
-											{data && data.map((data) => (
-
-												<option key={data.id} value={data.id}>{data.Nombre}</option>
-											))}
-
-										</Select>
-									</div>
-								</div>
-								<div className="row">
-									<div className="col-lg-5 mb-4 ml-3" >
-										<DateTimePicker
-											className="has-input input-lg "
-											key="fecha_inicio"
-											label="Fecha Inicio"
-											required
-											value={form.fecha_inicio}
-											format="YYYY/MM/DD hh:mm a"
-											onChange={(event) => this.handleChange(event, 'fecha_inicio')}
-											animateYearScrolling={false}
-											leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
-											rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
-											showTodayButton={true}
-										/>
-									</div>
-									<div className="col-lg-6">
-										<DateTimePicker
-											className="has-input input-lg "
-											key="fecha_fin"
-											label="Fecha Fin"
-											style={{marginRight:"1.9em"}}
-											required
-											value={form.fecha_fin}
-											minDate={moment(form.fecha_inicio, 'YYYY/MM/DD hh:mm a')}
-											format="YYYY/MM/DD hh:mm a"
-											onChange={(event) => this.handleChange(event, 'fecha_fin')}
-											animateYearScrolling={false}
-											leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
-											rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
-											showTodayButton={true}
-										/>
-									</div>
-								</div>
-								<div className="row">
-									<div className="col-lg-5 mb-4 ml-3" >
-
-										<Input
-											type="text"
-											name="descripcion"
-											id="descripcion"
-											value={this.state.form.descripcion}
-											className="has-input input-lg "
-											placeholder="Descripción"
-											onChange={() => this.handleChangeEdit(event)}
-										/>
-									</div>
-									<div className="col-lg-6">
-										<Input
-											type="text"
-											name="anio"
-											id="anio"
-											value={this.state.form.anio}
-											className="has-input input-lg generalMarginInputs"
-											placeholder="Año"
-											onChange={() => this.handleChangeEdit(event)}
-										/>
-									</div>
-									<div className="col-lg-12">
-										<label>Dirección Portal Cautivo:  
-											{form.path_campania && 
-												<a href={form.path_campania} target="_blank"> {form.path_campania}</a>
-											}
-										</label>
-									</div>
-								</div>
-
-
-							</form>
-
-						</SweetAlert>
 					</div>
 				</div>
-
 
 				<RctCollapsibleCard fullBlock>
 					<MUIDataTable

@@ -77,10 +77,17 @@ export default class DetailEvents extends Component {
 
 		   //Proceso DataTable -> Se gregan los nombres a un arreglo para luego pasarlos al data table
 			let arrayNames=[]
+			let dbDataDifference = localStorage.getItem('user_database');
 			for (let i = 0; i < dataNameColumns.length; i++) {
 				arrayNames.push.apply(arrayNames, Object.values(dataNameColumns[i]))
 			}
 			arrayNames = arrayNames.filter(names => names != 'id' && names != 'Campania' && names != 'Pais')
+			if(dbDataDifference == 'unicentro'){
+				arrayNames = arrayNames.filter(names => names != 'estado_nombre' && names != 'Campania' && names != 'Pais' && names != 'estado_apellidos' && names != 'estado_email' && names != 'estado_edad' && names != 'estado_telefono' && names != 'estado_genero' && names != 'estado_num_voucher' && names != 'estado_num_habitacion' && names != 'estado_razon_visita' && names != 'num_voucher' && names != 'num_habitacion' && names != 'razon_visita')
+			}
+			else if(dbDataDifference == 'portal_oxohotel'){
+				arrayNames = arrayNames.filter(names => names != 'estado_nombre' && names != 'Campania' && names != 'Pais' && names != 'estado_apellidos' && names != 'estado_email' && names != 'estado_edad' && names != 'estado_telefono' && names != 'estado_genero' && names != 'estado_num_voucher' && names != 'estado_num_habitacion' && names != 'estado_razon_visita' && names != 'Email' && names != 'Edad' && names != 'Telefono' && names != 'Genero')
+			}
 			 // fin Proceso DataTable
 
 			 //Consulta Detalle -> Se consulta el detalle del evento de acuerdo a su tabla en la bd

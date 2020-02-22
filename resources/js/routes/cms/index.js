@@ -192,35 +192,35 @@ export default class CMS extends Component {
          let res = await fetch(`${localStorage.urlDomain}api/campanias/${id_campaing}/edit`);
          let dataCampaing = await res.json();
          const urlDomain = localStorage.getItem('urlDomain')
-         console.log(dataCampaing[0])
          let newState = {};
          dataCampaing[1].forEach(function(column, i) {
             // console.log("En el índice " + i + " hay este valor: " + column.COLUMN_NAME);
-            if(column.COLUMN_NAME == 'email'){
-               Object.assign(newState, {email: true})
-            }
-            if(column.COLUMN_NAME == 'nombre'){
+            
+            if(column.COLUMN_NAME == 'estado_nombre'){
               Object.assign(newState, {nombre: true})
             }
-            if(column.COLUMN_NAME == 'apellidos'){
+            if(column.COLUMN_NAME == 'estado_apellidos'){
               Object.assign(newState, {apellidos: true})
             }
-            if(column.COLUMN_NAME == 'edad'){
+            if(column.COLUMN_NAME == 'estado_email'){
+               Object.assign(newState, {email: true})
+            }
+            if(column.COLUMN_NAME == 'estado_edad'){
                Object.assign(newState, {edad: true})
             }
-            if(column.COLUMN_NAME == 'genero'){
+            if(column.COLUMN_NAME == 'estado_genero'){
                Object.assign(newState, {genero: true})
             }
-            if(column.COLUMN_NAME == 'telefono'){
+            if(column.COLUMN_NAME == 'estado_telefono'){
                Object.assign(newState, {telefono: true})
             }
-            if(column.COLUMN_NAME == 'num_voucher'){
+            if(column.COLUMN_NAME == 'estado_num_voucher'){
                Object.assign(newState, {num_voucher: true})
             }
-            if(column.COLUMN_NAME == 'num_habitacion'){
+            if(column.COLUMN_NAME == 'estado_num_habitacion'){
                Object.assign(newState, {num_habitacion: true})
             }
-            if(column.COLUMN_NAME == 'razon_visita'){
+            if(column.COLUMN_NAME == 'estado_razon_visita'){
                Object.assign(newState, {razon_visita: true})
             }
          });
@@ -272,7 +272,8 @@ export default class CMS extends Component {
          let cleanRGBAFontFormString = colorFontForm.replace(/([rgba( )])/g,'')
          cleanRGBAFontFormString = cleanRGBAFontFormString.split(',')
 
-         if((dataCampaing[0].campania != 'Coworking' && dataCampaing[0].campania != 'Gammer') && (dataCampaing[0].campania != 'portal_cautivo_habitaciones' &&  dataCampaing[0].campania != 'portal_cautivo_formulario')){
+         const db = localStorage.getItem('user_database')
+         if((db == 'portal_oxohotel' && dataCampaing[0].id_campaing != 2) || (db == 'unicentro' &&  (dataCampaing[0].id_campaing != 1 && dataCampaing[0].id_campaing != 2))){
             toDataURL(urlDomain+'portales/'+dataCampaing[0].campania+dataCampaing[0].background)
             .then(dataUrl => {
                this.setState({
@@ -292,26 +293,8 @@ export default class CMS extends Component {
                })
             })
          }
-         else if(dataCampaing[0].campania === 'Coworking'){
+         if(db == 'unicentro' && dataCampaing[0].id_campaing == 1){
             let urlUnicentro = "https://www.unicentro.ipwork.io/";
-            // toDataURL(urlUnicentro+dataCampaing[0].campania+dataCampaing[0].background)
-            // .then(dataUrl => {
-            //    this.setState({
-            //       form:{
-            //          ...this.state.form,
-            //          fileBackground:dataUrl
-            //       }
-            //    })
-            // })
-            // toDataURL(urlUnicentro+dataCampaing[0].campania+dataCampaing[0].logo)
-            // .then(dataUrl => {
-            //    this.setState({
-            //       form:{
-            //          ...this.state.form,
-            //          fileLogo:dataUrl
-            //       }
-            //    })
-            // })
             this.setState({
                form:{
                   ...this.state.form,
@@ -320,7 +303,7 @@ export default class CMS extends Component {
                }
             })
          }
-         else if(dataCampaing[0].campania == 'Gammer'){
+         if(db == 'unicentro' && dataCampaing[0].id_campaing == 2){
             let urlUnicentro = "https://www.unicentro.ipwork.io/";
             this.setState({
                form:{
@@ -330,6 +313,19 @@ export default class CMS extends Component {
                }
             })
          }
+         
+         if(db == 'portal_oxohotel' && dataCampaing[0].id_campaing == 2){
+            let urlErmita = "https://www.oxohotel.ipwork.io/";
+            this.setState({
+               form:{
+                  ...this.state.form,
+                  fileBackground:urlErmita+'Ermita'+dataCampaing[0].background,
+                  fileLogo:urlErmita+'Ermita'+dataCampaing[0].logo
+               }
+            })
+         }
+         let date = moment(new Date, 'YYYY/MM/DD hh:mm a');
+		   let anio = date.year();
 
          this.setState({
             form: {
@@ -345,6 +341,7 @@ export default class CMS extends Component {
                razon_visita: newState.razon_visita,
                nombre_campaña: dataCampaing[0].nombre,
                campaingForDelete: dataCampaing[0].campania,
+               anio:anio,
                fecha_inicio: dataCampaing[0].fecha_inicio,
                fecha_fin: dataCampaing[0].fecha_fin,
                descripcion: dataCampaing[0].descripcion,
@@ -387,7 +384,6 @@ export default class CMS extends Component {
                // id_campaing: id_campaing,
             }
          });
-         console.log(this.state.form)
    }
 
    handleChangeTabs = (event, value) => {
@@ -783,20 +779,24 @@ export default class CMS extends Component {
          // imgsBannerSwitch,
          // filesBanner,
       } = this.state.form
-      console.log(this.state.form)
       if(((nombre_campaña == '' || descripcion == '')) || ((zona_ap == '') || (anio == '' || vertical_economica == ''))){
          	NotificationManager.error('Los campos son obligatorios','',5000);
       }
       else if((terminos_condiciones_esp == '' || terminos_condiciones_eng == '') || (terminos_condiciones_esp == '<p><br></p>' || terminos_condiciones_eng == '<p><br></p>')){
          NotificationManager.error('Los terminos y condiciones son requeridos','',5000);
       }
-      // else if(imgsBannerSwitch == true && !filesBanner.length){
-      //       NotificationManager.error('Las imagenes de banner son requeridas','',5000);
-      // }
+      else if(/[-!$%^&*()_+|~=`\\#{}\[\]:";'<>?,.Ññ\/]/.test(nombre_campaña)){
+            NotificationManager.error('No se permiten caracteres especiales','',5000);
+      }
       else if( (((titlePortal == "" || fileBackground == "") || (fileLogo == "" || sizeLogoMobile == "")) || (sizeLogoWeb == "" || buttonColors == "") || (colorTitleForm == "" || colorFontForm == ""))){
          NotificationManager.error('Todos los campos son obligatorios','',5000);
       } 
       else{
+         try {
+            
+         } catch (error) {
+            
+         }
          let config = {
 				method: 'POST',
 				headers: {
@@ -806,9 +806,16 @@ export default class CMS extends Component {
 				body: JSON.stringify(this.state.form)
 			};
 
-         await fetch(`${localStorage.urlDomain}api/campanias`, config);
+         let res = await fetch(`${localStorage.urlDomain}api/campanias`, config);
+         let dataCampaing = await res.json();
          
-         this.props.history.goBack();
+         if(dataCampaing.message == 500){
+            NotificationManager.error('El nombre de campaña ya existe, por favor intente con otro nombre','',5000);
+         }
+         if(dataCampaing.message == 200){
+            this.props.history.goBack();
+            NotificationManager.success('Campaña creada satisfactoriamente!','',5000);
+         }
       }
    }
 
@@ -837,12 +844,14 @@ export default class CMS extends Component {
          // imgsBannerSwitch,
          // filesBanner,
       } = this.state.form
-      console.log(this.state.form)
       if((nombre_campaña == "" || descripcion == "") || (zona_ap == "" ||  vertical_economica == "")){
          	NotificationManager.error('Los campos son obligatorios','',5000);
       }
       else if((terminos_condiciones_esp == "" || terminos_condiciones_eng == "") || (terminos_condiciones_esp == '<p><br></p>' || terminos_condiciones_eng == '<p><br></p>')){
          NotificationManager.error('Los terminos y condiciones son requeridos',"",5000);
+      }
+      else if(/[-!$%^&*()_+|~=`\\#{}\[\]:";'<>?,.Ññ\/]/.test(nombre_campaña)){
+         NotificationManager.error('No se permiten caracteres especiales','',5000);
       }
       // else if(imgsBannerSwitch == true && !filesBanner.length){
       //       NotificationManager.error('Las imagenes de banner son requeridas','',5000);
@@ -851,18 +860,29 @@ export default class CMS extends Component {
          NotificationManager.error('Todos los campos son obligatorios','',5000);
       } 
       else{
-         let config = {
-				method: 'PATCH',
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(this.state.form)
-			};
-
-			await fetch(`${localStorage.urlDomain}api/campanias/` + id_campaing, config);
-
-         this.props.history.goBack();
+         try {
+            let config = {
+               method: 'PATCH',
+               headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+               },
+               body: JSON.stringify(this.state.form)
+            };
+   
+            let res = await fetch(`${localStorage.urlDomain}api/campanias/` + id_campaing, config);
+            let dataCampaing = await res.json();
+            if(dataCampaing.message == 500){
+               NotificationManager.error('El nombre de campaña ya existe, por favor intente con otro nombre','',5000);
+            }
+            if(dataCampaing.message == 200){
+               this.props.history.goBack();
+               NotificationManager.success('Campaña editada satisfactoriamente!','',5000);
+            }
+         } catch (error) {
+            console.log(error);
+         }
+         
       }
    }
 
