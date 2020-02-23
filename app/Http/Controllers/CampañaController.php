@@ -40,7 +40,15 @@ class CampañaController extends Controller
     public function store(Request $request){
         $NameTabla = str_replace(["-", " "],"_",$request->nombre_campaña."_".date('Y-m-d', strtotime($request->fecha_inicio)));
         
-        $campaña= new Campaña();
+        
+        
+        $validation = CampañaController::createTable($request, $NameTabla);
+
+        if($validation == 500){
+            return response()->json(['message' => 500]);
+        }
+
+        $campaña = new Campaña();
         $campaña->setConnection(session('database'));
         $campaña->nombre = $request->nombre_campaña;
         $campaña->fecha_inicio = $request->fecha_inicio;
@@ -51,58 +59,75 @@ class CampañaController extends Controller
         $campaña->id_locacion = $request->id_location;
         $campaña->campania = $NameTabla;
         $campaña->vertical_economica = $request->vertical_economica;
+        $campaña->path_campania = env("APP_URL").'portales/'.$NameTabla;
         $campaña->save();
-        
-        CampañaController::createTable($request, $NameTabla);
-        
+
         CampañaController::add_Styles_Terms($request, $campaña);
         
-        CampañaController::ftp_portal_cautivo($NameTabla);
+        CampañaController::ftp_portal_cautivo($NameTabla, $request);
 
         CampañaController::sendImages($request, $NameTabla, $campaña);
         
         SideBarController::getSideBarRol(session('rol'),session('database'));
+
+        return response()->json(['message' => 200]);
     }
 
     private function createTable($request, $NameTabla){
-        Schema::connection(session('database'))->create($NameTabla, function (Blueprint $table) use ($request) {
-            $table->increments('id');
-            $table->bigInteger('id_evento');
-            $table->dateTime('fecha_creacion');
-            if($request->email){
-                $table->string('email');
-            }            
-            if($request->nombre){
-                $table->string('nombre');
-            }            
-            if($request->apellidos){
-                $table->string('apellidos');
-            }            
-            if($request->edad){
-                $table->string('edad');
-            }            
-            if($request->genero){
-                $table->string('genero');
-            }            
-            if($request->telefono){
-                $table->string('telefono');
-            }            
-            if($request->num_voucher){
-                $table->string('num_voucher');
-            }            
-            if($request->num_habitacion){
-                $table->string('num_habitacion');
-            }            
-            if($request->razon_visita){
-                $table->string('razon_visita');
-            }
-            $table->string('os');
-            $table->string('ssid');
-            $table->string('mac_cliente');
-            $table->string('ip_cliente');
-            $table->string('ip_ap');
-            $table->string('mac_ap');
-        });
+        try {
+            Schema::connection(session('database'))->create($NameTabla, function (Blueprint $table) use ($request) {
+                $table->increments('id');
+                $table->bigInteger('id_evento');
+                $table->dateTime('fecha_creacion');
+    
+                if($request->nombre){
+                    $table->string('estado_nombre')->nullable();
+                }            
+                if($request->apellidos){
+                    $table->string('estado_apellidos')->nullable();
+                }
+                if($request->email){
+                    $table->string('estado_email')->nullable();
+                }              
+                if($request->edad){
+                    $table->string('estado_edad')->nullable();
+                }            
+                if($request->genero){
+                    $table->string('estado_genero')->nullable();
+                }            
+                if($request->telefono){
+                    $table->string('estado_telefono')->nullable();
+                }            
+                if($request->num_voucher){
+                    $table->string('estado_num_voucher')->nullable();
+                }            
+                if($request->num_habitacion){
+                    $table->string('estado_num_habitacion')->nullable();
+                }            
+                if($request->razon_visita){
+                    $table->string('estado_razon_visita')->nullable();
+                }
+                $table->string('email')->nullable();
+                $table->string('nombre')->nullable();
+                $table->string('apellidos')->nullable();
+                $table->string('edad')->nullable();
+                $table->string('genero')->nullable();
+                $table->string('telefono')->nullable();
+                $table->string('num_voucher')->nullable();
+                $table->string('num_habitacion')->nullable();
+                $table->string('razon_visita')->nullable();
+                $table->string('os')->nullable();
+                $table->string('ssid')->nullable();
+                $table->string('mac_cliente')->nullable();
+                $table->string('ip_cliente')->nullable();
+                $table->string('ip_ap')->nullable();
+                $table->string('mac_ap')->nullable();
+            });
+            return 200;
+        } catch (\Throwable $th) {
+            return 500;
+        }
+        
     }
 
     private function add_Styles_Terms($request, $campaña){
@@ -134,7 +159,8 @@ class CampañaController extends Controller
         ]);
     }
 
-    private function ftp_portal_cautivo($NameTabla){
+    private function ftp_portal_cautivo($NameTabla, $request = ''){
+        $db = session('database');
         $portal_cautivo = Storage::disk('public')->allFiles('portal_cautivo');
         $host = env("DB_HOST");
         $userportal = env('DB_USERNAME');
@@ -148,11 +174,49 @@ class CampañaController extends Controller
         password = "'.$password.'"
         name = "'.$database.'"
         campania = "'.$campania.'"';
-        for ($i=0; $i < count($portal_cautivo); $i++) { 
-            $new_path[$i] = substr($portal_cautivo[$i], 15);
-            Storage::disk("ftp_".session('database')."")->put($NameTabla."/$new_path[$i]", Storage::disk('public')->get($portal_cautivo[$i]));
+
+        if(($db == 'unicentro' && ($request->id_campaing == 1 || $request->id_campaing == 2))){
+            // for ($i=0; $i < count($portal_cautivo); $i++) { 
+            //     $new_path[$i] = substr($portal_cautivo[$i], 15);
+            //     Storage::disk("ftp_".session('database')."")->put($NameTabla."/$new_path[$i]", Storage::disk('public')->get($portal_cautivo[$i]));
+            // }
+            // Storage::disk("ftp_".session('database')."")->prepend($NameTabla."/db/parameter.ini.dist", $config);
+
+            // descomentar al pasar a produccion
+
+            for ($i=0; $i < count($portal_cautivo); $i++) { 
+                $new_path[$i] = substr($portal_cautivo[$i], 15);
+                Storage::disk("ftp_unicentro_produccion".session('database')."")->put($NameTabla."/$new_path[$i]", Storage::disk('public')->get($portal_cautivo[$i]));
+            }
+            Storage::disk("ftp_unicentro_produccion".session('database')."")->prepend($NameTabla."/db/parameter.ini.dist", $config);
+            
         }
-        Storage::disk("ftp_".session('database')."")->prepend($NameTabla."/db/parameter.ini.dist", $config);
+        if(($db == 'portal_oxohotel' && $request->id_campaing == 2)){
+            // for ($i=0; $i < count($portal_cautivo); $i++) { 
+            //     $new_path[$i] = substr($portal_cautivo[$i], 15);
+            //     Storage::disk("ftp_".session('database')."")->put($NameTabla."/$new_path[$i]", Storage::disk('public')->get($portal_cautivo[$i]));
+            // }
+            // Storage::disk("ftp_".session('database')."")->prepend($NameTabla."/db/parameter.ini.dist", $config);
+
+            // descomentar al pasar a produccion
+
+            for ($i=0; $i < count($portal_cautivo); $i++) { 
+                $new_path[$i] = substr($portal_cautivo[$i], 15);
+                Storage::disk("ftp_ermita_produccion"."")->put($NameTabla."/$new_path[$i]", Storage::disk('public')->get($portal_cautivo[$i]));
+            }
+            Storage::disk("ftp_ermita_produccion"."")->prepend($NameTabla."/db/parameter.ini.dist", $config);
+            
+        }
+        if(($db == 'portal_oxohotel' && $request->id_campaing != 2) || ($db == 'unicentro' &&  ($request->id_campaing != 1 && $request->id_campaing != 2))){
+            for ($i=0; $i < count($portal_cautivo); $i++) { 
+                $new_path[$i] = substr($portal_cautivo[$i], 15);
+                Storage::disk("ftp_".session('database')."")->put($NameTabla."/$new_path[$i]", Storage::disk('public')->get($portal_cautivo[$i]));
+            }
+            Storage::disk("ftp_".session('database')."")->prepend($NameTabla."/db/parameter.ini.dist", $config);
+        }
+        
+
+       
     }
 
     private function sendImages($request, $NameTabla, $campaña){
@@ -205,12 +269,7 @@ class CampañaController extends Controller
      */
     public function show($id)
     {
-        $zonas = DB::connection(session('database'))
-        ->table('campania')
-            ->select('id','nombre as Nombre','descripcion as Descripcion','fecha_inicio as Fecha Inicio','fecha_fin as Fecha Fin', 'campania','vertical_economica as Vertical')
-            ->where('id_locacion', $id)
-            ->get();
-            
+        $zonas = DB::select("CALL dataCampaings ('".session('database')."', '$id')");
         return response()->json($zonas, 200);
     }
 
@@ -223,14 +282,199 @@ class CampañaController extends Controller
     public function edit($id)
     {
         try {
-            $campania = DB::connection(session('database'))
-                ->table('campania')
-                ->where('id', $id)
-                ->first();
-                return response()->json($campania, 200);
+            $table_name= DB::connection(session('database'))->table('campania')->select('campania')->where('id',$id)->first()->campania;
+            $db = session('database');
+            $getColumnNames = DB::select("SELECT COLUMN_NAME
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_SCHEMA = '".$db."' AND TABLE_NAME = '".$table_name."';");
+
+            $dataCampaing = DB::connection(session('database'))
+                ->select("SELECT cs.id as id_campaing, cs.nombre, cs.campania, cs.descripcion, cs.fecha_inicio, cs.fecha_fin, cs.zona_ap, cs.vertical_economica, sc.width_logo_web, sc.container_form_color, sc.container_form_font_color, sc.button_font_color, sc.button_background_color, sc.title_portal, sc.color_title_portal, sc.width_logo_web, sc.width_logo_movil, tcc.terms_conditions_es, tcc.terms_conditions_en, (SELECT fc.nombre FROM files_campania fc WHERE fc.id_tipo_archivo_multimedia = 1 AND fc.id_campania = cs.id) AS background,(SELECT fc.nombre FROM files_campania fc WHERE fc.id_tipo_archivo_multimedia = 2 AND fc.id_campania = cs.id) AS logo, (SELECT fc.nombre FROM files_campania fc WHERE fc.id_tipo_archivo_multimedia = 3 AND fc.id_campania = cs.id) AS favico FROM campania cs 
+                INNER JOIN styles_campania sc ON sc.id_campania = cs.id
+                INNER JOIN terms_conditions_campania tcc ON tcc.id_campania = cs.id 
+                WHERE cs.id = $id");
+
+                return response()->json([$dataCampaing[0],$getColumnNames], 200);
         } catch (\Throwable $th) {
-            return response()->json($campania, 500);
+            return response()->json($dataCampaing, 500);
         }
+    }
+
+    public function alterTableWithNewColumns($request, $id, $NameTable){
+            Schema::connection(session('database'))->table($NameTable, function (Blueprint $table) use ($request,$NameTable) {
+                if($request->email && !Schema::connection(session('database'))->hasColumn($NameTable,'estado_email')){
+                    $table->string('estado_email');
+                }            
+                if($request->nombre && !(Schema::connection(session('database'))->hasColumn($NameTable,'estado_nombre'))){
+                    $table->string('estado_nombre');
+                }            
+                if($request->apellidos && !(Schema::connection(session('database'))->hasColumn($NameTable,'estado_apellidos'))){
+                    $table->string('estado_apellidos');
+                }            
+                if($request->edad && !(Schema::connection(session('database'))->hasColumn($NameTable,'estado_edad'))){
+                    $table->string('estado_edad');
+                }            
+                if($request->genero && !(Schema::connection(session('database'))->hasColumn($NameTable,'estado_genero'))){
+                    $table->string('estado_genero');
+                }            
+                if($request->telefono && !(Schema::connection(session('database'))->hasColumn($NameTable,'estado_telefono'))){
+                    $table->string('estado_telefono');
+                }            
+                if($request->num_voucher && !(Schema::connection(session('database'))->hasColumn($NameTable,'estado_num_voucher'))){
+                    $table->string('estado_num_voucher');
+                }            
+                if($request->num_habitacion && !(Schema::connection(session('database'))->hasColumn($NameTable,'estado_num_habitacion'))){
+                    $table->string('estado_num_habitacion');
+                }            
+                if($request->razon_visita && !(Schema::connection(session('database'))->hasColumn($NameTable,'estado_razon_visita'))){
+                    $table->string('estado_razon_visita');
+                }
+
+                if(!$request->nombre && Schema::connection(session('database'))->hasColumn($NameTable,'estado_nombre')){
+                    $table->dropColumn('estado_nombre');
+                }            
+                if(!$request->apellidos && Schema::connection(session('database'))->hasColumn($NameTable,'estado_apellidos')){
+                    $table->dropColumn('estado_apellidos');
+                }            
+                if(!$request->email && Schema::connection(session('database'))->hasColumn($NameTable,'estado_email')){
+                    $table->dropColumn('estado_email');
+                }            
+                if(!$request->edad && Schema::connection(session('database'))->hasColumn($NameTable,'estado_edad')){
+                    $table->dropColumn('estado_edad');
+                }            
+                if(!$request->genero && Schema::connection(session('database'))->hasColumn($NameTable,'estado_genero')){
+                    $table->dropColumn('estado_genero');
+                }            
+                if(!$request->telefono && Schema::connection(session('database'))->hasColumn($NameTable,'estado_telefono')){
+                    $table->dropColumn('estado_telefono');
+                }            
+                if(!$request->num_voucher && Schema::connection(session('database'))->hasColumn($NameTable,'estado_num_voucher')){
+                    $table->dropColumn('estado_num_voucher');
+                }            
+                if(!$request->num_habitacion && Schema::connection(session('database'))->hasColumn($NameTable,'estado_num_habitacion') ){
+                    $table->dropColumn('estado_num_habitacion');
+                }            
+                if(!$request->razon_visita && Schema::connection(session('database'))->hasColumn($NameTable,'estado_razon_visita')){
+                    $table->dropColumn('estado_razon_visita');
+                }
+
+            });
+    }
+
+
+    public function deleteFolderFtp($NameTableForDelete){
+        if(Storage::disk("ftp_".session('database'),"")->exists($NameTableForDelete)){
+            Storage::disk("ftp_".session('database'),"")->deleteDirectory($NameTableForDelete);
+        }
+    }
+    
+    private function alterTable($NameTabla, $NameTableForDelete){
+        try {
+            Schema::connection(session('database'))->rename($NameTableForDelete, $NameTabla);
+            return 200;
+        } catch (\Throwable $th) {
+           return 500;
+        }
+        
+    }
+
+    private function update_Styles_Terms($request){
+        DB::connection(session('database'))->table('styles_campania')->where('id_campania', $request->id_campaing)->update([
+            'width_logo_web' => $request->sizeLogoWeb.'px',
+            'margin_logo_web' => '5%',
+            'width_logo_movil' => $request->sizeLogoMobile.'px',
+            'margin_logo_movil' => '5%',
+            'container_form_color' => "rgba(".$request->backgroundColorForm['r'].", ".$request->backgroundColorForm['g'].", ".$request->backgroundColorForm['b'].", ".$request->backgroundColorForm['a'].")",
+            'container_form_font_color' => "rgba(".$request->colorFontForm['r'].", ".$request->colorFontForm['g'].", ".$request->colorFontForm['b'].", ".$request->colorFontForm['a'].")",
+            'button_font_color' => "rgba(".$request->colorFontForm['r'].", ".$request->colorFontForm['g'].", ".$request->colorFontForm['b'].", ".$request->colorFontForm['a'].")",
+            'button_background_color' => "rgba(".$request->buttonColors['r'].", ".$request->buttonColors['g'].", ".$request->buttonColors['b'].", ".$request->buttonColors['a'].")",
+            'button_border_color' => "rgba(".$request->buttonColors['r'].", ".$request->buttonColors['g'].", ".$request->buttonColors['b'].", ".$request->buttonColors['a'].")",
+            'button_hover_font_color' => '#EEE',
+            'button_hover_background_color' => '#000',
+            'checkbox_terms_background_color' => "rgba(".$request->buttonColors['r'].", ".$request->buttonColors['g'].", ".$request->buttonColors['b'].", ".$request->buttonColors['a'].")",
+            'checkbox_terms_border_color' => "rgba(".$request->buttonColors['r'].", ".$request->buttonColors['g'].", ".$request->buttonColors['b'].", ".$request->buttonColors['a'].")",
+            'msg_error_color_font' => '#EEE',
+            'msg_error_color_background' => 'rgb(160,19,35,0.91)',
+            'title_portal' => $request->titlePortal,
+            'color_title_portal' => "rgba(".$request->colorTitleForm['r'].", ".$request->colorTitleForm['g'].", ".$request->colorTitleForm['b'].", ".$request->colorTitleForm['a'].")"
+        ]);
+
+        DB::connection(session('database'))->table('terms_conditions_campania')->where('id_campania', $request->id_campaing)->update([
+            'terms_conditions_es' => $request->terminos_condiciones_esp,
+            'terms_conditions_en' => $request->terminos_condiciones_eng         
+        ]);
+    }
+
+    private function sendImagesWithUpdate($request, $NameTable, $urlEncodedBackground='', $urlEncodedLogo=''){
+        $db = session('database');
+        if(($db == 'unicentro' && ($request->id_campaing == 1 || $request->id_campaing == 2))){
+            // $background = explode(';base64,', $urlEncodedBackground);
+            // Storage::disk("ftp_".session('database')."")->put($NameTable."/img/background.png", base64_decode($background[1]));
+            // $logo = explode(';base64,', $urlEncodedLogo);
+            // Storage::disk("ftp_".session('database')."")->put($NameTable."/img/logo.png", base64_decode($logo[1]));
+            // Storage::disk("ftp_".session('database')."")->put($NameTable."/img/favicon.ico", base64_decode($logo[1]));
+
+            // descomentar al pasar a produccion
+
+            $background = explode(';base64,', $urlEncodedBackground);
+            Storage::disk("ftp_unicentro_produccion"."")->put($NameTable."/img/background.png", base64_decode($background[1]));
+            $logo = explode(';base64,', $urlEncodedLogo);
+            Storage::disk("ftp_unicentro_produccion"."")->put($NameTable."/img/logo.png", base64_decode($logo[1]));
+            Storage::disk("ftp_unicentro_produccion"."")->put($NameTable."/img/favicon.ico", base64_decode($logo[1]));
+         }
+         if(($db == 'portal_oxohotel' && $request->id_campaing == 2)){
+            // $background = explode(';base64,', $urlEncodedBackground);
+            // Storage::disk("ftp_".session('database')."")->put($NameTable."/img/background.png", base64_decode($background[1]));
+            // $logo = explode(';base64,', $urlEncodedLogo);
+            // Storage::disk("ftp_".session('database')."")->put($NameTable."/img/logo.png", base64_decode($logo[1]));
+            // Storage::disk("ftp_".session('database')."")->put($NameTable."/img/favicon.ico", base64_decode($logo[1]));
+
+            // descomentar al pasar a produccion
+
+                $background = explode(';base64,', $urlEncodedBackground);
+                Storage::disk("ftp_ermita_produccion"."")->put($NameTable."/img/background.png", base64_decode($background[1]));
+                $logo = explode(';base64,', $urlEncodedLogo);
+                Storage::disk("ftp_ermita_produccion"."")->put($NameTable."/img/logo.png", base64_decode($logo[1]));
+                Storage::disk("ftp_ermita_produccion"."")->put($NameTable."/img/favicon.ico", base64_decode($logo[1]));
+         }
+         if(($db == 'portal_oxohotel' && $request->id_campaing != 2) || ($db == 'unicentro' &&  ($request->id_campaing != 1 && $request->id_campaing != 2))){
+            $background = explode(';base64,', $request->fileBackground);
+            Storage::disk("ftp_".session('database')."")->put($NameTable."/img/background.png", base64_decode($background[1]));
+    
+            $logo = explode(';base64,', $request->fileLogo);
+            Storage::disk("ftp_".session('database')."")->put($NameTable."/img/logo.png", base64_decode($logo[1]));
+    
+            Storage::disk("ftp_".session('database')."")->put($NameTable."/img/favicon.ico", base64_decode($logo[1]));
+        }
+        DB::connection(session('database'))->table('files_campania')->where('id_campania', $request->id_campaing)->where('id_tipo_archivo_multimedia', 1)->update([
+            'id_tipo_archivo_multimedia' => 1,
+            'nombre' => '/img/background.png',
+            'fecha_creacion' => date('Y-m-d H:i:s')         
+        ]);
+        DB::connection(session('database'))->table('files_campania')->where('id_campania', $request->id_campaing)->where('id_tipo_archivo_multimedia', 2)->update([
+            'id_tipo_archivo_multimedia' => 2,
+            'nombre' => '/img/logo.png',
+            'fecha_creacion' => date('Y-m-d H:i:s')
+        ]);
+        DB::connection(session('database'))->table('files_campania')->where('id_campania', $request->id_campaing)->where('id_tipo_archivo_multimedia', 3)->update([
+            'id_tipo_archivo_multimedia' => 3,
+            'nombre' => '/img/favicon.ico',
+            'fecha_creacion' => date('Y-m-d H:i:s')
+        ]);
+            
+        if($request->imgsBannerSwitch && count($request->filesBanner) > 0){
+            for($i=0; $i < count($request->filesBanner); $i++){
+                $banner = explode(';base64,', $request->filesBanner[$i]);
+                Storage::disk("ftp_".session('database')."")->put($NameTable."/img/banner/banner".($i+1).".png", base64_decode($banner[1]));
+                DB::connection(session('database'))->table('banner_files_campania')->insert([
+                    'id_campania' => $campaña->id,
+                    'nombre_img_web' => "/img/banner/banner".($i+1).".png",
+                    'nombre_img_movil' => "/img/banner/banner".($i+1).".png",
+                    'fecha_creacion' => date('Y-m-d H:i:s')
+                ]);
+            }
+        }
+       
     }
 
     /**
@@ -242,12 +486,91 @@ class CampañaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $campania = DB::connection(session('database'))
-            ->table('campania')
-            ->where('id', $id)
-            ->update(['nombre' => $request->nombre_campaña,'fecha_inicio' => $request->fecha_inicio,'fecha_fin' => $request->fecha_fin,'descripcion' => $request->descripcion,'zona_ap' => $request->zona_ap,'ano_evento' => $request->anio]);
+        if((session('database') == 'portal_oxohotel' && $id != 2) || (session('database') == 'unicentro' && ($id != 1 && $id != 2))){
+            $NameTable = str_replace(["-", " "],"_",$request->nombre_campaña."_".date('Y-m-d', strtotime($request->fecha_inicio)));
+
+            $NameTableForDelete = $request->campaingForDelete;
             
-        SideBarController::getSideBarRol(session('rol'),session('database'));
+            if($NameTableForDelete != $NameTable){
+                $validation = CampañaController::alterTable($NameTable, $NameTableForDelete);
+                if($validation == 500){
+                    return response()->json(['message' => 500]);
+                }else{
+                    $campania = DB::connection(session('database'))
+                    ->table('campania')
+                    ->where('id', $id)
+                    ->update(['nombre' => $request->nombre_campaña,'campania' => $NameTable, 'path_campania' => env("APP_URL").'portales/'.$NameTable]);
+                }
+            }
+
+            $comparisionCampaings = DB::connection(session('database'))->select("select fecha_inicio, fecha_fin, descripcion, zona_ap, ano_evento, campania, vertical_economica from campania where id = $id");
+        
+            if((($comparisionCampaings[0]->fecha_inicio != $request->fecha_inicio || $comparisionCampaings[0]->fecha_fin != $request->fecha_fin) || $comparisionCampaings[0]->descripcion != $request->descripcion) || ($comparisionCampaings[0]->zona_ap != $request->zona_ap || ($comparisionCampaings[0]->ano_evento != $request->anio || $comparisionCampaings[0]->vertical_economica != $request->vertical_economica))){
+                $campania = DB::connection(session('database'))
+                    ->table('campania')
+                    ->where('id', $id)
+                    ->update(['fecha_inicio' => $request->fecha_inicio, 'fecha_fin' => $request->fecha_fin, 'descripcion' => $request->descripcion, 'zona_ap' => $request->zona_ap,'ano_evento' => $request->anio, 'vertical_economica' => $request->vertical_economica]);
+            }
+
+            CampañaController::alterTableWithNewColumns($request, $id, $NameTable);
+
+           
+            CampañaController::update_Styles_Terms($request);
+            CampañaController::deleteFolderFtp($NameTableForDelete);
+            CampañaController::ftp_portal_cautivo($NameTable, $request);
+            CampañaController::sendImagesWithUpdate($request, $NameTable);
+            SideBarController::getSideBarRol(session('rol'),session('database'));
+            return response()->json(['message' => 200]);
+        } else{
+            // $opts = array('http'=>array('header' => "User-Agent:MyAgent/1.0\r\n")); 
+            // $context = stream_context_create($opts);
+            $imgBackground = file_get_contents($request->fileBackground);
+            $urlEncodedBackground='data:image/png;base64,'.base64_encode($imgBackground);
+            $imgLogo = file_get_contents($request->fileLogo);
+            $urlEncodedLogo='data:image/png;base64,'.base64_encode($imgLogo);
+
+            $NameTable = str_replace(["-", " "],'_', $request->nombre_campaña);
+
+            $NameTableForDelete = $request->campaingForDelete;
+            
+            if($NameTableForDelete != $NameTable){
+                $validation = CampañaController::alterTable($NameTable, $NameTableForDelete);
+                if($validation == 500){
+                    return response()->json(['message' => 500]);
+                }
+                if($validation == 200 && session('database') == 'unicentro'){
+                    $campania = DB::connection(session('database'))
+                    ->table('campania')
+                    ->where('id', $id)
+                    ->update(['nombre' => $request->nombre_campaña,'campania' => $NameTable, 'path_campania' => 'https://www.unicentro.ipwork.io/'.$NameTable]);
+                }
+                if($validation == 200 && session('database') == 'portal_oxohotel'){
+                    $campania = DB::connection(session('database'))
+                    ->table('campania')
+                    ->where('id', $id)
+                    ->update(['nombre' => $request->nombre_campaña,'campania' => $NameTable, 'path_campania' => 'https://www.oxohotel.ipwork.io/'.$NameTable]);
+                }
+            }
+
+            $comparisionCampaings = DB::connection(session('database'))->select("select fecha_inicio, fecha_fin, descripcion, zona_ap, ano_evento, campania, vertical_economica from campania where id = $id");
+        
+            if((($comparisionCampaings[0]->fecha_inicio != $request->fecha_inicio || $comparisionCampaings[0]->fecha_fin != $request->fecha_fin) || $comparisionCampaings[0]->descripcion != $request->descripcion) || ($comparisionCampaings[0]->zona_ap != $request->zona_ap || ($comparisionCampaings[0]->ano_evento != $request->anio || $comparisionCampaings[0]->vertical_economica != $request->vertical_economica))){
+                $campania = DB::connection(session('database'))
+                    ->table('campania')
+                    ->where('id', $id)
+                    ->update(['fecha_inicio' => $request->fecha_inicio, 'fecha_fin' => $request->fecha_fin, 'descripcion' => $request->descripcion, 'zona_ap' => $request->zona_ap,'ano_evento' => $request->anio, 'vertical_economica' => $request->vertical_economica]);
+            }
+
+            CampañaController::alterTableWithNewColumns($request, $id, $NameTable);
+
+            CampañaController::update_Styles_Terms($request);
+            CampañaController::deleteFolderFtp($NameTableForDelete);
+            CampañaController::ftp_portal_cautivo($NameTable, $request);
+            CampañaController::sendImagesWithUpdate($request, $NameTable, $urlEncodedBackground, $urlEncodedLogo);
+            SideBarController::getSideBarRol(session('rol'),session('database'));
+            return response()->json(['message' => 200]);
+        }
+       
     }
 
     /**

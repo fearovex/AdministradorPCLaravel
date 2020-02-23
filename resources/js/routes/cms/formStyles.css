@@ -1,3 +1,18 @@
+.zonaAP{
+    margin-left: -43px;
+    margin-right: 40px;
+    margin-bottom: 11px;
+    padding-bottom: 2px;
+}
+.verticalEco{
+    margin-bottom: 24px;
+    margin-left: -43px;
+    margin-right: 40px;
+}
+.textAreaResize{
+    resize: none;
+    padding-bottom: 13px;
+}
 
 .formulario {
     padding: 2%;

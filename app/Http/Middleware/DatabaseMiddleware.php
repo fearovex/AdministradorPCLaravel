@@ -50,7 +50,7 @@ class DatabaseMiddleware
 
             //local
             // 'driver' => 'ftp',
-            // 'host' => '192.168.1.9',
+            // 'host' => '192.168.1.8',
             // 'port' => '21',
             // 'root' => '/',
             // 'username' =>'Miguel Acevedo',
@@ -59,6 +59,33 @@ class DatabaseMiddleware
             // Optional FTP Settings...
             // 'ssl' => true,
             // 'timeout' => 30,
+        ]);
+
+
+        Config::set("filesystems.disks.ftp_unicentro_produccion", [
+            'driver' => 'sftp',
+            'host' => '157.230.157.246',
+            'port' => '22',
+            'root' => '/var/www/unicentro.ipwork.io/html/',
+            'username' => 'root',
+            'password' => 'IPwork2019.',
+            'passive' => true,
+            'visibility' => 'public',
+            'permPublic' => 0777,
+            'directoryPerm' => 0777,
+        ]);
+
+        Config::set("filesystems.disks.ftp_ermita_produccion", [
+            'driver' => 'sftp',
+            'host' => '157.230.157.246',
+            'port' => '22',
+            'root' => '/var/www/oxohotel.ipwork.io/html/',
+            'username' => 'root',
+            'password' => 'IPwork2019.',
+            'passive' => true,
+            'visibility' => 'public',
+            'permPublic' => 0777,
+            'directoryPerm' => 0777,
         ]);
 
         session(['database' => $user->database]);

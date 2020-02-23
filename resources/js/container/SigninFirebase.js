@@ -104,7 +104,7 @@ class Signin extends Component {
             });
          }
       //  }else{
-      //     NotificationManager.error("Please verify the captcha.",'',4000);
+      //     NotificationManager.error("Por favor verifique el captcha.",'',4000);
       //  }
    }
    async componentWillUnmount(){

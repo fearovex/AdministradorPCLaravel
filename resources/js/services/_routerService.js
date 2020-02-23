@@ -170,6 +170,10 @@ export default [
       component: CMS
    },
    {
+      path: 'locations/:location/campañas/editar/cms',
+      component: CMS
+   },
+   {
       path: 'locations/:location/campañas/:camp',
       component: DetailEvents
    },
