@@ -426,7 +426,7 @@ class RadiusController extends Controller
         $count = count($users_radius);
         if ($count > 0) {
             foreach ($users_radius as $user) {
-                $whereUsersQuery .= "r.username='" . $user->username . "',";
+                $whereUsersQuery .= "'" . $user->username . "',";
             }
             $whereUsersQuery = substr($whereUsersQuery, 0, -1);
             $connectedOldPeopleCampaing = DB::connection('radius')->select(
@@ -453,11 +453,11 @@ class RadiusController extends Controller
         $count = count($users_radius);
         if ($count > 0) {
             foreach ($users_radius as $key => $user) {
-                $whereUsersQuery .= "r.username='" . $user->username . "',";
+                $whereUsersQuery .= "'" . $user->username . "',";
             }
             $whereUsersQuery = substr($whereUsersQuery, 0, -1);
             $connectedNewPeopleCampaing = DB::connection('radius')->select(
-                "select count(s.cantidad) newPeople from (select count(*) cantidad, r.username FROM radacct as r where r.username in ($whereUsersQuery) and (r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate') GROUP BY r.username having cantidad > 1) s");
+                "select count(s.cantidad) newPeople from (select count(*) cantidad, r.username FROM radacct as r where r.username in ($whereUsersQuery) and (r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate') GROUP BY r.username having cantidad = 1) s");
             if(!$connectedNewPeopleCampaing){
                 $connectedNewPeopleCampaing[0] = [
                     'newPeople' => 0
