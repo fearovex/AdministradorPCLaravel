@@ -64,7 +64,7 @@ class CampañaController extends Controller
 
         CampañaController::add_Styles_Terms($request, $campaña);
         
-        CampañaController::ftp_portal_cautivo($NameTabla);
+        CampañaController::ftp_portal_cautivo($NameTabla, $request);
 
         CampañaController::sendImages($request, $NameTabla, $campaña);
         
@@ -517,7 +517,7 @@ class CampañaController extends Controller
            
             CampañaController::update_Styles_Terms($request);
             CampañaController::deleteFolderFtp($NameTableForDelete);
-            CampañaController::ftp_portal_cautivo($NameTable);
+            CampañaController::ftp_portal_cautivo($NameTable, $request);
             CampañaController::sendImagesWithUpdate($request, $NameTable);
             SideBarController::getSideBarRol(session('rol'),session('database'));
             return response()->json(['message' => 200]);

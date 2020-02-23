@@ -8,6 +8,7 @@ import React, { Component } from "react";
 //  import { RctCardContent } from 'Components/RctCard';
 import Card from '@material-ui/core/Card';
 import { withStyles } from '@material-ui/core/styles';
+import PageTitleBar from 'Components/PageTitleBar/PageTitleBar';
 // import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 // import Button from '@material-ui/core/Button';
@@ -1165,6 +1166,14 @@ export default class CMS extends Component {
       // var eventHandlers = { addedfile: (file) => this.handleChangeBannerImgs(file)}
 
       return (
+      <div>
+            <PageTitleBar 
+            title={ 'CMS - '+ nombre_campaña } 
+            match={this.props.match} 
+            history={this.props.history}
+         />
+      
+      
          <div className="row" style={{marginBottom:"20px"}}>
             <div className="col-lg-12" style={{marginBottom:'10px'}}>
                <Card variant="outlined">
@@ -2008,10 +2017,11 @@ export default class CMS extends Component {
                                  </div>              
                               </div>
                               <a className="popup__close" href="#">X</a>
+                           </div>
                         </div>
-                     </div>
-                  </CardContent>
-               </Card>
+                     </CardContent>
+                  </Card>
+               </div>
             </div>
          </div>
       );
