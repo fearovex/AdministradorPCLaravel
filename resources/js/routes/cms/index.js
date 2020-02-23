@@ -6,9 +6,9 @@ import React, { Component } from "react";
 //    LivePreview
 //  } from 'react-live';
 //  import { RctCardContent } from 'Components/RctCard';
-import renderHTML from 'react-render-html';
 import Card from '@material-ui/core/Card';
 import { withStyles } from '@material-ui/core/styles';
+import PageTitleBar from 'Components/PageTitleBar/PageTitleBar';
 // import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 // import Button from '@material-ui/core/Button';
@@ -17,7 +17,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
-
 import FormGroupUI from '@material-ui/core/FormGroup';
 import FormControlLabelUI from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -25,7 +24,6 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ButtonUI from '@material-ui/core/Button';
 import { RctCardContent } from 'Components/RctCard';
-
 import Dropzone from 'react-dropzone'
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -37,18 +35,16 @@ import {
 	Label,
 	Input,
 	FormText,
-	Col,
+   Col,
 	FormFeedback
 } from 'reactstrap';
-
-
 import '../cms/formStyles.css';
 import '../cms/styles.css';
-
-import axios, { post } from 'axios'
-
 import reactCSS from 'reactcss'
 import { SketchPicker } from 'react-color'
+import moment from "moment"
+import { DateTimePicker } from '@material-ui/pickers'
+import Select from '@material-ui/core/Select';
 import DropzoneComponent from 'react-dropzone-component';
 
 
@@ -62,11 +58,27 @@ function TabContainer({ children, dir }) {
    );
 }
 
+const toDataURL = url => fetch(url)
+   .then(response => response.blob())
+   .then(blob => new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onloadend = () => resolve(reader.result)
+      reader.onerror = reject
+      reader.readAsDataURL(blob)
+   }))
+
 export default class CMS extends Component {
    constructor(props){
       super(props)
       
-      this.formCampaing = this.props.location.state.form;
+      // this.formCampaing = this.props.location.state.form;
+		let date = moment(new Date, 'YYYY/MM/DD hh:mm a');
+		let año = date.year();
+		let mes = date.month() + 1;
+		let dia = date.dates();
+		let hora = date.hours();
+      let minutos = date.minute();
+      this.stateCampaing = this.props.location.state;
       this.state = {
          data: [],
          value:0,
@@ -78,17 +90,19 @@ export default class CMS extends Component {
          displayColorPickerTitleStyle: false,
          displayColorPickerFontStyle: false,
          countImgs:1,
-         termsConditions:false,
+         termsConditions:true,
+         dataAPZones:[],
          form:{
             //campaña
-            id_location: this.formCampaing.id_location,
-            nombre_campaña: this.formCampaing.nombre_campaña,
-				fecha_inicio: this.formCampaing.fecha_inicio,
-				fecha_fin: this.formCampaing.fecha_fin,
-            descripcion: this.formCampaing.descripcion,
-            vertical_economica: this.formCampaing.vertical_economica,
-				zona_ap: this.formCampaing.zona_ap,
-				anio: this.formCampaing.anio,
+            id_campaing: this.stateCampaing.id_campaing,
+            nombre_campaña: "",
+            campaingForDelete:"",
+				fecha_inicio: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos) + ":00",
+				fecha_fin: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos) + ":00",
+				descripcion: "",
+				zona_ap: "",
+				anio: año,
+            vertical_economica:"",
             //formulario
             email:true,
             nombre:false,
@@ -131,22 +145,248 @@ export default class CMS extends Component {
                b:'0',
                a:'1',
             },
-            filesBanner: [],
-            imgsBannerSwitch:true,
+            // filesBanner: [],
+            // imgsBannerSwitch:true,
             imgBackgroundPreviewUrl:null
          },
       }
       this.handleChangeCheckBox = this.handleChangeCheckBox.bind(this)
-      this.rteChangeEsp = this.rteChangeEsp.bind(this);
-      this.rteChangeEng = this.rteChangeEng.bind(this);
+      this.rteChangeEsp = this.rteChangeEsp.bind(this)
+      this.rteChangeEng = this.rteChangeEng.bind(this)
       this.handleChange = this.handleChange.bind(this)
+      this.handleChangeDate = this.handleChangeDate.bind(this)
       this.handleSubmit = this.handleSubmit.bind(this)
       this.handleChangeTerms = this.handleChangeTerms.bind(this)
+      this.settingValuesFormEdit = this.settingValuesFormEdit.bind(this)
+      this.handleSubmitEdit = this.handleSubmitEdit.bind(this)
    }
 
    async componentDidMount(){
-
+      const { 
+         id_campaing,
+       } = this.state.form
+      const id_location = localStorage.user_location
+      try {
+			let res = await fetch(`${localStorage.urlDomain}api/zonas/${id_location}`)
+			let dataAPZones = await res.json()
+			this.setState({
+				dataAPZones: dataAPZones,
+				form: {
+					...this.state.form,
+					id_location: id_location
+					
+				}
+			})
+		} catch (error) {
+			this.setState({
+				error
+			})
+      }
+      if(id_campaing != 0){
+      this.settingValuesFormEdit(id_campaing)
+      }
    }
+
+   
+
+   async settingValuesFormEdit(id_campaing){
+         let res = await fetch(`${localStorage.urlDomain}api/campanias/${id_campaing}/edit`);
+         let dataCampaing = await res.json();
+         const urlDomain = localStorage.getItem('urlDomain')
+         let newState = {};
+         dataCampaing[1].forEach(function(column, i) {
+            // console.log("En el índice " + i + " hay este valor: " + column.COLUMN_NAME);
+            
+            if(column.COLUMN_NAME == 'estado_nombre'){
+              Object.assign(newState, {nombre: true})
+            }
+            if(column.COLUMN_NAME == 'estado_apellidos'){
+              Object.assign(newState, {apellidos: true})
+            }
+            if(column.COLUMN_NAME == 'estado_email'){
+               Object.assign(newState, {email: true})
+            }
+            if(column.COLUMN_NAME == 'estado_edad'){
+               Object.assign(newState, {edad: true})
+            }
+            if(column.COLUMN_NAME == 'estado_genero'){
+               Object.assign(newState, {genero: true})
+            }
+            if(column.COLUMN_NAME == 'estado_telefono'){
+               Object.assign(newState, {telefono: true})
+            }
+            if(column.COLUMN_NAME == 'estado_num_voucher'){
+               Object.assign(newState, {num_voucher: true})
+            }
+            if(column.COLUMN_NAME == 'estado_num_habitacion'){
+               Object.assign(newState, {num_habitacion: true})
+            }
+            if(column.COLUMN_NAME == 'estado_razon_visita'){
+               Object.assign(newState, {razon_visita: true})
+            }
+         });
+         if(!newState.email){
+            Object.assign(newState, {email: false})
+         }
+         if(!newState.nombre){
+            Object.assign(newState, {nombre: false})
+         }
+         if(!newState.apellidos){
+            Object.assign(newState, {apellidos: false})
+         }
+         if(!newState.edad){
+            Object.assign(newState, {edad: false})
+         }
+         if(!newState.genero){
+            Object.assign(newState, {genero: false})
+         }
+         if(!newState.telefono){
+            Object.assign(newState, {telefono: false})
+         }
+         if(!newState.num_voucher){
+            Object.assign(newState, {num_voucher: false})
+         }
+         if(!newState.num_habitacion){
+            Object.assign(newState, {num_habitacion: false})
+         }
+         if(!newState.razon_visita){
+            Object.assign(newState, {razon_visita: false})
+         }
+       
+
+         let widthMovilToInt = parseInt(dataCampaing[0].width_logo_movil)
+         let widthWebToInt = parseInt(dataCampaing[0].width_logo_web)
+
+         let buttonColor = dataCampaing[0].button_background_color
+         let cleanRGBAButtonString = buttonColor.replace(/([rgba( )])/g,'')
+         cleanRGBAButtonString = cleanRGBAButtonString.split(',')
+
+         let backgroundColorForm = dataCampaing[0].container_form_color
+         let cleanRGBABackgroundFormString = backgroundColorForm.replace(/([rgba( )])/g,'')
+         cleanRGBABackgroundFormString = cleanRGBABackgroundFormString.split(',')
+
+         let colorTitleForm = dataCampaing[0].color_title_portal
+         let cleanRGBATitleFormString = colorTitleForm.replace(/([rgba( )])/g,'')
+         cleanRGBATitleFormString = cleanRGBATitleFormString.split(',')
+
+         let colorFontForm = dataCampaing[0].container_form_font_color
+         let cleanRGBAFontFormString = colorFontForm.replace(/([rgba( )])/g,'')
+         cleanRGBAFontFormString = cleanRGBAFontFormString.split(',')
+
+         const db = localStorage.getItem('user_database')
+         if((db == 'portal_oxohotel' && dataCampaing[0].id_campaing != 2) || (db == 'unicentro' &&  (dataCampaing[0].id_campaing != 1 && dataCampaing[0].id_campaing != 2))){
+            toDataURL(urlDomain+'portales/'+dataCampaing[0].campania+dataCampaing[0].background)
+            .then(dataUrl => {
+               this.setState({
+                  form:{
+                     ...this.state.form,
+                     fileBackground:dataUrl
+                  }
+               })
+            })
+            toDataURL(urlDomain+'portales/'+dataCampaing[0].campania+dataCampaing[0].logo)
+            .then(dataUrl => {
+               this.setState({
+                  form:{
+                     ...this.state.form,
+                     fileLogo:dataUrl
+                  }
+               })
+            })
+         }
+         if(db == 'unicentro' && dataCampaing[0].id_campaing == 1){
+            let urlUnicentro = "https://www.unicentro.ipwork.io/";
+            this.setState({
+               form:{
+                  ...this.state.form,
+                  fileBackground:urlUnicentro+dataCampaing[0].campania+dataCampaing[0].background,
+                  fileLogo:urlUnicentro+dataCampaing[0].campania+dataCampaing[0].logo
+               }
+            })
+         }
+         if(db == 'unicentro' && dataCampaing[0].id_campaing == 2){
+            let urlUnicentro = "https://www.unicentro.ipwork.io/";
+            this.setState({
+               form:{
+                  ...this.state.form,
+                  fileBackground:urlUnicentro+'Gamers'+dataCampaing[0].background,
+                  fileLogo:urlUnicentro+'Gamers'+dataCampaing[0].logo
+               }
+            })
+         }
+         
+         if(db == 'portal_oxohotel' && dataCampaing[0].id_campaing == 2){
+            let urlErmita = "https://www.oxohotel.ipwork.io/";
+            this.setState({
+               form:{
+                  ...this.state.form,
+                  fileBackground:urlErmita+'Ermita'+dataCampaing[0].background,
+                  fileLogo:urlErmita+'Ermita'+dataCampaing[0].logo
+               }
+            })
+         }
+         let date = moment(new Date, 'YYYY/MM/DD hh:mm a');
+		   let anio = date.year();
+
+         this.setState({
+            form: {
+               ...this.state.form,
+               email: newState.email,
+               nombre: newState.nombre,
+               apellidos: newState.apellidos,
+               edad: newState.edad,
+               genero: newState.genero,
+               telefono: newState.telefono,
+               num_voucher: newState.num_voucher,
+               num_habitacion: newState.num_habitacion,
+               razon_visita: newState.razon_visita,
+               nombre_campaña: dataCampaing[0].nombre,
+               campaingForDelete: dataCampaing[0].campania,
+               anio:anio,
+               fecha_inicio: dataCampaing[0].fecha_inicio,
+               fecha_fin: dataCampaing[0].fecha_fin,
+               descripcion: dataCampaing[0].descripcion,
+               zona_ap: dataCampaing[0].zona_ap,
+               vertical_economica: dataCampaing[0].vertical_economica,
+               terminos_condiciones_esp: dataCampaing[0].terms_conditions_es,
+               terminos_condiciones_eng:dataCampaing[0].terms_conditions_en,
+               titlePortal: dataCampaing[0].title_portal,
+               sizeLogoMobile: widthMovilToInt,
+               sizeLogoWeb: widthWebToInt,
+               // fileBackground:urlUnicentro,
+               // fileLogo:urlLogo,
+               buttonColors: {
+                  r:cleanRGBAButtonString[0],
+                  g:cleanRGBAButtonString[1],
+                  b:cleanRGBAButtonString[2],
+                  a:cleanRGBAButtonString[3],
+               },
+               backgroundColorForm:{
+                  r:cleanRGBABackgroundFormString[0],
+                  g:cleanRGBABackgroundFormString[1],
+                  b:cleanRGBABackgroundFormString[2],
+                  a:cleanRGBABackgroundFormString[3],
+               },
+               colorTitleForm:{
+                  r:cleanRGBATitleFormString[0],
+                  g:cleanRGBATitleFormString[1],
+                  b:cleanRGBATitleFormString[2],
+                  a:cleanRGBATitleFormString[3],
+               },
+               colorFontForm:{
+                  r:cleanRGBAFontFormString[0],
+                  g:cleanRGBAFontFormString[1],
+                  b:cleanRGBAFontFormString[2],
+                  a:cleanRGBAFontFormString[3],
+               },
+               // backgroundColorForm: ,
+               // colorTitleForm: ,
+               // colorFontForm: ,
+               // id_campaing: id_campaing,
+            }
+         });
+   }
+
    handleChangeTabs = (event, value) => {
       this.setState({ value });
    };
@@ -306,25 +546,25 @@ export default class CMS extends Component {
             });
          }
       }
-      else if(name== 'imgsBannerSwitch') {
-         if(event.target.checked != false){
+      // else if(name== 'imgsBannerSwitch') {
+      //    if(event.target.checked != false){
             
-            this.setState({
-               form:{
-                  ...this.state.form,
-                  imgsBannerSwitch: event.target.checked,
-               }
-            });
-         }else{
-            this.state.form.filesBanner = [];
-            this.setState({
-               form:{
-                  ...this.state.form,
-                  imgsBannerSwitch: event.target.checked,
-               }
-            });
-         }
-      }
+      //       this.setState({
+      //          form:{
+      //             ...this.state.form,
+      //             imgsBannerSwitch: event.target.checked,
+      //          }
+      //       });
+      //    }else{
+      //       this.state.form.filesBanner = [];
+      //       this.setState({
+      //          form:{
+      //             ...this.state.form,
+      //             imgsBannerSwitch: event.target.checked,
+      //          }
+      //       });
+      //    }
+      // }
       else{
          this.setState({
             form:{
@@ -366,8 +606,33 @@ export default class CMS extends Component {
    //fin métodos formulario
 
    //métodos diseño 
-   async handleChange(e){
-     
+
+   handleChangeDate(e, name=null){
+      if(e.target){
+         this.setState({
+            form:{
+               ...this.state.form,
+               [e.target.name]: e.target.value
+            }
+         })
+      }
+      else if(e._d){
+         let date = moment(e._d, 'YYYY/MM/DD hh:mm a');
+         let año = date.year();
+         let mes = date.month()+1;
+         let dia = date.date();
+         let hora = date.hour();
+         let minutos = date.minute();
+         this.setState({
+            form:{
+               ...this.state.form,
+               [name]: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos)
+            }
+         })
+      }
+   }
+
+   handleChange(e){
       if(e.target.name == 'fileBackground'){
          if(e.target.files[0].size >= 500000 ){
            
@@ -463,44 +728,44 @@ export default class CMS extends Component {
             }
          })
       }
+     
    }
 
-   handleChangeBannerImgs(imgs){
-      // console.log(imgs.getAsDataURL())
-      // if(this.state.countImgs <= 5){
-         let files = imgs;
-         let reader = new FileReader();
-         reader.readAsDataURL(files)
-         reader.onload=(e)=>{
-            this.setState(state =>{
-               const filesBanner = state.form.filesBanner.push(e.target.result)
-               return {
-                  filesBanner
-               };
-            })
-           // this.setState({
-            //   countImgs: this.state.countImgs+1
-            //})
-         }
-      // }
-      // else{
-      //    NotificationManager.error('El número de imagenes ha excedido el límite (Max 5)','',5000);
-      // }
+   // handleChangeBannerImgs(imgs){
+   //    // console.log(imgs.getAsDataURL())
+   //    // if(this.state.countImgs <= 5){
+   //       let files = imgs;
+   //       let reader = new FileReader();
+   //       reader.readAsDataURL(files)
+   //       reader.onload=(e)=>{
+   //          this.setState(state =>{
+   //             const filesBanner = state.form.filesBanner.push(e.target.result)
+   //             return {
+   //                filesBanner
+   //             };
+   //          })
+   //         // this.setState({
+   //          //   countImgs: this.state.countImgs+1
+   //          //})
+   //       }
+   //    // }
+   //    // else{
+   //    //    NotificationManager.error('El número de imagenes ha excedido el límite (Max 5)','',5000);
+   //    // }
 
-   }
+   // }
+  
   
    async handleSubmit(e){
       e.preventDefault();
       const {
-         email,
-         nombre,
-         apellidos,
-         edad,
-         genero,
-         telefono,
-         num_voucher,
-         num_habitacion,
-         razon_visita,
+         anio,
+         descripcion,
+         fecha_fin,
+         fecha_inicio,
+         nombre_campaña,
+         vertical_economica,
+         zona_ap,
          terminos_condiciones_esp,
          terminos_condiciones_eng,
          titlePortal,
@@ -512,20 +777,27 @@ export default class CMS extends Component {
          backgroundColorForm,
          colorTitleForm,
          colorFontForm,
-         imgsBannerSwitch,
-         filesBanner,
+         // imgsBannerSwitch,
+         // filesBanner,
       } = this.state.form
-     
-      if((terminos_condiciones_esp == '' || terminos_condiciones_eng == '') || (terminos_condiciones_esp == '<p><br></p>' || terminos_condiciones_eng == '<p><br></p>')){
+      if(((nombre_campaña == '' || descripcion == '')) || ((zona_ap == '') || (anio == '' || vertical_economica == ''))){
+         	NotificationManager.error('Los campos son obligatorios','',5000);
+      }
+      else if((terminos_condiciones_esp == '' || terminos_condiciones_eng == '') || (terminos_condiciones_esp == '<p><br></p>' || terminos_condiciones_eng == '<p><br></p>')){
          NotificationManager.error('Los terminos y condiciones son requeridos','',5000);
       }
-      else if(imgsBannerSwitch == true && !filesBanner.length){
-            NotificationManager.error('Las imagenes de banner son requeridas','',5000);
+      else if(/[-!$%^&*()_+|~=`\\#{}\[\]:";'<>?,.Ññ\/]/.test(nombre_campaña)){
+            NotificationManager.error('No se permiten caracteres especiales','',5000);
       }
       else if( (((titlePortal == "" || fileBackground == "") || (fileLogo == "" || sizeLogoMobile == "")) || (sizeLogoWeb == "" || buttonColors == "") || (colorTitleForm == "" || colorFontForm == ""))){
          NotificationManager.error('Todos los campos son obligatorios','',5000);
       } 
       else{
+         try {
+            
+         } catch (error) {
+            
+         }
          let config = {
 				method: 'POST',
 				headers: {
@@ -535,9 +807,83 @@ export default class CMS extends Component {
 				body: JSON.stringify(this.state.form)
 			};
 
-         await fetch(`${localStorage.urlDomain}api/campanias`, config);
+         let res = await fetch(`${localStorage.urlDomain}api/campanias`, config);
+         let dataCampaing = await res.json();
          
-         this.props.history.goBack();
+         if(dataCampaing.message == 500){
+            NotificationManager.error('El nombre de campaña ya existe, por favor intente con otro nombre','',5000);
+         }
+         if(dataCampaing.message == 200){
+            this.props.history.goBack();
+            NotificationManager.success('Campaña creada satisfactoriamente!','',5000);
+         }
+      }
+   }
+
+   async handleSubmitEdit(e){
+      e.preventDefault();
+      const {
+         id_campaing,
+         anio,
+         descripcion,
+         fecha_fin,
+         fecha_inicio,
+         nombre_campaña,
+         vertical_economica,
+         zona_ap,
+         terminos_condiciones_esp,
+         terminos_condiciones_eng,
+         titlePortal,
+         fileBackground,
+         fileLogo,
+         sizeLogoMobile,
+         sizeLogoWeb,
+         buttonColors,
+         backgroundColorForm,
+         colorTitleForm,
+         colorFontForm,
+         // imgsBannerSwitch,
+         // filesBanner,
+      } = this.state.form
+      if((nombre_campaña == "" || descripcion == "") || (zona_ap == "" ||  vertical_economica == "")){
+         	NotificationManager.error('Los campos son obligatorios','',5000);
+      }
+      else if((terminos_condiciones_esp == "" || terminos_condiciones_eng == "") || (terminos_condiciones_esp == '<p><br></p>' || terminos_condiciones_eng == '<p><br></p>')){
+         NotificationManager.error('Los terminos y condiciones son requeridos',"",5000);
+      }
+      else if(/[-!$%^&*()_+|~=`\\#{}\[\]:";'<>?,.Ññ\/]/.test(nombre_campaña)){
+         NotificationManager.error('No se permiten caracteres especiales','',5000);
+      }
+      // else if(imgsBannerSwitch == true && !filesBanner.length){
+      //       NotificationManager.error('Las imagenes de banner son requeridas','',5000);
+      // }
+      else if( (((titlePortal == "" || fileBackground == "") || (fileLogo == "" || sizeLogoMobile == "")) || (sizeLogoWeb == "" || buttonColors == "") || (colorTitleForm == "" || colorFontForm == ""))){
+         NotificationManager.error('Todos los campos son obligatorios','',5000);
+      } 
+      else{
+         try {
+            let config = {
+               method: 'PATCH',
+               headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+               },
+               body: JSON.stringify(this.state.form)
+            };
+   
+            let res = await fetch(`${localStorage.urlDomain}api/campanias/` + id_campaing, config);
+            let dataCampaing = await res.json();
+            if(dataCampaing.message == 500){
+               NotificationManager.error('El nombre de campaña ya existe, por favor intente con otro nombre','',5000);
+            }
+            if(dataCampaing.message == 200){
+               this.props.history.goBack();
+               NotificationManager.success('Campaña editada satisfactoriamente!','',5000);
+            }
+         } catch (error) {
+            console.log(error);
+         }
+         
       }
    }
 
@@ -564,6 +910,14 @@ export default class CMS extends Component {
          direction: 'rlt'
       }
       const {
+         id_campaing,
+         anio,
+         descripcion,
+         fecha_fin,
+         fecha_inicio,
+         nombre_campaña,
+         vertical_economica,
+         zona_ap,
          //constantes formulario
          email,
          nombre,
@@ -587,8 +941,9 @@ export default class CMS extends Component {
          backgroundColorForm,
          colorTitleForm,
          colorFontForm,
-         imgsBannerSwitch 
+         // imgsBannerSwitch 
       } = this.state.form;
+      const { dataAPZones } = this.state
 
       //constantes formulario
       const modules = {
@@ -615,11 +970,11 @@ export default class CMS extends Component {
       //fin constantes formulario
 
       //constantes diseño
-       const files = this.state.form.filesBanner.map(file => (
-         <li key={file.name}>
-            {file.name} - {file.size} bytes
-         </li>
-      ));
+      //  const files = this.state.form.filesBanner.map(file => (
+      //    <li key={file.name}>
+      //       {file.name} - {file.size} bytes
+      //    </li>
+      // ));
       // fin constantes diseño
 
       const IOSSwitch = withStyles(theme => ({
@@ -696,7 +1051,7 @@ export default class CMS extends Component {
             popover: {
               position: 'absolute',
               zIndex: '2',
-              bottom: '59px'
+            //   bottom: '59px'
             },
             cover: {
               position: 'fixed',
@@ -805,16 +1160,106 @@ export default class CMS extends Component {
       // const djsConfig = this.djsConfig;
 
       // For a list of all possible events (there are many), see README.md!
-      var componentConfig = { iconFiletypes: ['.jpg', '.png', '.gif'], showFiletypeIcon: false, postUrl: 'no-url' };
-      var djsConfig = { acceptedFiles: "image/jpeg,image/png,image/gif", autoProcessQueue: false }
-      var eventHandlers = { addedfile: (file) => this.handleChangeBannerImgs(file)}
+      // var componentConfig = { iconFiletypes: ['.jpg', '.png', '.gif'], showFiletypeIcon: false, postUrl: 'no-url' };
+      // var djsConfig = { acceptedFiles: "image/jpeg,image/png,image/gif", autoProcessQueue: false }
+
+      // var eventHandlers = { addedfile: (file) => this.handleChangeBannerImgs(file)}
 
       return (
+      <div>
+            <PageTitleBar 
+            title={ 'CMS - '+ nombre_campaña } 
+            match={this.props.match} 
+            history={this.props.history}
+         />
+      
+      
          <div className="row" style={{marginBottom:"20px"}}>
+            <div className="col-lg-12" style={{marginBottom:'10px'}}>
+               <Card variant="outlined">
+                  {/* <div style={{padding: '20px'}}> */}
+                  <div className="ongoing-projects-wrap "  style={{backgroundColor:'rgb(64, 78, 119)', padding:'20px'}}>      
+                     <div className="row">
+                        <div className="col-lg-4">
+                           <FormGroup>
+                              <Label for="nombre_campaña">Nombre Campaña</Label>
+                              <Input type="text" autoComplete="off" name="nombre_campaña" id="nombre_campaña" value={nombre_campaña} onChange={() => this.handleChange(event)} placeholder="Nombre Campaña" />
+                           </FormGroup>
+                           <div className="row">
+                              <div className="col-lg-6 mb-4" style={{marginLeft: '-19px', marginRight:'35px'}}>
+                                 <DateTimePicker
+                                    className="has-input has-input-lg"
+                                    key="fecha_inicio"
+                                    label="Fecha Inicio"
+                                    style={{marginTop:"19px",marginRight:"2px"}}
+                                    required
+                                    value={fecha_inicio}
+                                    format="YYYY/MM/DD hh:mm a"
+                                    onChange={(event) => this.handleChangeDate(event, 'fecha_inicio')}
+                                    animateYearScrolling={false}
+                                    leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
+                                    rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
+                                    showTodayButton={true}
+                                 />
+                              </div>
+                              <div className="col-lg-6 mb-4" style={{marginLeft: '-39px', marginRight:'22px'}}>
+                                 <DateTimePicker
+                                    className="has-input has-input-lg"
+                                    key="fecha_fin"
+                                    label="Fecha Fin"
+                                    style={{marginTop:"19px",marginRight:'2px'}}
+                                    required
+                                    value={fecha_fin}
+                                    minDate={moment(fecha_inicio, 'YYYY/MM/DD hh:mm a')}
+                                    format="YYYY/MM/DD hh:mm a"
+                                    onChange={(event) => this.handleChangeDate(event, 'fecha_fin')}
+                                    animateYearScrolling={false}
+                                    leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
+                                    rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
+                                    showTodayButton={true}
+                                 />
+                              </div>
+                           </div>
+                        </div>
+
+                        <div className="col-lg-4">
+                           <Label for="zona_ap">Zona AP</Label>
+                           <Select name="zona_ap" id="zona_ap" native onChange={() => this.handleChange(event)}
+                              className="has-input zonaAP" value={zona_ap}
+                           >
+                              <option value="">Seleccione una zona</option>
+                              {dataAPZones && dataAPZones.map((dataAPZones) => (
+
+                                 <option key={dataAPZones.id} value={dataAPZones.id}>{dataAPZones.Nombre}</option>
+                              ))}
+
+                           </Select>
+                           
+                           <Label for="vertical_economica">Vertical Economica</Label>
+                           <Select name="vertical_economica" id="vertical_economica" native onChange={() => this.handleChange(event)}
+                              className="has-input verticalEco" value={vertical_economica}
+                           >
+                              <option value="">Seleccione una vertical</option>
+                              <option value='Hoteles'>Hoteles</option>
+                              <option value='Centros Comerciales'>Centros Comerciales</option>
+                           </Select>
+                        </div>
+                        
+                        <div className="col-lg-4">
+                           <FormGroup>
+                              <Label for="descripcion">Descripción</Label>
+                              <Input type="textarea" autoComplete="off" className="textAreaResize" rows="4" name="descripcion" id="descripcion" value={descripcion} onChange={() => this.handleChange(event)} placeholder="Descripción" />
+                           </FormGroup>
+                        </div> 
+                     </div>
+                  </div>
+               </Card>
+            </div>
             <div className="col-lg-6" >
+               
                <Card variant="outlined">
                   <CardContent>
-                     <div className="Tab-wrap" style={{backgroundColor: "#404e77",border: "0.3px solid #c1c1c1", padding:"1px"}}>
+                     <div className="Tab-wrap" style={{padding:"1px"}}>
                         {/* border: "0.3px solid #c1c1c1 !important",borderRadius:"6px !important", padding: "20px!important", */}
                         <AppBar position="static" >
                            <Tabs
@@ -836,7 +1281,7 @@ export default class CMS extends Component {
                            <div className="card mb-0 transaction-box">
                               <TabContainer dir={theme.direction}>
                                  <RctCardContent>
-                                    <div className="row" style={{backgroundColor: "#404e77",padding: "20px"}}>
+                                    <div className="row" style={{backgroundColor: "#404e77",padding: "30px 30px 66px 30px"}}>
                                        <div className="col-lg-6">
                                           <FormGroupUI>
                                              <FormControlLabelUI
@@ -934,8 +1379,8 @@ export default class CMS extends Component {
                            <div className="card mb-0 transaction-box">
                               <TabContainer dir={theme.direction}>
                                  <RctCardContent>
-                                       <div className="row" style={{backgroundColor: "#404e77",padding: "20px"}}>
-                                          <div className="col-lg-6">
+                                       <div className="row" style={{backgroundColor: "#404e77",padding: "30px 30px 66px 30px"}}>
+                                          <div className="col-lg-6" style={{paddingRight: '19px'}}>
                                              <FormGroup>
                                                 <Label for="titlePortal">Titulo Portal Cautivo</Label>
                                                 <Input type="text" autoComplete="off" name="titlePortal" id="titlePortal" value={titlePortal} onChange={() => this.handleChange(event)} placeholder="Titulo Portal Cautivo" />
@@ -956,29 +1401,26 @@ export default class CMS extends Component {
                                                 </FormText>
                                              </FormGroup>
                                              <FormGroup>
-                                                <Label for="sizeLogoMobile">Tamaño Logo Movil</Label>
+                                                <Label for="sizeLogoMobile">Tamaño Logo Movil <b style={{color:'#10c773'}}>(pixeles)</b></Label>
                                                 <Input type="number" autoComplete="off" name="sizeLogoMobile" id="sizeLogoMobile" value={sizeLogoMobile} onChange={() => this.handleChange(event)} placeholder="Tamaño Logo Movil" />
                                              </FormGroup>
                                              <FormGroup>
-                                                <Label for="sizeLogoWeb">Tamaño Logo Web</Label>
+                                                <Label for="sizeLogoWeb">Tamaño Logo Web <b style={{color:'#10c773'}}>(pixeles)</b></Label>
                                                 <Input type="number" autoComplete="off" name="sizeLogoWeb" id="sizeLogoWeb" value={sizeLogoWeb} onChange={() => this.handleChange(event)} placeholder="Tamaño Logo Web" />
                                              </FormGroup>
-                                             <FormGroup>
-                                                <Label for="buttonColors">Color de Botones</Label>
-                                                <div style={ stylesButtonColorPicker.swatch } onClick={ this.handleClickButtonStyle } className="inputColor">
-                                                   <div style={ stylesButtonColorPicker.color } />
-                                                </div>
-                                                { this.state.displayColorPickerButtonStyle ? <div style={ stylesButtonColorPicker.popover }>
-                                                <div style={ stylesButtonColorPicker.cover } onClick={ this.handleCloseButtonStyle } className="inputColor" />
-                                                   <SketchPicker className="pickerColor" color={ buttonColors } onChange={ this.handleChangeColorButtonStyle } />
-                                                </div> : null }
-                                                {/* <input type="color" autoComplete="off" name="buttonColors" id="buttonColors" value={buttonColors} onChange={() => this.handleChange(event)} className="inputColor"/> */}
-                                             </FormGroup>
-                                             
-                                          
                                           </div>
-                                          <div className="col-lg-6" style={{marginBottom:"38px", marginTop:"20px"}}>
-                                                <div style={{marginBottom:"39px"}}>
+                                          <div className="col-lg-6" style={{marginBottom:"38px",paddingLeft: '24px'}}>
+                                                <div style={{marginBottom:"47px"}}>
+                                                   <Label for="buttonColors">Color de Botones</Label>
+                                                   <div style={ stylesButtonColorPicker.swatch } onClick={ this.handleClickButtonStyle } className="inputColor">
+                                                      <div style={ stylesButtonColorPicker.color } />
+                                                   </div>
+                                                   { this.state.displayColorPickerButtonStyle ? <div style={ stylesButtonColorPicker.popover }>
+                                                   <div style={ stylesButtonColorPicker.cover } onClick={ this.handleCloseButtonStyle } className="inputColor" />
+                                                      <SketchPicker className="pickerColor" color={ buttonColors } onChange={ this.handleChangeColorButtonStyle } />
+                                                   </div> : null }
+                                                </div>
+                                                <div style={{marginBottom:"80px"}}>
                                                    <Label for="colorTitleForm">Color de Fondo del Formulario</Label>
                                                    <div style={ stylesColorPicker.swatch } onClick={ this.handleClickFormStyle } className="inputColor">
                                                       <div style={ stylesColorPicker.color } />
@@ -989,7 +1431,7 @@ export default class CMS extends Component {
                                                    </div> : null }
                                                    {/* <input type="color" autoComplete="off" name="backgroundColorForm" rgba id="backgroundColorForm" value={backgroundColorForm} onChange={() => this.handleChange(event)} className="inputColor"/> */}
                                                 </div>
-                                                <div style={{marginBottom:"39px"}}>
+                                                <div style={{marginBottom:"47px"}}>
                                                    <Label for="colorTitleForm">Color Titulo del Formulario</Label>
                                                    <div style={ stylesTitleColorPicker.swatch } onClick={ this.handleClickTitleStyle } className="inputColor">
                                                       <div style={ stylesTitleColorPicker.color } />
@@ -1000,7 +1442,7 @@ export default class CMS extends Component {
                                                    </div> : null }
                                                    {/* <input type="color" autoComplete="off" name="colorTitleForm" id="colorTitleForm" value={colorTitleForm} onChange={() => this.handleChange(event)} className="inputColor"/> */}
                                                 </div>
-                                                <div style={{marginTop:"15px"}}>
+                                                <div style={{marginTop:"15px",marginBottom:'114px'}}>
                                                       <Label for="colorFontForm">Color de la Fuente del Formulario</Label>
                                                       <div style={ stylesFontColorPicker.swatch } onClick={ this.handleClickFontStyle } className="inputColor">
                                                          <div style={ stylesFontColorPicker.color } />
@@ -1011,13 +1453,13 @@ export default class CMS extends Component {
                                                       </div> : null }
                                                       {/* <input type="color" autoComplete="off" name="colorFontForm" id="colorFontForm"  value={colorFontForm} onChange={() => this.handleChange(event)} className="inputColor"/> */}
                                                 </div>
-                                                <div style={{marginTop:"35px"}}>
+                                                {/* <div style={{marginTop:"35px"}}>
                                                    <FormControlLabel
                                                       control={<Checkbox checked={imgsBannerSwitch} onChange={this.handleChangeCheckBox('imgsBannerSwitch')} value="imgsBannerSwitch" />}
                                                       label="Imagenes del Banner"
                                                    />
-                                                </div>
-                                                {imgsBannerSwitch?
+                                                </div> */}
+                                                {/* {imgsBannerSwitch?
                                                 // <FormGroup>
                                                    <div className="dropzone-wrapper">
                                                          <DropzoneComponent
@@ -1031,10 +1473,14 @@ export default class CMS extends Component {
                                                 <div style={{paddingTop:"186px"}}>
                                                    &nbsp;
                                                 </div>
-                                                }
+                                                } */}
                                           </div>
                                           <div className="col-lg-12" style={{paddingBottom:"35px",paddingTop:"10px"}}>
-                                             <Button onClick={() => this.handleSubmit(event)} color="primary" style={{ margin:"0 auto", padding:"10px 50px" }}>Guardar</Button>
+                                             {id_campaing && id_campaing != 0 ?
+                                             <Button onClick={() => this.handleSubmitEdit(event)} color="primary" style={{ margin:"0 auto", padding:"10px 100px" }}>Editar</Button>
+                                                :
+                                             <Button onClick={() => this.handleSubmit(event)} color="primary" style={{ margin:"0 auto", padding:"10px 100px" }}>Guardar</Button>
+                                             }
                                           </div>
                                        </div>
                                  </RctCardContent>
@@ -1052,7 +1498,7 @@ export default class CMS extends Component {
                         <div className="row h-100">
                            <div className="col-sm-12 my-auto" >
                            { fileBackground ?  
-                              <div className="Tab-wrap" style={{backgroundColor: "#404e77",border: "0.3px solid #c1c1c1", padding:"1px"}}>
+                              <div className="Tab-wrap" style={{ padding:"1px"}}>
                                  <AppBar position="static" >
                                     <Tabs
                                        value={this.state.valueViewsFormat}
@@ -1304,7 +1750,7 @@ export default class CMS extends Component {
                               </div>
                               :
 
-                              <div className="Tab-wrap" style={{backgroundColor: "#404e77",border: "0.3px solid #c1c1c1", padding:"1px"}}>
+                              <div className="Tab-wrap" style={{padding:"1px"}}>
                               <AppBar position="static" >
                                  <Tabs
                                     value={this.state.valueViewsFormat}
@@ -1322,7 +1768,7 @@ export default class CMS extends Component {
                                  index={this.state.valueViewsFormat}
                                  onChangeIndex={this.handleChangeTabsIndexViewsFormat}
                               >
-                              <div className="card mb-0 transaction-box" style={{padding: "26px 5px 10px 5px", backgroundColor:"#404e77"}}>
+                              <div className="card mb-0 transaction-box" style={{padding: "26px 0px 10px 5px", backgroundColor:"#404e77"}}>
                                  <TabContainer dir={themeLang.direction}>
                                     <RctCardContent>
                                     <div className="cardCont" style={{background: "white", backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }}>
@@ -1571,10 +2017,11 @@ export default class CMS extends Component {
                                  </div>              
                               </div>
                               <a className="popup__close" href="#">X</a>
+                           </div>
                         </div>
-                     </div>
-                  </CardContent>
-               </Card>
+                     </CardContent>
+                  </Card>
+               </div>
             </div>
          </div>
       );
