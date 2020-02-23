@@ -206,15 +206,7 @@ class CampañaController extends Controller
      */
     public function show($id)
     {
-        $table = DB::connection(session('database'))
-            ->table('campania')
-            ->select('campania')
-            ->where('id_locacion', $id)
-            ->first();
-        $zonas = DB::connection(session('database'))
-            ->select("
-                select id, nombre as Nombre, (select fecha_creacion from $table->campania order by fecha_creacion desc limit 1) as 'Ultima Fecha', (select count(*) from $table->campania) as 'Total Registros', fecha_inicio as 'Fecha Inicio', fecha_fin as 'Fecha Fin', campania, vertical_economica as Vertical, path_campania from campania where id_locacion = $id
-            ");
+        $zonas = DB::select("CALL dataCampaings ('".session('database')."', '$id')");
         return response()->json($zonas, 200);
     }
 
