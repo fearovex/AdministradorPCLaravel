@@ -28,7 +28,7 @@ BEGIN
     while @var1 <= @countOne do
         set @var2 = (select campania from nameTables where i=@var1);
         set @queryTotal = concat(@queryTotal,'
-            select c.id, c.nombre as "Nombre", (select fecha_creacion from ',nameDataBase,'.',@var2,' order by fecha_creacion desc limit 1) as "Ultima Fecha", (select count(*) from ',nameDataBase,'.',@var2,') as "Total Registros", c.fecha_inicio as "Fecha Inicio", c.fecha_fin as "Fecha Fin", c.vertical_economica as "Vertical", c.path_campania from ',nameDataBase,'.campania c where c.campania = "',@var2,'" group by c.id'
+            select c.id, c.nombre as "Nombre", (select fecha_creacion from ',nameDataBase,'.',@var2,' order by fecha_creacion desc limit 1) as "Ultima Fecha", (select count(*) from ',nameDataBase,'.',@var2,') as "Total Registros", c.fecha_inicio as "Fecha Inicio", c.fecha_fin as "Fecha Fin", c.vertical_economica as "Vertical", c.campania, c.path_campania from ',nameDataBase,'.campania c where c.campania = "',@var2,'" group by c.id'
         );
         if @var1 <> @countOne then
             set @queryTotal = concat(@queryTotal,' union all ');
