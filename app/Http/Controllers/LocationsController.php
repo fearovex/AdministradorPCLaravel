@@ -119,10 +119,17 @@ class LocationsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $locaciones = DB::connection(session('database'))
-                ->table('locaciones')
-                ->where('id', $id)
-                ->update(['nombre' => $request->nombre,'direccion' => $request->direccion,'pais' => $request->pais,'ciudad' => $request->ciudad,'telefono' => $request->telefono,'PaginaWeb' => $request->PaginaWeb]);
+        try {
+            $locaciones = DB::connection(session('database'))
+            ->table('locaciones')
+            ->where('id', $id)
+            ->update(['nombre' => $request->nombre,'direccion' => $request->direccion,'pais' => $request->pais,'ciudad' => $request->ciudad,'telefono' => $request->telefono,'PaginaWeb' => $request->PaginaWeb]);
+            $response = SideBarController::getSideBarRol(session('rol'),session('database'));
+            return response()->json($response);
+        } catch (\Throwable $th) {
+            return response()->json(['message'=>500]);
+        }
+        
     }
 
     /**

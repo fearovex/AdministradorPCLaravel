@@ -42,9 +42,6 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
-
-       
-    
     }
 
     public function login (Request $request){
@@ -85,8 +82,7 @@ class LoginController extends Controller
                 'charset' => 'utf8mb4',
                 'collation' => 'utf8mb4_unicode_ci',
             ]);
-            
-            SideBarController::getSideBarRol($user->id_rol,$user->database);
+
             session(['emailValidate' => 'CSV']);
             return response()->json($user, 200);
 

@@ -8,6 +8,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import NavMenuItem from './NavMenuItem';
 import { onToggleMenu } from 'Actions';
+import { bindActionCreators } from 'redux';
 
 
 // import { configureStoreTest } from '../../store/storeTest';
@@ -30,14 +31,7 @@ class SidebarContent extends Component {
         this.props.onToggleMenu(data);
     }
 
-    
-    // componentWillMount(){
-    //     let jsonNavLinks = JSON.parse(localStorage.getItem('navLinks'))
-    //     this.setState({
-    //         sidebarMenus: jsonNavLinks
-    //     })
-    // }
-   
+  
    
     // <IntlMessages id="sidebar.events" />
     render() {
@@ -71,7 +65,6 @@ const mapStateToProps = ({ sidebar }) => {
     return { sidebar };
 };
 
-export default withRouter(connect(mapStateToProps, {
-    onToggleMenu,
-    
+export default withRouter(connect(mapStateToProps,{
+    onToggleMenu
 })(SidebarContent));

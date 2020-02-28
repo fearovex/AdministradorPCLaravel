@@ -17,7 +17,8 @@ import {
     STOP_USER_TOUR,
     TOGGLE_DARK_SIDENAV,
     AGENCY_TOGGLE_MENU,
-    CHANGE_AGENCY_LAYOUT_BG
+    CHANGE_AGENCY_LAYOUT_BG,
+    UPDATE_SIDEBAR
 } from './types';
 
 /**
@@ -76,6 +77,11 @@ export const rtlLayoutAction = (isRtlLayout) => ({
 export const onToggleMenu = (selectedMenu) => ({
     type: TOGGLE_MENU,
     payload: selectedMenu
+});
+
+export const updateSidebar = (updateMenu) => ({
+    type: UPDATE_SIDEBAR,
+    payload: updateMenu
 });
 
 /**

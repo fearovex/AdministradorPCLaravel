@@ -29,6 +29,8 @@ Route::group(['middleware' => 'cors'], function() {
         
         Route::get('/events','EventsController@index');
 
+        Route::get('/sidebar','SideBarController@index');
+
         Route::post('/graficas', 'GraficasController@Consulta');
 
         //apis para detalle de campañas

@@ -38,12 +38,7 @@
        
         localStorage.setItem('urlDomain', '{{env("APP_URL")}}');
         
-        @if(session('sideBar'))
-            localStorage.setItem('navLinks', '{!!json_encode(session("sideBar"))!!}');
-        @else
-            localStorage.setItem('navLinks', '{!!json_encode($navLinks)!!}');
-            
-        @endif
+      
     </script> 
 
     <script type="application/javascript">
