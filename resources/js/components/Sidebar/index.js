@@ -16,11 +16,13 @@ import UserBlock from './UserBlock';
 import SidebarContent from './SidebarContent';
 import AgencySidebar from '../AgencyMenu/AgencySidebar';
 
+import { updateSidebar } from 'Actions';
+import { bindActionCreators } from 'redux';
+
 class Sidebar extends Component {
 
-	UNSAFE_componentWillMount() {
+	async UNSAFE_componentWillMount() {
 		this.updateDimensions();
-		
 	}
 
 	shouldComponentUpdate(nextProps) {
@@ -31,9 +33,18 @@ class Sidebar extends Component {
 			return false
 		}
 	}
+	async getSidebar(){
+		let res = await fetch(`${localStorage.urlDomain}api/sidebar`)
+		let data = await res.json();
+		this.props.updateSidebar(
+			data.original
+		);
+	}
 
-	componentDidMount() {
+	async componentDidMount() {
+		this.getSidebar();
 		window.addEventListener("resize", this.updateDimensions);
+		
 	}
 
 	componentWillUnmount() {
@@ -102,6 +113,14 @@ const mapStateToProps = ({ settings }) => {
 	return { enableSidebarBackgroundImage, selectedSidebarImage, collapsedSidebar, isDarkSidenav, locale };
 };
 
-export default withRouter(connect(mapStateToProps, {
-	collapsedSidebarAction,
+// const mapDispatchToProps = dispatch => {
+// 	return bindActionCreators({
+		// updateSidebar,
+		// collapsedSidebarAction
+// 	},dispatch);
+//  };
+
+export default withRouter(connect(mapStateToProps,{
+	updateSidebar,
+	collapsedSidebarAction
 })(Sidebar));

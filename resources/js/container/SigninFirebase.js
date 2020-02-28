@@ -17,10 +17,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import Recaptcha from 'react-recaptcha';
-
-
-
-
+import { bindActionCreators } from 'redux';
 
 
 // components
@@ -37,7 +34,8 @@ import {
    signinUserWithFacebook,
    signinUserWithGoogle,
    signinUserWithGithub,
-   signinUserWithTwitter
+   signinUserWithTwitter,
+   updateSidebar
 } from 'Actions';
 
 //Auth File
@@ -86,13 +84,17 @@ class Signin extends Component {
                };
                let res = await fetch(`${localStorage.urlDomain}api/login`, config);
                let data = await res.json();
+              
             if(data && data.email){
                this.setState({
                   data:data
                })
                this.props.signinUserInFirebase(this.state, this.props.history);
-              
+               // localStorage.setItem('id_rol', this.state.data.id_rol);
                NotificationManager.success('Ha ingresado satisfactoriamente al sistema!','',4000);
+
+              
+      
             }
             else{
                NotificationManager.error("La contraseña o el usuario es invalido!.",'',4000);
@@ -108,8 +110,15 @@ class Signin extends Component {
       //  }
    }
    async componentWillUnmount(){
-      window.location.reload();
+      this.getSidebar();
    }
+   async getSidebar(){
+		let res = await fetch(`${localStorage.urlDomain}api/sidebar`)
+		let data = await res.json();
+		this.props.updateSidebar(
+			data.original
+		);
+	}
    forgotPassword(){
       this.props.history.push('/password/email')
    }
@@ -253,6 +262,7 @@ const mapStateToProps = ({ authUser }) => {
    return { user, loading }
 }
 
-export default connect(mapStateToProps, {
+export default connect(mapStateToProps,{
    signinUserInFirebase,
+   updateSidebar
 })(Signin);

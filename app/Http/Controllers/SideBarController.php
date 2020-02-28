@@ -4,9 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Storage;
 
 class SideBarController extends Controller
 {
+    public function index(){
+        $response = SideBarController::getSideBarRol(session('rol'),session('database'));
+        return response()->json($response);
+    }
+
     public static function getSideBarRol($rol, $database){
         $id_location = session('location');
         $id_campaing = session('campaing');
@@ -80,8 +86,12 @@ class SideBarController extends Controller
                 );
             }
             $sidebarJSON = (object) array('category1' => $locationsArray);
-
-            session(['sideBar' => $sidebarJSON]);
+            return response()->json($sidebarJSON);
+            // $sidebarJSON = (object) array('category1' => $locationsArray);
+            // $jsonString = str_replace('\/', '/', json_encode($sidebarJSON));
+            // $utf8 = utf8_encode($jsonString);
+            // Storage::disk("local"."")->put("NavLinks.js", "export default  $utf8 ");
+            // // session(['sideBar' => $sidebarJSON]);
         }
         else if($rol == 2){
             $idLocacion = $id_location;
@@ -127,8 +137,7 @@ class SideBarController extends Controller
                 ]
             );
             $sidebarJSON = (object) array('category1' => $locationsArray); 
-            
-            session(['sideBar' => $sidebarJSON]);
+            return response()->json($sidebarJSON);
         }
         else if($rol == 3){
             $idLocacion = $id_location;
@@ -142,9 +151,9 @@ class SideBarController extends Controller
                 'path'=> '/app/locations/'.$idLocacion.'/campañas/'.$campaing[0]->nombre
             );
 
-            $sidebarJSON = (object) array('category1' => $campaingArray); 
-            
-            session(['sideBar' => $sidebarJSON]);
+
+            $sidebarJSON = (object) array('category1' => $campaingArray);
+            return response()->json($sidebarJSON);
         }
         else if($rol == 4){
             $idLocacion = $id_location;
@@ -158,9 +167,8 @@ class SideBarController extends Controller
                 'path'=> '/app/locations/'.$locations[0]->nombre.'/vouchers'
             );
 
-            $sidebarJSON = (object) array('category1' => $campaingArray); 
-            
-            session(['sideBar' => $sidebarJSON]);
+            $sidebarJSON = (object) array('category1' => $campaingArray);
+            return response()->json($sidebarJSON);
         }
     }
 }
