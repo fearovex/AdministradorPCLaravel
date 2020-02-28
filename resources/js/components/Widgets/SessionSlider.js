@@ -15,19 +15,19 @@ export default class SessionSlider extends Component {
 	}
 
 	componentDidMount() {
-		this.getSessionUsersData();
+		// this.getSessionUsersData();
 	}
 
 	// session users data
 	getSessionUsersData() {
-		api.get('testimonials.js')
-			.then((response) => {
-				console.log(response)
-				this.setState({ sessionUsersData: response.data });
-			})
-			.catch(error => {
-				// error handling
-			})
+		// api.get('testimonials.js')
+		// 	.then((response) => {
+		// 		console.log(response)
+		// 		this.setState({ sessionUsersData: response.data });
+		// 	})
+		// 	.catch(error => {
+		// 		// error handling
+		// 	})
 	}
 
 	render() {
@@ -44,7 +44,7 @@ export default class SessionSlider extends Component {
 			swipeToSlide: true,
 			draggable: true
 		};
-		const { sessionUsersData } = this.state;
+		// const { sessionUsersData } = this.state;
 		return (
 			<div className="session-slider">
 				<Slider {...settings}>

@@ -45,8 +45,6 @@ import {
 import Auth from '../Auth/Auth';
 // callback component
 import Callback from "Components/Callback/Callback";
-import { updateSidebar } from 'Actions';
-import { bindActionCreators } from 'redux';
 
 
 //Auth0 Handle Authentication
@@ -77,17 +75,6 @@ const InitialPath = ({ component: Component, authUser, ...rest}) =>
    />;
 
 class App extends Component {
-   async getSidebar(){
-		let res = await fetch(`${localStorage.urlDomain}api/sidebar`)
-		let data = await res.json();
-		this.props.updateSidebar(
-			data.original
-		);
-	}
-   componentDidMount(){
-      this.getSidebar();
-   }
-
    render() {
       const { location, match, user } = this.props;
       
@@ -144,10 +131,5 @@ const mapStateToProps = ({ authUser }) => {
    return { user };
 };
 
-const mapDispatchToProps = dispatch => {
-	return bindActionCreators({
-	  updateSidebar,
-	},dispatch);
- };
 
-export default connect(mapStateToProps,mapDispatchToProps)(App);
+export default connect(mapStateToProps)(App);
