@@ -11,6 +11,12 @@ import { Input } from '@material-ui/core';
 import Select from '@material-ui/core/Select';
 import { Link } from 'react-router-dom';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+import { connect } from 'react-redux';
+import { onToggleMenu, updateSidebar } from 'Actions';
+import { withRouter } from 'react-router-dom';
+
+import { bindActionCreators } from 'redux';
 
 import {
 	Card,
@@ -27,7 +33,7 @@ function getSteps() {
 	return [<h3>DATOS GENERALES</h3>, <h3>DISPOSITIVOS</h3>];
 }
 
-export default class Locations extends Component {
+class Locations extends Component {
 
 	constructor(props) {
 		super(props)
@@ -63,16 +69,16 @@ export default class Locations extends Component {
 		try {
 			let res = await fetch(`${localStorage.urlDomain}api/locations`)
 			let dataLocations = await res.json();
+
 			this.setState({
-				dataLocations: dataLocations
+				dataLocations:dataLocations,
 			})
 		} catch (error) {
 			this.state = {
 				error: error
 			}
 		}
-
-
+		// window.location.reload();
 	}
 
 	async handleSubmit(e) {
@@ -91,15 +97,15 @@ export default class Locations extends Component {
 			let data = await res.json()
 			this.props.history.push(location.pathname + '/' + this.state.form.nombre + '/campañas')
 			localStorage.setItem('user_location', data);
-
+			this.componentDidMount();
 		} catch (error) {
 			console.log(error);
 		}
 	}
 
-	async componentWillUnmount() {
-		window.location.reload();
-	}
+	// async UNSAFE_componentWillUpdate() {
+		// window.location.reload();
+	// }
 	async handleEdit(e) {
 		e.preventDefault();
 		try {
@@ -112,13 +118,24 @@ export default class Locations extends Component {
 				body: JSON.stringify(this.state.form)
 			};
 
-			await fetch(`${localStorage.urlDomain}api/locations/` + this.state.form.id, config);
-
-			this.setState({
-				modaledit: false
+			let res = await fetch(`${localStorage.urlDomain}api/locations/` + this.state.form.id, config);
+			let response = await res.json();
+			
+			// if(response.message == 200){
+				this.setState({
+					modaledit: false
 			})
 
-			window.location.reload();
+			// this.props.onToggleMenu(responsejson);
+			this.props.updateSidebar(
+				response.original
+			);
+
+				
+			this.componentDidMount();
+			
+			// }
+			
 
 		} catch (error) {
 			console.log(error);
@@ -126,6 +143,7 @@ export default class Locations extends Component {
 				error
 			});
 		}
+		// window.location.reload();
 	}
 	async openAlertTest(key, id) {
 		this.setState({ [key]: true });
@@ -134,6 +152,7 @@ export default class Locations extends Component {
 
 		this.setState({
 			form: {
+				...this.state.form,
 				nombre: locacion.nombre,
 				direccion: locacion.direccion,
 				pais: locacion.pais,
@@ -141,7 +160,6 @@ export default class Locations extends Component {
 				telefono: locacion.telefono,
 				PaginaWeb: locacion.PaginaWeb,
 				id: locacion.id
-
 			}
 		});
 
@@ -308,12 +326,26 @@ export default class Locations extends Component {
 		this.state.form[e.target.name] = e.target.value;
 	}
 	handleChangeEdit(e) {
-		this.setState({
-			form: {
-				...this.state.form,
-				[e.target.name]: e.target.value
+		if(e.target.name=="telefono"){
+			let validation = /^[0-9]*$/;
+			if(validation.test(e.target.value)){
+				this.setState({
+					form: {
+						...this.state.form,
+						telefono: e.target.value
+					}
+				})
+			}else{
+				NotificationManager.error('El campo debe contener solo números','',5000);
 			}
-		})
+		}else{
+			this.setState({
+				form: {
+					...this.state.form,
+					[e.target.name]: e.target.value
+				}
+			})
+		}
 	}
 
 	ClickNavLink(id_location, id_campain) {
@@ -324,9 +356,21 @@ export default class Locations extends Component {
 
 	render() {
 		const { dataLocations } = this.state;
-		const { dataLocation } = this.state;
 		const steps = getSteps();
 		const { activeStep } = this.state;
+
+		const {
+			nombre,
+			direccion,
+			pais,
+			ciudad,
+			telefono,
+			PaginaWeb,
+			dispositivo,
+			mac_dispositivo,
+			tecnologia,
+		} = this.state.form;
+
 		const { basic, withDes, success, warning, customIcon, withHtml, prompt, passwordPrompt, modaledit, customStyle } = this.state;
 		return (
 			<div className="cardsmasonry-wrapper">
@@ -404,7 +448,7 @@ export default class Locations extends Component {
 										type="text"
 										name="nombre"
 										id="nombre"
-										value={this.state.form.nombre}
+										value={nombre}
 										className="has-input input-lg"
 										placeholder="Nombre"
 										onChange={() => this.handleChangeEdit(event)}
@@ -417,7 +461,7 @@ export default class Locations extends Component {
 										id="direccion"
 										className="has-input input-lg"
 										placeholder="Direccion"
-										value={this.state.form.direccion}
+										value={direccion}
 										onChange={() => this.handleChangeEdit(event)}
 									/>
 								</div>
@@ -428,7 +472,7 @@ export default class Locations extends Component {
 										id="pais"
 										className="has-input input-lg"
 										placeholder="Pais"
-										value={this.state.form.pais}
+										value={pais}
 										onChange={() => this.handleChangeEdit(event)}
 									/>
 								</div>
@@ -439,18 +483,18 @@ export default class Locations extends Component {
 										id="ciudad"
 										className="has-input input-lg"
 										placeholder="Ciudad"
-										value={this.state.form.ciudad}
+										value={ciudad}
 										onChange={() => this.handleChangeEdit(event)}
 									/>
 								</div>
 								<div className="col-lg-5 ml-3">
 									<Input
-										type="number"
+										type="text"
 										name="telefono"
-										id="telefono"
+										pattern="\d*"
 										className="has-input input-lg"
 										placeholder="Telefono"
-										value={this.state.form.telefono}
+										value={telefono}
 										onChange={() => this.handleChangeEdit(event)}
 									/>
 								</div>
@@ -461,7 +505,7 @@ export default class Locations extends Component {
 										id="PaginaWeb"
 										className="has-input input-lg"
 										placeholder="Pagina Web"
-										value={this.state.form.PaginaWeb}
+										value={PaginaWeb}
 										onChange={() => this.handleChangeEdit(event)}
 									/>
 								</div>
@@ -505,3 +549,16 @@ export default class Locations extends Component {
 		);
 	}
 }
+
+const mapStateToProps = state => {
+    return {};
+};
+
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({
+		// onToggleMenu
+		updateSidebar
+    },dispatch);
+};
+
+export default withRouter(connect(mapStateToProps,mapDispatchToProps)(Locations));

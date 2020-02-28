@@ -134,9 +134,9 @@ class CampañaController extends Controller
         DB::connection(session('database'))->table('styles_campania')->insert([
             'id_campania' => $campaña->id,
             'width_logo_web' => $request->sizeLogoWeb.'px',
-            'margin_logo_web' => '5%',
+            'margin_logo_web' => '1px',
             'width_logo_movil' => $request->sizeLogoMobile.'px',
-            'margin_logo_movil' => '5%',
+            'margin_logo_movil' => '1px',
             'container_form_color' => "rgba(".$request->backgroundColorForm['r'].", ".$request->backgroundColorForm['g'].", ".$request->backgroundColorForm['b'].", ".$request->backgroundColorForm['a'].")",
             'container_form_font_color' => "rgba(".$request->colorFontForm['r'].", ".$request->colorFontForm['g'].", ".$request->colorFontForm['b'].", ".$request->colorFontForm['a'].")",
             'button_font_color' => "rgba(".$request->colorFontForm['r'].", ".$request->colorFontForm['g'].", ".$request->colorFontForm['b'].", ".$request->colorFontForm['a'].")",
@@ -186,9 +186,9 @@ class CampañaController extends Controller
 
             for ($i=0; $i < count($portal_cautivo); $i++) { 
                 $new_path[$i] = substr($portal_cautivo[$i], 15);
-                Storage::disk("ftp_unicentro_produccion".session('database')."")->put($NameTabla."/$new_path[$i]", Storage::disk('public')->get($portal_cautivo[$i]));
+                Storage::disk("ftp_unicentro_produccion"."")->put($NameTabla."/$new_path[$i]", Storage::disk('public')->get($portal_cautivo[$i]));
             }
-            Storage::disk("ftp_unicentro_produccion".session('database')."")->prepend($NameTabla."/db/parameter.ini.dist", $config);
+            Storage::disk("ftp_unicentro_produccion"."")->prepend($NameTabla."/db/parameter.ini.dist", $config);
             
         }
         if(($db == 'portal_oxohotel' && $request->id_campaing == 2)){
@@ -381,9 +381,9 @@ class CampañaController extends Controller
     private function update_Styles_Terms($request){
         DB::connection(session('database'))->table('styles_campania')->where('id_campania', $request->id_campaing)->update([
             'width_logo_web' => $request->sizeLogoWeb.'px',
-            'margin_logo_web' => '5%',
+            'margin_logo_web' => '1px',
             'width_logo_movil' => $request->sizeLogoMobile.'px',
-            'margin_logo_movil' => '5%',
+            'margin_logo_movil' => '1px',
             'container_form_color' => "rgba(".$request->backgroundColorForm['r'].", ".$request->backgroundColorForm['g'].", ".$request->backgroundColorForm['b'].", ".$request->backgroundColorForm['a'].")",
             'container_form_font_color' => "rgba(".$request->colorFontForm['r'].", ".$request->colorFontForm['g'].", ".$request->colorFontForm['b'].", ".$request->colorFontForm['a'].")",
             'button_font_color' => "rgba(".$request->colorFontForm['r'].", ".$request->colorFontForm['g'].", ".$request->colorFontForm['b'].", ".$request->colorFontForm['a'].")",

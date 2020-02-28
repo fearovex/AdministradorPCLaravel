@@ -75,8 +75,6 @@ const InitialPath = ({ component: Component, authUser, ...rest}) =>
    />;
 
 class App extends Component {
-
-
    render() {
       const { location, match, user } = this.props;
       
@@ -132,5 +130,6 @@ const mapStateToProps = ({ authUser }) => {
    const { user } = authUser;
    return { user };
 };
+
 
 export default connect(mapStateToProps)(App);
