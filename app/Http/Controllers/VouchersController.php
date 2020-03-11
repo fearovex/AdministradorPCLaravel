@@ -49,114 +49,148 @@ class VouchersController extends Controller
     // }
 
     public function store(Request $request){
-            $contador = $request->numerovouchers;
-            $creados = 0;
-            while($contador <> 0){
-                $vouchersArray = array();
-                $vouchersCreados = array();
-                $vouchersDiferentes = array();
+        $contador = $request->numerovouchers;
+        $creados = 0;
+        if($request->personalizado){
+            $voucherDB = DB::connection(session('database'))
+                ->table('vouchers')
+                ->select('voucher')
+                ->where('id_campania', $request->id_campaing)
+                ->where('id_locacion', $request->id_location)
+                ->where('voucher', $request->voucherPersonalizado)
+                ->first();
+            if($voucherDB){
+                return response()->json(500);
+            }
+                // dd($request->voucherDB);
+            $voucher = new Voucher();
+            $voucher->setConnection(session('database'));
+            $voucher->id_locacion = $request->id_location;
+            $voucher->voucher = $request->voucherPersonalizado;
+            $voucher->estado = "Sin Uso";
+            $voucher->fecha_inicio = date('Y-m-d H:i:00', strtotime($request->fecha_inicio));
+            $voucher->fecha_fin = date('Y-m-d H:i:00', strtotime($request->fecha_fin));
+            $voucher->id_campania = $request->id_campaing;
+            $voucher->num_usos = 0;
+            $voucher->total_num_usos = $request->numerousos;
+            $voucher->etiqueta = $request->etiqueta;
+            $voucher->dias_disponibles = 0; 
+            $voucher->horas_disponibles = 0; 
+            $voucher->minutos_disponibles = 0;
+            $voucher->id_caducidad = 2;
+            $voucher->save();
 
-                $vouchers = DB::connection(session('database'))
-                    ->table('vouchers')
-                    ->select('voucher')
-                    ->where('id_campania', $request->id_campaing)
-                    ->where('id_locacion', $request->id_location)
-                    ->get();
+            $vouchersRecienCreados = DB::connection(session('database'))
+                ->select("select v.voucher as Voucher, v.fecha_inicio as 'Fecha Inicio', IF(v.id_caducidad=1, 'Nunca Expira', IF(v.id_caducidad=3, IF(v.num_usos=0, 'Aun no se activa', v.fecha_fin), v.fecha_fin)) as 'Fecha Fin', total_num_usos as 'N° Usos Total', etiqueta as 'Etiqueta' from vouchers as v where v.id_locacion = $request->id_location and v.id_campania=$request->id_campaing order by v.id_voucher desc limit 1");
+            
+            return response()->json($vouchersRecienCreados, 200);
+        }
+        while($contador <> 0){
+            $vouchersArray = array();
+            $vouchersCreados = array();
+            $vouchersDiferentes = array();
 
-                foreach($vouchers as $key => $voucher){
-                    $vouchersCreados[$key] = $voucher->voucher;
-                }
+            $vouchers = DB::connection(session('database'))
+                ->table('vouchers')
+                ->select('voucher')
+                ->where('id_campania', $request->id_campaing)
+                ->where('id_locacion', $request->id_location)
+                ->get();
 
-                $i=0;
-                while($i < $contador){
-                    $voucher = substr(md5(microtime()),rand(0,26),6);
-                    if(!in_array($voucher, $vouchersArray)){
-                        $vouchersArray[$i] = $voucher;
-                        $i++;
-                    }
-                }
-                $vouchersDiferentes = array_diff($vouchersArray, $vouchersCreados);
-                if(count($vouchersDiferentes) <> 0){
-                    if($request->nuncaExpira){
-                        foreach ($vouchersDiferentes as $key => $voucher){
-                            $voucher = new Voucher();
-                            $voucher->setConnection(session('database'));
-                            $voucher->id_locacion = $request->id_location;
-                            $voucher->voucher = $vouchersDiferentes[$key];
-                            $voucher->estado = "Sin Uso";
-                            $voucher->fecha_inicio = date('Y-m-d 00:00:00');
-                            $voucher->fecha_fin = date('Y-m-d 00:00:00', strtotime("3000-01-01"));
-                            $voucher->id_campania = $request->id_campaing;
-                            $voucher->num_usos = 0;
-                            $voucher->total_num_usos = $request->numerousos;
-                            $voucher->etiqueta = $request->etiqueta;
-                            $voucher->dias_disponibles = 0; 
-                            $voucher->horas_disponibles = 0; 
-                            $voucher->minutos_disponibles = 0;
-                            $voucher->id_caducidad = 1;
-                            $voucher->save();
-                            $creados++;
-                        }
-                    }
-                    if($request->expira){
-                        foreach ($vouchersDiferentes as $key => $voucher){
-                            $voucher = new Voucher();
-                            $voucher->setConnection(session('database'));
-                            $voucher->id_locacion = $request->id_location;
-                            $voucher->voucher = $vouchersDiferentes[$key];
-                            $voucher->estado = "Sin Uso";
-                            $voucher->fecha_inicio = date('Y-m-d H:i:00', strtotime($request->fecha_inicio));
-                            $voucher->fecha_fin = date('Y-m-d H:i:00', strtotime($request->fecha_fin));
-                            $voucher->id_campania = $request->id_campaing;
-                            $voucher->num_usos = 0;
-                            $voucher->total_num_usos = $request->numerousos;
-                            $voucher->etiqueta = $request->etiqueta;
-                            $voucher->dias_disponibles = 0; 
-                            $voucher->horas_disponibles = 0; 
-                            $voucher->minutos_disponibles = 0;
-                            $voucher->id_caducidad = 2;
-                            $voucher->save();
-                            $creados++;
-                        }
-                    }
-                    if($request->activarUso){
-                        if(is_null($request->diasDisponibles)){
-                            $request->diasDisponibles = 0; 
-                        }
-                        if(is_null($request->horasDisponibles)){
-                            $request->horasDisponibles = 0;
-                        }
-                        if(is_null($request->minutosDisponibles)){
-                            $request->minutosDisponibles = 0;
-                        }
-                        foreach ($vouchersDiferentes as $key => $voucher){
-                            $voucher = new Voucher();
-                            $voucher->setConnection(session('database'));
-                            $voucher->id_locacion = $request->id_location;
-                            $voucher->voucher = $vouchersDiferentes[$key];
-                            $voucher->estado = "Sin Uso";
-                            $voucher->fecha_inicio = date('Y-m-d H:i:00', strtotime($request->fecha_inicio));
-                            $voucher->fecha_fin = date('Y-m-d 00:00:00', strtotime($request->finalDateCampaing));
-                            $voucher->id_campania = $request->id_campaing;
-                            $voucher->num_usos = 0;
-                            $voucher->total_num_usos = $request->numerousos;
-                            $voucher->etiqueta = $request->etiqueta;
-                            
-                                $voucher->dias_disponibles = $request->diasDisponibles; 
-                                $voucher->horas_disponibles = $request->horasDisponibles; 
-                                $voucher->minutos_disponibles = $request->minutosDisponibles;
-                            $voucher->id_caducidad = 3;
-                            $voucher->save();
-                            $creados++;
-                        }
-                    }
+            foreach($vouchers as $key => $voucher){
+                $vouchersCreados[$key] = $voucher->voucher;
+            }
 
-                    $contador = $contador - count($vouchersDiferentes);
-                }
-                else{
-                    $contador = 0;
+            $i=0;
+            while($i < $contador){
+                $voucher = substr(md5(microtime()),rand(0,26),6);
+                if(!in_array($voucher, $vouchersArray)){
+                    $vouchersArray[$i] = $voucher;
+                    $i++;
                 }
             }
+            $vouchersDiferentes = array_diff($vouchersArray, $vouchersCreados);
+            if(count($vouchersDiferentes) <> 0){
+                if($request->nuncaExpira){
+                    foreach ($vouchersDiferentes as $key => $voucher){
+                        $voucher = new Voucher();
+                        $voucher->setConnection(session('database'));
+                        $voucher->id_locacion = $request->id_location;
+                        $voucher->voucher = $vouchersDiferentes[$key];
+                        $voucher->estado = "Sin Uso";
+                        $voucher->fecha_inicio = date('Y-m-d 00:00:00');
+                        $voucher->fecha_fin = date('Y-m-d 00:00:00', strtotime("3000-01-01"));
+                        $voucher->id_campania = $request->id_campaing;
+                        $voucher->num_usos = 0;
+                        $voucher->total_num_usos = $request->numerousos;
+                        $voucher->etiqueta = $request->etiqueta;
+                        $voucher->dias_disponibles = 0; 
+                        $voucher->horas_disponibles = 0; 
+                        $voucher->minutos_disponibles = 0;
+                        $voucher->id_caducidad = 1;
+                        $voucher->save();
+                        $creados++;
+                    }
+                }
+                if($request->expira){
+                    foreach ($vouchersDiferentes as $key => $voucher){
+                        $voucher = new Voucher();
+                        $voucher->setConnection(session('database'));
+                        $voucher->id_locacion = $request->id_location;
+                        $voucher->voucher = $vouchersDiferentes[$key];
+                        $voucher->estado = "Sin Uso";
+                        $voucher->fecha_inicio = date('Y-m-d H:i:00', strtotime($request->fecha_inicio));
+                        $voucher->fecha_fin = date('Y-m-d H:i:00', strtotime($request->fecha_fin));
+                        $voucher->id_campania = $request->id_campaing;
+                        $voucher->num_usos = 0;
+                        $voucher->total_num_usos = $request->numerousos;
+                        $voucher->etiqueta = $request->etiqueta;
+                        $voucher->dias_disponibles = 0; 
+                        $voucher->horas_disponibles = 0; 
+                        $voucher->minutos_disponibles = 0;
+                        $voucher->id_caducidad = 2;
+                        $voucher->save();
+                        $creados++;
+                    }
+                }
+                if($request->activarUso){
+                    if(is_null($request->diasDisponibles)){
+                        $request->diasDisponibles = 0; 
+                    }
+                    if(is_null($request->horasDisponibles)){
+                        $request->horasDisponibles = 0;
+                    }
+                    if(is_null($request->minutosDisponibles)){
+                        $request->minutosDisponibles = 0;
+                    }
+                    foreach ($vouchersDiferentes as $key => $voucher){
+                        $voucher = new Voucher();
+                        $voucher->setConnection(session('database'));
+                        $voucher->id_locacion = $request->id_location;
+                        $voucher->voucher = $vouchersDiferentes[$key];
+                        $voucher->estado = "Sin Uso";
+                        $voucher->fecha_inicio = date('Y-m-d H:i:00', strtotime($request->fecha_inicio));
+                        $voucher->fecha_fin = date('Y-m-d 00:00:00', strtotime($request->finalDateCampaing));
+                        $voucher->id_campania = $request->id_campaing;
+                        $voucher->num_usos = 0;
+                        $voucher->total_num_usos = $request->numerousos;
+                        $voucher->etiqueta = $request->etiqueta;
+                        
+                            $voucher->dias_disponibles = $request->diasDisponibles; 
+                            $voucher->horas_disponibles = $request->horasDisponibles; 
+                            $voucher->minutos_disponibles = $request->minutosDisponibles;
+                        $voucher->id_caducidad = 3;
+                        $voucher->save();
+                        $creados++;
+                    }
+                }
+
+                $contador = $contador - count($vouchersDiferentes);
+            }
+            else{
+                $contador = 0;
+            }
+        }
 
         $vouchersRecienCreados = DB::connection(session('database'))
         ->select("select v.voucher as Voucher, v.fecha_inicio as 'Fecha Inicio', IF(v.id_caducidad=1, 'Nunca Expira', IF(v.id_caducidad=3, IF(v.num_usos=0, 'Aun no se activa', v.fecha_fin), v.fecha_fin)) as 'Fecha Fin', total_num_usos as 'N° Usos Total', etiqueta as 'Etiqueta' from vouchers as v where v.id_locacion = $request->id_location and v.id_campania=$request->id_campaing order by v.id_voucher desc limit $creados");
