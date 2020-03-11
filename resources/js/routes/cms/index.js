@@ -274,7 +274,8 @@ export default class CMS extends Component {
          cleanRGBAFontFormString = cleanRGBAFontFormString.split(',')
 
          const db = localStorage.getItem('user_database')
-         if((db == 'portal_oxohotel' && dataCampaing[0].id_campaing != 2) || (db == 'unicentro' &&  (dataCampaing[0].id_campaing != 1 && dataCampaing[0].id_campaing != 2))){
+         console.log(urlDomain+'portales/'+dataCampaing[0].campania+dataCampaing[0].background);
+         if((db == 'portal_oxohotel' && dataCampaing[0].id_campaing != 2) || (db == 'unicentro' &&  (dataCampaing[0].id_campaing != 1 && dataCampaing[0].id_campaing != 2)) || (db != 'unicentro' && db != 'portal_oxohotel')){
             toDataURL(urlDomain+'portales/'+dataCampaing[0].campania+dataCampaing[0].background)
             .then(dataUrl => {
                this.setState({
@@ -286,6 +287,7 @@ export default class CMS extends Component {
             })
             toDataURL(urlDomain+'portales/'+dataCampaing[0].campania+dataCampaing[0].logo)
             .then(dataUrl => {
+
                this.setState({
                   form:{
                      ...this.state.form,
@@ -309,8 +311,8 @@ export default class CMS extends Component {
             this.setState({
                form:{
                   ...this.state.form,
-                  fileBackground:urlUnicentro+'Gamers'+dataCampaing[0].background,
-                  fileLogo:urlUnicentro+'Gamers'+dataCampaing[0].logo
+                  fileBackground:urlUnicentro+dataCampaing[0].campania+dataCampaing[0].background,
+                  fileLogo:urlUnicentro+dataCampaing[0].campania+dataCampaing[0].logo
                }
             })
          }
@@ -320,8 +322,8 @@ export default class CMS extends Component {
             this.setState({
                form:{
                   ...this.state.form,
-                  fileBackground:urlErmita+'Ermita'+dataCampaing[0].background,
-                  fileLogo:urlErmita+'Ermita'+dataCampaing[0].logo
+                  fileBackground:urlErmita+dataCampaing[0].campania+dataCampaing[0].background,
+                  fileLogo:urlErmita+dataCampaing[0].campania+dataCampaing[0].logo
                }
             })
          }

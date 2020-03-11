@@ -176,38 +176,38 @@ class CampañaController extends Controller
         campania = "'.$campania.'"';
 
         if(($db == 'unicentro' && ($request->id_campaing == 1 || $request->id_campaing == 2))){
-            // for ($i=0; $i < count($portal_cautivo); $i++) { 
-            //     $new_path[$i] = substr($portal_cautivo[$i], 15);
-            //     Storage::disk("ftp_".session('database')."")->put($NameTabla."/$new_path[$i]", Storage::disk('public')->get($portal_cautivo[$i]));
-            // }
-            // Storage::disk("ftp_".session('database')."")->prepend($NameTabla."/db/parameter.ini.dist", $config);
+            for ($i=0; $i < count($portal_cautivo); $i++) { 
+                $new_path[$i] = substr($portal_cautivo[$i], 15);
+                Storage::disk("ftp_".session('database')."")->put($NameTabla."/$new_path[$i]", Storage::disk('public')->get($portal_cautivo[$i]));
+            }
+            Storage::disk("ftp_".session('database')."")->prepend($NameTabla."/db/parameter.ini.dist", $config);
 
             // descomentar al pasar a produccion
 
-            for ($i=0; $i < count($portal_cautivo); $i++) { 
-                $new_path[$i] = substr($portal_cautivo[$i], 15);
-                Storage::disk("ftp_unicentro_produccion"."")->put($NameTabla."/$new_path[$i]", Storage::disk('public')->get($portal_cautivo[$i]));
-            }
-            Storage::disk("ftp_unicentro_produccion"."")->prepend($NameTabla."/db/parameter.ini.dist", $config);
+            // for ($i=0; $i < count($portal_cautivo); $i++) { 
+            //     $new_path[$i] = substr($portal_cautivo[$i], 15);
+            //     Storage::disk("ftp_unicentro_produccion"."")->put($NameTabla."/$new_path[$i]", Storage::disk('public')->get($portal_cautivo[$i]));
+            // }
+            // Storage::disk("ftp_unicentro_produccion"."")->prepend($NameTabla."/db/parameter.ini.dist", $config);
             
         }
         if(($db == 'portal_oxohotel' && $request->id_campaing == 2)){
-            // for ($i=0; $i < count($portal_cautivo); $i++) { 
-            //     $new_path[$i] = substr($portal_cautivo[$i], 15);
-            //     Storage::disk("ftp_".session('database')."")->put($NameTabla."/$new_path[$i]", Storage::disk('public')->get($portal_cautivo[$i]));
-            // }
-            // Storage::disk("ftp_".session('database')."")->prepend($NameTabla."/db/parameter.ini.dist", $config);
+            for ($i=0; $i < count($portal_cautivo); $i++) { 
+                $new_path[$i] = substr($portal_cautivo[$i], 15);
+                Storage::disk("ftp_".session('database')."")->put($NameTabla."/$new_path[$i]", Storage::disk('public')->get($portal_cautivo[$i]));
+            }
+            Storage::disk("ftp_".session('database')."")->prepend($NameTabla."/db/parameter.ini.dist", $config);
 
             // descomentar al pasar a produccion
 
-            for ($i=0; $i < count($portal_cautivo); $i++) { 
-                $new_path[$i] = substr($portal_cautivo[$i], 15);
-                Storage::disk("ftp_ermita_produccion"."")->put($NameTabla."/$new_path[$i]", Storage::disk('public')->get($portal_cautivo[$i]));
-            }
-            Storage::disk("ftp_ermita_produccion"."")->prepend($NameTabla."/db/parameter.ini.dist", $config);
+            // for ($i=0; $i < count($portal_cautivo); $i++) { 
+            //     $new_path[$i] = substr($portal_cautivo[$i], 15);
+            //     Storage::disk("ftp_ermita_produccion"."")->put($NameTabla."/$new_path[$i]", Storage::disk('public')->get($portal_cautivo[$i]));
+            // }
+            // Storage::disk("ftp_ermita_produccion"."")->prepend($NameTabla."/db/parameter.ini.dist", $config);
             
         }
-        if(($db == 'portal_oxohotel' && $request->id_campaing != 2) || ($db == 'unicentro' &&  ($request->id_campaing != 1 && $request->id_campaing != 2))){
+        if(($db == 'portal_oxohotel' && $request->id_campaing != 2) || ($db == 'unicentro' &&  ($request->id_campaing != 1 && $request->id_campaing != 2)) || ($db !='unicentro' && $db !='portal_oxohotel')){
             for ($i=0; $i < count($portal_cautivo); $i++) { 
                 $new_path[$i] = substr($portal_cautivo[$i], 15);
                 Storage::disk("ftp_".session('database')."")->put($NameTabla."/$new_path[$i]", Storage::disk('public')->get($portal_cautivo[$i]));
@@ -363,8 +363,20 @@ class CampañaController extends Controller
 
 
     public function deleteFolderFtp($NameTableForDelete){
-        if(Storage::disk("ftp_".session('database'),"")->exists($NameTableForDelete)){
-            Storage::disk("ftp_".session('database'),"")->deleteDirectory($NameTableForDelete);
+        if((session('database') == 'portal_oxohotel' && $id != 2) || (session('database') == 'unicentro' && ($id != 1 && $id != 2)) || (session('database') !='unicentro' && session('database') !='portal_oxohotel')){
+            if(Storage::disk("ftp_".session('database'),"")->exists($NameTableForDelete)){
+                Storage::disk("ftp_".session('database'),"")->deleteDirectory($NameTableForDelete);
+            }
+        }
+        if((session('database') == 'unicentro' && ($id == 1 || $id == 2))){
+            if(Storage::disk("ftp_unicentro_produccion","")->exists($NameTableForDelete)){
+                Storage::disk("ftp_ermita_produccion","")->deleteDirectory($NameTableForDelete);
+            }
+        }
+        if((session('database') == 'portal_oxohotel' && $id == 2)){
+            if(Storage::disk("ftp_ermita_produccion","")->exists($NameTableForDelete)){
+                Storage::disk("ftp_ermita_produccion","")->deleteDirectory($NameTableForDelete);
+            }
         }
     }
     
@@ -408,37 +420,39 @@ class CampañaController extends Controller
     private function sendImagesWithUpdate($request, $NameTable, $urlEncodedBackground='', $urlEncodedLogo=''){
         $db = session('database');
         if(($db == 'unicentro' && ($request->id_campaing == 1 || $request->id_campaing == 2))){
-            // $background = explode(';base64,', $urlEncodedBackground);
-            // Storage::disk("ftp_".session('database')."")->put($NameTable."/img/background.png", base64_decode($background[1]));
-            // $logo = explode(';base64,', $urlEncodedLogo);
-            // Storage::disk("ftp_".session('database')."")->put($NameTable."/img/logo.png", base64_decode($logo[1]));
-            // Storage::disk("ftp_".session('database')."")->put($NameTable."/img/favicon.ico", base64_decode($logo[1]));
+            $background = explode(';base64,', $urlEncodedBackground);
+            Storage::disk("ftp_".session('database')."")->put($NameTable."/img/background.png", base64_decode($background[1]));
+            $logo = explode(';base64,', $urlEncodedLogo);
+            Storage::disk("ftp_".session('database')."")->put($NameTable."/img/logo.png", base64_decode($logo[1]));
+            Storage::disk("ftp_".session('database')."")->put($NameTable."/img/favicon.ico", base64_decode($logo[1]));
 
             // descomentar al pasar a produccion
 
-            $background = explode(';base64,', $urlEncodedBackground);
-            Storage::disk("ftp_unicentro_produccion"."")->put($NameTable."/img/background.png", base64_decode($background[1]));
-            $logo = explode(';base64,', $urlEncodedLogo);
-            Storage::disk("ftp_unicentro_produccion"."")->put($NameTable."/img/logo.png", base64_decode($logo[1]));
-            Storage::disk("ftp_unicentro_produccion"."")->put($NameTable."/img/favicon.ico", base64_decode($logo[1]));
+            // $background = explode(';base64,', $urlEncodedBackground);
+            // Storage::disk("ftp_unicentro_produccion"."")->put($NameTable."/img/background.png", base64_decode($background[1]));
+            // $logo = explode(';base64,', $urlEncodedLogo);
+            // Storage::disk("ftp_unicentro_produccion"."")->put($NameTable."/img/logo.png", base64_decode($logo[1]));
+            // Storage::disk("ftp_unicentro_produccion"."")->put($NameTable."/img/favicon.ico", base64_decode($logo[1]));
          }
          if(($db == 'portal_oxohotel' && $request->id_campaing == 2)){
-            // $background = explode(';base64,', $urlEncodedBackground);
-            // Storage::disk("ftp_".session('database')."")->put($NameTable."/img/background.png", base64_decode($background[1]));
-            // $logo = explode(';base64,', $urlEncodedLogo);
-            // Storage::disk("ftp_".session('database')."")->put($NameTable."/img/logo.png", base64_decode($logo[1]));
-            // Storage::disk("ftp_".session('database')."")->put($NameTable."/img/favicon.ico", base64_decode($logo[1]));
+            $background = explode(';base64,', $urlEncodedBackground);
+            Storage::disk("ftp_".session('database')."")->put($NameTable."/img/background.png", base64_decode($background[1]));
+            $logo = explode(';base64,', $urlEncodedLogo);
+            Storage::disk("ftp_".session('database')."")->put($NameTable."/img/logo.png", base64_decode($logo[1]));
+            Storage::disk("ftp_".session('database')."")->put($NameTable."/img/favicon.ico", base64_decode($logo[1]));
 
             // descomentar al pasar a produccion
 
-                $background = explode(';base64,', $urlEncodedBackground);
-                Storage::disk("ftp_ermita_produccion"."")->put($NameTable."/img/background.png", base64_decode($background[1]));
-                $logo = explode(';base64,', $urlEncodedLogo);
-                Storage::disk("ftp_ermita_produccion"."")->put($NameTable."/img/logo.png", base64_decode($logo[1]));
-                Storage::disk("ftp_ermita_produccion"."")->put($NameTable."/img/favicon.ico", base64_decode($logo[1]));
+                // $background = explode(';base64,', $urlEncodedBackground);
+                // Storage::disk("ftp_ermita_produccion"."")->put($NameTable."/img/background.png", base64_decode($background[1]));
+                // $logo = explode(';base64,', $urlEncodedLogo);
+                // Storage::disk("ftp_ermita_produccion"."")->put($NameTable."/img/logo.png", base64_decode($logo[1]));
+                // Storage::disk("ftp_ermita_produccion"."")->put($NameTable."/img/favicon.ico", base64_decode($logo[1]));
          }
-         if(($db == 'portal_oxohotel' && $request->id_campaing != 2) || ($db == 'unicentro' &&  ($request->id_campaing != 1 && $request->id_campaing != 2))){
+         if(($db == 'portal_oxohotel' && $request->id_campaing != 2) || ($db == 'unicentro' &&  ($request->id_campaing != 1 && $request->id_campaing != 2)) || ($db !='unicentro' && $db !='portal_oxohotel')){
+            
             $background = explode(';base64,', $request->fileBackground);
+            // dd($request->fileBackground);
             Storage::disk("ftp_".session('database')."")->put($NameTable."/img/background.png", base64_decode($background[1]));
     
             $logo = explode(';base64,', $request->fileLogo);
@@ -486,7 +500,7 @@ class CampañaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if((session('database') == 'portal_oxohotel' && $id != 2) || (session('database') == 'unicentro' && ($id != 1 && $id != 2))){
+        if((session('database') == 'portal_oxohotel' && $id != 2) || (session('database') == 'unicentro' && ($id != 1 && $id != 2)) || (session('database') !='unicentro' && session('database') !='portal_oxohotel')){
             $NameTable = str_replace(["-", " "],"_",$request->nombre_campaña."_".date('Y-m-d', strtotime($request->fecha_inicio)));
 
             $NameTableForDelete = $request->campaingForDelete;
@@ -516,10 +530,10 @@ class CampañaController extends Controller
 
            
             CampañaController::update_Styles_Terms($request);
-            CampañaController::deleteFolderFtp($NameTableForDelete);
+            CampañaController::deleteFolderFtp($NameTableForDelete, $id);
             CampañaController::ftp_portal_cautivo($NameTable, $request);
             CampañaController::sendImagesWithUpdate($request, $NameTable);
-            SideBarController::getSideBarRol(session('rol'),session('database'));
+            // SideBarController::getSideBarRol(session('rol'),session('database'));
             return response()->json(['message' => 200]);
         } else{
             // $opts = array('http'=>array('header' => "User-Agent:MyAgent/1.0\r\n")); 
@@ -564,10 +578,10 @@ class CampañaController extends Controller
             CampañaController::alterTableWithNewColumns($request, $id, $NameTable);
 
             CampañaController::update_Styles_Terms($request);
-            CampañaController::deleteFolderFtp($NameTableForDelete);
+            CampañaController::deleteFolderFtp($NameTableForDelete, $id);
             CampañaController::ftp_portal_cautivo($NameTable, $request);
             CampañaController::sendImagesWithUpdate($request, $NameTable, $urlEncodedBackground, $urlEncodedLogo);
-            SideBarController::getSideBarRol(session('rol'),session('database'));
+            // SideBarController::getSideBarRol(session('rol'),session('database'));
             return response()->json(['message' => 200]);
         }
        
