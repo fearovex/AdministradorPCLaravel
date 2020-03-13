@@ -50,7 +50,7 @@ class DatabaseMiddleware
 
             //local
             // 'driver' => 'ftp',
-            // 'host' => '192.168.1.10',
+            // 'host' => '192.168.0.48',
             // 'port' => '21',
             // 'root' => '/public/portales',
             // 'username' =>'Miguel Acevedo',
