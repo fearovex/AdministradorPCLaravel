@@ -44,9 +44,9 @@ class DatabaseMiddleware
             'username' => env('FTP_USERNAME'),
             'password' => env('FTP_PASSWORD'),
             'passive' => true,
-            'visibility' => 'public',
-            'permPublic' => 0777,
-            'directoryPerm' => 0777,
+            //'visibility' => 'public',
+            //'permPublic' => 0777,
+            //'directoryPerm' => 0777,
 
             //local
             // 'driver' => 'ftp',

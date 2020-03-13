@@ -409,7 +409,7 @@ export default class Voucher extends Component {
 				}
 			})
 		}
-		else if (e.target.name === 'numerousos' && e.target.value > 5) {
+		else if (e.target.name === 'numerousos' && e.target.value > 5 && !this.state.form.personalizado) {
 				this.setState({
 					form: {
 						...this.state.form,
