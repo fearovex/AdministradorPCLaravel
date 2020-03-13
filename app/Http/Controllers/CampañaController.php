@@ -363,21 +363,23 @@ class CampañaController extends Controller
 
 
     public function deleteFolderFtp($NameTableForDelete){
-        if((session('database') == 'portal_oxohotel' && $id != 2) || (session('database') == 'unicentro' && ($id != 1 && $id != 2)) || (session('database') !='unicentro' && session('database') !='portal_oxohotel')){
+        //descomentar al pasar a producción
+
+        // if((session('database') == 'portal_oxohotel' && $id != 2) || (session('database') == 'unicentro' && ($id != 1 && $id != 2)) || (session('database') !='unicentro' && session('database') !='portal_oxohotel')){
             if(Storage::disk("ftp_".session('database'),"")->exists($NameTableForDelete)){
                 Storage::disk("ftp_".session('database'),"")->deleteDirectory($NameTableForDelete);
             }
-        }
-        if((session('database') == 'unicentro' && ($id == 1 || $id == 2))){
-            if(Storage::disk("ftp_unicentro_produccion","")->exists($NameTableForDelete)){
-                Storage::disk("ftp_ermita_produccion","")->deleteDirectory($NameTableForDelete);
-            }
-        }
-        if((session('database') == 'portal_oxohotel' && $id == 2)){
-            if(Storage::disk("ftp_ermita_produccion","")->exists($NameTableForDelete)){
-                Storage::disk("ftp_ermita_produccion","")->deleteDirectory($NameTableForDelete);
-            }
-        }
+        // }
+        // if((session('database') == 'unicentro' && ($id == 1 || $id == 2))){
+        //     if(Storage::disk("ftp_unicentro_produccion","")->exists($NameTableForDelete)){
+        //         Storage::disk("ftp_ermita_produccion","")->deleteDirectory($NameTableForDelete);
+        //     }
+        // }
+        // if((session('database') == 'portal_oxohotel' && $id == 2)){
+        //     if(Storage::disk("ftp_ermita_produccion","")->exists($NameTableForDelete)){
+        //         Storage::disk("ftp_ermita_produccion","")->deleteDirectory($NameTableForDelete);
+        //     }
+        // }
     }
     
     private function alterTable($NameTabla, $NameTableForDelete){
@@ -533,11 +535,9 @@ class CampañaController extends Controller
             CampañaController::deleteFolderFtp($NameTableForDelete, $id);
             CampañaController::ftp_portal_cautivo($NameTable, $request);
             CampañaController::sendImagesWithUpdate($request, $NameTable);
-            // SideBarController::getSideBarRol(session('rol'),session('database'));
+            SideBarController::getSideBarRol(session('rol'),session('database'));
             return response()->json(['message' => 200]);
         } else{
-            // $opts = array('http'=>array('header' => "User-Agent:MyAgent/1.0\r\n")); 
-            // $context = stream_context_create($opts);
             $imgBackground = file_get_contents($request->fileBackground);
             $urlEncodedBackground='data:image/png;base64,'.base64_encode($imgBackground);
             $imgLogo = file_get_contents($request->fileLogo);
@@ -581,7 +581,7 @@ class CampañaController extends Controller
             CampañaController::deleteFolderFtp($NameTableForDelete, $id);
             CampañaController::ftp_portal_cautivo($NameTable, $request);
             CampañaController::sendImagesWithUpdate($request, $NameTable, $urlEncodedBackground, $urlEncodedLogo);
-            // SideBarController::getSideBarRol(session('rol'),session('database'));
+            SideBarController::getSideBarRol(session('rol'),session('database'));
             return response()->json(['message' => 200]);
         }
        
