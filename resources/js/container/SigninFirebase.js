@@ -232,14 +232,14 @@ class Signin extends Component {
                             			</Button>
                                  </FormGroup>
                                  <a onClick={()=> this.forgotPassword()} className="forgotPassword" >Olvidó Su Contraseña?</a><br></br>
-                                 <div className="reCaptcha">
+                                 {/* <div className="reCaptcha">
                                     <Recaptcha
                                        sitekey="6Ldb58YUAAAAAHAumCMJxAyQLQvZ5O57tUepigG3"
                                        render="explicit"
                                        onloadCallback={this.onloadCallback}
                                        verifyCallback={this.verifyCallback}
                                     />
-                                 </div>
+                                 </div> */}
                               </Form>
                            </div>
                         </div>

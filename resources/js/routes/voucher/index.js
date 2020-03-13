@@ -71,6 +71,7 @@ export default class Voucher extends Component {
 				finalDate:finalDate,
 				nuncaExpira: true,
 				expira: false,
+				personalizado: false,
 				activarUso: false,
 				diasDisponibles: "",
 				horasDisponibles: "",
@@ -114,7 +115,9 @@ export default class Voucher extends Component {
 		const {
 			numerovouchers,
 			numerousos, 
-			etiqueta, 
+			etiqueta,
+			personalizado,
+			voucherPersonalizado, 
 			nuncaExpira, 
 			expira, 
 			activarUso, 
@@ -246,6 +249,49 @@ export default class Voucher extends Component {
 				}
 			}
 		}
+		if(personalizado){
+			if(etiqueta == ''){
+				NotificationManager.error('El campo etiqueta es obligatorio','',5000);
+			}
+			if(!voucherPersonalizado){
+				NotificationManager.error('El campo de voucher personalizado es obligatorio','',5000);
+			}
+			if(numerousos == ''){
+				NotificationManager.error('El campo cantidad de usos es obligatorio (Min: 1 Uso)','',5000);
+			}
+			if(new Date(fecha_fin) < new Date(finalDateValidation)){
+				NotificationManager.error('La Fecha Fin del voucher debe ser mayor de 30 minutos con respecto a la Fecha Inicio','',5000);
+			}
+			if(new Date(fecha_fin) > new Date(finalDateCampaing)){
+				NotificationManager.error('La Fecha Fin del voucher debe ser menor o igual a la fecha fin de la campaña','',5000);
+			}
+			if(((((voucherPersonalizado) && (new Date(fecha_fin) >= new Date(finalDateValidation))) && (new Date(fecha_fin) <= new Date(finalDateCampaing))) && (numerousos !='' && numerousos > 0)) && etiqueta !=''){
+				try {
+					let config = {
+						method: 'POST',
+						headers: {
+							'Accept': 'application/json',
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify(this.state.form)
+					};
+					let res = await fetch(`${localStorage.urlDomain}api/vouchers/store`, config);
+					let datavouchers = await res.json()
+					if(datavouchers != 500){
+						this.setState({
+							dataVouchers: datavouchers,
+							prompt: false
+						});
+					}
+					else{
+						NotificationManager.error('EL voucher creado ya se encuentra registrado','',5000);
+					}
+	
+				} catch (error) {
+					console.log(error)
+				}
+			}
+		}
 	}
 
 	onConfirm(key) {
@@ -363,7 +409,7 @@ export default class Voucher extends Component {
 				}
 			})
 		}
-		else if (e.target.name === 'numerousos' && e.target.value > 5) {
+		else if (e.target.name === 'numerousos' && e.target.value > 5 && !this.state.form.personalizado) {
 				this.setState({
 					form: {
 						...this.state.form,
@@ -444,6 +490,7 @@ export default class Voucher extends Component {
 					nuncaExpira: true, 
 					expira: false,
 					activarUso: false,
+					personalizado: false,
 				}
 			});
 		}
@@ -454,6 +501,7 @@ export default class Voucher extends Component {
 					nuncaExpira: false, 
 					expira: true, 
 					activarUso: false,
+					personalizado: false,
 				}
 			});
 		}
@@ -464,6 +512,19 @@ export default class Voucher extends Component {
 					nuncaExpira: false, 
 					expira: false, 
 					activarUso: true,
+					personalizado: false,
+				}
+			});
+		}
+		if(name == "personalizado"){
+			this.setState({ 
+				form:{
+					...this.state.form, 
+					nuncaExpira: false, 
+					expira: false, 
+					activarUso: false,
+					personalizado: true,
+					numerovouchers: 1,
 				}
 			});
 		}
@@ -588,6 +649,7 @@ export default class Voucher extends Component {
 									</div>
 									<div className="row marginForm">
 										<div className="col-lg-6 mb-4">
+											{!form.personalizado &&
 											<Input
 												type="number"
 												min={1}
@@ -599,6 +661,18 @@ export default class Voucher extends Component {
 												value={this.state.form.numerovouchers}
 												onChange={() => this.handleChangeNumber(event)}
 											/>
+											}
+											{form.personalizado &&
+											<Input
+												type="text"
+												value={this.state.form.voucherPersonalizado}
+												placeholder="Voucher Personalizado"
+												name="voucherPersonalizado"
+												autoComplete="off"
+												id="voucherPersonalizado"
+												onChange={() => this.handleChange(event)}
+											/>
+											}
 										</div>
 										<div className="col-lg-6 mb-4">
 											<Input
@@ -615,23 +689,29 @@ export default class Voucher extends Component {
 										</div>
 									</div>
 									<div className="row marginForm">
-										<div className="col-lg-4 mb-3">
+										<div className="col-lg-3 mb-3">
 										<FormControlLabel
 											control={<Checkbox checked={form.nuncaExpira} onChange={this.handleChangeCheckBox('nuncaExpira')} value="nuncaExpira "/>}
 											label="Nunca Expira"
 										/>
 											{/* <Checkbox checked={true} onChange={handleChange('gilad')} value="gilad"/> */}
 										</div>
-										<div className="col-lg-4 mb-3">
+										<div className="col-lg-3 mb-3">
 											<FormControlLabel
 												control={<Checkbox checked={form.expira} onChange={this.handleChangeCheckBox('expira')} value="expira"/>}
 												label="Expira"
 											/>
 										</div>
-										<div className="col-lg-4 mb-3">
+										<div className="col-lg-3 mb-3">
 											<FormControlLabel
 												control={<Checkbox checked={form.activarUso} onChange={this.handleChangeCheckBox('activarUso')} value="activarUso"/>}
 												label="Activar Una Vez Se Use"
+											/>
+										</div>
+										<div className="col-lg-3 mb-3">
+											<FormControlLabel
+												control={<Checkbox checked={form.personalizado} onChange={this.handleChangeCheckBox('personalizado')} value="personalizado"/>}
+												label="Voucher Personalizado"
 											/>
 										</div>
 										
@@ -680,7 +760,7 @@ export default class Voucher extends Component {
 										<div className="row marginForm">
 										
 										</div>
-										:
+										:form.activarUso?
 										<div className="row marginForm">
 											<div className="col-lg-12 mb-4">
 												<span style={{fontSize: '13px'}}>
@@ -728,6 +808,46 @@ export default class Voucher extends Component {
 												/>
 											</div>
 										</div>
+										:
+										<div className="row marginForm">
+											<div className="col-lg-12 mb-4" style={{color:"white"}}>
+												La fecha fin de la campaña es: {form.finalDateCampaing}
+											</div>
+											<div className="col-lg-6 mb-4" >
+												<DateTimePicker
+													key="fecha_inicio"
+													label="Fecha Inicio"
+													locale='es'
+													required
+													value={form.fecha_inicio}
+													minDate={moment(form.initialDate, 'YYYY/MM/DD hh:mm a')}
+													// maxDate={moment(form.fecha_fin, 'YYYY/MM/DD hh:mm a').subtract(1,'Days')}
+													format="YYYY/MM/DD hh:mm a"
+													onChange={(event) => this.handleChange(event, 'fecha_inicio')}
+													animateYearScrolling={false}
+													leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
+													rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
+													showTodayButton={true}
+												/>
+											</div>
+											<div className="col-lg-6 mb-4">
+												<DateTimePicker
+													key="fecha_fin"
+													label="Fecha Fin"
+													locale='es'
+													required
+													value={form.fecha_fin}
+													minDate={moment(form.fecha_inicio, 'YYYY/MM/DD hh:mm a').add(30,'Minutes')}
+													maxDate={moment(form.finalDateCampaing, 'YYYY/MM/DD hh:mm a')}
+													format="YYYY/MM/DD hh:mm a"
+													onChange={(event) => this.handleChange(event, 'fecha_fin')}
+													animateYearScrolling={false}
+													leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
+													rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
+													showTodayButton={true}
+												/>
+											</div>
+										</div> 
 									}
 									
 									<div className="row">
@@ -774,38 +894,38 @@ export default class Voucher extends Component {
 							</ListItem>
 							<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
 								<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
-									<span>Opción de Caducidad : <span className="font-weight-bold">{form.nuncaExpira ? 'Nunca Expira' : (form.expira ? 'Expira' : 'Activar Una Vez Se Use')}</span></span>
+									<span>Opción de Caducidad : <span className="font-weight-bold">{form.nuncaExpira ? 'Nunca Expira' : (form.expira ? 'Expira' : (form.activarUso ? 'Activar Una Vez Se Use' : "Personalizado"))}</span></span>
 								</p>
 							</ListItem>
-							{form.expira &&
+							{form.expira || form.personalizado &&
 								<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
 									<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
 										<span>Fecha de Inicio : <span className="font-weight-bold">{form.fecha_inicio}</span></span>
 									</p>
 								</ListItem>
 							}
-							{form.expira &&
+							{form.expira || form.personalizado &&
 								<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
 									<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
 										<span>Fecha de Final : <span className="font-weight-bold">{form.fecha_fin}</span></span>
 									</p>
 								</ListItem>
 							}
-							{!form.expira && !form.nuncaExpira &&
+							{!form.expira && !form.nuncaExpira && !form.personalizado &&
 								<ListItem className="p-0 col-lg-4 col-md-4 col-sm-12 mb-10 align-content-left">
 									<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
 										<span>Dias Disponibles : <span className="font-weight-bold">{form.diasDisponibles == "" ? 0 : form.diasDisponibles }</span></span>
 									</p>
 								</ListItem>
 							}
-							{!form.expira && !form.nuncaExpira &&
+							{!form.expira && !form.nuncaExpira && !form.personalizado &&
 								<ListItem className="p-0 col-lg-4 col-md-4 col-sm-12 mb-10 align-content-left">
 									<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
 										<span>Horas Disponibles : <span className="font-weight-bold">{form.horasDisponibles == "" ? 0 : form.horasDisponibles }</span></span>
 									</p>
 								</ListItem>
 							}
-							{!form.expira && !form.nuncaExpira &&
+							{!form.expira && !form.nuncaExpira && !form.personalizado &&
 								<ListItem className="p-0 col-lg-4 col-md-4 col-sm-12 mb-10 align-content-left">
 									<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
 										<span>Minutos Disponibles : <span className="font-weight-bold">{form.minutosDisponibles == "" ? 0 : form.minutosDisponibles }</span></span>
