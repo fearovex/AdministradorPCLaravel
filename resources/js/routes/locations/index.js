@@ -18,6 +18,8 @@ import { withRouter } from 'react-router-dom';
 
 import { bindActionCreators } from 'redux';
 
+import './styles.css'
+
 import {
 	Card,
 	CardImg,
@@ -61,11 +63,16 @@ class Locations extends Component {
 		this.ClickNavLink = this.ClickNavLink.bind(this);
 		this.handleEdit = this.handleEdit.bind(this);
 		this.openAlertTest = this.openAlertTest.bind(this);
+		this.getLocations = this.getLocations.bind(this);
 	}
 
 
 
 	async componentDidMount() {
+		this.getLocations();
+	}
+
+	async getLocations(){
 		try {
 			let res = await fetch(`${localStorage.urlDomain}api/locations`)
 			let dataLocations = await res.json();
@@ -78,34 +85,49 @@ class Locations extends Component {
 				error: error
 			}
 		}
-		// window.location.reload();
 	}
 
 	async handleSubmit(e) {
-		const { location } = this.props
 		e.preventDefault()
+		const { location } = this.props
+		const { form } = this.state;
 		try {
-			let config = {
-				method: 'POST',
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(this.state.form)
-			};
-			let res = await fetch(`${localStorage.urlDomain}api/locations`, config);
-			let data = await res.json()
-			this.props.history.push(location.pathname + '/' + this.state.form.nombre + '/campañas')
-			localStorage.setItem('user_location', data);
-			this.componentDidMount();
+			if(form.dispositivo != '' && form.mac_dispositivo != '' && form.tecnologia !=''){
+				let config = {
+					method: 'POST',
+					headers: {
+						'Accept': 'application/json',
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(this.state.form)
+				};
+				let res = await fetch(`${localStorage.urlDomain}api/locations`, config);
+				let data = await res.json()
+				// this.props.history.push(location.pathname + '/' + this.state.form.nombre + '/campañas')
+				localStorage.setItem('user_location', data);
+				this.getLocations();
+				this.getSidebar();
+				this.setState({
+					prompt:false
+				})
+			}
+			else{
+				NotificationManager.error('Todos los campos son obligatorios','', 5000);
+			}
+			
 		} catch (error) {
 			console.log(error);
 		}
 	}
 
-	// async UNSAFE_componentWillUpdate() {
-		// window.location.reload();
-	// }
+	async getSidebar(){
+		let res = await fetch(`${localStorage.urlDomain}api/sidebar`)
+		let data = await res.json();
+		this.props.updateSidebar(
+			data.original
+		);
+	}
+
 	async handleEdit(e) {
 		e.preventDefault();
 		try {
@@ -120,30 +142,20 @@ class Locations extends Component {
 
 			let res = await fetch(`${localStorage.urlDomain}api/locations/` + this.state.form.id, config);
 			let response = await res.json();
-			
-			// if(response.message == 200){
 				this.setState({
 					modaledit: false
 			})
-
-			// this.props.onToggleMenu(responsejson);
 			this.props.updateSidebar(
 				response.original
 			);
-
-				
 			this.componentDidMount();
-			
-			// }
-			
-
+		
 		} catch (error) {
 			console.log(error);
 			this.setState({
 				error
 			});
 		}
-		// window.location.reload();
 	}
 	async openAlertTest(key, id) {
 		this.setState({ [key]: true });
@@ -166,6 +178,8 @@ class Locations extends Component {
 	}
 
 	getStepContent(step) {
+		const { form } = this.state;
+		console.log(form)
 		switch (step) {
 			case 0:
 				return (
@@ -177,6 +191,7 @@ class Locations extends Component {
 										type="text"
 										name="nombre"
 										id="nombre"
+										value={form.nombre}
 										className="has-input input-lg"
 										placeholder="Nombre"
 										onChange={() => this.handleChange(event)}
@@ -187,6 +202,7 @@ class Locations extends Component {
 										type="text"
 										name="direccion"
 										id="direccion"
+										value={form.direccion}
 										className="has-input input-lg"
 										placeholder="Direccion"
 										onChange={() => this.handleChange(event)}
@@ -199,6 +215,7 @@ class Locations extends Component {
 										type="text"
 										name="pais"
 										id="pais"
+										value={form.pais}
 										className="has-input input-lg"
 										placeholder="Pais"
 										onChange={() => this.handleChange(event)}
@@ -209,6 +226,7 @@ class Locations extends Component {
 										type="text"
 										name="ciudad"
 										id="ciudad"
+										value={form.ciudad}
 										className="has-input input-lg"
 										placeholder="Ciudad"
 										onChange={() => this.handleChange(event)}
@@ -221,6 +239,7 @@ class Locations extends Component {
 										type="number"
 										name="telefono"
 										id="telefono"
+										value={form.telefono}
 										className="has-input input-lg"
 										placeholder="Telefono"
 										onChange={() => this.handleChange(event)}
@@ -231,6 +250,7 @@ class Locations extends Component {
 										type="text"
 										name="PaginaWeb"
 										id="PaginaWeb"
+										value={form.PaginaWeb}
 										className="has-input input-lg"
 										placeholder="Pagina Web"
 										onChange={() => this.handleChange(event)}
@@ -250,23 +270,28 @@ class Locations extends Component {
 										type="text"
 										name="dispositivo"
 										id="dispositivo"
+										value={form.dispositivo}
 										className="has-input input-lg"
 										placeholder="Nombre Dispositivo"
 										onChange={() => this.handleChange(event)}
 									/>
 								</div>
+								
+
+
 								<div className="col-lg-6">
 									<Input
 										type="text"
 										name="mac_dispositivo"
 										id="mac_dispositivo"
+										value={form.mac_dispositivo}
 										className="has-input input-lg"
 										placeholder="Mac Dispositivo"
 										onChange={() => this.handleChange(event)}
 									/>
 								</div>
 							</div>
-							<div className="col-lg-6">
+							<div className="col-lg-6 selectDiv">
 
 								<Select name="tecnologia" native onChange={() => this.handleChange(event)}
 									className="has-input input-lg"
@@ -305,9 +330,15 @@ class Locations extends Component {
 	}
 
 	handleNext = () => {
-		this.setState({
-			activeStep: this.state.activeStep + 1,
-		});
+		const { form } = this.state;
+		if(form.nombre != '' && form.direccion != '' && form.pais !='' && form.ciudad !='' && form.telefono !=''){
+			this.setState({
+				activeStep: this.state.activeStep + 1,
+			});
+		}
+		else{
+			NotificationManager.error('Todos los campos son obligatorios','',5000);
+		}
 	};
 
 	handleBack = () => {
@@ -323,7 +354,12 @@ class Locations extends Component {
 	};
 
 	handleChange(e) {
-		this.state.form[e.target.name] = e.target.value;
+		this.setState({
+			form:{
+				...this.state.form,
+				[e.target.name]: e.target.value
+			}
+		})
 	}
 	handleChangeEdit(e) {
 		if(e.target.name=="telefono"){
@@ -376,16 +412,16 @@ class Locations extends Component {
 			<div className="cardsmasonry-wrapper">
 				<PageTitleBar title={<IntlMessages id="sidebar.locations" />} match={this.props.match} />
 				<div className="sweet-alert-wrapper">
-					{/* <Button
-							variant="contained"
-							color="primary"
-							className="boton"
-							onClick={() => this.openAlert('prompt')}
-						>Crear locacion
-						</Button> */}
-
+					<Button
+						variant="contained"
+						color="primary"
+						className="botonLocacion"
+						onClick={() => this.openAlert('prompt')}
+						style={{position: "absolute", right: "23px"}}
+					>Crear locacion
+					</Button>
 					<SweetAlert
-
+						customClass='sweetAlertLocations'
 						btnSize="sm"
 						show={prompt}
 						title="Crear Zona"
@@ -405,7 +441,7 @@ class Locations extends Component {
 												<div>
 													<Button variant="contained" className="btn-danger text-white mr-10 mb-10" disabled={activeStep === 0} onClick={this.handleBack}>
 														Atras
-                    		</Button>
+                    								</Button>
 													<Button variant="contained" color="primary" className="text-white mr-10 mb-10" onClick={activeStep === steps.length - 1 ? this.handleSubmit : this.handleNext}>
 														{activeStep === steps.length - 1 ? 'Guardar' : 'Siguiente'}
 													</Button>
@@ -417,10 +453,10 @@ class Locations extends Component {
 							</Stepper>
 							{activeStep === steps.length && (
 								<Paper square elevation={0} className="pl-40">
-									<p>All steps completed - you&quot;re finished</p>
+									<p>Todos los pasos finalizados correctamente</p>
 									<Button variant="contained" className="btn-success text-white mr-10 mb-10" onClick={this.handleReset}>
 										Reset
-            		</Button>
+            						</Button>
 								</Paper>
 							)}
 						</div>
@@ -514,7 +550,7 @@ class Locations extends Component {
 
 					</SweetAlert>
 				</div>
-				<div className="row">
+				<div className="row" style={{ marginTop: "80px" }}>
 
 					{dataLocations && dataLocations.map((data) => (
 						<div key={data.id} className="col-md-4 col-lg-4 col-xs-2 col-sm-6 mb-3">

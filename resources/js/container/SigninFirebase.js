@@ -90,11 +90,7 @@ class Signin extends Component {
                   data:data
                })
                this.props.signinUserInFirebase(this.state, this.props.history);
-               // localStorage.setItem('id_rol', this.state.data.id_rol);
                NotificationManager.success('Ha ingresado satisfactoriamente al sistema!','',4000);
-
-              
-      
             }
             else{
                NotificationManager.error("La contraseña o el usuario es invalido!.",'',4000);
@@ -112,6 +108,7 @@ class Signin extends Component {
    async componentWillUnmount(){
       this.getSidebar();
    }
+
    async getSidebar(){
 		let res = await fetch(`${localStorage.urlDomain}api/sidebar`)
 		let data = await res.json();
