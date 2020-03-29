@@ -81,6 +81,14 @@ class SideBarController extends Controller
                             'type_multi'=> false,
                             'menu_icon'=>'icon-tag',
                             'path'=> '/app/locations/'.$location->nombre.'/vouchers'
+                        ),
+                        (object) array(
+                            'menu_title'=>"Contraseñas",
+                            'id_campain'=> 0,
+                            'id_location' => $location->id,
+                            'type_multi'=> false,
+                            'menu_icon'=>'zmdi zmdi-key',
+                            'path'=> '/app/locations/'.$location->nombre.'/contraseñas'
                         )
                     ]
                 );
@@ -133,6 +141,14 @@ class SideBarController extends Controller
                         'type_multi'=> false,
                         'menu_icon'=>'icon-tag',
                         'path'=> '/app/locations/'.$location[0]->nombre.'/vouchers'
+                    ),
+                    (object) array(
+                        'menu_title'=>"Contraseñas",
+                        'id_campain'=> 0,
+                        'id_location' => $location->id,
+                        'type_multi'=> false,
+                        'menu_icon'=>'zmdi zmdi-key',
+                        'path'=> '/app/locations/'.$location->nombre.'/contraseñas'
                     )
                 ]
             );
