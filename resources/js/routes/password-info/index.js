@@ -50,7 +50,7 @@ export default class PasswordInfo extends Component {
 				password:"",
 				etiqueta:""
 			},
-			nameColumns: ['Etiqueta','Contraseña','Fecha Inicio','Fecha Fin', 'N° de Usos por Voucher','N° Usos Total',{
+			nameColumns: ['Etiqueta','Contraseña','Fecha Inicio','Fecha Fin', 'N° de Usos por Contraseña','N° Usos Total',{
 				name:"Estado",
 				options: {
 					customBodyRender: (value, tableMeta, updateValue) => {
@@ -349,7 +349,7 @@ export default class PasswordInfo extends Component {
 			print: false,
 			selectableRows: 'multiple',
 			downloadOptions: {
-				filename: 'Vouchers.csv',
+				filename: 'Contraseñas.csv',
 				filterOptions: {
 					useDisplayedRowsOnly: true,
 					useDisplayedColumnsOnly: true
