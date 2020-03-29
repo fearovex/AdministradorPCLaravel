@@ -62,9 +62,20 @@ Route::group(['middleware' => 'cors'], function() {
 
         Route::post("/vouchers/store","VouchersController@store");
 
+        Route::post("/password/store","VouchersController@storePassword");
+
         Route::post("/vouchers","VouchersController@index");
 
+        Route::post("/passwords","VouchersController@indexPasswords");
+
         Route::post("/vouchers/voucherInfo","VouchersController@voucherInfo");
+
+        Route::post("/passwords/passwordInfo","VouchersController@passwordInfo");
+
+        Route::post("/passwords/editPassword","VouchersController@editPassword");
+
+        Route::post("/passwords/updatePassword","VouchersController@updatePassword");
+
 
         Route::post('/csvEmail', 'Api\CsvEmail@sendResetLinkEmail');
 
