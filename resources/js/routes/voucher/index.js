@@ -75,7 +75,7 @@ export default class Voucher extends Component {
 				expira: false,
 				personalizado: false,
 				activarUso: false,
-				tipoClave:false,
+				// tipoClave:false,
 				diasDisponibles: "",
 				horasDisponibles: "",
 				minutosDisponibles: "",
@@ -120,7 +120,7 @@ export default class Voucher extends Component {
 			numerousos, 
 			etiqueta,
 			personalizado,
-			tipoClave,
+			// tipoClave,
 			voucherPersonalizado, 
 			nuncaExpira, 
 			expira, 
@@ -253,7 +253,7 @@ export default class Voucher extends Component {
 				}
 			}
 		}
-		if(personalizado && !tipoClave){
+		if(personalizado){
 			if(etiqueta == ''){
 				NotificationManager.error('El campo etiqueta es obligatorio','',5000);
 			}
@@ -296,40 +296,40 @@ export default class Voucher extends Component {
 				}
 			}
 		}
-		if(personalizado && tipoClave){
-			if(etiqueta == ''){
-				NotificationManager.error('El campo etiqueta es obligatorio','',5000);
-			}
-			if(!passwordPersonalizado){
-				NotificationManager.error('El campo de contraseña personalizada es obligatorio','',5000);
-			}
-			if(passwordPersonalizado != '' && etiqueta !=''){
-				try {
-					let config = {
-						method: 'POST',
-						headers: {
-							'Accept': 'application/json',
-							'Content-Type': 'application/json'
-						},
-						body: JSON.stringify(this.state.form)
-					};
-					let res = await fetch(`${localStorage.urlDomain}api/vouchers/store`, config);
-					let datavouchers = await res.json()
-					if(datavouchers != 500){
-						this.setState({
-							dataVouchers: datavouchers,
-							prompt: false
-						});
-					}
-					else{
-						NotificationManager.error('La contraseña creada ya se encuentra registrada','',5000);
-					}
+		// if(personalizado && tipoClave){
+		// 	if(etiqueta == ''){
+		// 		NotificationManager.error('El campo etiqueta es obligatorio','',5000);
+		// 	}
+		// 	if(!passwordPersonalizado){
+		// 		NotificationManager.error('El campo de contraseña personalizada es obligatorio','',5000);
+		// 	}
+		// 	if(passwordPersonalizado != '' && etiqueta !=''){
+		// 		try {
+		// 			let config = {
+		// 				method: 'POST',
+		// 				headers: {
+		// 					'Accept': 'application/json',
+		// 					'Content-Type': 'application/json'
+		// 				},
+		// 				body: JSON.stringify(this.state.form)
+		// 			};
+		// 			let res = await fetch(`${localStorage.urlDomain}api/vouchers/store`, config);
+		// 			let datavouchers = await res.json()
+		// 			if(datavouchers != 500){
+		// 				this.setState({
+		// 					dataVouchers: datavouchers,
+		// 					prompt: false
+		// 				});
+		// 			}
+		// 			else{
+		// 				NotificationManager.error('La contraseña creada ya se encuentra registrada','',5000);
+		// 			}
 	
-				} catch (error) {
-					console.log(error)
-				}
-			}
-		}
+		// 		} catch (error) {
+		// 			console.log(error)
+		// 		}
+		// 	}
+		// }
 	}
 
 	onConfirm(key) {
@@ -529,7 +529,7 @@ export default class Voucher extends Component {
 					expira: false,
 					activarUso: false,
 					personalizado: false,
-					tipoClave:false,
+					// tipoClave:false,
 				}
 			});
 		}
@@ -541,7 +541,7 @@ export default class Voucher extends Component {
 					expira: true, 
 					activarUso: false,
 					personalizado: false,
-					tipoClave:false,
+					// tipoClave:false,
 				}
 			});
 		}
@@ -553,7 +553,7 @@ export default class Voucher extends Component {
 					expira: false, 
 					activarUso: true,
 					personalizado: false,
-					tipoClave:false,
+					// tipoClave:false,
 				}
 			});
 		}
@@ -687,22 +687,6 @@ export default class Voucher extends Component {
 								<form onSubmit={this.handleSubmitVouchers} className="col-lg-12" >
 									{form.personalizado ?
 										<div>
-											<div>
-												<div className="col-lg-3 mb-3" style={{ marginLeft: "auto",marginRight: "auto",marginBottom: "0 !important" }}>
-													<FormControlLabel
-														style={{
-															margin: "0"
-														}}
-														control={<Checkbox checked={form.tipoClave} onChange={this.handleChangeCheckBox('tipoClave')} value="tipoClave"/>}
-														label="Tipo Clave"
-													/>
-												</div>
-											</div>
-											{form.tipoClave ? 
-											<div>
-
-											</div>
-											:
 											<div className="col-lg-12 mt-1 mb-4" >
 												<Input
 													type="text"
@@ -714,8 +698,6 @@ export default class Voucher extends Component {
 													onChange={() => this.handleChange(event)}
 												/>
 											</div>	
-											}
-											
 										</div>
 										:
 										<div className="col-lg-12 mt-4 mb-4" >
@@ -730,7 +712,6 @@ export default class Voucher extends Component {
 											/>
 										</div>
 									}
-									{!form.tipoClave &&
 									<div className="row marginForm">
 										<div className="col-lg-6 mb-4">
 											{!form.personalizado &&
@@ -746,7 +727,7 @@ export default class Voucher extends Component {
 												onChange={() => this.handleChangeNumber(event)}
 											/>
 											}
-											{form.personalizado && !form.tipoClave &&
+											{form.personalizado &&
 											
 												<Input
 													type="text"
@@ -760,7 +741,6 @@ export default class Voucher extends Component {
 											
 											}
 										</div>
-										{!form.tipoClave &&
 										<div className="col-lg-6 mb-4">
 											<Input
 												min={1}
@@ -774,36 +754,7 @@ export default class Voucher extends Component {
 												onChange={() => this.handleChangeNumber(event)}
 											/>
 										</div>
-										}
 									</div>
-									}
-
-									{form.personalizado && form.tipoClave &&
-									<div className="row marginForm">
-										<div className="col-lg-6 mb-4">
-											<Input
-												type="text"
-												value={this.state.form.etiqueta}
-												placeholder="Etiqueta"
-												name="etiqueta"
-												autoComplete="off"
-												id="etiqueta"
-												onChange={() => this.handleChange(event)}
-											/>
-										</div>
-										<div className="col-lg-6 mb-4">
-											<Input
-												type="text"
-												value={this.state.form.passwordPersonalizado}
-												placeholder="Clave Personalizada"
-												name="passwordPersonalizado"
-												autoComplete="off"
-												id="passwordPersonalizado"
-												onChange={() => this.handleChange(event)}
-											/>
-										</div>
-									</div>
-									}
 
 									<div className="row marginForm">
 										<div className="col-lg-3 mb-3">
@@ -925,10 +876,7 @@ export default class Voucher extends Component {
 												/>
 											</div>
 										</div>
-										:form.tipoClave?
-											<div className="row marginForm">
-											
-											</div>
+										
 										:
 										<div className="row marginForm">
 											<div className="col-lg-12 mb-4" style={{color:"white"}}>
@@ -1003,42 +951,31 @@ export default class Voucher extends Component {
 									<span>Etiqueta de los Vouchers : <span className="font-weight-bold">{form.etiqueta}</span></span>
 								</p>
 							</ListItem>
-							{!form.tipoClave ?
 							<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
 								<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
 									<span>Cantidad de Vouchers Generados : <span className="font-weight-bold">{form.numerovouchers}</span></span>
 								</p>
 							</ListItem>
-							:
-							<div>
-
-							</div>
-							}
-							{!form.tipoClave ?
+							
 								<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
 								<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
 									<span>Cantidad de Usos por Vouchers : <span className="font-weight-bold">{form.numerousos}</span></span>
 								</p>
 								</ListItem>
-								:
-								<div>
-	
-								</div>
-							}
 							
 							<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
 								<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
 									<span>Opción de Caducidad : <span className="font-weight-bold">{form.nuncaExpira ? 'Nunca Expira' : (form.expira ? 'Expira' : (form.activarUso ? 'Activar Una Vez Se Use' : "Personalizado"))}</span></span>
 								</p>
 							</ListItem>
-							{form.expira || (form.personalizado && !form.tipoClave) &&
+							{form.expira || form.personalizado  &&
 								<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
 									<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
 										<span>Fecha de Inicio : <span className="font-weight-bold">{form.fecha_inicio}</span></span>
 									</p>
 								</ListItem>
 							}
-							{form.expira || (form.personalizado && !form.tipoClave) &&
+							{form.expira || form.personalizado &&
 								<ListItem className="p-0 col-lg-6 col-md-6 col-sm-12 mb-10 align-content-left">
 									<p className="col-lg-12 col-md-12 col-sm-12 mr-10">
 										<span>Fecha de Final : <span className="font-weight-bold">{form.fecha_fin}</span></span>

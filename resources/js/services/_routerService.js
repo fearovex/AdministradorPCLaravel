@@ -29,6 +29,9 @@ import Analytical from 'Routes/analytical';
 import Voucher from 'Routes/voucher';
 import Vouchers from 'Routes/vouchers';
 import VoucherInfo from 'Routes/voucher-info';
+import Password from 'Routes/password';
+import Passwords from 'Routes/passwords';
+import PasswordInfo from 'Routes/password-info';
 import AnalyticalCampaing from 'Routes/analytical-campaing';
 import CMS from 'Routes/cms';
 
@@ -192,5 +195,17 @@ export default [
    {
       path: 'locations/:location/vouchers/voucher-info/create',
       component: Voucher
+   },
+   {
+      path: 'locations/:location/contraseñas',
+      component: Passwords
+   },
+   {
+      path: 'locations/:location/contraseñas/contraseña-info',
+      component: PasswordInfo
+   },
+   {
+      path: 'locations/:location/contraseñas/contraseña-info/create',
+      component: Password
    },
 ]
