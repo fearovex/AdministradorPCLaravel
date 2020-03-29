@@ -59,7 +59,7 @@ class VouchersController extends Controller
 
 
         $vouchers = DB::connection(session('database'))
-            ->select("select v.id_voucher as id_password, v.voucher as 'Contraseña', v.etiqueta as 'Etiqueta', v.fecha_inicio as 'Fecha Inicio', IF(v.id_caducidad=1, 'Nunca Expira',IF(v.id_caducidad=3, IF(v.num_usos=0, 'Aun no se activa', v.fecha_fin),  IF(v.id_caducidad=4,'Nunca Expira', v.fecha_fin))) as 'Fecha Fin', v.estado as Estado, IF(v.id_caducidad=4,'Indefinido',num_usos) as 'N° de Usos por Voucher', IF(v.id_caducidad=4,'Indefinido',total_num_usos) as 'N° Usos Total' from vouchers as v where (v.id_locacion = $request->id_location and v.id_campania=$request->id_campaing) and v.id_caducidad = 4");  
+            ->select("select v.id_voucher as id_password, v.voucher as 'Contraseña', v.etiqueta as 'Etiqueta', v.fecha_inicio as 'Fecha Inicio', IF(v.id_caducidad=1, 'Nunca Expira',IF(v.id_caducidad=3, IF(v.num_usos=0, 'Aun no se activa', v.fecha_fin),  IF(v.id_caducidad=4,'Nunca Expira', v.fecha_fin))) as 'Fecha Fin', v.estado as Estado, IF(v.id_caducidad=4,'Indefinido',num_usos) as 'N° de Usos por Contraseña', IF(v.id_caducidad=4,'Indefinido',total_num_usos) as 'N° Usos Total' from vouchers as v where (v.id_locacion = $request->id_location and v.id_campania=$request->id_campaing) and v.id_caducidad = 4");  
         return response()->json($vouchers);
     }
 
