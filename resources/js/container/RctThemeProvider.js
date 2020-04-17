@@ -62,6 +62,7 @@ class RctThemeProvider extends Component {
                locale={currentAppLocale.locale}
                messages={currentAppLocale.messages}
             >
+               	
                <Fragment>
                   {children}
                </Fragment>

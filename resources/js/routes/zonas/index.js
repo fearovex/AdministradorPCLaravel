@@ -9,7 +9,7 @@ import SweetAlert from 'react-bootstrap-sweetalert'
 import Button from '@material-ui/core/Button';
 import { Input } from '@material-ui/core';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-
+import FullScreenLoader from 'Components/FullScreenLoader'
 
 import './styles.css'
 
@@ -28,7 +28,7 @@ export default class zona extends Component {
 			prompt: false,
 			modaledit: false,
 			zona: [],
-			
+			spinnerState: false,
 			form: {
 				nombre: "",
 			},
@@ -41,6 +41,9 @@ export default class zona extends Component {
 		this.dispositivos = this.dispositivos.bind(this);
 	}
 	async componentDidMount() {
+		this.setState({
+			spinnerState:true
+		});
 		const id_location = localStorage.user_location;
 		const { location } = this.props;
 
@@ -66,7 +69,8 @@ export default class zona extends Component {
 				data: data,
 				form: {
 					id_location: id_location
-				}
+				},
+				spinnerState:false
 			})
 
 		} catch (error) {
@@ -82,8 +86,10 @@ export default class zona extends Component {
 	}
 
 	async handleSubmit(e) {
-		e.preventDefault()
-		console.log(this.state.form)
+		e.preventDefault();
+		this.setState({
+			spinnerState:true
+		});
 		try {
 			let config = {
 				method: 'POST',
@@ -99,7 +105,8 @@ export default class zona extends Component {
 			this.componentDidMount();
 
 			this.setState({
-				prompt: false
+				prompt: false,
+				spinnerState:false
 			})
 		} catch (error) {
 			console.log(error);
@@ -111,6 +118,9 @@ export default class zona extends Component {
 
 	async handleEdit(e) {
 		e.preventDefault();
+		this.setState({
+			spinnerState:true
+		});
 		try {
 			let config = {
 				method: 'PATCH',
@@ -125,7 +135,8 @@ export default class zona extends Component {
 
 			this.componentDidMount();
 			this.setState({
-				modaledit: false
+				modaledit: false,
+				spinnerState:false
 			})
 
 		} catch (error) {
@@ -149,14 +160,15 @@ export default class zona extends Component {
 	}
 
 	async openAlertTest(key, id) {
-		this.setState({ [key]: true });
+		this.setState({ [key]: true, spinnerState:true });
 		let res = await fetch(`${localStorage.urlDomain}api/zonas/${id}/edit`);
 		let zona = await res.json();
 		this.setState({
 			form: {
 				nombre: zona.nombre,
 				id_zona: id,
-			}
+			},
+			spinnerState:false
 		});
 
 	}
@@ -180,7 +192,7 @@ export default class zona extends Component {
 		})
 	}
 	render() {
-		const { data } = this.state;
+		const { data, spinnerState } = this.state;
 		const columns = ['Nombre', 'Editar', 'Dispositivos'];
 		const { prompt, modaledit } = this.state;
 		const options = {
@@ -192,6 +204,13 @@ export default class zona extends Component {
 		};
 		return (
 			<div className="blank-wrapper">
+				{ spinnerState ? 
+					<FullScreenLoader />
+					:
+					<div>
+
+					</div>
+				}
 				<Helmet>
 					<meta name="description" content="Reactify Blank Page" />
 				</Helmet>
@@ -212,6 +231,7 @@ export default class zona extends Component {
 						</Button>
 					<div className="sweet-alert-wrapper">
 						<SweetAlert
+						customClass='stylesZone'
 							btnSize="sm"
 							show={prompt}
 							showCancel
@@ -239,6 +259,7 @@ export default class zona extends Component {
 							</form>
 						</SweetAlert>
 						<SweetAlert
+							customClass='stylesZone'
 							btnSize="sm"
 							show={modaledit}
 							showCancel

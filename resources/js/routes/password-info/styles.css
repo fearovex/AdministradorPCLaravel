@@ -20,3 +20,11 @@ left: 10%!important;}
 .MuiTableRow-head{
     z-index: 98!important;
 }
+.editPasswordAlert{
+    width: 620px !important;
+    left: 48% !important;
+    top: 58% !important;
+}
+.dark-mode .MuiSwitch-colorSecondary.Mui-checked + .MuiSwitch-track {
+    background-color: #04fd40;
+}

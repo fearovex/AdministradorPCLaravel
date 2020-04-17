@@ -19,6 +19,7 @@ import Button from '@material-ui/core/Button';
 import CustomToolbar from "../../util/CustomToolbar";
 import { Input,TextField, Select, InputLabel, FormControlLabel, MenuItem, Checkbox} from '@material-ui/core';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
+import FullScreenLoader from 'Components/FullScreenLoader'
 
 import './styles.css'
 
@@ -91,6 +92,7 @@ export default class Voucher extends Component {
 			nameColumns: ['Etiqueta','Voucher', 'Fecha Inicio', 'Fecha Fin','N° Usos Total'],
 			dataVouchers: [],
 			modalEmailCsv: false,
+			spinnerState: false
 		}
 
 		this.handleChange = this.handleChange.bind(this);
@@ -113,7 +115,9 @@ export default class Voucher extends Component {
 
 	async handleSubmitVouchers(e) {
 		e.preventDefault()
-
+		this.setState({
+			spinnerState: true
+		})
 		
 		const {
 			numerovouchers,
@@ -144,12 +148,21 @@ export default class Voucher extends Component {
 		
 		if(nuncaExpira){
 			if(etiqueta == ''){
+				this.setState({
+					spinnerState: false
+				})
 				NotificationManager.error('El campo etiqueta es obligatorio!','',5000);
 			}
 			if(numerovouchers == ''){
+				this.setState({
+					spinnerState: false
+				})
 				NotificationManager.error('El campo de número de vouchers es obligatorio (Min: 1 Voucher)!','',5000);
 			}
 			if(numerousos == ''){
+				this.setState({
+					spinnerState: false
+				})
 				NotificationManager.error('El campo cantidad de usos es obligatorio (Min: 1 Uso)!','',5000);
 			}
 			if(((numerovouchers!= '' && numerovouchers > 0) && (numerousos !='' && numerousos > 0)) && etiqueta !=''){
@@ -167,7 +180,8 @@ export default class Voucher extends Component {
 	
 					this.setState({
 						dataVouchers: datavouchers,
-						prompt: false
+						prompt: false,
+						spinnerState: false
 					});
 	
 				} catch (error) {
@@ -177,18 +191,33 @@ export default class Voucher extends Component {
 		}
 		if(expira){
 			if(etiqueta == ''){
+				this.setState({
+					spinnerState: false
+				})
 				NotificationManager.error('El campo etiqueta es obligatorio','',5000);
 			}
 			if(numerovouchers == ''){
+				this.setState({
+					spinnerState: false
+				})
 				NotificationManager.error('El campo de número de vouchers es obligatorio (Min: 1 Voucher)','',5000);
 			}
 			if(numerousos == ''){
+				this.setState({
+					spinnerState: false
+				})
 				NotificationManager.error('El campo cantidad de usos es obligatorio (Min: 1 Uso)','',5000);
 			}
 			if(new Date(fecha_fin) < new Date(finalDateValidation)){
+				this.setState({
+					spinnerState: false
+				})
 				NotificationManager.error('La Fecha Fin del voucher debe ser mayor de 30 minutos con respecto a la Fecha Inicio','',5000);
 			}
 			if(new Date(fecha_fin) > new Date(finalDateCampaing)){
+				this.setState({
+					spinnerState: false
+				})
 				NotificationManager.error('La Fecha Fin del voucher debe ser menor o igual a la fecha fin de la campaña','',5000);
 			}
 			if(((((numerovouchers!= '' && numerovouchers > 0) && (new Date(fecha_fin) >= new Date(finalDateValidation))) && (new Date(fecha_fin) <= new Date(finalDateCampaing))) && (numerousos !='' && numerousos > 0)) && etiqueta !=''){
@@ -206,7 +235,8 @@ export default class Voucher extends Component {
 	
 					this.setState({
 						dataVouchers: datavouchers,
-						prompt: false
+						prompt: false,
+						spinnerState: false
 					});
 	
 				} catch (error) {
@@ -216,18 +246,34 @@ export default class Voucher extends Component {
 		}
 		if(activarUso){
 			if(etiqueta == ''){
+				this.setState({
+					spinnerState: false
+				})
 				NotificationManager.error('El campo etiqueta es obligatorio','',5000);
 			}
 			if(numerovouchers == ''){
+				this.setState({
+					spinnerState: false
+				})
 				NotificationManager.error('El campo de número de vouchers es obligatorio (Min: 1 Voucher)','',5000);
+				
 			}
 			if(numerousos == ''){
+				this.setState({
+					spinnerState: false
+				})
 				NotificationManager.error('El campo cantidad de usos es obligatorio (Min: 1 Uso)','',5000);
 			}
 			if((diasDisponibles == '' && horasDisponibles == '') && (minutosDisponibles <= 29)){
+				this.setState({
+					spinnerState: false
+				})
 				NotificationManager.error('El campo Minutos disponibles debe tener como minimo 30 mins','',5000);
 			}
 			if((diasDisponibles == '') && (horasDisponibles == '' && minutosDisponibles == '')){
+				this.setState({
+					spinnerState: false
+				})
 				NotificationManager.error('Los campos, días, horas y minutos disponibles, por lo menos uno, es obligatorio','',5000);
 			}
 			if((((diasDisponibles == '' && horasDisponibles == '') && (minutosDisponibles >= 30)) || (((((((diasDisponibles == '' && minutosDisponibles == '') && (horasDisponibles != '')) || ((horasDisponibles == '' && minutosDisponibles == '') && (diasDisponibles != ''))) || ((horasDisponibles != '' && minutosDisponibles != '') && (diasDisponibles == ''))) || ((horasDisponibles != '' && diasDisponibles != '') && (minutosDisponibles == ''))) || ((minutosDisponibles != '' && diasDisponibles != '') && (horasDisponibles == ''))) || ((minutosDisponibles != '' && diasDisponibles != '') && (horasDisponibles != '')))) && ((etiqueta !='' && numerovouchers!= '') && (numerousos !=''))){
@@ -245,7 +291,8 @@ export default class Voucher extends Component {
 	
 					this.setState({
 						dataVouchers: datavouchers,
-						prompt: false
+						prompt: false,
+						spinnerState: false
 					});
 	
 				} catch (error) {
@@ -255,18 +302,33 @@ export default class Voucher extends Component {
 		}
 		if(personalizado){
 			if(etiqueta == ''){
+				this.setState({
+					spinnerState: false
+				})
 				NotificationManager.error('El campo etiqueta es obligatorio','',5000);
 			}
 			if(!voucherPersonalizado){
+				this.setState({
+					spinnerState: false
+				})
 				NotificationManager.error('El campo de voucher personalizado es obligatorio','',5000);
 			}
 			if(numerousos == ''){
+				this.setState({
+					spinnerState: false
+				})
 				NotificationManager.error('El campo cantidad de usos es obligatorio (Min: 1 Uso)','',5000);
 			}
 			if(new Date(fecha_fin) < new Date(finalDateValidation)){
+				this.setState({
+					spinnerState: false
+				})
 				NotificationManager.error('La Fecha Fin del voucher debe ser mayor de 30 minutos con respecto a la Fecha Inicio','',5000);
 			}
 			if(new Date(fecha_fin) > new Date(finalDateCampaing)){
+				this.setState({
+					spinnerState: false
+				})
 				NotificationManager.error('La Fecha Fin del voucher debe ser menor o igual a la fecha fin de la campaña','',5000);
 			}
 			if(((((voucherPersonalizado) && (new Date(fecha_fin) >= new Date(finalDateValidation))) && (new Date(fecha_fin) <= new Date(finalDateCampaing))) && (numerousos !='' && numerousos > 0)) && etiqueta !=''){
@@ -284,7 +346,8 @@ export default class Voucher extends Component {
 					if(datavouchers != 500){
 						this.setState({
 							dataVouchers: datavouchers,
-							prompt: false
+							prompt: false,
+							spinnerState: false
 						});
 					}
 					else{
@@ -348,7 +411,9 @@ export default class Voucher extends Component {
 
 	async handleSubmit(e) {
 		e.preventDefault()
-
+		this.setState({
+			spinnerState: true
+		})
 		try {
 			let config = {
 				method: 'POST',
@@ -369,7 +434,8 @@ export default class Voucher extends Component {
 			if (data.message && !data.errors) {
 				NotificationManager.success(data.message, '', 4000);
 				this.setState({
-					modalEmailCsv: false
+					modalEmailCsv: false,
+					spinnerState: false
 				})
 			}
 
@@ -632,7 +698,7 @@ export default class Voucher extends Component {
 
 	render() {
 		const columns = this.state.nameColumns;
-		const { dataVouchers, prompt, modalEmailCsv, form } = this.state;
+		const { dataVouchers, prompt, modalEmailCsv, form, spinnerState  } = this.state;
 		
 
 		const options = {
@@ -670,8 +736,16 @@ export default class Voucher extends Component {
 				/>
 				
 				<div className="blank-wrapper">
+				{ spinnerState ? 
+					<FullScreenLoader />
+					:
+					<div>
+
+					</div>
+				}
 					<div className="sweet-alert-wrapper">
 						<SweetAlert
+							customClass='styleSweetAlertVouchers'
 							btnSize="sm"
 							show={prompt}
 							showConfirm={false}
@@ -1024,6 +1098,7 @@ export default class Voucher extends Component {
 					cancelBtnText="Cancelar"
 					cancelBtnBsStyle="danger"
 					confirmBtnBsStyle="primary"
+					customClass='emailCsvSweetAlert'
 					title="Enviar Email CSV"
 					onConfirm={() => this.handleSubmit(event)}
 					onCancel={() => this.onCancel('modalEmailCsv')}
@@ -1031,13 +1106,14 @@ export default class Voucher extends Component {
 
 					<form onSubmit={this.handleSubmit}>
 						<div className="row">
-							<div className="col-6 mb-6 ml-6 offset-3">
+							<div className="col-6 mb-6 ml-6" style={{marginLeft: "20%", marginTop:" 20px"}}>
 								<TextField
 									type="email"
 									name="email"
 									id="email"
 									autoComplete="off"
 									value={this.state.form2.email}
+									style={{ height: "52px", padding: "0", left:"0"}}
 									className="has-input input-lg"
 									placeholder="Email Csv"
 									onChange={() => this.handleChangeEmailCsv(event)}

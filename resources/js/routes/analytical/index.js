@@ -28,7 +28,7 @@ import ChartConexionClientes from "Components/new-Graficas/ChartConexionClientes
 import CardInfo from "Components/new-Graficas/CardInfo";
 import TopTables from "Components/new-Graficas/TopTables";
 import LastTenUsersList from "Components/new-Graficas/LastTenUsersList";
-
+import FullScreenLoader from 'Components/FullScreenLoader';
 
 import {
     Card,
@@ -80,6 +80,7 @@ export default class Analytical extends Component {
             promedyTimeSession: [],
             totalTimeSession: [],
             ConnectedPeopleLocation: [],
+            spinnerState:false
         }
         this.ConsultaGraficas = this.ConsultaGraficas.bind(this);
         this.ConsultaEventos = this.ConsultaEventos.bind(this);
@@ -92,46 +93,54 @@ export default class Analytical extends Component {
         this.TopCampanias = this.TopCampanias.bind(this);
         this.UltimosDiez = this.UltimosDiez.bind(this);
         this.TopZonas = this.TopZonas.bind(this);
-        this.TopVisitas = this.TopVisitas.bind(this);
+        // this.TopVisitas = this.TopVisitas.bind(this);
         this.handlePromedyBandwidth = this.handlePromedyBandwidth.bind(this);
         this.handlePromedyTimeSession = this.handlePromedyTimeSession.bind(this);
         this.handleTotalBandwidth = this.handleTotalBandwidth.bind(this);
         this.handleTotalTimeSession = this.handleTotalTimeSession.bind(this);
         this.ConsultaGraficaAnchoBanda = this.ConsultaGraficaAnchoBanda.bind(this);
-        this.handleConnectedNewPeopleLocation = this.handleConnectedNewPeopleLocation.bind(this);
-        this.handleConnectedOldPeopleLocation = this.handleConnectedOldPeopleLocation.bind(this);
+        this.handleConnectedPeopleLocation = this.handleConnectedPeopleLocation.bind(this);
+        // this.handleConnectedOldPeopleLocation = this.handleConnectedOldPeopleLocation.bind(this);
         this.ConsultaGraficaTiempoConexion = this.ConsultaGraficaTiempoConexion.bind(this);
     }
     
     componentDidMount(){
-        this.TopCampanias();
-        this.UltimosDiez();
-        this.TopZonas();
-        this.ConsultaEventos();
-        this.TopVisitas();
-        this.handlePromedyBandwidth();
-        this.handlePromedyTimeSession();
-        this.handleTotalBandwidth();
-        this.handleTotalTimeSession();
-        this.handleConnectedNewPeopleLocation();
-        this.handleConnectedOldPeopleLocation();
-        this.ConsultaGraficaAnchoBanda();
-        this.ConsultaGraficaTiempoConexion();
-        let column = "fecha_creacion";
-        this.state.form.column = [column];
-        this.ConsultaGraficas(column)
-        column = "mac_ap";
-        this.state.form.column = [column];
-        this.ConsultaGraficas(column)
-        column = "os";
-        this.state.form.column = [column];
-        this.ConsultaGraficas(column)
-        column = "id_evento";
-        this.state.form.column = [column];
-        this.ConsultaGraficas(column)
+        this.setState({
+            spinnerState:true
+        })
+            let column = "fecha_creacion";
+            this.state.form.column = [column];
+            this.ConsultaGraficas(column)
+            column = "mac_ap";
+            this.state.form.column = [column];
+            this.ConsultaGraficas(column)
+            column = "os";
+            this.state.form.column = [column];
+            this.ConsultaGraficas(column)
+            column = "id_evento";
+            this.state.form.column = [column];
+            this.ConsultaGraficas(column)
+
+            this.TopCampanias();
+            this.UltimosDiez();
+            this.TopZonas();
+            this.ConsultaEventos();
+            // this.TopVisitas();
+            this.handlePromedyBandwidth();
+            this.handlePromedyTimeSession();
+            this.handleTotalBandwidth();
+            this.handleTotalTimeSession();
+            this.handleConnectedPeopleLocation();
+            // this.handleConnectedOldPeopleLocation();
+            this.ConsultaGraficaAnchoBanda();
+            this.ConsultaGraficaTiempoConexion();
+            
     }
     
     async TopCampanias(){
+        this.setState({
+            spinnerState:true
+        })
         try {
             let config = {
                 method: 'POST',
@@ -148,6 +157,7 @@ export default class Analytical extends Component {
                 form:{
                     ...this.state.form,
                     filterPersonalizado: false,
+                    spinnerState:false
                 }
             });
         } catch (error) {
@@ -158,6 +168,9 @@ export default class Analytical extends Component {
     }
 
     async UltimosDiez(){
+        this.setState({
+            spinnerState:true
+        })
         try {
             let config = {
             method: 'POST',
@@ -170,7 +183,8 @@ export default class Analytical extends Component {
             let res = await fetch(`${localStorage.urlDomain}api/lastTen`, config)
             let lastTenUsers = await res.json()
             this.setState({
-                lastTenUsers: lastTenUsers
+                lastTenUsers: lastTenUsers,
+                spinnerState:false
             })
             
         } catch (error) {
@@ -181,6 +195,9 @@ export default class Analytical extends Component {
     }
 
     async TopZonas(){
+        this.setState({
+            spinnerState:true
+        })
         try {
             let config = {
             method: 'POST',
@@ -198,6 +215,7 @@ export default class Analytical extends Component {
                 form:{
                     ...this.state.form,
                     filterPersonalizado: false,
+                    spinnerState:false
                 }
             });
             
@@ -208,30 +226,37 @@ export default class Analytical extends Component {
         }
     }
 
-    async TopVisitas(){
-        try {
-            let config = {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(this.state.form)
-            }
-            let res = await fetch(`${localStorage.urlDomain}api/topVisits`, config)
-            let topVisits = await res.json()
-            this.setState({
-                topVisits: topVisits
-            })
+    // async TopVisitas(){
+    //     this.setState({
+    //         spinnerState:true
+    //     })
+    //     try {
+    //         let config = {
+    //         method: 'POST',
+    //         headers: {
+    //             'Accept': 'application/json',
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify(this.state.form)
+    //         }
+    //         let res = await fetch(`${localStorage.urlDomain}api/topVisits`, config)
+    //         let topVisits = await res.json()
+    //         this.setState({
+    //             topVisits: topVisits,
+    //             spinnerState:false
+    //         })
             
-        } catch (error) {
-            this.setState({
-                error:error
-            })
-        }
-    }
+    //     } catch (error) {
+    //         this.setState({
+    //             error:error
+    //         })
+    //     }
+    // }
 
     async ConsultaGraficas(column = "fecha_creacion"){
+        this.setState({
+            spinnerState:true
+        })
         try {
             let config = {
                 method: 'POST',
@@ -252,7 +277,8 @@ export default class Analytical extends Component {
                 form:{
                     ...this.state.form,
                     filterPersonalizado: false,
-                }
+                },
+                spinnerState:false
             });
         } catch (error) {
             this.setState({
@@ -262,25 +288,35 @@ export default class Analytical extends Component {
     }
 
     handleDateFilter(e = null){
+        this.setState({
+            spinnerState:true
+        })
         if(e != null){
             e.preventDefault()
+            this.componentDidMount()
         }
         this.setState({
             form:{
                 ...this.state.form,
                 filterPersonalizado: false,
-            }
+            },
+            spinnerState:false,
         });
-        this.componentDidMount()
+        this.componentDidMount();
+        
     }
     
     async ConsultaEventos(){
+        this.setState({
+            spinnerState:true
+        })
         try {
             let res = await fetch(`${localStorage.urlDomain}api/events`)
             let dataevents = await res.json()
             
             this.setState({
-                events: dataevents
+                events: dataevents,
+                spinnerState:false
             })
 
         } catch (error) {
@@ -291,6 +327,7 @@ export default class Analytical extends Component {
     }
 
     handleChangeFilter(e){
+        
         if(e.target.value != 4){
             let dateAtras = moment(new Date, 'YYYY/MM/DD hh:mm a');
             if(e.target.value == 1){
@@ -324,7 +361,7 @@ export default class Analytical extends Component {
             this.state.form.initialDate = (añoAtras) + '-' + (mesAtras) + '-' + (diaAtras) + " " + (horaAtras) + ":" + (minutosAtras)
             this.state.form.finalDate = (añoActual) + '-' + (mesActual) + '-' + (diaActual) + " " + (horaActual) + ":" + (minutosActual)
             
-            this.componentDidMount()
+            this.componentDidMount();
         }
         else{
             this.handleModal();
@@ -375,6 +412,7 @@ export default class Analytical extends Component {
                 filterPersonalizado: true,
             }
         });
+        // this.componentDidMount();
     }
 
     handleDateFilterCancel(e){
@@ -385,7 +423,7 @@ export default class Analytical extends Component {
                 filterPersonalizado: false,
             }
         });
-        this.componentDidMount()
+        this.componentDidMount();
     }
 
     handleReload(column){
@@ -393,6 +431,9 @@ export default class Analytical extends Component {
     }
 
     async handlePromedyBandwidth(){
+        this.setState({
+            spinnerState:true
+        })
         try {
             let config = {
                 method: 'POST',
@@ -427,7 +468,8 @@ export default class Analytical extends Component {
                 promedyBandwidth:{
                     promedy: promedy,
                     type: type,
-                }
+                },
+                spinnerState:false,
             });
         } catch (error) {
             console.log(error);
@@ -435,6 +477,9 @@ export default class Analytical extends Component {
     }
 
     async handleTotalBandwidth(){
+        this.setState({
+            spinnerState:true
+        })
         try {
             let config = {
                 method: 'POST',
@@ -469,7 +514,8 @@ export default class Analytical extends Component {
                 totalBandwidth:{
                     total: total,
                     type: type,
-                }
+                },
+                spinnerState:false,
             });
         } catch (error) {
             console.log(error);
@@ -477,6 +523,9 @@ export default class Analytical extends Component {
     }
 
     async handlePromedyTimeSession(){
+        this.setState({
+            spinnerState:true
+        })
         try {
             let config = {
                 method: 'POST',
@@ -507,7 +556,8 @@ export default class Analytical extends Component {
                 promedyTimeSession:{
                     promedy: promedy,
                     type: type,
-                }
+                },
+                spinnerState:false,
             });
         } catch (error) {
             console.log(error);
@@ -515,6 +565,9 @@ export default class Analytical extends Component {
     }
 
     async handleTotalTimeSession(){
+        this.setState({
+            spinnerState:true
+        })
         try {
             let config = {
                 method: 'POST',
@@ -544,7 +597,8 @@ export default class Analytical extends Component {
                 totalTimeSession:{
                     total: total,
                     type: type,
-                }
+                },
+                spinnerState:false,
             });
         } catch (error) {
             console.log(error);
@@ -552,6 +606,9 @@ export default class Analytical extends Component {
     }
 
     async ConsultaGraficaAnchoBanda(){
+        this.setState({
+            spinnerState:true
+        })
         try {
             let config = {
                 method: 'POST',
@@ -564,12 +621,18 @@ export default class Analytical extends Component {
             let res = await fetch(`${localStorage.urlDomain}api/ChartBandwidth`, config);
             let ChartBandwidth = await res.json();
             this.state.data.ChartBandwidth = ChartBandwidth;
+            this.setState({
+                spinnerState:false
+            })
         } catch (error) {
             console.log(error);
         }
     }
 
-    async handleConnectedNewPeopleLocation(){
+    async handleConnectedPeopleLocation(){
+        this.setState({
+            spinnerState:true
+        })
         try {
             let config = {
                 method: 'POST',
@@ -579,35 +642,48 @@ export default class Analytical extends Component {
                 },
                 body: JSON.stringify(this.state.form)
             }
-            let res = await fetch(`${localStorage.urlDomain}api/ConnectedNewPeopleLocation`, config);
-            let ConnectedNewPeopleLocation = await res.json();
-            this.state.ConnectedNewPeopleLocation = ConnectedNewPeopleLocation.newPeople;
+            let res = await fetch(`${localStorage.urlDomain}api/ConnectedPeopleLocation`, config);
+            let ConnectedPeopleLocation = await res.json();
+            this.state.ConnectedPeopleLocation = ConnectedPeopleLocation.total;
+            this.setState({
+                // ConnectedPeopleLocation:ConnectedPeopleLocation.total,
+                spinnerState:false
+            })
         } catch (error) {
             console.log(error);
         }
     }
 
-    async handleConnectedOldPeopleLocation(){
-        try {
-            let config = {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(this.state.form)
-            }
-            let res = await fetch(`${localStorage.urlDomain}api/ConnectedOldPeopleLocation`, config);
-            let ConnectedOldPeopleLocation = await res.json();
-            this.state.ConnectedOldPeopleLocation = ConnectedOldPeopleLocation.oldPeople;
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    // async handleConnectedOldPeopleLocation(){
+    //     this.setState({
+    //         spinnerState:true
+    //     })
+    //     try {
+    //         let config = {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Accept': 'application/json',
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             body: JSON.stringify(this.state.form)
+    //         }
+    //         let res = await fetch(`${localStorage.urlDomain}api/ConnectedOldPeopleLocation`, config);
+    //         let ConnectedOldPeopleLocation = await res.json();
+    //         this.state.ConnectedOldPeopleLocation = ConnectedOldPeopleLocation.oldPeople;
+    //         this.setState({
+    //             spinnerState:false
+    //         })
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
 
     
 
     async ConsultaGraficaTiempoConexion(){
+        this.setState({
+            spinnerState:true
+        })
         try {
             let config = {
                 method: 'POST',
@@ -624,7 +700,8 @@ export default class Analytical extends Component {
                 form:{
                     ...this.state.form,
                     filterPersonalizado: false,
-                }
+                },
+                spinnerState:false,
             });
         } catch (error) {
             console.log(error);
@@ -633,10 +710,17 @@ export default class Analytical extends Component {
 
     render() {
         const { events,form } = this.state;
-        const { promedyTimeSession, totalTimeSession, lastTenUsers, promedyBandwidth, totalBandwidth, topVisits, ConnectedNewPeopleLocation, ConnectedOldPeopleLocation } = this.state;
+        const { promedyTimeSession, totalTimeSession, lastTenUsers, promedyBandwidth, totalBandwidth, topVisits, ConnectedPeopleLocation, ConnectedOldPeopleLocation, spinnerState } = this.state;
         const { location } = this.props.match.params
         return (
             <div className="cardsmasonry-wrapper" >
+                {spinnerState ? 
+					<FullScreenLoader />
+					:
+					<div>
+
+					</div>
+				}
                 <PageTitleBar 
                     title={location} 
                     match={this.props.match} 
@@ -660,72 +744,78 @@ export default class Analytical extends Component {
                 <div className="row">
                 <RctCollapsibleCard
                     customClasses=""
-                    colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
+                    colClasses="col-sm-12 col-md-3 col-lg-3 d-sm-3"
                     heading={"Total Registrados"}
                     collapsible
-                    //reloadable
                     fullBlock
                 >
-                    <div className="row" style={{ padding: '0 20px'}}>
-                        <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
-                            <CardInfo 
-                                titleName={"Nuevos"}
-                                dataNum={ConnectedNewPeopleLocation ? ConnectedNewPeopleLocation: 0}
-                                backgroundColor=""
-                                classColor={"dark"}
-                            />
+                    <div className="row" style={{ padding: '0 30px'}}>
+                        <div className="col-sm-6 col-md-6 col-lg-6 d-sm-6">
+                            <img style={{margin: "0 auto"}} src={require("Assets/logos/icons8-connected-people-100.png")}/>
                         </div>
-                        <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
-                            <CardInfo 
-                                titleName={"Antiguos"}
-                                dataNum={ConnectedOldPeopleLocation ? ConnectedOldPeopleLocation : 0}
-                                backgroundColor=""
-                                classColor={"info"}
-                            />
+                        <div className="col-sm-6 col-md-6 col-lg-6 d-sm-6" style={{textAlign:"center"}}>
+                            <p style={{margin: "0"}}>Total</p>
+                            <span style={{fontSize:"55px"}}>{ConnectedPeopleLocation ? ConnectedPeopleLocation : 0}</span>
                         </div>
                     </div>
                 </RctCollapsibleCard>
                 <RctCollapsibleCard
                     customClasses=""
-                    colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
+                    colClasses="col-sm-12 col-md-3 col-lg-3 d-sm-3"
                     heading={"Tiempo de Conexión"}
                     collapsible
                     //reloadable
                     fullBlock
                 >
-                    <div className="row" style={{ padding: '0 20px'}}>
-                        <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
-                            <CardInfo 
-                                titleName={"Promedio"}
-                                dataNum={promedyTimeSession.promedy ? promedyTimeSession.promedy : 0}
-                                backgroundColor=""
-                                time={` ${promedyTimeSession.type ? promedyTimeSession.type : 'Seg'}`}
-                                classColor={"primary"}
-                            />
-                        </div>
-                        {/* <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
-                            <CardInfo 
-                                titleName={"Total"}
-                                dataNum={totalTimeSession.total ? totalTimeSession.total : 0}
-                                backgroundColor=""
-                                time={` ${totalTimeSession.type ? totalTimeSession.type : 'Seg'}`}
-                                classColor={"secondary"}
-                            />
-                        </div> */}
-                    </div>
+                             <div className="row" style={{ padding: '0 30px'}}>
+                                <div className="col-sm-6 col-md-6 col-lg-6 d-sm-6">
+                                    <img style={{margin: "0 auto"}} src={require("Assets/logos/icons8-wi-fi-100.png")}/>
+                                </div>
+                                <div className="col-sm-6 col-md-6 col-lg-6 d-sm-6" style={{textAlign:"center"}}>
+                                    <p>Promedio por Usuario</p>
+                                    <div style={{ marginTop: "-15px", fontSize:"25px" }}> 
+                                        <span>{promedyTimeSession.promedy ? promedyTimeSession.promedy : 0} </span>
+                                        <span>{ promedyTimeSession.type ? promedyTimeSession.type : 'Seg' }</span>
+                                    </div>
+                                </div>
+                            </div>
+                        
                 </RctCollapsibleCard>
                 <RctCollapsibleCard
                     customClasses=""
-                    colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
+                    colClasses="col-sm-12 col-md-6 col-lg-6 d-sm-6"
                     heading={"Ancho de Banda"}
                     collapsible
                     //reloadable
                     fullBlock
                 >
-                    <div className="row" style={{ padding: '0 20px'}}>
+                    <div className="row" style={{ padding: '0 5px'}}>
+                        <div className="col-sm-2 col-md-2 col-lg-2 d-sm-2">
+                            <img style={{margin: "0 auto"}} src={require("Assets/logos/icons8-remote-working-100.png")}/>
+                            
+                        </div>
+                        <div className="col-sm-4 col-md-4 col-lg-4 d-sm-4" style={{textAlign:"center"}}>
+                            <p>Promedio por Usuario</p>
+                            <div style={{fontSize:"25px"}}> 
+                                <span>{promedyBandwidth.promedy ? promedyBandwidth.promedy : 0} </span>
+                                <span>{promedyBandwidth.type ? promedyBandwidth.type : 'Bytes'}</span>
+                            </div>
+                        </div>
+                        <div className="col-sm-2 col-md-2 col-lg-2 d-sm-2">
+                            <img style={{margin: "0 auto"}} src={require("Assets/logos/icons8-cloud-backup-restore-100.png")}/>
+                        </div>
+                        <div className="col-sm-4 col-md-4 col-lg-4 d-sm-4" style={{textAlign:"center"}}>
+                            <p style={{}}>Total</p>
+                            <div style={{fontSize:"25px"}}> 
+                                <span>{totalBandwidth.total ? totalBandwidth.total : 0} </span>
+                                <span>{totalBandwidth.type ? totalBandwidth.type : 'Bytes'}</span>
+                            </div>
+                        </div>
+                    </div>
+                    {/* <div className="row" style={{ padding: '0 20px'}}>
                         <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
                             <CardInfo 
-                                titleName={"Promedio"}
+                                titleName={"Promedio por Usuario"}
                                 dataNum={promedyBandwidth.promedy ? promedyBandwidth.promedy : 0}
                                 backgroundColor=""
                                 time={` ${promedyBandwidth.type ? promedyBandwidth.type : 'Bytes'}`}
@@ -741,7 +831,7 @@ export default class Analytical extends Component {
                                 classColor={"secondary"}
                             />
                         </div>
-                    </div>
+                    </div> */}
                 </RctCollapsibleCard>
 
                 <RctCollapsibleCard
@@ -751,8 +841,16 @@ export default class Analytical extends Component {
                     //reloadable={this.handleReload('fecha_creacion')}
                     fullBlock
                     customClasses="overflow-hidden"
+                    style={{textAlign: "center"}}
                 >
-                    <ChartFecha data={this.state.data.fecha_creacion}/>
+                        {this.state.data.fecha_creacion && this.state.data.fecha_creacion == '' ?
+                            <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full" style={{ textAlign: "center", padding: "100px", fontSize: "20px"}}>
+                                <span >No se encontraron datos</span>
+                            </div>
+                            :
+                            <ChartFecha data={this.state.data.fecha_creacion}/>
+                        }
+                    
                 </RctCollapsibleCard>
 
                 <RctCollapsibleCard
@@ -763,7 +861,14 @@ export default class Analytical extends Component {
                     fullBlock
                     customClasses="overflow-hidden"
                 >
-                    <ChartAp data={this.state.data.mac_ap} paddingRight={20}/>
+                    {this.state.data.mac_ap && this.state.data.mac_ap == '' ?
+                            <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full" style={{ textAlign: "center", padding: "100px", fontSize: "20px"}}>
+                                <span >No se encontraron datos</span>
+                            </div>
+                            :
+                            <ChartAp data={this.state.data.mac_ap} paddingRight={20}/>
+                        }
+                    
                 </RctCollapsibleCard>
                 <RctCollapsibleCard
                     colClasses="col-sm-12 col-md-4 col-lg-4 w-xs-full"
@@ -773,7 +878,13 @@ export default class Analytical extends Component {
                     fullBlock
                     customClasses="overflow-hidden"
                 >
-                    <ChartOS data={this.state.data.os}/>
+                    {this.state.data.os && this.state.data.os == '' ?
+                            <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full" style={{ textAlign: "center", padding: "100px", fontSize: "20px"}}>
+                                <span >No se encontraron datos</span>
+                            </div>
+                            :
+                            <ChartOS data={this.state.data.os}/>
+                        }
                 </RctCollapsibleCard>
                 <RctCollapsibleCard
                     colClasses="col-sm-12 col-md-4 col-lg-4 w-xs-full"
@@ -783,7 +894,13 @@ export default class Analytical extends Component {
                     fullBlock
                     customClasses="overflow-hidden"
                 >
-                    <ChartZona data={this.state.data.id_evento} paddingRight={20}/>
+                        {this.state.data.id_evento && this.state.data.id_evento == '' ?
+                            <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full" style={{ textAlign: "center", padding: "100px", fontSize: "20px"}}>
+                                <span >No se encontraron datos</span>
+                            </div>
+                            :
+                            <ChartZona data={this.state.data.id_evento} paddingRight={20}/>
+                        }
                 </RctCollapsibleCard>
 
 
@@ -796,19 +913,31 @@ export default class Analytical extends Component {
                     fullBlock
                     customClasses="overflow-hidden"
                 >
+                    {this.state.data.ChartBandwidth == '' ?
+                            <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full" style={{ textAlign: "center", padding: "100px", fontSize: "20px"}}>
+                                <span >No se encontraron datos</span>
+                            </div>
+                            :
+                            <ChartAnchoBanda data={this.state.data.ChartBandwidth} paddingRight={20}/>
+                        }
                     
-                    <ChartAnchoBanda data={this.state.data.ChartBandwidth} paddingRight={20}/>
                 </RctCollapsibleCard>
                 <RctCollapsibleCard
                     customClasses=""
                     colClasses="ccol-sm-12 col-md-4 col-lg-12 w-xs-full"
-                    heading={"Tiempo De Conexión VS Fecha"}
+                    heading={"Tiempo De Conexión Promedio VS Fecha"}
                     collapsible
                     //reloadable
                     customClasses="overflow-hidden"
                     fullBlock
                 >
+                    {this.state.data.ChartTimeConnect == '' ?
+                        <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full" style={{ textAlign: "center", padding: "100px", fontSize: "20px"}}>
+                            <span >No se encontraron datos</span>
+                        </div>
+                        :
                         <ChartConexionClientes data={this.state.data.ChartTimeConnect} paddingRight={20}/>
+                    }
                 </RctCollapsibleCard>
                 <RctCollapsibleCard
                     customClasses=""
@@ -844,7 +973,7 @@ export default class Analytical extends Component {
                     </div>
                     
                 </RctCollapsibleCard>
-                <RctCollapsibleCard
+                {/* <RctCollapsibleCard
                     customClasses=""
                     colClasses="col-sm-12 col-md-12 col-lg-6 d-sm-full"
                     heading={"Concentración De Visitas Total"}
@@ -861,10 +990,10 @@ export default class Analytical extends Component {
                         />
                     </div>
                     
-                </RctCollapsibleCard>
+                </RctCollapsibleCard> */}
                 <RctCollapsibleCard
                     customClasses=""
-                    colClasses="col-sm-12 col-md-12 col-lg-6 d-sm-full"
+                    colClasses="col-sm-12 col-md-12 col-lg-12 d-sm-full"
                     heading={"Últimos 10 Clientes Conectados"}
                     collapsible
                     //reloadable

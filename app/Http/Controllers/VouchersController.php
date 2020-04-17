@@ -31,18 +31,29 @@ class VouchersController extends Controller
         $fecha_inicialC = '"'.date('Y-m-d 00:00:00', strtotime($campania->fecha_inicio)).'"';
         $fecha_finC = '"'.date('Y-m-d 00:00:00', strtotime($campania->fecha_fin)).'"';
         $fecha_actual =  '"'.date('Y-m-d H:i:s').'"';
-        DB::connection(session('database'))->select("update vouchers set estado = 'En Uso' where num_usos > 0  and id_caducidad != 4");
 
-        DB::connection(session('database'))->select("update vouchers set estado = 'Sin Usos Disponibles' where num_usos = total_num_usos and id_caducidad !=4");
-        
-        DB::connection(session('database'))->select("update vouchers set estado = 'Sin Uso' where (num_usos = 0 and id_caducidad != 4) and (fecha_inicio >= $fecha_inicialC OR (fecha_fin >= $fecha_finC and id_caducidad = 1))");
+        $vouchersValidation = DB::connection(session('database'))->select("select id_voucher from vouchers where id_campania = $request->id_campaing and id_caducidad != 4");
 
-        DB::connection(session('database'))->select("update vouchers set estado = 'Caducado' 
-        where ((id_campania = $request->id_campaing and id_caducidad !=4) and fecha_fin < $fecha_actual OR (fecha_inicio < $fecha_inicialC) OR (fecha_inicio > $fecha_finC) OR (fecha_fin > $fecha_finC and id_caducidad = 2) OR (fecha_fin < $fecha_inicialC))");
+        if($vouchersValidation){
+            DB::connection(session('database'))->select("update vouchers set estado = 'En Uso' where num_usos > 0  and id_caducidad != 4");
 
-        $vouchers = DB::connection(session('database'))
+            DB::connection(session('database'))->select("update vouchers set estado = 'Sin Usos Disponibles' where num_usos = total_num_usos and id_caducidad !=4");
+            
+            DB::connection(session('database'))->select("update vouchers set estado = 'Sin Uso' where (num_usos = 0 and id_caducidad != 4) and (fecha_inicio >= $fecha_inicialC OR (fecha_fin >= $fecha_finC and id_caducidad = 1))");
+
+            DB::connection(session('database'))->select("update vouchers set estado = 'Caducado' 
+            where ((id_campania = $request->id_campaing and id_caducidad != 4) and fecha_fin < $fecha_actual OR (fecha_inicio < $fecha_inicialC) OR (fecha_inicio > $fecha_finC) OR (fecha_fin > $fecha_finC and id_caducidad = 2) OR (fecha_fin < $fecha_inicialC))");
+
+            $vouchers = DB::connection(session('database'))
+                ->select("select v.voucher as Voucher, v.etiqueta as 'Etiqueta', v.fecha_inicio as 'Fecha Inicio', IF(v.id_caducidad=1, 'Nunca Expira',IF(v.id_caducidad=3, IF(v.num_usos=0, 'Aun no se activa', v.fecha_fin),  IF(v.id_caducidad=4,'Nunca Expira', v.fecha_fin))) as 'Fecha Fin', v.estado as Estado, IF(v.id_caducidad=4,'Indefinido',num_usos) as 'N° de Usos por Voucher', IF(v.id_caducidad=4,'Indefinido',total_num_usos) as 'N° Usos Total' from vouchers as v where (v.id_locacion = $request->id_location and v.id_campania=$request->id_campaing) and v.id_caducidad != 4");  
+            return response()->json($vouchers);
+        }else{
+            $vouchers = DB::connection(session('database'))
             ->select("select v.voucher as Voucher, v.etiqueta as 'Etiqueta', v.fecha_inicio as 'Fecha Inicio', IF(v.id_caducidad=1, 'Nunca Expira',IF(v.id_caducidad=3, IF(v.num_usos=0, 'Aun no se activa', v.fecha_fin),  IF(v.id_caducidad=4,'Nunca Expira', v.fecha_fin))) as 'Fecha Fin', v.estado as Estado, IF(v.id_caducidad=4,'Indefinido',num_usos) as 'N° de Usos por Voucher', IF(v.id_caducidad=4,'Indefinido',total_num_usos) as 'N° Usos Total' from vouchers as v where (v.id_locacion = $request->id_location and v.id_campania=$request->id_campaing) and v.id_caducidad != 4");  
-        return response()->json($vouchers);
+            return response()->json($vouchers);
+        }
+
+        
     }
 
     public function passwordInfo(Request $request){

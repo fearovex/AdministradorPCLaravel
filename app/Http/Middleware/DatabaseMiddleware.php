@@ -37,24 +37,24 @@ class DatabaseMiddleware
             //Configurar para redireccionar al ftp deseado
 
             //pre y producción
-            'driver' => env('FTP_DRIVER'),
-            'host' => env('FTP_HOST'),
-            'port' => env('FTP_PORT'),
-            'root' => env('FTP_ROOTPATH'),
-            'username' => env('FTP_USERNAME'),
-            'password' => env('FTP_PASSWORD'),
-            'passive' => true,
-            'visibility' => 'public',
-            'permPublic' => 0777,
-            'directoryPerm' => 0777,
+            // 'driver' => env('FTP_DRIVER'),
+            // 'host' => env('FTP_HOST'),
+            // 'port' => env('FTP_PORT'),
+            // 'root' => env('FTP_ROOTPATH'),
+            // 'username' => env('FTP_USERNAME'),
+            // 'password' => env('FTP_PASSWORD'),
+            // 'passive' => true,
+            // 'visibility' => 'public',
+            // 'permPublic' => 0777,
+            // 'directoryPerm' => 0777,
 
             //local
-            // 'driver' => 'ftp',
-            // 'host' => '192.168.0.48',
-            // 'port' => '21',
-            // 'root' => '/public/portales',
-            // 'username' =>'Miguel Acevedo',
-            // 'password' => 'dogfire1',
+            'driver' => 'ftp',
+            'host' => '192.168.0.34',
+            'port' => '21',
+            'root' => '/public/portales',
+            'username' =>'Miguel Acevedo',
+            'password' => 'dogfire1',
             
             // Optional FTP Settings...
             // 'ssl' => true,

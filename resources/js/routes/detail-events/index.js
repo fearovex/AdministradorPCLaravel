@@ -13,6 +13,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import SwipeableViewInfo from 'Components/SwipeableViews/SwipeableViewInfo';
+import FullScreenLoader from 'Components/FullScreenLoader';
 
 
 export default class DetailEvents extends Component {
@@ -38,6 +39,7 @@ export default class DetailEvents extends Component {
 			modalInfo: false,
 			value:0,
 			rowData:[],
+			spinnerState:false,
             form: {
 				filterPersonalizado: false,
                 initialDate: initialDate,
@@ -60,6 +62,9 @@ export default class DetailEvents extends Component {
 
 
 	async componentDidMount(){	
+		this.setState({
+			spinnerState:true
+		})
 		try {
 			//Consulta Nombre Columnas  -> Se hace la consulta de los nombres de las columnas de la tabla correspondiente
 			let onlyTableConfig = {
@@ -94,6 +99,7 @@ export default class DetailEvents extends Component {
 
 			this.setState({
 				nameColumns: arrayNames,
+				
 				form:{
 					...this.state.form,
 					nameColumns: arrayNames,
@@ -110,6 +116,9 @@ export default class DetailEvents extends Component {
 	}
 
 	async handleDateFilter(e = null){
+		this.setState({
+			spinnerState:true
+		})
 		if(e != null){
 			e.preventDefault()
 		}
@@ -130,7 +139,8 @@ export default class DetailEvents extends Component {
 					...this.state.form,
 					filterPersonalizado: false,
 				},
-			   	dataDetails: dataDetails,
+				dataDetails: dataDetails,
+				spinnerState:false
             })
             
         } catch (error) {
@@ -146,6 +156,7 @@ export default class DetailEvents extends Component {
 	}
 	
 	handleChangeFilter(e){
+		
         if(e.target.value != 4){
             let dateAtras = moment(new Date, 'YYYY/MM/DD hh:mm a');
             if(e.target.value == 1){
@@ -247,7 +258,7 @@ export default class DetailEvents extends Component {
 
 	render() {
 		const columns = this.state.nameColumns;
-		const { form, modalInfo, rowData } = this.state;
+		const { form, modalInfo, rowData, spinnerState } = this.state;
 		const options = {
 			responsive: 'scrollMaxHeight',
 			print: false,
@@ -265,7 +276,13 @@ export default class DetailEvents extends Component {
 	  
 		return (
 			<div className="data-table-wrapper">
-				
+				{spinnerState ? 
+					<FullScreenLoader />
+					:
+					<div>
+
+					</div>
+				}
 				<PageTitleBar 
 					title={"Detalle de la Campaña - "+form.name_campaing } 
 					match={this.props.match} 
@@ -292,6 +309,7 @@ export default class DetailEvents extends Component {
 						options={options}
 					/>
 					<SweetAlert
+						customClass='lastTenUsersAlert'
 						btnSize="sm"
 						show={modalInfo}
 						// showCancel

@@ -1,5 +1,5 @@
 .paddingInfo{
-    background: #313d4e;
+    background: #404e77!important;
     padding-top: 20px !important;
     padding-right: 20px !important;
     padding-left: 20px !important;
@@ -24,13 +24,13 @@
     margin-top: 7px;
 }
 .paddingDetail{
-    background: #313d4e;
+    background: #404e77!important;
     padding-top: 20px !important;
     padding-right: 20px !important;
     padding-left: 20px !important;
     border-radius: 12px;
     font-size: 14px !important;
-    padding-bottom: 82px!important;
+    padding-bottom: 53px!important;
 }
 .ql-picker-options{
     background-color: #3d4e66!important;
@@ -89,5 +89,6 @@
     color: white!important;
 }
 .dark-mode .MuiInputBase-input  {
-    padding-left: 15px !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
 }

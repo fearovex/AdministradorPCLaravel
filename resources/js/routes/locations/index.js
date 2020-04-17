@@ -15,8 +15,9 @@ import { NotificationContainer, NotificationManager } from 'react-notifications'
 import { connect } from 'react-redux';
 import { onToggleMenu, updateSidebar } from 'Actions';
 import { withRouter } from 'react-router-dom';
-
 import { bindActionCreators } from 'redux';
+// import CircularProgress from '@material-ui/core/CircularProgress';
+import FullScreenLoader from 'Components/FullScreenLoader'
 
 import './styles.css'
 
@@ -45,6 +46,7 @@ class Locations extends Component {
 			activeStep: 0,
 			prompt: false,
 			modaledit: false,
+			spinnerState:false,
 			form: {
 				nombre: "",
 				direccion: "",
@@ -73,12 +75,16 @@ class Locations extends Component {
 	}
 
 	async getLocations(){
+		this.setState({
+			spinnerState:true
+		 })
 		try {
 			let res = await fetch(`${localStorage.urlDomain}api/locations`)
 			let dataLocations = await res.json();
 
 			this.setState({
 				dataLocations:dataLocations,
+				spinnerState:false
 			})
 		} catch (error) {
 			this.state = {
@@ -89,6 +95,9 @@ class Locations extends Component {
 
 	async handleSubmit(e) {
 		e.preventDefault()
+		this.setState({
+			spinnerState:true
+		})
 		const { location } = this.props
 		const { form } = this.state;
 		try {
@@ -108,10 +117,16 @@ class Locations extends Component {
 				this.getLocations();
 				this.getSidebar();
 				this.setState({
-					prompt:false
+					prompt:false,
+					spinnerState:false
 				})
+				
+				NotificationManager.success('Locación registrada exitosamente','', 5000);
 			}
 			else{
+				this.setState({
+					spinnerState:false
+				 })
 				NotificationManager.error('Todos los campos son obligatorios','', 5000);
 			}
 			
@@ -130,26 +145,52 @@ class Locations extends Component {
 
 	async handleEdit(e) {
 		e.preventDefault();
+		this.setState({
+			spinnerState:true
+		})
 		try {
-			let config = {
-				method: 'PATCH',
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(this.state.form)
-			};
+			const { form } = this.state;
+			if(((form.nombre != '' && form.direccion != '') && form.pais != '') && ((form.ciudad != '' && form.telefono != '') && form.PaginaWeb != '')){
+				let config = {
+					method: 'PATCH',
+					headers: {
+						'Accept': 'application/json',
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(this.state.form)
+				};
 
-			let res = await fetch(`${localStorage.urlDomain}api/locations/` + this.state.form.id, config);
-			let response = await res.json();
+				let res = await fetch(`${localStorage.urlDomain}api/locations/` + this.state.form.id, config);
+				let response = await res.json();
+					this.setState({
+						modaledit: false,
+						spinnerState:false,
+						form: {
+							...this.state.form,
+							nombre: "",
+							direccion: "",
+							pais: "",
+							ciudad: "",
+							telefono: "",
+							PaginaWeb: "",
+							id: ""
+						}
+				})
+				this.props.updateSidebar(
+					response.original
+				);
+				this.componentDidMount();
 				this.setState({
-					modaledit: false
-			})
-			this.props.updateSidebar(
-				response.original
-			);
-			this.componentDidMount();
-		
+					spinnerState:false
+				})
+				NotificationManager.success('Locación editada exitosamente','', 5000);
+			}
+			else{
+				this.setState({
+					spinnerState:false
+				})
+				NotificationManager.error('Todos los campos son obligatorios','', 5000);
+			}
 		} catch (error) {
 			console.log(error);
 			this.setState({
@@ -326,7 +367,17 @@ class Locations extends Component {
 	 * @param {string} key
 	 */
 	onCancel(key) {
-		this.setState({ [key]: false })
+		this.setState({ [key]: false,
+			form: {
+				...this.state.form,
+				nombre: "",
+				direccion: "",
+				pais: "",
+				ciudad: "",
+				telefono: "",
+				PaginaWeb: "",
+				id: ""
+			} })
 	}
 
 	handleNext = () => {
@@ -337,6 +388,9 @@ class Locations extends Component {
 			});
 		}
 		else{
+			this.setState({
+				spinnerState:false
+			 })
 			NotificationManager.error('Todos los campos son obligatorios','',5000);
 		}
 	};
@@ -372,6 +426,9 @@ class Locations extends Component {
 					}
 				})
 			}else{
+				this.setState({
+					spinnerState:false
+				 })
 				NotificationManager.error('El campo debe contener solo números','',5000);
 			}
 		}else{
@@ -407,9 +464,17 @@ class Locations extends Component {
 			tecnologia,
 		} = this.state.form;
 
-		const { basic, withDes, success, warning, customIcon, withHtml, prompt, passwordPrompt, modaledit, customStyle } = this.state;
+		const { basic, withDes, success, warning, customIcon, withHtml, prompt, passwordPrompt, modaledit, customStyle, spinnerState } = this.state;
 		return (
+			
 			<div className="cardsmasonry-wrapper">
+				{spinnerState ? 
+					<FullScreenLoader />
+					:
+					<div>
+
+					</div>
+				}
 				<PageTitleBar title={<IntlMessages id="sidebar.locations" />} match={this.props.match} />
 				<div className="sweet-alert-wrapper">
 					<Button
@@ -463,6 +528,7 @@ class Locations extends Component {
 
 					</SweetAlert>
 					<SweetAlert
+						customClass='sweetAlertLocationsEdit'
 						btnSize="sm"
 						show={modaledit}
 						showCancel
@@ -580,8 +646,11 @@ class Locations extends Component {
 							</Card>
 						</div>
 					))}
+					
 				</div>
+				
 			</div>
+			
 		);
 	}
 }

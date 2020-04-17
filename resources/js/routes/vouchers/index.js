@@ -6,6 +6,7 @@ import MUIDataTable from "mui-datatables";
 import RctCollapsibleCard from 'Components/RctCollapsibleCard/RctCollapsibleCard';
 import { Link } from 'react-router-dom'
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import FullScreenLoader from 'Components/FullScreenLoader';
 
 import './styles.css'
 
@@ -21,6 +22,7 @@ export default class Vouchers extends Component {
 				id_locacion: id_location
 			},
 			modalEmailCsv: false,
+			spinnerState: false
 		}
 		this.clickNavLink= this.clickNavLink.bind(this)
 	}
@@ -33,6 +35,9 @@ export default class Vouchers extends Component {
 		localStorage.setItem('user_finalDate_campaing', fecha_fin);
 	 }
 	async componentDidMount(){
+		this.setState({
+			spinnerState:true
+		})
 		try {
 			let config = {
 				method: 'POST',
@@ -67,6 +72,7 @@ export default class Vouchers extends Component {
 
 			this.setState({ 
 				dataVouchers: datavouchers,
+				spinnerState: false
 			});
 
 		} catch (error) {
@@ -75,6 +81,7 @@ export default class Vouchers extends Component {
 	}
 	
 	render() {
+		const { spinnerState } = this.state;
 		const columns = this.state.nameColumns;
 		const options = {
 			responsive: 'scrollMaxHeight',
@@ -85,6 +92,13 @@ export default class Vouchers extends Component {
 		};
 		return (
 			<div className="blank-wrapper">
+				{ spinnerState ? 
+					<FullScreenLoader />
+					:
+					<div>
+
+					</div>
+				}
 				<Helmet>
 					<meta name="description" content="Reactify Blank Page" />
 				</Helmet>

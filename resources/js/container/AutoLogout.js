@@ -12,6 +12,7 @@ export class AutoLogout extends Component {
         var minutos = 10;
         this.state = {
             signoutTime: minutos*60*1000,
+            // signoutTime: 1000,
             showAlert: false,
             AutoLogoutBoolean: false
         };
@@ -87,7 +88,7 @@ export class AutoLogout extends Component {
         return (
             <SweetAlert
                 warning
-                customClass='classSweetAlert'
+                customClass='classSweetAlertSession'
                 btnSize="sm"
                 show={showAlert}
                 title={"Sesión Cerrada"}

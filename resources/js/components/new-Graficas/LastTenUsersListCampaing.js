@@ -173,6 +173,7 @@ class LastTenUsersListCampaing extends Component {
                   </div>
             </Scrollbars>
             <SweetAlert
+                  customClass='lastTenUsersAlert'
 						btnSize="sm"
 						show={modalInfo}
                   confirmBtnText="Cerrar"
