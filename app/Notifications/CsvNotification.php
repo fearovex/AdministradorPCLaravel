@@ -71,11 +71,21 @@ class CsvNotification extends Notification
 
         $aliasFrom = env('ALIAS_MAIL_FROM');
         $campaing = $this->name_campaing;
-        return (new MailMessage)
+        if($this->columns[1] == 'Contraseña'){
+            return (new MailMessage)
+            ->from($aliasFrom,'Contraseñas IPfi')
+            ->subject(Lang::get('Notificación de envío de CSV Contraseñas'))
+            ->line(Lang::get("Se te ha enviado un listado de contraseñas de la campaña: <strong>$campaing</strong>, el cual ha sido adjuntado en formato CSV!"))
+            ->attach($this->filename);
+        }
+        else{
+            return (new MailMessage)
             ->from($aliasFrom,'Vouchers IPfi')
             ->subject(Lang::get('Notificación de envío de CSV vouchers'))
             ->line(Lang::get("Se te ha enviado un listado de vouchers de la campaña: <strong>$campaing</strong>, el cual ha sido adjuntado en formato CSV!"))
             ->attach($this->filename);
+        }
+        
     }
 
     /**

@@ -15,6 +15,7 @@ class DefaultLayout extends Component {
 	render() {
 		const { match } = this.props;
 		return (
+		
 			<RctAppLayout>
 				{routerService && routerService.map((route,key)=>
 					<Route key={key} exact path={`${match.url}/${route.path}`} component={route.component} />

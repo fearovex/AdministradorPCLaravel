@@ -1,12 +1,6 @@
 .MuiTableCell-head{
     z-index: 98!important;
 }
-.sweet-alert{    
-    /* width: 480pz !important; */
-    padding: 17px !important;
-
-    
-}
 .botonCampaña {
     padding-right : 20px;
     float:right;
@@ -17,6 +11,13 @@
 .generalMarginInputs{
     margin-right: 2.3em;
 }
-
+.urlPortalAlert{
+    width: 600px !important;
+    left: 49% !important;
+}
+.filterCustomAlert{
+    width: 600px !important;
+    
+}
 /* formulario*/
 

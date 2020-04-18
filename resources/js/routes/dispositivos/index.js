@@ -10,7 +10,7 @@ import Button from '@material-ui/core/Button';
 import { Input } from '@material-ui/core';
 import Select from '@material-ui/core/Select';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-
+import FullScreenLoader from 'Components/FullScreenLoader'
 import './styles.css'
 
 
@@ -31,6 +31,7 @@ export default class dispositivos extends Component {
 			dispositivo: [],
 			modaledit: false,
 			name_zone: name_zone,
+			spinnerState:false,
 			form: {
 				nombre_dispositivo: "",
 				mac_dispositivo: "",
@@ -42,13 +43,20 @@ export default class dispositivos extends Component {
 		this.handleChange = this.handleChange.bind(this);
 		this.handleEdit = this.handleEdit.bind(this);
 		this.openAlertTest = this.openAlertTest.bind(this);
+		this.zones = this.zones.bind(this);
+		this.devices = this.devices.bind(this);
 
 	}
 	async componentDidMount() {
-		const id_location = localStorage.user_location
-		const id_zona = localStorage.user_zona
-		const { location } = this.props
+		this.zones();
+		this.devices();
 
+	}
+	async zones(){
+		this.setState({
+			spinnerState:true
+		})
+		const id_location = localStorage.user_location
 		try {
 			let res = await fetch(`${localStorage.urlDomain}api/zonas/${id_location}`)
 			let data = await res.json()
@@ -57,7 +65,8 @@ export default class dispositivos extends Component {
 				data: data,
 				form: {
 					id_location: id_location
-				}
+				},
+				
 			})
 
 		} catch (error) {
@@ -65,6 +74,11 @@ export default class dispositivos extends Component {
 				error
 			})
 		}
+	}
+
+	async devices(){
+		const id_zona = localStorage.user_zona
+		const { location } = this.props
 
 		try {
 			let res = await fetch(`${localStorage.urlDomain}api/dispositivos/` + id_zona)
@@ -78,7 +92,8 @@ export default class dispositivos extends Component {
 			}
 
 			this.setState({
-				datadispositivos: datadispositivos
+				datadispositivos: datadispositivos,
+				spinnerState:false
 			})
 
 
@@ -91,7 +106,10 @@ export default class dispositivos extends Component {
 
 
 	async handleSubmit(e) {
-		e.preventDefault()
+		e.preventDefault();
+		this.setState({
+			spinnerState:true
+		})
 		try {
 			let config = {
 				method: 'POST',
@@ -105,7 +123,8 @@ export default class dispositivos extends Component {
 			await fetch(`${localStorage.urlDomain}api/dispositivos`, config);
 			//    this.props.history.push('app/dispositivos') 
 			this.setState({
-				prompt: false
+				prompt: false,
+				spinnerState:false
 			})
 
 			this.componentDidMount();
@@ -119,7 +138,10 @@ export default class dispositivos extends Component {
 	}
 
 	async handleEdit(e) {
-		e.preventDefault()
+		e.preventDefault();
+		this.setState({
+			spinnerState:true
+		})
 		try {
 			let config = {
 				method: 'PATCH',
@@ -132,17 +154,12 @@ export default class dispositivos extends Component {
 
 			await fetch(`${localStorage.urlDomain}api/dispositivos/` + this.state.form.id_dispositivo, config);
 			this.setState({
-				modaledit: false
+				modaledit: false,
+				spinnerState: false
 			})
 
 			this.componentDidMount();
-			// this.setState({
-			// 	state:this.state
-			// })
-
-
-
-
+	
 		} catch (error) {
 			console.log(error);
 			this.setState({
@@ -163,7 +180,7 @@ export default class dispositivos extends Component {
 		this.setState({ [key]: true });
 	}
 	async openAlertTest(key, id) {
-		this.setState({ [key]: true });
+		this.setState({ [key]: true, spinnerState:true });
 		let res = await fetch(`${localStorage.urlDomain}api/dispositivos/${id}/edit`);
 		let dispositivo = await res.json();
 
@@ -174,7 +191,8 @@ export default class dispositivos extends Component {
 				tecnologia: dispositivo.tecnologia,
 				id_zona: dispositivo.id_zona,
 				id_dispositivo: id,
-			}
+			},
+			spinnerState:false
 		});
 
 	}
@@ -198,7 +216,7 @@ export default class dispositivos extends Component {
 		})
 	}
 	render() {
-		const { data, prompt, modaledit, name_zone} = this.state;
+		const { data, prompt, modaledit, name_zone, spinnerState} = this.state;
 		const columns = ['Nombre Dispositivo', 'Mac Dispositivo', 'Tecnologia'
 			, 'Editar'];
 		const options = {
@@ -213,7 +231,13 @@ export default class dispositivos extends Component {
 				<Helmet>
 					<meta name="description" content="Reactify Blank Page" />
 				</Helmet>
+				{spinnerState ? 
+					<FullScreenLoader />
+					:
+					<div>
 
+					</div>
+				}
 
 				<PageTitleBar
 					title={"Dispositivos de "+ name_zone}
@@ -235,7 +259,7 @@ export default class dispositivos extends Component {
 					<div className="sweet-alert-wrapper">
 
 						<SweetAlert
-
+							customClass='stylesDevice'
 							btnSize="sm"
 							show={prompt}
 							showCancel
@@ -313,7 +337,7 @@ export default class dispositivos extends Component {
 						</SweetAlert>
 
 						<SweetAlert
-
+							customClass='stylesDevice'
 							btnSize="sm"
 							show={modaledit}
 							showCancel

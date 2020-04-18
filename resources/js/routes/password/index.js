@@ -19,7 +19,7 @@ import Button from '@material-ui/core/Button';
 import CustomToolbar from "../../util/CustomToolbar";
 import { Input,TextField, Select, InputLabel, FormControlLabel, MenuItem, Checkbox} from '@material-ui/core';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
-
+import FullScreenLoader from 'Components/FullScreenLoader';
 import './styles.css'
 
 
@@ -56,6 +56,7 @@ export default class Password extends Component {
 			nameColumns: ['Etiqueta','Contraseña', 'Fecha Inicio', 'Fecha Fin','N° Usos Total'],
 			dataVouchers: [],
 			modalEmailCsv: false,
+			spinnerState:false
 		}
 
 		this.handleChange = this.handleChange.bind(this);
@@ -78,15 +79,24 @@ export default class Password extends Component {
 
 	async handleSubmitVouchers(e) {
 		e.preventDefault()
+		this.setState({
+			spinnerState:true
+		})
 		const {
 			etiqueta,
 			passwordPersonalizado
 		} = this.state.form
 		
 		if(etiqueta == ''){
+			this.setState({
+				spinnerState:false
+			})
 			NotificationManager.error('El campo etiqueta es obligatorio','',5000);
 		}
 		if(!passwordPersonalizado){
+			this.setState({
+				spinnerState:false
+			})
 			NotificationManager.error('El campo de contraseña personalizada es obligatorio','',5000);
 		}
 		if(passwordPersonalizado != '' && etiqueta !=''){
@@ -104,10 +114,15 @@ export default class Password extends Component {
 				if(datavouchers != 500){
 					this.setState({
 						dataVouchers: datavouchers,
-						prompt: false
+						prompt: false,
+						spinnerState:false
 					});
+					NotificationManager.success('Contraseña creada satisfactoriamente','',5000);
 				}
 				else{
+					this.setState({
+						spinnerState:false
+					})
 					NotificationManager.error('La contraseña creada ya se encuentra registrada','',5000);
 				}
 
@@ -133,7 +148,9 @@ export default class Password extends Component {
 
 	async handleSubmit(e) {
 		e.preventDefault()
-
+		this.setState({
+			spinnerState:true
+		})
 		try {
 			let config = {
 				method: 'POST',
@@ -154,7 +171,8 @@ export default class Password extends Component {
 			if (data.message && !data.errors) {
 				NotificationManager.success(data.message, '', 4000);
 				this.setState({
-					modalEmailCsv: false
+					modalEmailCsv: false,
+					spinnerState: false
 				})
 			}
 
@@ -268,7 +286,7 @@ export default class Password extends Component {
 
 	render() {
 		const columns = this.state.nameColumns;
-		const { dataVouchers, prompt, modalEmailCsv, form } = this.state;
+		const { dataVouchers, prompt, modalEmailCsv, form, spinnerState } = this.state;
 		
 
 		const options = {
@@ -295,14 +313,21 @@ export default class Password extends Component {
 		return (
 			<div className="blank-wrapper">
 				<PageTitleBar
-					title="crear voucher"
+					title="Crear Contraseña"
 					match={this.props.match}
 					history={this.props.history}
 				/>
-				
+				{ spinnerState ? 
+					<FullScreenLoader />
+					:
+					<div>
+
+					</div>
+				}
 				<div className="blank-wrapper">
 					<div className="sweet-alert-wrapper">
 						<SweetAlert
+							customClass="makePasswordAlert"
 							btnSize="sm"
 							show={prompt}
 							showConfirm={false}
@@ -386,6 +411,7 @@ export default class Password extends Component {
 				</RctCollapsibleCard>
 
 				<SweetAlert
+					customClass='emailCsvSweetAlert'
 					btnSize="sm"
 					show={modalEmailCsv}
 					showCancel
@@ -400,7 +426,7 @@ export default class Password extends Component {
 
 					<form onSubmit={this.handleSubmit}>
 						<div className="row">
-							<div className="col-6 mb-6 ml-6 offset-3">
+							<div className="col-6 mb-6 ml-6" style={{marginLeft: "20%", marginTop:" 20px"}}>
 								<TextField
 									type="email"
 									name="email"

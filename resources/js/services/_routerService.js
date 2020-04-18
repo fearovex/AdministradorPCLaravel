@@ -20,7 +20,6 @@
 // import Dropzone from 'Routes/dropzone';
 import Events from 'Routes/events';
 import DetailEvents from 'Routes/detail-events';
-import locacion from 'Routes/locacion';
 import campaña from 'Routes/campaña';
 import zonas from 'Routes/zonas';
 import dispositivos from 'Routes/dispositivos';
@@ -140,10 +139,6 @@ export default [
 		path: 'events',
 		component: Events
 	},
-   {
-      path: 'locacion',
-      component: locacion
-   },
    // {
    // 	path: 'events/detail-events',
    // 	component: DetailEvents

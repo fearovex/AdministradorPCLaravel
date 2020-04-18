@@ -46,7 +46,7 @@ import moment from "moment"
 import { DateTimePicker } from '@material-ui/pickers'
 import Select from '@material-ui/core/Select';
 import DropzoneComponent from 'react-dropzone-component';
-
+import FullScreenLoader from 'Components/FullScreenLoader'
 
 // import Radium, { Style } from 'radium'
 
@@ -92,6 +92,7 @@ export default class CMS extends Component {
          countImgs:1,
          termsConditions:true,
          dataAPZones:[],
+         spinnerState:false,
          form:{
             //campaña
             id_campaing: this.stateCampaing.id_campaing,
@@ -190,6 +191,9 @@ export default class CMS extends Component {
    
 
    async settingValuesFormEdit(id_campaing){
+         this.setState({
+            spinnerState:true
+         })
          let res = await fetch(`${localStorage.urlDomain}api/campanias/${id_campaing}/edit`);
          let dataCampaing = await res.json();
          const urlDomain = localStorage.getItem('urlDomain')
@@ -331,6 +335,7 @@ export default class CMS extends Component {
 		   let anio = date.year();
 
          this.setState({
+            spinnerState:false,
             form: {
                ...this.state.form,
                email: newState.email,
@@ -760,6 +765,9 @@ export default class CMS extends Component {
   
    async handleSubmit(e){
       e.preventDefault();
+      this.setState({
+         spinnerState:true
+      })
       const {
          anio,
          descripcion,
@@ -783,15 +791,24 @@ export default class CMS extends Component {
          // filesBanner,
       } = this.state.form
       if(((nombre_campaña == '' || descripcion == '')) || ((zona_ap == '') || (anio == '' || vertical_economica == ''))){
-         	NotificationManager.error('Los campos son obligatorios','',5000);
+         this.setState({
+            spinnerState:false
+         })
+         NotificationManager.error('Los campos son obligatorios','',5000);
       }
       else if((terminos_condiciones_esp == '' || terminos_condiciones_eng == '') || (terminos_condiciones_esp == '<p><br></p>' || terminos_condiciones_eng == '<p><br></p>')){
          NotificationManager.error('Los terminos y condiciones son requeridos','',5000);
       }
       else if(/[-!$%^&*()_+|~=`\\#{}\[\]:";'<>?,.Ññ\/]/.test(nombre_campaña)){
-            NotificationManager.error('No se permiten caracteres especiales','',5000);
+         this.setState({
+            spinnerState:false
+         })
+         NotificationManager.error('No se permiten caracteres especiales','',5000);
       }
       else if( (((titlePortal == "" || fileBackground == "") || (fileLogo == "" || sizeLogoMobile == "")) || (sizeLogoWeb == "" || buttonColors == "") || (colorTitleForm == "" || colorFontForm == ""))){
+         this.setState({
+            spinnerState:false
+         })
          NotificationManager.error('Todos los campos son obligatorios','',5000);
       } 
       else{
@@ -813,9 +830,15 @@ export default class CMS extends Component {
          let dataCampaing = await res.json();
          
          if(dataCampaing.message == 500){
+            this.setState({
+               spinnerState:false
+            })
             NotificationManager.error('El nombre de campaña ya existe, por favor intente con otro nombre','',5000);
          }
          if(dataCampaing.message == 200){
+            this.setState({
+               spinnerState:false
+            })
             this.props.history.goBack();
             NotificationManager.success('Campaña creada satisfactoriamente!','',5000);
          }
@@ -824,6 +847,9 @@ export default class CMS extends Component {
 
    async handleSubmitEdit(e){
       e.preventDefault();
+      this.setState({
+         spinnerState:true
+      })
       const {
          id_campaing,
          anio,
@@ -848,18 +874,31 @@ export default class CMS extends Component {
          // filesBanner,
       } = this.state.form
       if((nombre_campaña == "" || descripcion == "") || (zona_ap == "" ||  vertical_economica == "")){
-         	NotificationManager.error('Los campos son obligatorios','',5000);
+         this.setState({
+            spinnerState:false
+         })
+         NotificationManager.error('Los campos son obligatorios','',5000);
+            
       }
       else if((terminos_condiciones_esp == "" || terminos_condiciones_eng == "") || (terminos_condiciones_esp == '<p><br></p>' || terminos_condiciones_eng == '<p><br></p>')){
+         this.setState({
+            spinnerState:false
+         })
          NotificationManager.error('Los terminos y condiciones son requeridos',"",5000);
       }
       else if(/[-!$%^&*()_+|~=`\\#{}\[\]:";'<>?,.Ññ\/]/.test(nombre_campaña)){
+         this.setState({
+            spinnerState:false
+         })
          NotificationManager.error('No se permiten caracteres especiales','',5000);
       }
       // else if(imgsBannerSwitch == true && !filesBanner.length){
       //       NotificationManager.error('Las imagenes de banner son requeridas','',5000);
       // }
       else if( (((titlePortal == "" || fileBackground == "") || (fileLogo == "" || sizeLogoMobile == "")) || (sizeLogoWeb == "" || buttonColors == "") || (colorTitleForm == "" || colorFontForm == ""))){
+         this.setState({
+            spinnerState:false
+         })
          NotificationManager.error('Todos los campos son obligatorios','',5000);
       } 
       else{
@@ -876,9 +915,15 @@ export default class CMS extends Component {
             let res = await fetch(`${localStorage.urlDomain}api/campanias/` + id_campaing, config);
             let dataCampaing = await res.json();
             if(dataCampaing.message == 500){
+               this.setState({
+                  spinnerState:false
+               })
                NotificationManager.error('El nombre de campaña ya existe, por favor intente con otro nombre','',5000);
             }
             if(dataCampaing.message == 200){
+               this.setState({
+                  spinnerState:false
+               })
                this.props.history.goBack();
                NotificationManager.success('Campaña editada satisfactoriamente!','',5000);
             }
@@ -911,6 +956,9 @@ export default class CMS extends Component {
       const themeLang = {
          direction: 'rlt'
       }
+      const {
+         spinnerState
+      } = this.state;
       const {
          id_campaing,
          anio,
@@ -1169,6 +1217,13 @@ export default class CMS extends Component {
 
       return (
       <div>
+         {spinnerState ? 
+					<FullScreenLoader />
+					:
+					<div>
+
+					</div>
+				}
             <PageTitleBar 
             title={ 'CMS - '+ nombre_campaña } 
             match={this.props.match} 
@@ -1615,6 +1670,7 @@ export default class CMS extends Component {
                                                                checked={this.state.checkedB}
                                                                onChange={this.handleSwitch('checkedB')}
                                                                value="checkedB"
+                                                               color="primary"
                                                             />
                                                             
                                                          }

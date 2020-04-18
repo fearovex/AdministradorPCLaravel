@@ -6,7 +6,7 @@ import MUIDataTable from "mui-datatables";
 import RctCollapsibleCard from 'Components/RctCollapsibleCard/RctCollapsibleCard';
 import { Link } from 'react-router-dom'
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-
+import FullScreenLoader from 'Components/FullScreenLoader';
 import './styles.css'
 
 export default class Passwords extends Component {
@@ -21,8 +21,10 @@ export default class Passwords extends Component {
 				id_locacion: id_location
 			},
 			modalEmailCsv: false,
+			spinnerState:false
 		}
 		this.clickNavLink= this.clickNavLink.bind(this)
+		this.getDataPasswords= this.getDataPasswords.bind(this)
 	}
 
 	clickNavLink(id_location, id_campaing, name_campaing,fecha_inicio,fecha_fin){
@@ -32,7 +34,14 @@ export default class Passwords extends Component {
 		localStorage.setItem('user_initialDate_campaing', fecha_inicio);
 		localStorage.setItem('user_finalDate_campaing', fecha_fin);
 	 }
-	async componentDidMount(){
+	componentDidMount(){
+		this.getDataPasswords();
+	}
+
+	async getDataPasswords(){
+		this.setState({
+			spinnerState:true
+		})
 		try {
 			let config = {
 				method: 'POST',
@@ -67,6 +76,7 @@ export default class Passwords extends Component {
 
 			this.setState({ 
 				dataVouchers: datavouchers,
+				spinnerState:false
 			});
 
 		} catch (error) {
@@ -75,6 +85,7 @@ export default class Passwords extends Component {
 	}
 	
 	render() {
+		const { spinnerState } = this.state;
 		const columns = this.state.nameColumns;
 		const options = {
 			responsive: 'scrollMaxHeight',
@@ -88,7 +99,13 @@ export default class Passwords extends Component {
 				<Helmet>
 					<meta name="description" content="Reactify Blank Page" />
 				</Helmet>
+				{ spinnerState ? 
+					<FullScreenLoader />
+					:
+					<div>
 
+					</div>
+				}
 				<PageTitleBar
 					// title={<IntlMessages id="vouchers" />}
 					title="Contraseñas"

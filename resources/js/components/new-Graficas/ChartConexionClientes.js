@@ -72,7 +72,7 @@ class ChartConexionClientes extends Component {
       valueAxis.title.fontWeight = "bold";
       valueAxis.min = 0;
       valueAxis.baseUnit = "second";
-      chart.durationFormatter.durationFormat = "hh 'Hr' mm 'Min' ss 'Seg'";
+      chart.durationFormatter.durationFormat = "hh 'Hr' mm 'Min'";
 
       let series = chart.series.push(new am4charts.LineSeries());
       series.dataFields.dateX = "DateRegister";

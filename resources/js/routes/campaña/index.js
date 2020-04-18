@@ -17,7 +17,7 @@ import moment from "moment";
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import { DateTimePicker } from '@material-ui/pickers';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
-
+import FullScreenLoader from 'Components/FullScreenLoader'
 import './styles.css'
 
 
@@ -34,7 +34,8 @@ export default class campañas extends Component {
 			prompt: false,
 			id_location: id_location,
 			campania: [],
-			url:false
+			url:false,
+			spinnerState:false
 		}
 		this.redirectCMS = this.redirectCMS.bind(this);
 		this.DataCampania = this.DataCampania.bind(this);
@@ -47,6 +48,9 @@ export default class campañas extends Component {
 	async componentDidMount() {
 		const id_location = localStorage.user_location
 		const { location } = this.props
+		this.setState({
+			spinnerState:true
+		})
 		try {
 			let res = await fetch(`${localStorage.urlDomain}api/campanias/${id_location}`)
 			let datacampania = await res.json()
@@ -78,7 +82,8 @@ export default class campañas extends Component {
 			}
 
 			this.setState({
-				datacampania: datacampania
+				datacampania: datacampania,
+				spinnerState:false
 			})
 
 		} catch (error) {
@@ -136,7 +141,7 @@ export default class campañas extends Component {
 
 	render() {
 		const columns = ['Nombre', 'Ultima Fecha','Total Registros', 'Fecha Inicio', 'Fecha Fin', 'Editar', 'Datos','Dashboard', 'Portal'];
-		const { url, portalUrl } = this.state;
+		const { url, portalUrl, spinnerState } = this.state;
 		const options = {
 			filterType: 'dropdown',
 			selectableRows: false,
@@ -146,10 +151,16 @@ export default class campañas extends Component {
 		};
 		return (
 			<div className="blank-wrapper">
-				<Helmet>
+				{/* <Helmet>
 					<meta name="description" content="Reactify Blank Page" />
-				</Helmet>
+				</Helmet> */}
+				{spinnerState ? 
+					<FullScreenLoader />
+					:
+					<div>
 
+					</div>
+				}
 
 				<PageTitleBar
 					title={<IntlMessages id="sidebar.campaña" />}
@@ -166,6 +177,7 @@ export default class campañas extends Component {
 						>Crear campaña
 						</Button>
 						<SweetAlert
+						 	customClass="urlPortalAlert"
 							info
 							btnSize="sm"
 							show={url}

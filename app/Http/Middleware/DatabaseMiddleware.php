@@ -36,7 +36,7 @@ class DatabaseMiddleware
             //Habilitar/Instalar la extension de ftp para php
             //Configurar para redireccionar al ftp deseado
 
-            //pre y producción
+            // pre y producción
             'driver' => env('FTP_DRIVER'),
             'host' => env('FTP_HOST'),
             'port' => env('FTP_PORT'),
@@ -50,7 +50,7 @@ class DatabaseMiddleware
 
             //local
             // 'driver' => 'ftp',
-            // 'host' => '192.168.0.48',
+            // 'host' => '192.168.0.25',
             // 'port' => '21',
             // 'root' => '/public/portales',
             // 'username' =>'Miguel Acevedo',

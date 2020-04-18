@@ -1,11 +1,11 @@
 .MuiTableCell-head{
     z-index: 98!important;
 }
-.sweet-alert{    
-    width: 480pz !important;
-    padding: 17px !important;
-    /* left: 40% !important; */
-    
+.stylesDevice{    
+    width: 600px !important;
+    padding: 17px !important; 
+    top: 56% !important;
+    left: 48% !important;
 }
 
 .botonDisp {

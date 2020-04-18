@@ -18,6 +18,7 @@ class RctAgencyApp extends Component {
       }
       return (
          <RctAgencyLayout>
+           
             {routerService && routerService.map((route,key)=>
 					<Route key={key} exact path={`${match.url}/${route.path}`} component={route.component} />
 				)}
