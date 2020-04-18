@@ -54,6 +54,7 @@ class SwipeableViewInfoDB extends Component {
          this.handleVisitHistory();
          this.handleUserRadius();
          this.handleTimeConnect();
+        
       }
    }
 
@@ -141,7 +142,7 @@ class SwipeableViewInfoDB extends Component {
 
    render() {
       const { visitHistory, timeConnect, userRadius } = this.state;
-      const { rowData, prefferDayOfWeekDB } = this.props;
+      const { rowData, prefferDayOfWeekDB, spinnerState } = this.props;
       const theme = {
          direction: 'rlt'
       }

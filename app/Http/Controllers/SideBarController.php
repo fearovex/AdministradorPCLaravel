@@ -51,6 +51,22 @@ class SideBarController extends Controller
                     'type_multi'=>false,
                     'child_routes'=>[
                         (object) array(
+                            'menu_title'=>"Contraseñas",
+                            'id_campain'=> 0,
+                            'id_location' => $location->id,
+                            'type_multi'=> false,
+                            'menu_icon'=>'zmdi zmdi-key',
+                            'path'=> '/app/locations/'.$location->nombre.'/contraseñas'
+                        ),
+                        (object) array(
+                            'menu_title'=>"Vouchers",
+                            'id_campain'=> 0,
+                            'id_location' => $location->id,
+                            'type_multi'=> false,
+                            'menu_icon'=>'icon-tag',
+                            'path'=> '/app/locations/'.$location->nombre.'/vouchers'
+                        ),
+                        (object) array(
                             'menu_title'=>'Dashboard',
                             'type_multi'=> false,
                             'id_campain'=> 0,
@@ -74,22 +90,6 @@ class SideBarController extends Controller
                             'menu_icon'=>'zmdi zmdi-view-carousel',
                             'path'=>'/app/locations/'.$location->nombre.'/zonas'
                         ),
-                        (object) array(
-                            'menu_title'=>"Vouchers",
-                            'id_campain'=> 0,
-                            'id_location' => $location->id,
-                            'type_multi'=> false,
-                            'menu_icon'=>'icon-tag',
-                            'path'=> '/app/locations/'.$location->nombre.'/vouchers'
-                        ),
-                        (object) array(
-                            'menu_title'=>"Contraseñas",
-                            'id_campain'=> 0,
-                            'id_location' => $location->id,
-                            'type_multi'=> false,
-                            'menu_icon'=>'zmdi zmdi-key',
-                            'path'=> '/app/locations/'.$location->nombre.'/contraseñas'
-                        )
                     ]
                 );
             }
@@ -110,6 +110,22 @@ class SideBarController extends Controller
                 'menu_title'=>$location[0]->nombre,
                 'menu_icon'=>'zmdi zmdi-pin',
                 'child_routes'=>[
+                    (object) array(
+                        'menu_title'=>"Contraseñas",
+                        'id_campain'=> 0,
+                        'id_location' => $location->id,
+                        'type_multi'=> false,
+                        'menu_icon'=>'zmdi zmdi-key',
+                        'path'=> '/app/locations/'.$location->nombre.'/contraseñas'
+                    ),
+                    (object) array(
+                        'menu_title'=>"Vouchers",
+                        'id_campain'=> 0,
+                        'id_location' => $location[0]->id,
+                        'type_multi'=> false,
+                        'menu_icon'=>'icon-tag',
+                        'path'=> '/app/locations/'.$location[0]->nombre.'/vouchers'
+                    ),
                     (object) array(
                         'menu_title'=>'Dashboard',
                         'type_multi'=> false,
@@ -134,22 +150,6 @@ class SideBarController extends Controller
                         'menu_icon'=>'zmdi zmdi-view-carousel',
                         'path'=>'/app/locations/'.$location[0]->nombre.'/zonas'
                     ),
-                    (object) array(
-                        'menu_title'=>"Vouchers",
-                        'id_campain'=> 0,
-                        'id_location' => $location[0]->id,
-                        'type_multi'=> false,
-                        'menu_icon'=>'icon-tag',
-                        'path'=> '/app/locations/'.$location[0]->nombre.'/vouchers'
-                    ),
-                    (object) array(
-                        'menu_title'=>"Contraseñas",
-                        'id_campain'=> 0,
-                        'id_location' => $location->id,
-                        'type_multi'=> false,
-                        'menu_icon'=>'zmdi zmdi-key',
-                        'path'=> '/app/locations/'.$location->nombre.'/contraseñas'
-                    )
                 ]
             );
             $sidebarJSON = (object) array('category1' => $locationsArray); 

@@ -1,13 +1,7 @@
 /* .MuiTableCell-head{
     z-index: 98!important;
 }
-.sweet-alert{    
-    width: 800px !important;
-    padding: 0px !important;
-    left: 40% !important;
-    top: 40% !important ;
-    
-}
+
 
 .botonDisZon{
     float:right;
@@ -37,4 +31,70 @@
 }
 .selectDiv > div{
     margin-left: -10px;
+}
+.imgSpinner {
+    position: absolute;
+    /* top: 50%; */
+    /* left: 50%; */
+    max-width: 60px;
+    filter: invert(1);
+    -webkit-animation: rotation 1s infinite linear;
+}
+.customZ_index{
+    z-index: 6000;
+    position: fixed;
+}
+.MuiTableCell-head{
+    z-index: 98!important;
+}
+.sweetAlertLocations{    
+    width: 700px !important;
+    left: 45% !important;
+    top: 40% !important ;
+}
+
+.sweetAlertLocationsEdit{
+    width: 700px !important;
+    left: 43% !important;
+    top: 50% !important ;
+}
+@media (min-width: 724px) and (max-width: 892px){
+    .sweetAlertLocations{    
+        /* width: 478px !important; */
+        padding: 0px !important;
+        left: 40% !important;
+        top: 30% !important;
+    }
+}
+
+@media (min-width: 0px) and (max-width: 803px){
+    .sweetAlertLocations{    
+        width: 478px !important;
+        padding: 0px !important;
+        left: 48% !important;
+        top: 30% !important ;
+    }
+}
+
+@media (min-width: 804px) and (max-width: 892px){
+    .sweetAlertLocations{    
+        /* width: 478px !important; */
+        padding: 0px !important;
+        left: 39% !important;
+        top: 30% !important;
+    }
+}
+
+
+/* .MuiCircularProgress-colorPrimary {
+    color: #122e3c;
+} */
+
+@-webkit-keyframes rotation {
+    from {
+            -webkit-transform: rotate(0deg);
+    }
+    to {
+            -webkit-transform: rotate(359deg);
+    }
 }

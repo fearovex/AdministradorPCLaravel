@@ -128,6 +128,7 @@ class LastTenUsersList extends Component {
                   </div>
             </Scrollbars>
             <SweetAlert
+               customClass='lastTenUsersAlert'
                btnSize="sm"
                show={modalInfo}
                // showCancel

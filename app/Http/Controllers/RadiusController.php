@@ -125,13 +125,26 @@ class RadiusController extends Controller
 
     public function getPromedyBandwidth(Request $request){
         $database = session('database');
-        $users_radius = DB::connection($database)
-            ->table('users_radius as ur')
-            ->join('campania as c', 'ur.id_campania', '=', 'c.id')
-            ->join('locaciones as l', 'c.id_locacion', '=', 'l.id')
-            ->select('ur.username')
-            ->where('l.id', $request->id_location)
-            ->get();
+
+            if($request->id_event == 0){
+                $users_radius = DB::connection($database)
+                ->table('users_radius as ur')
+                ->join('campania as c', 'ur.id_campania', '=', 'c.id')
+                ->join('locaciones as l', 'c.id_locacion', '=', 'l.id')
+                ->select('ur.username')
+                ->where('l.id', $request->id_location)
+                ->get();
+            }else{
+                $users_radius = DB::connection($database)
+                ->table('users_radius as ur')
+                ->join('campania as c', 'ur.id_campania', '=', 'c.id')
+                ->join('locaciones as l', 'c.id_locacion', '=', 'l.id')
+                ->select('ur.username')
+                ->where('l.id', $request->id_location)
+                ->where('c.id', $request->id_event)
+                ->get();
+            }
+            
 
         $whereUsersQuery = "";
         $count = count($users_radius);
@@ -159,13 +172,25 @@ class RadiusController extends Controller
 
     public function getTotalBandwidth(Request $request){
         $database = session('database');
-        $users_radius = DB::connection($database)
+        if($request->id_event == 0){
+            $users_radius = DB::connection($database)
             ->table('users_radius as ur')
             ->join('campania as c', 'ur.id_campania', '=', 'c.id')
             ->join('locaciones as l', 'c.id_locacion', '=', 'l.id')
             ->select('ur.username')
             ->where('l.id', $request->id_location)
             ->get();
+        }else{
+            $users_radius = DB::connection($database)
+            ->table('users_radius as ur')
+            ->join('campania as c', 'ur.id_campania', '=', 'c.id')
+            ->join('locaciones as l', 'c.id_locacion', '=', 'l.id')
+            ->select('ur.username')
+            ->where('l.id', $request->id_location)
+            ->where('c.id', $request->id_event)
+            ->get();
+        }
+        
 
         $whereUsersQuery = "";
         $count = count($users_radius);
@@ -176,7 +201,7 @@ class RadiusController extends Controller
                     $whereUsersQuery .= " OR ";
                 }
             }
-            $total = DB::connection('radius')->select("select round(sum(r.acctoutputoctets+r.acctinputoctets)) Total from radacct r WHERE r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate' AND ($whereUsersQuery)");
+            $total = DB::connection('radius')->select("select round(sum(r.acctoutputoctets+r.acctinputoctets)) Total from radacct r WHERE ($whereUsersQuery) and (r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate')");
             if(!$total){
                 $total[0] = [
                     'Total' => 0
@@ -362,114 +387,136 @@ class RadiusController extends Controller
         return response()->json($bandWidth, 200);
     }
     
-    public function getConnectedNewPeopleLocation(Request $request){
-        $database = session('database');
-        $users_radius = RadiusController::getUsersRadius($request);
-        $whereUsersQuery = "";
-        $count = count($users_radius[0]);
-        if ($count > 0) {
-            foreach ($users_radius as $users) {
-                foreach ($users as $user){
-                    $whereUsersQuery .= "'" . $user->username . "',";
-                }
-            }
-            $whereUsersQuery = substr($whereUsersQuery, 0, -1);
-            $connectedNewPeopleLocation = DB::connection('radius')->select(
-                "select count(s.cantidad) newPeople from (select count(*) cantidad, r.username FROM radacct as r where r.username in ($whereUsersQuery) and (r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate') GROUP BY r.username having cantidad = 1) s");
-            if(!$connectedNewPeopleLocation){
-                $connectedNewPeopleLocation[0] = [
-                    'newPeople' => 0
-                ];
-            }
-        } else {
-            $connectedNewPeopleLocation[0] = [
-                'newPeople' => 0
-            ];
-        }
+    public function getConnectedPeopleLocation(Request $request){
 
-        return response()->json($connectedNewPeopleLocation[0], 200);
+        $database = session('database');
+        $fecha_inicial = '"'.date('Y-m-d H:i:00', strtotime($request->initialDate)).'"';
+        $fecha_final = '"'.date('Y-m-d H:i:00', strtotime($request->finalDate)).'"';
+        $campania = $request->id_event;
+
+        $locacion = $request->id_location;
+
+        $dataTotalRegisters = DB::select(
+            "call dataTotalRegisters('".$database."','".$locacion."','".$campania."','".$fecha_inicial."','".$fecha_final."')"
+        );
+        return response()->json($dataTotalRegisters[0]);
+        // $database = session('database');
+        // $users_radius = RadiusController::getUsersRadius($request);
+        // $whereUsersQuery = "";
+        // $count = count($users_radius[0]);
+        // if ($count > 0) {
+        //     foreach ($users_radius as $users) {
+        //         foreach ($users as $user){
+        //             $whereUsersQuery .= "'" . $user->username . "',";
+        //         }
+        //     }
+        //     $whereUsersQuery = substr($whereUsersQuery, 0, -1);
+        //     $connectedNewPeopleLocation = DB::connection('radius')->select(
+        //         "select count(s.cantidad) newPeople from (select count(*) cantidad, r.username FROM radacct as r where r.username in ($whereUsersQuery) and (r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate') GROUP BY r.username having cantidad = 1) s");
+        //     if(!$connectedNewPeopleLocation){
+        //         $connectedNewPeopleLocation[0] = [
+        //             'newPeople' => 0
+        //         ];
+        //     }
+        // } else {
+        //     $connectedNewPeopleLocation[0] = [
+        //         'newPeople' => 0
+        //     ];
+        // }
+
+        // return response()->json($connectedNewPeopleLocation[0], 200);
     }
 
-    public function getConnectedOldPeopleLocation(Request $request){
-        $database = session('database');
-        $users_radius = RadiusController::getUsersRadius($request);
-        $whereUsersQuery = "";
-        $count = count($users_radius);
-        if ($count > 0) {
-            foreach ($users_radius as $users) {
-                foreach ($users as $user){
-                    $whereUsersQuery .= "'" . $user->username . "',";
-                }
-            }
-            $whereUsersQuery = substr($whereUsersQuery, 0, -1);
-            $connectedOldPeopleLocation = DB::connection('radius')->select(
-                "select count(s.cantidad) oldPeople from (select count(*) cantidad, r.username FROM radacct as r where r.username in ($whereUsersQuery) and (r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate') GROUP BY r.username having cantidad > 1) s");
-            if(!$connectedOldPeopleLocation){
-                $connectedOldPeopleLocation[0] = [
-                    'oldPeople' => 0
-                ];
-            }
-        } else {
-            $connectedOldPeopleLocation[0] = [
-                'oldPeople' => 0
-            ];
-        }
+    // public function getConnectedOldPeopleLocation(Request $request){
+    //     $database = session('database');
+    //     $users_radius = RadiusController::getUsersRadius($request);
+    //     $whereUsersQuery = "";
+    //     $count = count($users_radius);
+    //     if ($count > 0) {
+    //         foreach ($users_radius as $users) {
+    //             foreach ($users as $user){
+    //                 $whereUsersQuery .= "'" . $user->username . "',";
+    //             }
+    //         }
+    //         $whereUsersQuery = substr($whereUsersQuery, 0, -1);
+    //         $connectedOldPeopleLocation = DB::connection('radius')->select(
+    //             "select count(s.cantidad) oldPeople from (select count(*) cantidad, r.username FROM radacct as r where r.username in ($whereUsersQuery) and (r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate') GROUP BY r.username having cantidad > 1) s");
+    //         if(!$connectedOldPeopleLocation){
+    //             $connectedOldPeopleLocation[0] = [
+    //                 'oldPeople' => 0
+    //             ];
+    //         }
+    //     } else {
+    //         $connectedOldPeopleLocation[0] = [
+    //             'oldPeople' => 0
+    //         ];
+    //     }
 
-        return response()->json($connectedOldPeopleLocation[0], 200);
-    }
+    //     return response()->json($connectedOldPeopleLocation[0], 200);
+    // }
 
     public function getConnectedOldPeopleCampaing(Request $request){
         $database = session('database');
-        $users_radius = RadiusController::getUsersRadius($request);
-        $whereUsersQuery = "";
-        
-        $count = count($users_radius);
-        if ($count > 0) {
-            foreach ($users_radius as $user) {
-                $whereUsersQuery .= "'" . $user->username . "',";
-            }
-            $whereUsersQuery = substr($whereUsersQuery, 0, -1);
-            $connectedOldPeopleCampaing = DB::connection('radius')->select(
-                "select count(s.cantidad) traditionalPeople from (select count(*) cantidad, r.username FROM radacct as r where r.username in ($whereUsersQuery) and (r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate') GROUP BY r.username having cantidad > 1) s");
-            if(!$connectedOldPeopleCampaing){
-                $connectedOldPeopleCampaing[0] = [
-                    'traditionalPeople' => 0
-                ];
-            }
-        } else {
-            $connectedOldPeopleCampaing[0] = [
-                'traditionalPeople' => 0
-            ];
-        }
-        return response()->json($connectedOldPeopleCampaing[0], 200);
+        $fecha_inicial = '"'.date('Y-m-d H:i:00', strtotime($request->initialDate)).'"';
+        $fecha_final = '"'.date('Y-m-d H:i:00', strtotime($request->finalDate)).'"';
+        $campania = $request->id_event;
+
+        $locacion = $request->id_location;
+
+        $tabla = DB::connection($database)->table('campania')->select('campania')->where('id', $campania)->first();
+        $registers = DB::connection($database)->select("select tr.mac_cliente FROM $tabla->campania AS tr WHERE (tr.fecha_creacion BETWEEN $fecha_inicial AND $fecha_final) GROUP BY tr.mac_cliente");
+
+        return response()->json($connectedOldPeopleCampaing[0]=[
+            'traditionalPeople' => count($registers)
+        ], 200);
+
+        // $count = count($users_radius);
+        // if ($count > 0) {
+        //     foreach ($users_radius as $user) {
+        //         $whereUsersQuery .= "'" . $user->username . "',";
+        //     }
+        //     $whereUsersQuery = substr($whereUsersQuery, 0, -1);
+        //     $connectedOldPeopleCampaing = DB::connection('radius')->select(
+        //         "select count(s.cantidad) traditionalPeople from (select count(*) cantidad, r.username FROM radacct as r where r.username in ($whereUsersQuery) and (r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate') GROUP BY r.username having cantidad > 1) s");
+        //     if(!$connectedOldPeopleCampaing){
+        //         $connectedOldPeopleCampaing[0] = [
+        //             'traditionalPeople' => 0
+        //         ];
+        //     }
+        // } else {
+        //     $connectedOldPeopleCampaing[0] = [
+        //         'traditionalPeople' => 0
+        //     ];
+        // }
+       
     }
 
-    public function getConnectedNewPeopleCampaing(Request $request){
-        $database = session('database');
-        $users_radius = RadiusController::getUsersRadius($request);
+    // public function getConnectedNewPeopleCampaing(Request $request){
+    //     $database = session('database');
+    //     $users_radius = RadiusController::getUsersRadius($request);
 
-        $whereUsersQuery = "";
+    //     $whereUsersQuery = "";
         
-        $count = count($users_radius);
-        if ($count > 0) {
-            foreach ($users_radius as $key => $user) {
-                $whereUsersQuery .= "'" . $user->username . "',";
-            }
-            $whereUsersQuery = substr($whereUsersQuery, 0, -1);
-            $connectedNewPeopleCampaing = DB::connection('radius')->select(
-                "select count(s.cantidad) newPeople from (select count(*) cantidad, r.username FROM radacct as r where r.username in ($whereUsersQuery) and (r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate') GROUP BY r.username having cantidad = 1) s");
-            if(!$connectedNewPeopleCampaing){
-                $connectedNewPeopleCampaing[0] = [
-                    'newPeople' => 0
-                ];
-            }
-        } else {
-            $connectedNewPeopleCampaing[0] = [
-                'newPeople' => 0
-            ];
-        }
-        return response()->json($connectedNewPeopleCampaing[0], 200);
-    }
+    //     $count = count($users_radius);
+    //     if ($count > 0) {
+    //         foreach ($users_radius as $key => $user) {
+    //             $whereUsersQuery .= "'" . $user->username . "',";
+    //         }
+    //         $whereUsersQuery = substr($whereUsersQuery, 0, -1);
+    //         $connectedNewPeopleCampaing = DB::connection('radius')->select(
+    //             "select count(s.cantidad) newPeople from (select count(*) cantidad, r.username FROM radacct as r where r.username in ($whereUsersQuery) and (r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate') GROUP BY r.username having cantidad = 1) s");
+    //         if(!$connectedNewPeopleCampaing){
+    //             $connectedNewPeopleCampaing[0] = [
+    //                 'newPeople' => 0
+    //             ];
+    //         }
+    //     } else {
+    //         $connectedNewPeopleCampaing[0] = [
+    //             'newPeople' => 0
+    //         ];
+    //     }
+    //     return response()->json($connectedNewPeopleCampaing[0], 200);
+    // }
 
 
 
@@ -494,7 +541,7 @@ class RadiusController extends Controller
                     $whereUsersQuery .= " OR ";
                 }
             }
-            $timeConnect = DB::connection('radius')->select("select round(sum(r.acctsessiontime)) Quantity, date(r.acctstarttime) as DateRegister from radacct r WHERE r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate' AND ($whereUsersQuery) GROUP BY DateRegister");
+            $timeConnect = DB::connection('radius')->select("select round(avg(r.acctsessiontime)) Quantity, date(r.acctstarttime) as DateRegister from radacct r WHERE r.acctstarttime BETWEEN '$request->initialDate' AND '$request->finalDate' AND ($whereUsersQuery) GROUP BY DateRegister");
         } else {
             $timeConnect = [];
         }

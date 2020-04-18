@@ -48,10 +48,11 @@ const FilterDateForm = ({ form, onChange, onChangeFilter, onSubmit, onClick, onC
             </div>
         }
         <SweetAlert
+            customClass='filterCustomAlert'
             btnSize="sm"
             show={form.filterPersonalizado}
             showCancel
-            title="Filtro Perzonalizado"
+            title="Filtro Personalizado"
             confirmBtnText="Filtrar"
             confirmBtnBsStyle="primary"
             cancelBtnText="Cancelar"
@@ -94,7 +95,7 @@ const FilterDateForm = ({ form, onChange, onChangeFilter, onSubmit, onClick, onC
             <div className="row mb-40">
                 {campain &&
                     <div className="form-inline justify-content-center col-12 col-sm-12 col-lg-12">
-                        <label className="mr-4">Campañas</label>
+                        <label className="mr-4" style={{ marginBottom: "20px"}}>Campañas</label>
                         <select name="id_event" id="id_event" className="form-control" onChange={onChange} value={form.id_event}>
                             <option value="0">Todas</option>
                             {events && events.map((data, key) => (

@@ -128,6 +128,7 @@ class MainApp extends Component {
 		const { windowWidth } = this.state;
 		return (
 			<div className="app">
+
 				<div className="app-main-container">
 					{/* <Tour /> */}
 					<Sidebar

@@ -33,6 +33,7 @@ import CardInfo from "Components/new-Graficas/CardInfo";
 
 
 import FilterDateForm from 'Components/FilterDateForm/FilterDateForm';
+import FullScreenLoader from 'Components/FullScreenLoader'
 
 export default class AnalyticalCampaing extends Component {
 
@@ -55,6 +56,7 @@ export default class AnalyticalCampaing extends Component {
         this.state = {
             data: {},
             error: null,
+            spinnerState :false,
             form: {
                 filterPersonalizado: false,
                 initialDate: initialDate,
@@ -83,7 +85,7 @@ export default class AnalyticalCampaing extends Component {
         this.handleChangeFilter = this.handleChangeFilter.bind(this)
         this.handleReload = this.handleReload.bind(this)
         this.handleConnectedOldPeopleCampaing = this.handleConnectedOldPeopleCampaing.bind(this);
-        this.handleConnectedNewPeopleCampaing = this.handleConnectedNewPeopleCampaing.bind(this);
+        // this.handleConnectedNewPeopleCampaing = this.handleConnectedNewPeopleCampaing.bind(this);
         this.UsersMoreVisit = this.UsersMoreVisit.bind(this)
         this.LastTenUsersListCampaing = this.LastTenUsersListCampaing.bind(this)
         this.TopTenAgesList = this.TopTenAgesList.bind(this)
@@ -99,7 +101,7 @@ export default class AnalyticalCampaing extends Component {
 
     componentDidMount() {
         this.handleConnectedOldPeopleCampaing()
-        this.handleConnectedNewPeopleCampaing()
+        // this.handleConnectedNewPeopleCampaing()
         this.VouchersUse()
         this.UsersMoreVisit()
         this.LastTenUsersListCampaing()
@@ -118,6 +120,9 @@ export default class AnalyticalCampaing extends Component {
         this.ConsultaGraficas(column)
     }
     async ConsultaGraficas(column = "fecha_creacion"){
+        this.setState({
+            spinnerState:true
+        })
         try {
             let config = {
                 method: 'POST',
@@ -132,9 +137,11 @@ export default class AnalyticalCampaing extends Component {
             this.state.data[column] = datagraph[column];
             
             this.setState({
+                spinnerState:false,
                 form:{
                     ...this.state.form,
                     filterPersonalizado: false,
+                    
                 }
             });
         } catch (error) {
@@ -145,10 +152,14 @@ export default class AnalyticalCampaing extends Component {
     }
     
     handleDateFilter(e = null){
+        this.setState({
+            spinnerState:true
+        })
         if(e != null){
             e.preventDefault()
         }
         this.setState({
+            spinnerState:false,
             form:{
                 ...this.state.form,
                 filterPersonalizado: false,
@@ -158,12 +169,16 @@ export default class AnalyticalCampaing extends Component {
     }
     
     async ConsultaEventos(){
+        this.setState({
+            spinnerState:true
+        })
         try {
             let res = await fetch(`${localStorage.urlDomain}api/events`)
             let dataevents = await res.json()
             
             this.setState({
-                events: dataevents
+                events: dataevents,
+                spinnerState:false
             })
 
         } catch (error) {
@@ -275,6 +290,9 @@ export default class AnalyticalCampaing extends Component {
     }
 
     async handleConnectedOldPeopleCampaing(){
+        this.setState({
+            spinnerState:true
+        })
         try {
             let config = {
             method: 'POST',
@@ -285,13 +303,17 @@ export default class AnalyticalCampaing extends Component {
             body: JSON.stringify(this.state.form)
             }
             let res = await fetch(`${localStorage.urlDomain}api/ConnectedOldPeopleCampaing`, config)
-            let traditionalPeople = await res.json()
+            let traditionalPeople = await res.json();
+
+            console.log(traditionalPeople);
             
             this.setState({
+               
                 data:{
                     ...this.state.data,
                     traditionalPeople: traditionalPeople.traditionalPeople
-                }
+                },
+                spinnerState:false
             })
 
         } catch (error) {
@@ -301,34 +323,41 @@ export default class AnalyticalCampaing extends Component {
         }
     }
 
-    async handleConnectedNewPeopleCampaing(){
-        try {
-            let config = {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(this.state.form)
-            }
-            let res = await fetch(`${localStorage.urlDomain}api/ConnectedNewPeopleCampaing`, config)
-            let newPeople = await res.json()
+    // async handleConnectedNewPeopleCampaing(){
+    //     this.setState({
+    //         spinnerState:true
+    //     })
+    //     try {
+    //         let config = {
+    //         method: 'POST',
+    //         headers: {
+    //             'Accept': 'application/json',
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify(this.state.form)
+    //         }
+    //         let res = await fetch(`${localStorage.urlDomain}api/ConnectedNewPeopleCampaing`, config)
+    //         let newPeople = await res.json()
             
-            this.setState({
-                data:{
-                    ...this.state.data,
-                    newPeople: newPeople.newPeople
-                }
-            })
+    //         this.setState({
+    //             data:{
+    //                 ...this.state.data,
+    //                 newPeople: newPeople.newPeople
+    //             },
+    //             spinnerState:false
+    //         })
 
-        } catch (error) {
-            this.setState({
-                error:error
-            })
-        }
-    }
+    //     } catch (error) {
+    //         this.setState({
+    //             error:error
+    //         })
+    //     }
+    // }
 
     async UsersMoreVisit(){
+        this.setState({
+            spinnerState:true
+        })
         try {
             let config = {
             method: 'POST',
@@ -344,7 +373,8 @@ export default class AnalyticalCampaing extends Component {
                 data:{
                     ...this.state.data,
                     UsersMoreVisit: UsersMoreVisit
-                }
+                },
+                spinnerState:false
             })
             
         } catch (error) {
@@ -355,6 +385,9 @@ export default class AnalyticalCampaing extends Component {
     }
 
     async LastTenUsersListCampaing(){
+        this.setState({
+            spinnerState:true
+        })
         try {
             let config = {
             method: 'POST',
@@ -370,7 +403,8 @@ export default class AnalyticalCampaing extends Component {
                 data:{
                     ...this.state.data,
                     LastTenUsersListCampaing: LastTenUsersListCampaing
-                }
+                },
+                spinnerState:false
             })
             
         } catch (error) {
@@ -380,6 +414,9 @@ export default class AnalyticalCampaing extends Component {
         }
     }
     async PromedyAge(){
+        this.setState({
+            spinnerState:true
+        })
         try {
             let config = {
             method: 'POST',
@@ -395,7 +432,8 @@ export default class AnalyticalCampaing extends Component {
                 data:{
                     ...this.state.data,
                     PromedyAge: PromedyAge[0].Promedio
-                }
+                },
+                spinnerState:false
             })
             
         } catch (error) {
@@ -406,6 +444,9 @@ export default class AnalyticalCampaing extends Component {
     }
 
     async TopTenAgesList(){
+        this.setState({
+            spinnerState:true
+        })
         try {
             let config = {
             method: 'POST',
@@ -421,7 +462,8 @@ export default class AnalyticalCampaing extends Component {
                 data:{
                     ...this.state.data,
                     TopTenAgesList: TopTenAgesList
-                }
+                },
+                spinnerState:false
             })
             
         } catch (error) {
@@ -432,6 +474,9 @@ export default class AnalyticalCampaing extends Component {
     }
     
     async TopFiveReasonVisits(){
+        this.setState({
+            spinnerState:true
+        })
         try {
             let config = {
             method: 'POST',
@@ -447,7 +492,8 @@ export default class AnalyticalCampaing extends Component {
                 data:{
                     ...this.state.data,
                     TopFiveReasonVisits: TopFiveReasonVisits
-                }
+                },
+                spinnerState:false
             })
         } catch (error) {
             this.setState({
@@ -457,6 +503,9 @@ export default class AnalyticalCampaing extends Component {
     }
     
     async VouchersUse(){
+        this.setState({
+            spinnerState:true
+        })
         try {
             let config = {
             method: 'POST',
@@ -473,7 +522,8 @@ export default class AnalyticalCampaing extends Component {
                     ...this.state.data,
                     V_SinUso: VouchersUse.Sin_Uso,
                     V_EnUso: VouchersUse.En_Uso
-                }
+                },
+                spinnerState:false
             })
         } catch (error) {
             this.setState({
@@ -483,6 +533,9 @@ export default class AnalyticalCampaing extends Component {
     }
 
     async TopFiveRooms(){
+        this.setState({
+            spinnerState:true
+        })
         try {
             let config = {
             method: 'POST',
@@ -498,7 +551,8 @@ export default class AnalyticalCampaing extends Component {
                 data:{
                     ...this.state.data,
                     TopFiveRooms: TopFiveRooms
-                }
+                },
+                spinnerState:false
             })
         } catch (error) {
             this.setState({
@@ -508,6 +562,9 @@ export default class AnalyticalCampaing extends Component {
     }
 
     async AverageTimeConnectionRadius(){
+        this.setState({
+            spinnerState:true
+        })
         let vertical = this.state.form.vertical
         if(vertical == 'Centros Comerciales'){
             try {
@@ -540,7 +597,8 @@ export default class AnalyticalCampaing extends Component {
                 
                 this.setState({
                     timeConnectionRadius:radiusTimeUser,
-                    type: type
+                    type: type,
+                    spinnerState:false
                 })
             } catch (error) {
                 console.log(error)
@@ -549,6 +607,9 @@ export default class AnalyticalCampaing extends Component {
     }
 
     async TotalTimeConnectionRadius(){
+        this.setState({
+            spinnerState:true
+        })
         let vertical = this.state.form.vertical
         if(vertical == 'Centros Comerciales'){
             try {
@@ -581,7 +642,8 @@ export default class AnalyticalCampaing extends Component {
                 
                 this.setState({
                     timeConnectionRadiusTotal:radiusTimeUserTotal,
-                    typeTotal: typeTotal
+                    typeTotal: typeTotal,
+                    spinnerState:false
                 })
             } catch (error) {
                 console.log(error)
@@ -610,11 +672,18 @@ export default class AnalyticalCampaing extends Component {
     // }
 
     render() {
-        const { events,form, data, timeConnectionRadius, usersConnectedRadius, timeConnectionRadiusTotal } = this.state;
+        const { events,form, data, timeConnectionRadius, usersConnectedRadius, timeConnectionRadiusTotal, spinnerState } = this.state;
         const { camp } = this.props.match.params
         const { vertical } = this.state.form
         return (
             <div className="cardsmasonry-wrapper" >
+                {spinnerState ? 
+					<FullScreenLoader />
+					:
+					<div>
+
+					</div>
+				}
                 <PageTitleBar
                     title={camp}
                     match={this.props.match}
@@ -639,29 +708,21 @@ export default class AnalyticalCampaing extends Component {
                         <RctCollapsibleCard
                             customClasses=""
                             colClasses="col-sm-12 col-md-6 col-lg-6 d-sm-full"
-                            heading={"Numero de registros"}
+                            heading={"Total Registrados"}
                             collapsible
                             // reloadable
                             fullBlock
                         >
-                            <div className="row" style={{ padding: '0 20px'}}>
-                                <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
-                                    <CardInfo 
-                                        titleName={"Nuevos"}
-                                        dataNum={data.newPeople ? data.newPeople : 0}
-                                        backgroundColor=""
-                                        classColor={"dark"}
-                                    />
+                            <div className="row" style={{ padding: '20px 20px 20px 20px'}}>
+                                <div className="col-sm-6 col-md-6 col-lg-6 d-sm-6">
+                                    <img style={{margin: "0 auto"}} src={require("Assets/logos/icons8-connected-people-100.png")}/>
                                 </div>
-                                <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
-                                    <CardInfo 
-                                        titleName={"Antiguos"}
-                                        dataNum={data.traditionalPeople ? data.traditionalPeople : 0}
-                                        backgroundColor=""
-                                        classColor={"info"}
-                                    />
+                                <div className="col-sm-6 col-md-6 col-lg-6 d-sm-6" style={{textAlign:"center"}}>
+                                    <p style={{margin: "0"}}>Total</p>
+                                    <span style={{fontSize:"55px"}}>{data.traditionalPeople ? data.traditionalPeople : 0}</span>
                                 </div>
                             </div>
+                          
                         </RctCollapsibleCard>
                         {/* <RctCollapsibleCard
                             customClasses=""
@@ -717,7 +778,13 @@ export default class AnalyticalCampaing extends Component {
                             fullBlock
                             customClasses="overflow-hidden"
                         >
-                            <ChartFecha data={this.state.data.fecha_creacion}/>
+                            {data.fecha_creacion && data.fecha_creacion == '' ?
+                            <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full" style={{ textAlign: "center", padding: "100px", fontSize: "20px"}}>
+                                <span >No se encontraron datos</span>
+                            </div>
+                            :
+                            <ChartFecha data={data.fecha_creacion}/>
+                        }
                         </RctCollapsibleCard>
                         <RctCollapsibleCard
                             customClasses=""
@@ -773,30 +840,22 @@ export default class AnalyticalCampaing extends Component {
                     <div className="row">
                         <RctCollapsibleCard
                             customClasses=""
-                            colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
-                            heading={"Numero de registros"}
+                            colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-4"
+                            heading={"Total Registrados"}
                             collapsible
                             // reloadable
                             fullBlock
                         >
-                            <div className="row" style={{ padding: '0 20px'}}>
-                                <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
-                                    <CardInfo 
-                                        titleName={"Nuevos"}
-                                        dataNum={data.newPeople ? data.newPeople : 0}
-                                        backgroundColor=""
-                                        classColor={"dark"}
-                                    />
+                            <div className="row" style={{ padding: '20px 20px 20px 20px'}}>
+                                <div className="col-sm-6 col-md-6 col-lg-6 d-sm-6">
+                                    <img style={{margin: "0 auto"}} src={require("Assets/logos/icons8-connected-people-100.png")}/>
                                 </div>
-                                <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
-                                    <CardInfo 
-                                        titleName={"Antiguos"}
-                                        dataNum={data.traditionalPeople ? data.traditionalPeople : 0}
-                                        backgroundColor=""
-                                        classColor={"info"}
-                                    />
+                                <div className="col-sm-6 col-md-6 col-lg-6 d-sm-6" style={{textAlign:"center"}}>
+                                    <p style={{margin: "0"}}>Total</p>
+                                    <span style={{fontSize:"55px"}}>{data.traditionalPeople ? data.traditionalPeople : 0}</span>
                                 </div>
                             </div>
+                          
                         </RctCollapsibleCard>
                         {/* <RctCollapsibleCard
                             customClasses=""
@@ -815,44 +874,30 @@ export default class AnalyticalCampaing extends Component {
                                 />
                             </div>
                         </RctCollapsibleCard> */}
+
                         <RctCollapsibleCard
                             customClasses=""
-                            colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
+                            colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-4"
                             heading={"Tiempo de Conexión"}
                             collapsible
-                            // reloadable
+                            //reloadable
                             fullBlock
                         >
-                            <div className="row" style={{ padding: '0 20px'}}>
-                                <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
-                                    <CardInfo 
-                                        titleName={"Promedio"}
-                                        dataNum={timeConnectionRadius ? timeConnectionRadius : 0}
-                                        backgroundColor=""
-                                        time={` ${this.state.type ? this.state.type : 'Seg'}`}
-                                        classColor={"primary"}
-                                    />
-                                </div>
-                                {/* <div className="col-sm-6 col-md-6 col-lg-6 d-sm-full">
-                                    <CardInfo 
-                                        titleName={"Total"}
-                                        dataNum={timeConnectionRadiusTotal ? timeConnectionRadiusTotal : 0}
-                                        backgroundColor=""
-                                        time={` ${this.state.typeTotal ? this.state.typeTotal : 'Seg'}`}
-                                        classColor={"secondary"}
-                                    />
-                                </div> */}
-                            </div>
-                            {/* <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
-                                <CardInfo
-                                    titleName={"Promedio"}
-                                    dataNum={timeConnectionRadius ? timeConnectionRadius : 0}
-                                    backgroundColor=""
-                                    time={this.state.type}
-                                    classColor={"info"}
-                                />
-                            </div> */}
+                                    <div className="row" style={{ padding: '20px 20px 20px 20px'}}>
+                                        <div className="col-sm-6 col-md-6 col-lg-6 d-sm-6">
+                                            <img style={{margin: "0 auto"}} src={require("Assets/logos/icons8-wi-fi-100.png")}/>
+                                        </div>
+                                        <div className="col-sm-6 col-md-6 col-lg-6 d-sm-6" style={{textAlign:"center"}}>
+                                            <p>Promedio por Usuario</p>
+                                            <div style={{ marginTop: "-15px", fontSize:"25px" }}> 
+                                                <span>{timeConnectionRadius ? timeConnectionRadius : 0} </span>
+                                                <span>{this.state.type ? this.state.type : 'Seg'}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                
                         </RctCollapsibleCard>
+
                         <RctCollapsibleCard
                             customClasses=""
                             colClasses="col-sm-12 col-md-4 col-lg-4 d-sm-full"
@@ -878,7 +923,14 @@ export default class AnalyticalCampaing extends Component {
                             fullBlock
                             customClasses="overflow-hidden"
                         >
-                            <ChartFecha data={this.state.data.fecha_creacion}/>
+                            {data.fecha_creacion && data.fecha_creacion == '' ?
+                            <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full" style={{ textAlign: "center", padding: "100px", fontSize: "20px"}}>
+                                <span >No se encontraron datos</span>
+                            </div>
+                            :
+                            <ChartFecha data={data.fecha_creacion}/>
+                        }
+                            
                         </RctCollapsibleCard>
                         <RctCollapsibleCard
                             customClasses=""
@@ -940,11 +992,15 @@ export default class AnalyticalCampaing extends Component {
                             //reloadable
                             fullBlock
                         >
-                            <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full">
-                                <ChartGenero 
+                            {data.genero && data.genero == '' ?
+                            <div className="col-sm-12 col-md-12 col-lg-12 d-sm-full" style={{ textAlign: "center", padding: "100px", fontSize: "20px"}}>
+                                <span >No se encontraron datos</span>
+                            </div>
+                            :
+                            <ChartGenero 
                                     data={data.genero}
                                 />
-                            </div>
+                        }
                         </RctCollapsibleCard>
                     </div>
                 }

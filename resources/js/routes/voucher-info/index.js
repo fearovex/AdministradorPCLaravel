@@ -19,6 +19,7 @@ import { Input, Select, Button } from '@material-ui/core';
 import { Route, Link } from 'react-router-dom'
 import queryString from 'query-string'
 import { NotificationContainer, NotificationManager } from 'react-notifications';
+import FullScreenLoader from 'Components/FullScreenLoader'
 
 import './styles.css'
 
@@ -81,6 +82,7 @@ export default class VoucherInfo extends Component {
 			}],
 			dataVouchers: [],
 			modalEmailCsv: false,
+			spinnerState:false
 		}
 
 		this.createVoucher = this.createVoucher.bind(this)
@@ -89,6 +91,9 @@ export default class VoucherInfo extends Component {
 	}
 
 	async componentDidMount(){
+		this.setState({
+			spinnerState:true
+		})
 		try {
 			let config = {
 				method: 'POST',
@@ -105,6 +110,7 @@ export default class VoucherInfo extends Component {
             // }
 			this.setState({ 
 				dataVouchers: datavouchers,
+				spinnerState: false
 			});
 
 		} catch (error) {
@@ -125,7 +131,9 @@ export default class VoucherInfo extends Component {
 
 	async handleSubmit(e) {
 		e.preventDefault()
-
+		this.setState({
+			spinnerState:true
+		})
 		try {
 			let config = {
 				method: 'POST',
@@ -141,9 +149,15 @@ export default class VoucherInfo extends Component {
 
 			if (data.errors) {
 				if(data.errors.email[0]==="The email must be a valid email address."){
+					this.setState({
+						spinnerState:false
+					})
 					NotificationManager.error('El correo tiene que ser valido.', '', 4000);
 				}
 				if(data.errors.email[0]==="The email field is required."){
+					this.setState({
+						spinnerState:false
+					})
 					NotificationManager.error('El campo con el correo electrónico es requerido.', '', 4000);
 				}
 				
@@ -151,7 +165,8 @@ export default class VoucherInfo extends Component {
 			if (data.message && !data.errors) {
 				NotificationManager.success(data.message, '', 4000);
 				this.setState({
-					modalEmailCsv: false
+					modalEmailCsv: false,
+					spinnerState: false
 				})
 			}
 
@@ -234,7 +249,7 @@ export default class VoucherInfo extends Component {
 
 
 	render() {
-		const { dataVouchers, modalEmailCsv, form } = this.state;
+		const { dataVouchers, modalEmailCsv, form, spinnerState } = this.state;
 		const columns = this.state.nameColumns;
 		const options = {
 			responsive: 'scrollMaxHeight',
@@ -267,6 +282,13 @@ export default class VoucherInfo extends Component {
 				<Helmet>
 					<meta name="description" content="Reactify Blank Page" />
 				</Helmet>
+				{ spinnerState ? 
+					<FullScreenLoader />
+					:
+					<div>
+
+					</div>
+				}
 
 
 				<PageTitleBar
@@ -288,6 +310,7 @@ export default class VoucherInfo extends Component {
 						}
 						<SweetAlert
 							btnSize="sm"
+							customClass='emailCsvSweetAlert'
 							show={modalEmailCsv}
 							showCancel
 							confirmBtnText="Enviar"
@@ -301,11 +324,12 @@ export default class VoucherInfo extends Component {
 
 							<form onSubmit={this.handleSubmit}>
 								<div className="row">
-									<div className="col-6 mb-6 ml-6 offset-3">
+									<div className="col-6 mb-6 ml-6" style={{marginLeft: "20%"}}>
 										<Input
 											type="email"
 											name="email"
 											id="email"
+											autoComplete="off"
 											value={this.state.form.email}
 											className="has-input input-lg"
 											placeholder="Correo"

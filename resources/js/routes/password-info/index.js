@@ -15,7 +15,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-
+import FullScreenLoader from 'Components/FullScreenLoader';
 import './styles.css'
 
 export default class PasswordInfo extends Component {
@@ -71,6 +71,7 @@ export default class PasswordInfo extends Component {
 			},'Acciones'],
 			dataVouchers: [],
 			modalEmailCsv: false,
+			spinnerState: false
 		}
 
 		this.createVoucher = this.createVoucher.bind(this)
@@ -87,6 +88,9 @@ export default class PasswordInfo extends Component {
 	}
 
 	async dataPasswordsInfo(){
+		this.setState({
+			spinnerState:true
+		})
 		try {
 			let config = {
 				method: 'POST',
@@ -108,6 +112,7 @@ export default class PasswordInfo extends Component {
             }
 			this.setState({ 
 				dataVouchers: datavouchers,
+				spinnerState:false
 			});
 
 		} catch (error) {
@@ -143,7 +148,9 @@ export default class PasswordInfo extends Component {
 
 	async handleSubmit(e) {
 		e.preventDefault()
-
+		this.setState({
+			spinnerState:true
+		})
 		try {
 			let config = {
 				method: 'POST',
@@ -159,9 +166,15 @@ export default class PasswordInfo extends Component {
 
 			if (data.errors) {
 				if(data.errors.email[0]==="The email must be a valid email address."){
+					this.setState({
+						spinnerState:false
+					})
 					NotificationManager.error('El correo tiene que ser valido.', '', 4000);
 				}
 				if(data.errors.email[0]==="The email field is required."){
+					this.setState({
+						spinnerState:false
+					})
 					NotificationManager.error('El campo con el correo electrónico es requerido.', '', 4000);
 				}
 				
@@ -169,7 +182,8 @@ export default class PasswordInfo extends Component {
 			if (data.message && !data.errors) {
 				NotificationManager.success(data.message, '', 4000);
 				this.setState({
-					modalEmailCsv: false
+					modalEmailCsv: false,
+					spinnerState:false
 				})
 			}
 
@@ -182,6 +196,9 @@ export default class PasswordInfo extends Component {
 
 	async handleEditPassword(e){
 		e.preventDefault();
+		this.setState({
+			spinnerState:true
+		})
 		const id_location = localStorage.user_location;
 		const id_campaing = localStorage.user_campaing;
 		try {
@@ -214,10 +231,14 @@ export default class PasswordInfo extends Component {
 					NotificationManager.success('La contraseña se ha editado exitosamente', '', 4000);
 					this.dataPasswordsInfo();
 					this.setState({
-						modalEdit:false
+						modalEdit:false,
+						spinnerState:false
 					})
 				}
 				else{
+					this.setState({
+						spinnerState:false
+					})
 					NotificationManager.error('Error al editar la contraseña', '', 4000);
 				}
 			}
@@ -239,6 +260,9 @@ export default class PasswordInfo extends Component {
 	}
 
 	async openModalEdit(key,id_password) {
+		this.setState({
+			spinnerState:true
+		})
 		const id_location = localStorage.user_location;
 		const id_campaing = localStorage.user_campaing;
 		try {
@@ -264,7 +288,8 @@ export default class PasswordInfo extends Component {
 					etiqueta:data.etiqueta,
 					password:data.password,
 					estado:data.estado,
-				}
+				},
+				spinnerState:false
 			});
 			if(this.state.formPassword.estado == 'Disponible'){
 				this.setState({
@@ -342,7 +367,7 @@ export default class PasswordInfo extends Component {
 
 
 	render() {
-		const { dataVouchers, modalEmailCsv, form, modalEdit } = this.state;
+		const { dataVouchers, modalEmailCsv, form, modalEdit, spinnerState } = this.state;
 		const columns = this.state.nameColumns;
 		const options = {
 			responsive: 'scrollMaxHeight',
@@ -376,7 +401,13 @@ export default class PasswordInfo extends Component {
 					<meta name="description" content="Reactify Blank Page" />
 				</Helmet>
 
+				{ spinnerState ? 
+					<FullScreenLoader />
+					:
+					<div>
 
+					</div>
+				}
 				<PageTitleBar
 					title={"Información de Contraseñas - "+form.name_campaing}
 					match={this.props.match}
@@ -395,6 +426,7 @@ export default class PasswordInfo extends Component {
 							</Button>
 						}
 						<SweetAlert
+							customClass='editPasswordAlert'
 							btnSize="sm"
 							show={modalEdit}
 							showConfirm={false}
@@ -433,6 +465,7 @@ export default class PasswordInfo extends Component {
 											style={{margin: "0 auto"}}
 											control={
 											<Switch
+												className="SwitchClassPassword"
 												checked={this.state.statePassword}
 												onChange={this.handleChangeStatePassword('statePassword')}
 												color="secondary"
@@ -466,6 +499,7 @@ export default class PasswordInfo extends Component {
 								</form>
 						</SweetAlert>
 						<SweetAlert
+							customClass='emailCsvSweetAlert'
 							btnSize="sm"
 							show={modalEmailCsv}
 							showCancel
@@ -480,11 +514,13 @@ export default class PasswordInfo extends Component {
 
 							<form onSubmit={this.handleSubmit}>
 								<div className="row">
-									<div className="col-6 mb-6 ml-6 offset-3">
+									<div className="col-6 mb-6 ml-6" style={{marginLeft: "20%"}}>
 										<Input
 											type="email"
 											name="email"
 											id="email"
+											autoComplete="off"
+											style={{ height: "52px", padding: "0", left:"0"}}
 											value={this.state.form.email}
 											className="has-input input-lg"
 											placeholder="Correo"

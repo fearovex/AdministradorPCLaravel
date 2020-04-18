@@ -20,3 +20,15 @@ left: 10%!important;}
 .MuiTableRow-head{
     z-index: 98!important;
 }
+.editPasswordAlert{
+    width: 620px !important;
+    left: 48% !important;
+    top: 58% !important;
+}
+.dark-mode .SwitchClassPassword .Mui-checked + .MuiSwitch-track {
+    background-color: #12b137;
+}
+/* 
+.dark-mode .SwitchClassPassword >span:nth-child(2) {
+    background-color: #04fd40;
+} */

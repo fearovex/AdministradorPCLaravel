@@ -131,9 +131,9 @@ Route::group(['middleware' => 'cors'], function() {
         
         Route::post('/timeConnectDB', 'RadiusController@getTimeConnectDB');
         
-        Route::post('/ConnectedNewPeopleLocation', 'RadiusController@getConnectedNewPeopleLocation');
+        Route::post('/ConnectedPeopleLocation', 'RadiusController@getConnectedPeopleLocation');
 
-        Route::post('/ConnectedOldPeopleLocation', 'RadiusController@getConnectedOldPeopleLocation');
+        // Route::post('/ConnectedOldPeopleLocation', 'RadiusController@getConnectedOldPeopleLocation');
 
         Route::post('/ConnectedNewPeopleCampaing', 'RadiusController@getConnectedNewPeopleCampaing');
 

@@ -48,12 +48,24 @@ class CsvEmail extends Controller
 
     protected function sendResetLinkEmail(Request $request)
     {
+        
         $response = $this->validateEmail($request);
-        date_default_timezone_set('America/Bogota');
-        $filename = 'Vouchers'.date("Y-m-d-His").'.csv';
-            Notification::route('mail', "$request->email")
-                        ->notify(new CsvNotification($request->columns,$request->rows,$request->name_campaing, $filename));
-        unlink($filename);
+        if($request->columns[1] == 'Contraseña'){
+            date_default_timezone_set('America/Bogota');
+            $filename = 'Contraseñas'.date("Y-m-d-His").'.csv';
+                Notification::route('mail', "$request->email")
+                            ->notify(new CsvNotification($request->columns,$request->rows,$request->name_campaing, $filename));
+            unlink($filename);
+        }
+        else{
+            date_default_timezone_set('America/Bogota');
+            $filename = 'Vouchers'.date("Y-m-d-His").'.csv';
+                Notification::route('mail', "$request->email")
+                            ->notify(new CsvNotification($request->columns,$request->rows,$request->name_campaing, $filename));
+            unlink($filename);
+        }
+
+        
 
         return $response == null
                     ? $this->sendResetLinkResponse($request, $response)
