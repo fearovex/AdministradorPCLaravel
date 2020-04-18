@@ -25,6 +25,10 @@ left: 10%!important;}
     left: 48% !important;
     top: 58% !important;
 }
-.dark-mode .MuiSwitch-colorSecondary.Mui-checked + .MuiSwitch-track {
-    background-color: #04fd40;
+.dark-mode .SwitchClassPassword .Mui-checked + .MuiSwitch-track {
+    background-color: #12b137;
 }
+/* 
+.dark-mode .SwitchClassPassword >span:nth-child(2) {
+    background-color: #04fd40;
+} */

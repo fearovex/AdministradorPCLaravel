@@ -465,6 +465,7 @@ export default class PasswordInfo extends Component {
 											style={{margin: "0 auto"}}
 											control={
 											<Switch
+												className="SwitchClassPassword"
 												checked={this.state.statePassword}
 												onChange={this.handleChangeStatePassword('statePassword')}
 												color="secondary"

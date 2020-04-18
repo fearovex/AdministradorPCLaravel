@@ -1670,6 +1670,7 @@ export default class CMS extends Component {
                                                                checked={this.state.checkedB}
                                                                onChange={this.handleSwitch('checkedB')}
                                                                value="checkedB"
+                                                               color="primary"
                                                             />
                                                             
                                                          }
