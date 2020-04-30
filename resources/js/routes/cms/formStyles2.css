@@ -12,12 +12,18 @@
     font-weight: 700;
 }
 
-.formulario {
-    padding: 2%;
-    background: #005153ad;
-    border-radius: 10px;
+.formulario2 {
+    padding: 4%;
+    background: #fff;
     color: #EEE;
-    margin: 0 10px;
+    margin:0 100px
+}
+
+.formulario2B{
+    padding: 4%;
+    background: #fff;
+    color: #EEE;
+    margin:0 30px
 }
 
 
@@ -44,50 +50,8 @@ a:hover {
     margin-bottom: 0.5rem;
 }
 
-.input_error input {
-    background-color: rgb(251,154,154,0.73);
-}
-
-.input_error input::placeholder {
-    color: #EEE;
-}
-
-.input_error select {
-    background-color: rgb(251,154,154,0.73);
-    color: #EEE;
-}
-
-.input_error span {
-    font-size: 13px;
-}
 
 @import url('https://fonts.googleapis.com/css?family=Montserrat');
-
-/* * {
-    margin: 0;
-    box-sizing: border-box;
-    padding: 0;
-    font-family: 'Montserrat', sans-serif;
-} */
-
-/* html {   
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: center;
-} */
-
-/* body {
-    background: transparent;
-} */
-
-/* 
-html, body {
-    height: 100%;
-} */
 
 .selector-idioma {
     position: absolute;
@@ -122,44 +86,55 @@ html, body {
     min-width: 100px;
 }
 
-.cardCont {
+.blockContent2{
+    background-size: cover!important;
+    background-repeat: no-repeat!important;
+    background-position: center!important;
+}
+
+.cardCont2 {
     background:transparent;
     padding: 2%;
     border: 0px solid rgba(0,0,0,.125);
     font-family: 'Montserrat', sans-serif;
-    background-size: cover !important;
-    background-position: center center !important;
-    background-repeat: no-repeat !important;
+    background: "background: rgba(0, 0, 0, 0.75)"
 }
 
 .logo {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 20%;
+    margin-top: 10%;
     margin-bottom: 7%;
 }
 
-.titleForm{
+.titleForm2{
     text-align: center;
     margin: 15px 0;
     color: aliceblue;
     text-transform: uppercase;
-    font-size: 15px;
-    font-weight: 700;
+    font-size: 17px;
+    line-height: 1;
+    font-weight: 400;
 }
 
 
-.dark-mode .colorPlaceHolder input::placeholder{
-    color: black!important;
+.dark-mode .colorPlaceHolder2 input::placeholder{
+    color: rgb(58, 57, 57)!important;
  }
- .dark-mode .colorPlaceHolder > select{
-    background-color:white!important;
-    color: black!important;
- }
- .dark-mode .colorPlaceHolder input{
+ .dark-mode .colorPlaceHolder2 > select{
+    color: rgb(58, 57, 57)!important;
     background-color:white!important;
     color: #0A0A0A;
+    font-size: 12px;
+    padding: 10px;
+    height: 40px!important;
+ }
+ .dark-mode .colorPlaceHolder2 input{
+    background-color:white!important;
+    color: black!important;
+    padding: 10px;
+    font-size: 12px;
  }
 
 /* estilos terminos y condiciones*/
