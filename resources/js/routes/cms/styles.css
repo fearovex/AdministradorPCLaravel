@@ -92,3 +92,46 @@
     padding-left: 10px !important;
     padding-right: 10px !important;
 }
+.dark-mode .MuiTab-textColorPrimary.Mui-selected{
+    background: #343e63!important
+}
+
+.customTitles{
+    text-align: center;
+    font-size: 15px;
+    font-weight: bold;
+    text-decoration: underline;
+    padding-bottom: 5px;
+}
+.customMarginInputs{
+    margin-bottom: 25px!important;
+}
+.customMarginTextArea{
+    margin-top:20px!important; 
+}
+#zona_ap{
+    padding-bottom: 11px;
+    padding-right: 71px!important;
+}
+.textAreaResize{
+    resize: none;
+    padding-bottom: 13px;
+}
+.buttonForm1{
+    background-color: rgba(1, 82, 84, 0.53);
+    border: 1px solid white;
+    color: white;
+}
+.buttonForm2{
+    background: -webkit-gradient(linear, left top, right bottom, from(rgb(255, 255, 255)), to(rgb(52, 78, 151)));
+    border: 1px solid white;
+    color: white;
+}
+.buttonForm3{
+    background-color: rgba(68, 196, 231, 0.54);
+    border: 1px solid white;
+    color: white;
+}
+.btn-info{
+    background: #209a8f linear-gradient(180deg, #1cb5a7, #23b7a9) repeat-x !important;
+}

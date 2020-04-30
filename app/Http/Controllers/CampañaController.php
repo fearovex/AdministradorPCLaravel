@@ -58,7 +58,8 @@ class CampañaController extends Controller
         $campaña->ano_evento = $request->anio;
         $campaña->id_locacion = $request->id_location;
         $campaña->campania = $NameTabla;
-        $campaña->vertical_economica = $request->vertical_economica;
+        $campaña->vertical_economica = "";
+        // $campaña->vertical_economica = $request->vertical_economica;
         $campaña->path_campania = env("APP_URL").'portales/'.$NameTabla;
         $campaña->save();
 
@@ -131,6 +132,40 @@ class CampañaController extends Controller
     }
 
     private function add_Styles_Terms($request, $campaña){
+        $type_form = 0;
+        $type_banner = 0;
+        $static_form = 0;
+        $weather_widget = 0;
+
+        if($request->type_form_one){
+            $type_form = 1;
+        }
+        if($request->type_form_two){
+            $type_form = 2;
+        }
+        if($request->type_form_three){
+            $type_form = 3;
+        }
+
+        if($request->imgsBannerSwitch){
+            $type_banner = 1;
+        }
+
+        if($request->static_form){
+            $static_form = 1;
+        }
+
+        if($request->type_banner_one){
+            $type_banner = 1;
+        }
+        if($request->type_banner_two){
+            $type_banner = 2;
+        }
+
+        if($request->weather_widget){
+            $weather_widget = 1;
+        }
+
         DB::connection(session('database'))->table('styles_campania')->insert([
             'id_campania' => $campaña->id,
             'width_logo_web' => $request->sizeLogoWeb.'px',
@@ -139,7 +174,7 @@ class CampañaController extends Controller
             'margin_logo_movil' => '1px',
             'container_form_color' => "rgba(".$request->backgroundColorForm['r'].", ".$request->backgroundColorForm['g'].", ".$request->backgroundColorForm['b'].", ".$request->backgroundColorForm['a'].")",
             'container_form_font_color' => "rgba(".$request->colorFontForm['r'].", ".$request->colorFontForm['g'].", ".$request->colorFontForm['b'].", ".$request->colorFontForm['a'].")",
-            'button_font_color' => "rgba(".$request->colorFontForm['r'].", ".$request->colorFontForm['g'].", ".$request->colorFontForm['b'].", ".$request->colorFontForm['a'].")",
+            'button_font_color' => "rgba(".$request->buttonColorsFont['r'].", ".$request->buttonColorsFont['g'].", ".$request->buttonColorsFont['b'].", ".$request->buttonColorsFont['a'].")",
             'button_background_color' => "rgba(".$request->buttonColors['r'].", ".$request->buttonColors['g'].", ".$request->buttonColors['b'].", ".$request->buttonColors['a'].")",
             'button_border_color' => "rgba(".$request->buttonColors['r'].", ".$request->buttonColors['g'].", ".$request->buttonColors['b'].", ".$request->buttonColors['a'].")",
             'button_hover_font_color' => '#EEE',
@@ -149,7 +184,12 @@ class CampañaController extends Controller
             'msg_error_color_font' => '#EEE',
             'msg_error_color_background' => 'rgb(160,19,35,0.91)',
             'title_portal' => $request->titlePortal,
-            'color_title_portal' => "rgba(".$request->colorTitleForm['r'].", ".$request->colorTitleForm['g'].", ".$request->colorTitleForm['b'].", ".$request->colorTitleForm['a'].")"
+            'color_title_portal' => "rgba(".$request->colorTitleForm['r'].", ".$request->colorTitleForm['g'].", ".$request->colorTitleForm['b'].", ".$request->colorTitleForm['a'].")",
+            'color_background' => "rgba(".$request->backgroundColor['r'].", ".$request->backgroundColor['g'].", ".$request->backgroundColor['b'].", ".$request->backgroundColor['a'].")",
+            'type_form' => $type_form,
+            'type_banner' => $type_banner,
+            'static_form' => $static_form,
+            'weather_widget' => $weather_widget
         ]);
 
         DB::connection(session('database'))->table('terms_conditions_campania')->insert([
@@ -167,13 +207,29 @@ class CampañaController extends Controller
         $password = env('DB_PASSWORD');
         $database = session('database');
         $campania = $NameTabla;
+        
+        $type_form = 0;
+
+        if($request->type_form_one){
+            $type_form = 1;
+        }
+        if($request->type_form_two){
+            $type_form = 2;
+        }
+        if($request->type_form_three){
+            $type_form = 3;
+        }
+
         $config = '[database]
         host = "'.$host.'"
         port = ""
         user = "'.$userportal.'"
         password = "'.$password.'"
         name = "'.$database.'"
-        campania = "'.$campania.'"';
+        campania = "'.$campania.'"
+        id_locacion = "'.$request->user_location.'"
+        id_campania = "'.$request->id_campaing.'"
+        type_form = "'.$type_form.'"';
 
         if(($db == 'unicentro' && ($request->id_campaing == 1 || $request->id_campaing == 2))){
             for ($i=0; $i < count($portal_cautivo); $i++) { 
@@ -289,7 +345,7 @@ class CampañaController extends Controller
             WHERE TABLE_SCHEMA = '".$db."' AND TABLE_NAME = '".$table_name."';");
 
             $dataCampaing = DB::connection(session('database'))
-                ->select("SELECT cs.id as id_campaing, cs.nombre, cs.campania, cs.descripcion, cs.fecha_inicio, cs.fecha_fin, cs.zona_ap, cs.vertical_economica, sc.width_logo_web, sc.container_form_color, sc.container_form_font_color, sc.button_font_color, sc.button_background_color, sc.title_portal, sc.color_title_portal, sc.width_logo_web, sc.width_logo_movil, tcc.terms_conditions_es, tcc.terms_conditions_en, (SELECT fc.nombre FROM files_campania fc WHERE fc.id_tipo_archivo_multimedia = 1 AND fc.id_campania = cs.id) AS background,(SELECT fc.nombre FROM files_campania fc WHERE fc.id_tipo_archivo_multimedia = 2 AND fc.id_campania = cs.id) AS logo, (SELECT fc.nombre FROM files_campania fc WHERE fc.id_tipo_archivo_multimedia = 3 AND fc.id_campania = cs.id) AS favico FROM campania cs 
+                ->select("SELECT cs.id as id_campaing, cs.nombre, cs.campania, cs.descripcion, cs.fecha_inicio, cs.fecha_fin, cs.zona_ap, cs.vertical_economica, sc.*, tcc.terms_conditions_es, tcc.terms_conditions_en, (SELECT fc.nombre FROM files_campania fc WHERE fc.id_tipo_archivo_multimedia = 1 AND fc.id_campania = cs.id) AS background,(SELECT fc.nombre FROM files_campania fc WHERE fc.id_tipo_archivo_multimedia = 2 AND fc.id_campania = cs.id) AS logo, (SELECT fc.nombre FROM files_campania fc WHERE fc.id_tipo_archivo_multimedia = 3 AND fc.id_campania = cs.id) AS favico FROM campania cs 
                 INNER JOIN styles_campania sc ON sc.id_campania = cs.id
                 INNER JOIN terms_conditions_campania tcc ON tcc.id_campania = cs.id 
                 WHERE cs.id = $id");
@@ -393,6 +449,38 @@ class CampañaController extends Controller
     }
 
     private function update_Styles_Terms($request){
+        $type_form = 0;
+        $type_banner = 0;
+        $static_form = 0;
+        $weather_widget = 0;
+
+        if($request->type_form_one){
+            $type_form = 1;
+        }
+        if($request->type_form_two){
+            $type_form = 2;
+        }
+        if($request->type_form_three){
+            $type_form = 3;
+        }
+
+        
+        if($request->static_form){
+            $static_form = 1;
+        }
+      
+
+        if($request->type_banner_one){
+            $type_banner = 1;
+        }
+        if($request->type_banner_two){
+            $type_banner = 2;
+        }
+        
+        if($request->weather_widget){
+            $weather_widget = 1;
+        }
+
         DB::connection(session('database'))->table('styles_campania')->where('id_campania', $request->id_campaing)->update([
             'width_logo_web' => $request->sizeLogoWeb.'px',
             'margin_logo_web' => '1px',
@@ -400,7 +488,7 @@ class CampañaController extends Controller
             'margin_logo_movil' => '1px',
             'container_form_color' => "rgba(".$request->backgroundColorForm['r'].", ".$request->backgroundColorForm['g'].", ".$request->backgroundColorForm['b'].", ".$request->backgroundColorForm['a'].")",
             'container_form_font_color' => "rgba(".$request->colorFontForm['r'].", ".$request->colorFontForm['g'].", ".$request->colorFontForm['b'].", ".$request->colorFontForm['a'].")",
-            'button_font_color' => "rgba(".$request->colorFontForm['r'].", ".$request->colorFontForm['g'].", ".$request->colorFontForm['b'].", ".$request->colorFontForm['a'].")",
+            'button_font_color' => "rgba(".$request->buttonColorsFont['r'].", ".$request->buttonColorsFont['g'].", ".$request->buttonColorsFont['b'].", ".$request->buttonColorsFont['a'].")",
             'button_background_color' => "rgba(".$request->buttonColors['r'].", ".$request->buttonColors['g'].", ".$request->buttonColors['b'].", ".$request->buttonColors['a'].")",
             'button_border_color' => "rgba(".$request->buttonColors['r'].", ".$request->buttonColors['g'].", ".$request->buttonColors['b'].", ".$request->buttonColors['a'].")",
             'button_hover_font_color' => '#EEE',
@@ -410,7 +498,12 @@ class CampañaController extends Controller
             'msg_error_color_font' => '#EEE',
             'msg_error_color_background' => 'rgb(160,19,35,0.91)',
             'title_portal' => $request->titlePortal,
-            'color_title_portal' => "rgba(".$request->colorTitleForm['r'].", ".$request->colorTitleForm['g'].", ".$request->colorTitleForm['b'].", ".$request->colorTitleForm['a'].")"
+            'color_title_portal' => "rgba(".$request->colorTitleForm['r'].", ".$request->colorTitleForm['g'].", ".$request->colorTitleForm['b'].", ".$request->colorTitleForm['a'].")",
+            'color_background' => "rgba(".$request->backgroundColor['r'].", ".$request->backgroundColor['g'].", ".$request->backgroundColor['b'].", ".$request->backgroundColor['a'].")",
+            'type_form' => $type_form,
+            'type_banner' => $type_banner,
+            'static_form' => $static_form,
+            'weather_widget' => $weather_widget
         ]);
 
         DB::connection(session('database'))->table('terms_conditions_campania')->where('id_campania', $request->id_campaing)->update([
@@ -479,11 +572,12 @@ class CampañaController extends Controller
         ]);
             
         if($request->imgsBannerSwitch && count($request->filesBanner) > 0){
+            DB::connection(session('database'))->select("delete from banner_files_campania where id_campania = $request->id_campaing");
             for($i=0; $i < count($request->filesBanner); $i++){
                 $banner = explode(';base64,', $request->filesBanner[$i]);
                 Storage::disk("ftp_".session('database')."")->put($NameTable."/img/banner/banner".($i+1).".png", base64_decode($banner[1]));
                 DB::connection(session('database'))->table('banner_files_campania')->insert([
-                    'id_campania' => $campaña->id,
+                    'id_campania' => $request->id_campaing,
                     'nombre_img_web' => "/img/banner/banner".($i+1).".png",
                     'nombre_img_movil' => "/img/banner/banner".($i+1).".png",
                     'fecha_creacion' => date('Y-m-d H:i:s')
@@ -572,7 +666,7 @@ class CampañaController extends Controller
                 $campania = DB::connection(session('database'))
                     ->table('campania')
                     ->where('id', $id)
-                    ->update(['fecha_inicio' => $request->fecha_inicio, 'fecha_fin' => $request->fecha_fin, 'descripcion' => $request->descripcion, 'zona_ap' => $request->zona_ap,'ano_evento' => $request->anio, 'vertical_economica' => $request->vertical_economica]);
+                    ->update(['fecha_inicio' => $request->fecha_inicio, 'fecha_fin' => $request->fecha_fin, 'descripcion' => $request->descripcion, 'zona_ap' => $request->zona_ap,'ano_evento' => $request->anio, 'vertical_economica' => '']);
             }
 
             CampañaController::alterTableWithNewColumns($request, $id, $NameTable);
