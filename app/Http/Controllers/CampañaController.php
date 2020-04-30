@@ -147,8 +147,8 @@ class CampañaController extends Controller
             $type_form = 3;
         }
 
-        if($request->imgsBannerSwitch){
-            $type_banner = 1;
+        if(!$request->imgsBannerSwitch){
+            $type_banner = 0;
         }
 
         if($request->static_form){
@@ -467,6 +467,10 @@ class CampañaController extends Controller
         
         if($request->static_form){
             $static_form = 1;
+        }
+
+        if(!$request->imgsBannerSwitch){
+            $type_banner = 0;
         }
       
 
