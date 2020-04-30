@@ -161,7 +161,7 @@ export default class CMS extends Component {
                r:'0',
                g:'0',
                b:'0',
-               a:'1',
+               a:'0.5',
             },
             filesBanner: [],
             imgsBannerSwitch:false,
@@ -1997,7 +1997,7 @@ export default class CMS extends Component {
                                                                eventHandlers={eventHandlers}
                                                                djsConfig={djsConfig}
                                                             > 
-                                                            <div className="dz-message" style={{padding:"0 10px"}}>Suelte o Haga Click Para Subir Sus Imagenes</div>
+                                                            <div className="dz-message" style={{padding:"40px 28px"}}>Suelte o Haga Click Para Subir Sus Imagenes</div>
                                                             
                                                             </ DropzoneComponent>
                                                       </div>
@@ -2653,7 +2653,7 @@ export default class CMS extends Component {
                                                 :
                                                 <div className="cardCont2" style={{background: `rgba(${form.backgroundColor.r }, ${form.backgroundColor.g }, ${form.backgroundColor.b }, ${form.backgroundColor.a })`}}>
                                                    <div className="logo">                        
-                                                      <img className="img-logo" src={form.fileLogo ? form.fileLogo:''} style={{width: `${form.sizeLogoWeb}px`}} alt="" />
+                                                      <img className="img-logo" src={form.fileLogo ? form.fileLogo:''} style={{width: `${form.sizeLogoMobile}px`}} alt="" />
                                                       
                                                    </div>
                                                    <form className="formulario2B"  action="" style={{background: `rgba(${form.backgroundColorForm.r }, ${form.backgroundColorForm.g }, ${form.backgroundColorForm.b }, ${form.backgroundColorForm.a })`}}>
@@ -3141,7 +3141,7 @@ export default class CMS extends Component {
                                              <div className="cardCont3" style={{background: `rgba(${form.backgroundColor.r }, ${form.backgroundColor.g }, ${form.backgroundColor.b }, ${form.backgroundColor.a })`}}>
                                                 <form className="formulario3B"  action="" style={{background: `rgba(${form.backgroundColorForm.r }, ${form.backgroundColorForm.g }, ${form.backgroundColorForm.b }, ${form.backgroundColorForm.a })`}}>
                                                    <div className="logo3">                        
-                                                      <img className="img-logo" src={form.fileLogo ? form.fileLogo:''} style={{width: `${form.sizeLogoWeb}px`}} alt="" />
+                                                      <img className="img-logo" src={form.fileLogo ? form.fileLogo:''} style={{width: `${form.sizeLogoMobile}px`}} alt="" />
                                                    </div>
                                                    <div className="titleForm3B" style={{color:`rgba(${form.colorTitleForm.r }, ${form.colorTitleForm.g }, ${form.colorTitleForm.b }, ${form.colorTitleForm.a })`}}>{form.titlePortal}</div>
                                                    <div className="form-row">

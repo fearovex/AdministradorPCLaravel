@@ -135,3 +135,31 @@
 .btn-info{
     background: #209a8f linear-gradient(180deg, #1cb5a7, #23b7a9) repeat-x !important;
 }
+
+.dark-mode .dropzone.dz-clickable {
+    cursor: pointer;
+    overflow-y: scroll;
+    height: 200px;
+}
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey; 
+    border-radius: 10px;
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: rgba(183, 182, 182, 0.72);
+    border-radius: 10px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(209, 208, 208, 0.925);
+  }
+
+  
