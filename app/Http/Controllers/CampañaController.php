@@ -155,10 +155,10 @@ class CampañaController extends Controller
             $static_form = 1;
         }
 
-        if($request->type_banner_one){
+        if($request->imgsBannerSwitch && $request->type_banner_one){
             $type_banner = 1;
         }
-        if($request->type_banner_two){
+        if($request->imgsBannerSwitch && $request->type_banner_two){
             $type_banner = 2;
         }
 
@@ -231,12 +231,22 @@ class CampañaController extends Controller
         id_campania = "'.$request->id_campaing.'"
         type_form = "'.$type_form.'"';
 
+        $latLong= DB::connection(session('database'))->table('locaciones')->select('latitud','longitud')->where('id',$request->user_location)->first();
+
+        $configWeather = "$(document).ready(
+            function(){
+              var geoLat = ".$latLong->latitud.";
+              var geoLng = ".$latLong->longitud.";";
+
+
         if(($db == 'unicentro' && ($request->id_campaing == 1 || $request->id_campaing == 2))){
             for ($i=0; $i < count($portal_cautivo); $i++) { 
                 $new_path[$i] = substr($portal_cautivo[$i], 15);
                 Storage::disk("ftp_".session('database')."")->put($NameTabla."/$new_path[$i]", Storage::disk('public')->get($portal_cautivo[$i]));
             }
             Storage::disk("ftp_".session('database')."")->prepend($NameTabla."/db/parameter.ini.dist", $config);
+
+            Storage::disk("ftp_".session('database')."")->prepend($NameTabla."/js/weather.js", $configWeather);
 
             // descomentar al pasar a produccion
 
@@ -254,6 +264,8 @@ class CampañaController extends Controller
             }
             Storage::disk("ftp_".session('database')."")->prepend($NameTabla."/db/parameter.ini.dist", $config);
 
+            Storage::disk("ftp_".session('database')."")->prepend($NameTabla."/js/weather.js", $configWeather);
+
             // descomentar al pasar a produccion
 
             // for ($i=0; $i < count($portal_cautivo); $i++) { 
@@ -269,6 +281,8 @@ class CampañaController extends Controller
                 Storage::disk("ftp_".session('database')."")->put($NameTabla."/$new_path[$i]", Storage::disk('public')->get($portal_cautivo[$i]));
             }
             Storage::disk("ftp_".session('database')."")->prepend($NameTabla."/db/parameter.ini.dist", $config);
+
+            Storage::disk("ftp_".session('database')."")->prepend($NameTabla."/js/weather.js", $configWeather);
         }
         
 
@@ -474,10 +488,10 @@ class CampañaController extends Controller
         }
       
 
-        if($request->type_banner_one){
+       if($request->imgsBannerSwitch && $request->type_banner_one){
             $type_banner = 1;
         }
-        if($request->type_banner_two){
+        if($request->imgsBannerSwitch && $request->type_banner_two){
             $type_banner = 2;
         }
         
