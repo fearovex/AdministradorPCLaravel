@@ -50,6 +50,8 @@ class LocationsController extends Controller
         $location->ciudad = $request->ciudad;
         $location->telefono = $request->telefono;
         $location->PaginaWeb = $request->PaginaWeb;
+        $location->latitud = $request->latitud;
+        $location->longitud = $request->longitud;
         $location->save();
 
         $zona= new Zona();
@@ -123,7 +125,7 @@ class LocationsController extends Controller
             $locaciones = DB::connection(session('database'))
             ->table('locaciones')
             ->where('id', $id)
-            ->update(['nombre' => $request->nombre,'direccion' => $request->direccion,'pais' => $request->pais,'ciudad' => $request->ciudad,'telefono' => $request->telefono,'PaginaWeb' => $request->PaginaWeb]);
+            ->update(['nombre' => $request->nombre,'direccion' => $request->direccion,'pais' => $request->pais,'ciudad' => $request->ciudad,'telefono' => $request->telefono,'PaginaWeb' => $request->PaginaWeb, 'latitud' => $request->latitud, 'longitud'=> $request->longitud]);
             $response = SideBarController::getSideBarRol(session('rol'),session('database'));
             return response()->json($response);
         } catch (\Throwable $th) {

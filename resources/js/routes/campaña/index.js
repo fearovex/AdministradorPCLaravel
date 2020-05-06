@@ -87,9 +87,9 @@ export default class campañas extends Component {
 			})
 
 		} catch (error) {
-			this.state = {
-				error: error
-			}
+			this.setState({
+				spinnerState:false
+			})
 		}
 
 
