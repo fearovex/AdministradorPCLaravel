@@ -28,6 +28,7 @@ import Dropzone from 'react-dropzone'
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
+import Tooltip from '@material-ui/core/Tooltip';
 import {
 	Button,
 	Form,
@@ -1958,7 +1959,8 @@ export default class CMS extends Component {
                                                 <div>
                                                    <FormControlLabel
                                                       control={<Checkbox checked={form.weather_widget} onChange={this.handleChangeCheckBox('weather_widget')} value="weather_widget" />}
-                                                      label="Widget de Clima"
+                                                      label={<Tooltip id="tooltip-top" title={<h5>Se agregará un widget de tiempo en la parte superior derecha del portal cautivo, tenga en cuenta que el clima será de acuerdo a las coordenadas de la locación,</h5>} placement="top">
+                                                      <p style={{ margin: "0"}}>Widget de Clima</p></Tooltip>}
                                                    />
                                                 </div>
                                              </div>
@@ -1980,14 +1982,16 @@ export default class CMS extends Component {
                                                       </p>
                                                       
                                                    </div>
-                                                   <div className="col-lg-6" style={{ display: "flex", margin: "0 auto", paddingBottom: "20px"}}>
+                                                   <div className="col-lg-7" style={{ display: "flex", margin: "0 auto", paddingBottom: "20px"}}>
                                                       <FormControlLabelUI
                                                          control={<Checkbox checked={form.type_banner_one} onChange={this.handleChangeCheckBox('type_banner_one')} value="type_banner_one" />}
-                                                         label={<p style={{fontSize: "12px", margin: "0"}}>Banner Imagenes</p>}
+                                                         label={<Tooltip id="tooltip-top" title={<h5>Control deslizante de imagenes grande, ideal para dar información o mostrar productos,</h5>} placement="top">
+                                                            <p style={{fontSize: "12px", margin: "0"}}>Banner Imagenes 1</p></Tooltip>}
                                                       />
                                                       <FormControlLabelUI
                                                          control={<Checkbox checked={form.type_banner_two} onChange={this.handleChangeCheckBox('type_banner_two')} value="type_banner_two" />}
-                                                         label={<p style={{fontSize: "12px", margin: "0"}}>Banner Patrocinios</p>}
+                                                         label={ <Tooltip id="tooltip-top" title={<h5>Control deslizante de imagenes pequeño, ideal para marcas y/o patrocinios.</h5>} placement="top">
+                                                         <p style={{fontSize: "12px", margin: "0"}}>Banner Imagenes 2</p></Tooltip>}
                                                       />
                                                    </div>
                                                    <div className="col-lg-12" style={{padding: "0 25%"}}>

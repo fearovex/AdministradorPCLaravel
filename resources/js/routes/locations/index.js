@@ -57,6 +57,8 @@ class Locations extends Component {
 				dispositivo: "",
 				mac_dispositivo: "",
 				tecnologia: "",
+				latitud:"",
+				longitud:""
 			},
 		}
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -220,7 +222,6 @@ class Locations extends Component {
 
 	getStepContent(step) {
 		const { form } = this.state;
-		console.log(form)
 		switch (step) {
 			case 0:
 				return (
@@ -294,6 +295,30 @@ class Locations extends Component {
 										value={form.PaginaWeb}
 										className="has-input input-lg"
 										placeholder="Pagina Web"
+										onChange={() => this.handleChange(event)}
+									/>
+								</div>
+							</div>
+							<div className="row">
+								<div className="col-lg-6">
+									<Input
+										type="text"
+										name="latitud"
+										id="latitud"
+										value={form.latitud}
+										className="has-input input-lg"
+										placeholder="Latitud"
+										onChange={() => this.handleChange(event)}
+									/>
+								</div>
+								<div className="col-lg-6">
+									<Input
+										type="text"
+										name="longitud"
+										id="longitud"
+										value={form.longitud}
+										className="has-input input-lg"
+										placeholder="Longitud"
 										onChange={() => this.handleChange(event)}
 									/>
 								</div>
@@ -462,6 +487,8 @@ class Locations extends Component {
 			dispositivo,
 			mac_dispositivo,
 			tecnologia,
+			latitud,
+			longitud
 		} = this.state.form;
 
 		const { basic, withDes, success, warning, customIcon, withHtml, prompt, passwordPrompt, modaledit, customStyle, spinnerState } = this.state;
@@ -609,6 +636,28 @@ class Locations extends Component {
 										placeholder="Pagina Web"
 										value={PaginaWeb}
 										onChange={() => this.handleChangeEdit(event)}
+									/>
+								</div>
+								<div className="col-lg-5 ml-3">
+									<Input
+										type="text"
+										name="latitud"
+										id="latitud"
+										value={latitud}
+										className="has-input input-lg"
+										placeholder="Latitud"
+										onChange={() => this.handleChange(event)}
+									/>
+								</div>
+								<div className="col-lg-5 ml-3">
+									<Input
+										type="text"
+										name="longitud"
+										id="longitud"
+										value={longitud}
+										className="has-input input-lg"
+										placeholder="Longitud"
+										onChange={() => this.handleChange(event)}
 									/>
 								</div>
 							</div>
