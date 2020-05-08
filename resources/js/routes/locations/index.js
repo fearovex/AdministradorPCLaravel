@@ -175,6 +175,8 @@ class Locations extends Component {
 							ciudad: "",
 							telefono: "",
 							PaginaWeb: "",
+							latitud: "",
+							longitud: "",
 							id: ""
 						}
 				})
@@ -214,6 +216,8 @@ class Locations extends Component {
 				ciudad: locacion.ciudad,
 				telefono: locacion.telefono,
 				PaginaWeb: locacion.PaginaWeb,
+				latitud: locacion.latitud,
+				longitud: locacion.longitud,
 				id: locacion.id
 			}
 		});
@@ -307,7 +311,7 @@ class Locations extends Component {
 										id="latitud"
 										value={form.latitud}
 										className="has-input input-lg"
-										placeholder="Latitud"
+										placeholder="Latitud (Decimales)"
 										onChange={() => this.handleChange(event)}
 									/>
 								</div>
@@ -318,7 +322,7 @@ class Locations extends Component {
 										id="longitud"
 										value={form.longitud}
 										className="has-input input-lg"
-										placeholder="Longitud"
+										placeholder="Longitud (Decimales)"
 										onChange={() => this.handleChange(event)}
 									/>
 								</div>
@@ -383,6 +387,22 @@ class Locations extends Component {
 	 * Open Alert
 	 * @param {key} key
 	 */
+	openAlertLocation(key) {
+		this.setState({ [key]: true,
+			form: {
+				...this.state.form,
+				nombre: "",
+				direccion: "",
+				pais: "",
+				ciudad: "",
+				telefono: "",
+				PaginaWeb: "",
+				latitud: "",
+				longitud: "",
+				id: ""
+			} })
+	}
+
 	openAlert(key) {
 		this.setState({ [key]: true });
 	}
@@ -401,6 +421,8 @@ class Locations extends Component {
 				ciudad: "",
 				telefono: "",
 				PaginaWeb: "",
+				latitud: "",
+				longitud: "",
 				id: ""
 			} })
 	}
@@ -508,7 +530,7 @@ class Locations extends Component {
 						variant="contained"
 						color="primary"
 						className="botonLocacion"
-						onClick={() => this.openAlert('prompt')}
+						onClick={() => this.openAlertLocation('prompt')}
 						style={{position: "absolute", right: "23px"}}
 					>Crear locacion
 					</Button>
@@ -645,7 +667,7 @@ class Locations extends Component {
 										id="latitud"
 										value={latitud}
 										className="has-input input-lg"
-										placeholder="Latitud"
+										placeholder="Latitud (Decimales)"
 										onChange={() => this.handleChange(event)}
 									/>
 								</div>
@@ -656,7 +678,7 @@ class Locations extends Component {
 										id="longitud"
 										value={longitud}
 										className="has-input input-lg"
-										placeholder="Longitud"
+										placeholder="Longitud (Decimales)"
 										onChange={() => this.handleChange(event)}
 									/>
 								</div>
