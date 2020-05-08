@@ -233,10 +233,10 @@ class CampañaController extends Controller
 
         $latLong= DB::connection(session('database'))->table('locaciones')->select('latitud','longitud')->where('id',$request->user_location)->first();
 
-        $configWeather = "$(document).ready(
-            function(){
-              var geoLat = ".$latLong->latitud.";
-              var geoLng = ".$latLong->longitud.";";
+        // $configWeather = "$(document).ready(
+        //     function(){
+        //       var geoLat = ".$latLong->latitud.";
+        //       var geoLng = ".$latLong->longitud.";";
 
 
         if(($db == 'unicentro' && ($request->id_campaing == 1 || $request->id_campaing == 2))){
@@ -246,7 +246,7 @@ class CampañaController extends Controller
             }
             Storage::disk("ftp_".session('database')."")->prepend($NameTabla."/db/parameter.ini.dist", $config);
 
-            Storage::disk("ftp_".session('database')."")->prepend($NameTabla."/js/weather.js", $configWeather);
+            // Storage::disk("ftp_".session('database')."")->prepend($NameTabla."/js/weather.js", $configWeather);
 
             // descomentar al pasar a produccion
 
@@ -264,7 +264,7 @@ class CampañaController extends Controller
             }
             Storage::disk("ftp_".session('database')."")->prepend($NameTabla."/db/parameter.ini.dist", $config);
 
-            Storage::disk("ftp_".session('database')."")->prepend($NameTabla."/js/weather.js", $configWeather);
+            // Storage::disk("ftp_".session('database')."")->prepend($NameTabla."/js/weather.js", $configWeather);
 
             // descomentar al pasar a produccion
 
@@ -282,7 +282,7 @@ class CampañaController extends Controller
             }
             Storage::disk("ftp_".session('database')."")->prepend($NameTabla."/db/parameter.ini.dist", $config);
 
-            Storage::disk("ftp_".session('database')."")->prepend($NameTabla."/js/weather.js", $configWeather);
+            // Storage::disk("ftp_".session('database')."")->prepend($NameTabla."/js/weather.js", $configWeather);
         }
         
 
